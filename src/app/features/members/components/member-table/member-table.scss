@@ -1,0 +1,86 @@
+.members-table {
+  min-width: 1000px;
+}
+
+.member-cell {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.member-avatar {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--primary-light);
+  color: var(--primary);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.member-identity,
+.secondary-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.member-name {
+  width: fit-content;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: var(--text-primary);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: var(--transition);
+}
+
+.member-name:hover {
+  color: var(--primary);
+}
+
+.member-code,
+.secondary-cell small {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.secondary-cell strong {
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.date-cell {
+  color: var(--text-secondary) !important;
+  white-space: nowrap;
+}
+
+.status-badge {
+  gap: 6px;
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
