@@ -1,0 +1,44 @@
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-5 { gap: 20px; }
+
+.w-100 { width: 100%; }
+
+.page-title {
+  color: var(--text-primary);
+  font-size: clamp(24px, 4vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.page-description {
+  margin-top: var(--space-xs);
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-active { color: var(--success); background: rgba(24, 185, 129, 0.12); }
+.status-expired { color: var(--danger); background: rgba(239, 68, 68, 0.12); }
+.status-expiring { color: var(--warning); background: rgba(245, 165, 36, 0.12); }
+.status-inactive { color: var(--text-muted); background: rgba(100, 107, 120, 0.14); }

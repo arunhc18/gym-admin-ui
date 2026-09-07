@@ -1,0 +1,10 @@
+.quick-actions { display: flex; align-items: center; gap: 8px; }
+.quick-actions .btn { min-height: 36px; padding: 0 12px; font-size: 12px; }
+.quick-actions .more-action { display: none; }
+
+@media (max-width: 600px) {
+  .quick-actions { width: 100%; gap: 8px; }
+  .quick-actions .btn { flex: 1; min-width: 0; padding: 0 8px; }
+  .quick-actions .check-in-action { display: none; }
+  .quick-actions .more-action { display: inline-flex; flex: 0 0 38px; }
+}
