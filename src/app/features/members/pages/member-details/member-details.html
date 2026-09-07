@@ -1,1 +1,894 @@
-<section class="placeholder-page"><h2>Member Details Content</h2></section>
+<form
+  class="member-details-page"
+  [formGroup]="memberForm"
+  (ngSubmit)="saveMember()"
+>
+
+  <div class="member-actions">
+    @if (!isEditMode) {
+      <button type="button" class="btn btn-primary" (click)="startEditing()">
+        Edit Member
+      </button>
+    } @else {
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSaveDisabled">
+        Save Changes
+      </button>
+    }
+  </div>
+
+  <!-- Member Profile -->
+  <section class="profile-card">
+
+    <div class="profile-photo">
+      <span>{{ memberInitials }}</span>
+    </div>
+
+    <div class="profile-info">
+
+      <div class="profile-name-row">
+        <h2>{{ memberName }}</h2>
+
+        <span class="status-badge" [class.status-active]="savedMember['status'] === 'active'">
+          {{ savedMember['status'] | titlecase }}
+        </span>
+      </div>
+
+      <p class="member-code">
+        {{ savedMember['memberCode'] }}
+      </p>
+
+      <p class="member-since">
+        Member since {{ memberSince }}
+      </p>
+
+    </div>
+
+  </section>
+
+  @if (!isEditMode) {
+    <section class="profile-sections">
+      <section class="form-card">
+        <div class="section-header">
+          <h2>Personal Information</h2>
+        </div>
+        <div class="details-grid">
+          <div class="detail-item"><span>Member Code</span><strong>{{ displayValue('memberCode') }}</strong></div>
+          <div class="detail-item"><span>First Name</span><strong>{{ displayValue('firstName') }}</strong></div>
+          <div class="detail-item"><span>Last Name</span><strong>{{ displayValue('lastName') }}</strong></div>
+          <div class="detail-item"><span>Date of Birth</span><strong>{{ formatDate(savedMember['dateOfBirth']) }}</strong></div>
+          <div class="detail-item"><span>Gender</span><strong>{{ optionLabel('gender') }}</strong></div>
+          <div class="detail-item"><span>Blood Group</span><strong>{{ optionLabel('bloodGroup') }}</strong></div>
+          <div class="detail-item"><span>Phone</span><strong>{{ displayValue('phone') }}</strong></div>
+          <div class="detail-item"><span>Alternate Phone</span><strong>{{ displayValue('alternatePhone') }}</strong></div>
+          <div class="detail-item"><span>Email</span><strong>{{ displayValue('email') }}</strong></div>
+          <div class="detail-item detail-item-wide"><span>Address</span><strong>{{ displayValue('addressLine1') }}<br>{{ displayValue('addressLine2') }}</strong></div>
+          <div class="detail-item"><span>City</span><strong>{{ displayValue('city') }}</strong></div>
+          <div class="detail-item"><span>State</span><strong>{{ displayValue('state') }}</strong></div>
+          <div class="detail-item"><span>Country</span><strong>{{ displayValue('country') }}</strong></div>
+          <div class="detail-item"><span>Postal Code</span><strong>{{ displayValue('postalCode') }}</strong></div>
+          <div class="detail-item"><span>Emergency Contact</span><strong>{{ displayValue('emergencyContactName') }}</strong></div>
+          <div class="detail-item"><span>Emergency Phone</span><strong>{{ displayValue('emergencyContactPhone') }}</strong></div>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="section-header">
+          <h2>Identification</h2>
+        </div>
+        <div class="details-grid">
+          <div class="detail-item"><span>ID Proof Type</span><strong>{{ optionLabel('idProofType') }}</strong></div>
+          <div class="detail-item"><span>ID Proof Number</span><strong>{{ displayValue('idProofNumber') }}</strong></div>
+          <div class="detail-item"><span>ID Proof</span><strong>{{ displayValue('idProofUrl') }}</strong></div>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="section-header">
+          <h2>Medical & Referral</h2>
+        </div>
+        <div class="details-grid">
+          <div class="detail-item detail-item-wide"><span>Medical Conditions</span><strong>{{ displayValue('medicalConditions') }}</strong></div>
+          <div class="detail-item"><span>Referral Source</span><strong>{{ optionLabel('referralSource') }}</strong></div>
+          <div class="detail-item"><span>Referred By Member</span><strong>{{ displayValue('referredByMemberId') }}</strong></div>
+        </div>
+      </section>
+    </section>
+  } @else {
+
+  <!-- Personal Information -->
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Personal Information</h2>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Member Code -->
+      <div class="form-group">
+
+        <label for="memberCode">
+          Member Code <span>*</span>
+        </label>
+
+        <input
+          id="memberCode"
+          type="text"
+          formControlName="memberCode"
+          placeholder="Enter member code"
+        />
+
+        @if (
+          memberForm.controls['memberCode'].touched &&
+          memberForm.controls['memberCode'].hasError('required')
+        ) {
+          <small class="validation-error">
+            Member code is required.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['memberCode'].touched &&
+          memberForm.controls['memberCode'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Member code cannot exceed 50 characters.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['memberCode'].touched &&
+          memberForm.controls['memberCode'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Use letters, numbers, - or _ only.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- First Name -->
+      <div class="form-group">
+
+        <label for="firstName">
+          First Name <span>*</span>
+        </label>
+
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="Enter first name"
+        />
+
+        @if (
+          memberForm.controls['firstName'].touched &&
+          memberForm.controls['firstName'].hasError('required')
+        ) {
+          <small class="validation-error">
+            First name is required.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['firstName'].touched &&
+          memberForm.controls['firstName'].hasError('minlength')
+        ) {
+          <small class="validation-error">
+            First name must contain at least 2 characters.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['firstName'].touched &&
+          memberForm.controls['firstName'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            First name cannot exceed 100 characters.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['firstName'].touched &&
+          memberForm.controls['firstName'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            First name can contain only letters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Last Name -->
+      <div class="form-group">
+
+        <label for="lastName">
+          Last Name <span>*</span>
+        </label>
+
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="Enter last name"
+        />
+
+        @if (
+          memberForm.controls['lastName'].touched &&
+          memberForm.controls['lastName'].hasError('required')
+        ) {
+          <small class="validation-error">
+            Last name is required.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['lastName'].touched &&
+          memberForm.controls['lastName'].hasError('minlength')
+        ) {
+          <small class="validation-error">
+            Last name must contain at least 2 characters.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['lastName'].touched &&
+          memberForm.controls['lastName'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Last name cannot exceed 100 characters.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['lastName'].touched &&
+          memberForm.controls['lastName'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Last name can contain only letters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Date of Birth -->
+      <div class="form-group">
+
+        <label for="dateOfBirth">
+          Date of Birth
+        </label>
+
+        <input
+          id="dateOfBirth"
+          type="date"
+          formControlName="dateOfBirth"
+        />
+
+        @if (
+          memberForm.controls['dateOfBirth'].touched &&
+          memberForm.controls['dateOfBirth'].hasError('futureDate')
+        ) {
+          <small class="validation-error">
+            Date of birth cannot be in the future.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['dateOfBirth'].touched &&
+          memberForm.controls['dateOfBirth'].hasError('underAge')
+        ) {
+          <small class="validation-error">
+            Member must be at least 18 years old.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Gender -->
+      <div class="form-group">
+
+        <label for="gender">
+          Gender
+        </label>
+
+        <select
+          id="gender"
+          formControlName="gender"
+        >
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+
+      </div>
+
+
+      <!-- Blood Group -->
+      <div class="form-group">
+
+        <label for="bloodGroup">
+          Blood Group
+        </label>
+
+        <select
+          id="bloodGroup"
+          formControlName="bloodGroup"
+        >
+          <option value="">Select blood group</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+
+      </div>
+
+
+      <!-- Phone -->
+      <div class="form-group">
+
+        <label for="phone">
+          Phone <span>*</span>
+        </label>
+
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          placeholder="Enter phone number"
+        />
+
+        @if (
+          memberForm.controls['phone'].touched &&
+          memberForm.controls['phone'].hasError('required')
+        ) {
+          <small class="validation-error">
+            Phone number is required.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['phone'].touched &&
+          memberForm.controls['phone'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid phone number.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['phone'].touched &&
+          memberForm.controls['phone'].hasError('phoneLength')
+        ) {
+          <small class="validation-error">
+            Phone number must contain 10 to 15 digits.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Alternate Phone -->
+      <div class="form-group">
+
+        <label for="alternatePhone">
+          Alternate Phone
+        </label>
+
+        <input
+          id="alternatePhone"
+          type="tel"
+          formControlName="alternatePhone"
+          placeholder="Enter alternate phone"
+        />
+
+        @if (
+          memberForm.controls['alternatePhone'].touched &&
+          memberForm.controls['alternatePhone'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid phone number.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['alternatePhone'].touched &&
+          memberForm.controls['alternatePhone'].hasError('phoneLength')
+        ) {
+          <small class="validation-error">
+            Phone number must contain 10 to 15 digits.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Email -->
+      <div class="form-group">
+
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter email address"
+        />
+
+        @if (
+          memberForm.controls['email'].touched &&
+          memberForm.controls['email'].hasError('email')
+        ) {
+          <small class="validation-error">
+            Enter a valid email address.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['email'].touched &&
+          memberForm.controls['email'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Email cannot exceed 100 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Address Line 1 -->
+      <div class="form-group">
+
+        <label for="addressLine1">
+          Address Line 1
+        </label>
+
+        <input
+          id="addressLine1"
+          type="text"
+          formControlName="addressLine1"
+          placeholder="Enter address"
+        />
+
+        @if (
+          memberForm.controls['addressLine1'].touched &&
+          memberForm.controls['addressLine1'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Address cannot exceed 255 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Address Line 2 -->
+      <div class="form-group">
+
+        <label for="addressLine2">
+          Address Line 2
+        </label>
+
+        <input
+          id="addressLine2"
+          type="text"
+          formControlName="addressLine2"
+          placeholder="Apartment / landmark"
+        />
+
+        @if (
+          memberForm.controls['addressLine2'].touched &&
+          memberForm.controls['addressLine2'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Address cannot exceed 255 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- City -->
+      <div class="form-group">
+
+        <label for="city">
+          City
+        </label>
+
+        <input
+          id="city"
+          type="text"
+          formControlName="city"
+          placeholder="Enter city"
+        />
+
+        @if (
+          memberForm.controls['city'].touched &&
+          memberForm.controls['city'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid city.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['city'].touched &&
+          memberForm.controls['city'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            City cannot exceed 100 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- State -->
+      <div class="form-group">
+
+        <label for="state">
+          State
+        </label>
+
+        <input
+          id="state"
+          type="text"
+          formControlName="state"
+          placeholder="Enter state"
+        />
+
+        @if (
+          memberForm.controls['state'].touched &&
+          memberForm.controls['state'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid state.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['state'].touched &&
+          memberForm.controls['state'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            State cannot exceed 100 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Country -->
+      <div class="form-group">
+
+        <label for="country">
+          Country
+        </label>
+
+        <input
+          id="country"
+          type="text"
+          formControlName="country"
+          placeholder="Enter country"
+        />
+
+        @if (
+          memberForm.controls['country'].touched &&
+          memberForm.controls['country'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid country.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['country'].touched &&
+          memberForm.controls['country'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Country cannot exceed 100 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Postal Code -->
+      <div class="form-group">
+
+        <label for="postalCode">
+          Postal Code
+        </label>
+
+        <input
+          id="postalCode"
+          type="text"
+          formControlName="postalCode"
+          placeholder="Enter postal code"
+        />
+
+        @if (
+          memberForm.controls['postalCode'].touched &&
+          memberForm.controls['postalCode'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid postal code.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Emergency Contact Name -->
+      <div class="form-group">
+
+        <label for="emergencyContactName">
+          Emergency Contact
+        </label>
+
+        <input
+          id="emergencyContactName"
+          type="text"
+          formControlName="emergencyContactName"
+          placeholder="Contact name"
+        />
+
+        @if (
+          memberForm.controls['emergencyContactName'].touched &&
+          memberForm.controls['emergencyContactName'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid name.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['emergencyContactName'].touched &&
+          memberForm.controls['emergencyContactName'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Name cannot exceed 100 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Emergency Contact Phone -->
+      <div class="form-group">
+
+        <label for="emergencyContactPhone">
+          Emergency Phone
+        </label>
+
+        <input
+          id="emergencyContactPhone"
+          type="tel"
+          formControlName="emergencyContactPhone"
+          placeholder="Emergency phone"
+        />
+
+        @if (
+          memberForm.controls['emergencyContactPhone'].touched &&
+          memberForm.controls['emergencyContactPhone'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid phone number.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['emergencyContactPhone'].touched &&
+          memberForm.controls['emergencyContactPhone'].hasError('phoneLength')
+        ) {
+          <small class="validation-error">
+            Phone number must contain 10 to 15 digits.
+          </small>
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Identification -->
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Identification</h2>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- ID Proof Type -->
+      <div class="form-group">
+
+        <label for="idProofType">
+          ID Proof Type
+        </label>
+
+        <select
+          id="idProofType"
+          formControlName="idProofType"
+        >
+          <option value="">Select ID proof</option>
+          <option value="aadhaar">Aadhaar</option>
+          <option value="pan">PAN</option>
+          <option value="passport">Passport</option>
+          <option value="driving-license">Driving License</option>
+          <option value="voter-id">Voter ID</option>
+        </select>
+
+      </div>
+
+
+      <!-- ID Proof Number -->
+      <div class="form-group">
+
+        <label for="idProofNumber">
+          ID Proof Number
+        </label>
+
+        <input
+          id="idProofNumber"
+          type="text"
+          formControlName="idProofNumber"
+          placeholder="Enter ID number"
+        />
+
+        @if (
+          memberForm.controls['idProofNumber'].touched &&
+          memberForm.controls['idProofNumber'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Enter a valid ID number.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['idProofNumber'].touched &&
+          memberForm.controls['idProofNumber'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            ID number cannot exceed 100 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- ID Proof File -->
+      <div class="form-group">
+
+        <label for="idProofUrl">
+          ID Proof
+        </label>
+
+        <div class="file-upload">
+
+          <input
+            id="idProofUrl"
+            type="file"
+            accept="image/*,.pdf"
+          />
+
+          <div class="upload-text">
+            <strong>Upload ID proof</strong>
+            <span>PDF, JPG or PNG</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Medical & Referral -->
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Medical & Referral</h2>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Medical Conditions -->
+      <div class="form-group full-width">
+
+        <label for="medicalConditions">
+          Medical Conditions
+        </label>
+
+        <textarea
+          id="medicalConditions"
+          rows="2"
+          formControlName="medicalConditions"
+          placeholder="Enter any relevant medical conditions"
+        ></textarea>
+
+        @if (
+          memberForm.controls['medicalConditions'].touched &&
+          memberForm.controls['medicalConditions'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Medical information cannot exceed 1000 characters.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Referral Source -->
+      <div class="form-group">
+
+        <label for="referralSource">
+          Referral Source
+        </label>
+
+        <select
+          id="referralSource"
+          formControlName="referralSource"
+        >
+          <option value="">Select referral source</option>
+          <option value="walk-in">Walk-in</option>
+          <option value="website">Website</option>
+          <option value="social-media">Social Media</option>
+          <option value="member-referral">Member Referral</option>
+          <option value="advertisement">Advertisement</option>
+          <option value="other">Other</option>
+        </select>
+
+      </div>
+
+
+      <!-- Referred By Member -->
+      <div class="form-group">
+
+        <label for="referredByMemberId">
+          Referred By Member
+        </label>
+
+        <input
+          id="referredByMemberId"
+          type="text"
+          formControlName="referredByMemberId"
+          placeholder="Member ID"
+        />
+
+        @if (
+          memberForm.controls['referredByMemberId'].touched &&
+          memberForm.controls['referredByMemberId'].hasError('pattern')
+        ) {
+          <small class="validation-error">
+            Member ID must contain numbers only.
+          </small>
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+  }
+
+</form>
