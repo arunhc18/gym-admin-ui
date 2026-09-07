@@ -275,6 +275,10 @@ export class MemberDetailsComponent {
     console.log('Member ID received:', this.memberId);
 
     this.loadMember(this.memberId);
+
+    if (this.route.snapshot.queryParamMap.get('mode') === 'edit') {
+      this.startEditing();
+    }
   }
 
   private loadMember(id: number): void {
