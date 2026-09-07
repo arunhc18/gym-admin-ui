@@ -1,0 +1,134 @@
+<div class="table-container">
+
+  <table class="data-table members-table">
+
+    <thead>
+      <tr>
+        <th>Member</th>
+        <th>Phone</th>
+        <th>Membership</th>
+        <th>Join Date</th>
+        <th>Expiry Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+
+    <tbody>
+
+      <tr
+        *ngFor="
+          let member of members;
+          trackBy: trackByMemberId
+        "
+      >
+
+        <td>
+
+          <div class="member-cell">
+
+            <div class="member-avatar">
+              {{ getInitials(member) }}
+            </div>
+
+            <div class="member-identity">
+
+              <button
+                type="button"
+                class="member-name"
+                (click)="view.emit(member)"
+              >
+                {{ member.firstName }}
+                {{ member.lastName }}
+              </button>
+
+              <span class="member-code">
+                {{ member.memberCode }}
+              </span>
+
+            </div>
+
+          </div>
+
+        </td>
+
+
+        <td>
+
+          <div class="secondary-cell">
+
+            <span>
+              {{ member.phone }}
+            </span>
+
+            <small>
+              {{ member.email }}
+            </small>
+
+          </div>
+
+        </td>
+
+
+        <td>
+
+          <div class="secondary-cell">
+
+            <strong>
+              {{ member.planName }}
+            </strong>
+
+            <small>
+              {{ member.location }}
+            </small>
+
+          </div>
+
+        </td>
+
+
+        <td class="date-cell">
+          {{ member.joinDate | date:'dd MMM yyyy' }}
+        </td>
+
+
+        <td class="date-cell">
+          {{ member.expiryDate | date:'dd MMM yyyy' }}
+        </td>
+
+
+        <td>
+
+          <span
+            class="status-badge"
+            [ngClass]="getStatusClass(member.status)"
+          >
+            <span class="status-dot"></span>
+
+            {{ member.status }}
+          </span>
+
+        </td>
+
+
+        <td>
+
+          <app-member-actions
+            [member]="member"
+
+            (view)="view.emit($event)"
+            (edit)="edit.emit($event)"
+            (renew)="renew.emit($event)"
+            (payment)="payment.emit($event)"
+          />
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

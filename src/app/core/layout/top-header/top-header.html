@@ -6,7 +6,11 @@
   @if (pageMeta$ | async; as pageMeta) {
     <div class="header-copy">
       <h1>{{ pageMeta.title }}</h1>
-      <p>{{ pageMeta.description }}</p>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a routerLink="/dashboard">Dashboard</a>
+        <span aria-hidden="true">/</span>
+        <span>{{ pageMeta.title }}</span>
+      </nav>
     </div>
   }
 

@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { QuickActionsComponent } from '../quick-actions/quick-actions';
 
 @Component({
   selector: 'app-top-header',
-  imports: [AsyncPipe, QuickActionsComponent],
+  imports: [AsyncPipe, QuickActionsComponent, RouterLink],
   templateUrl: './top-header.html',
   styleUrl: './top-header.scss',
 })

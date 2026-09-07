@@ -1,1 +1,301 @@
-<section class="placeholder-page"><h2>Members Content</h2></section>
+<div class="member-list-page">
+
+  <!-- ======================================================
+       SUMMARY CARDS
+  ======================================================= -->
+
+  <section class="summary-grid">
+
+    <!-- Total Members -->
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+
+      <div class="summary-content">
+
+        <p class="summary-label">
+          Total Members
+        </p>
+
+        <h3 class="summary-value">
+          {{ totalMembers }}
+        </h3>
+
+      </div>
+
+    </div>
+
+
+    <!-- Active Members -->
+    <div class="summary-card">
+
+      <div class="summary-icon active-icon">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="9"/>
+          <path d="m8 12 2.5 2.5L16 9"/>
+        </svg>
+      </div>
+
+      <div class="summary-content">
+
+        <p class="summary-label">
+          Active Members
+        </p>
+
+        <h3 class="summary-value">
+          {{ activeMembers }}
+        </h3>
+
+      </div>
+
+    </div>
+
+
+    <!-- Expiring Members -->
+    <div class="summary-card">
+
+      <div class="summary-icon expiring-icon">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5l3 2"/>
+        </svg>
+      </div>
+
+      <div class="summary-content">
+
+        <p class="summary-label">
+          Expiring Soon
+        </p>
+
+        <h3 class="summary-value">
+          {{ expiringMembers }}
+        </h3>
+
+      </div>
+
+    </div>
+
+
+    <!-- Expired Members -->
+    <div class="summary-card">
+
+      <div class="summary-icon expired-icon">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 8v5"/>
+          <path d="M12 16h.01"/>
+        </svg>
+      </div>
+
+      <div class="summary-content">
+
+        <p class="summary-label">
+          Expired
+        </p>
+
+        <h3 class="summary-value">
+          {{ expiredMembers }}
+        </h3>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ======================================================
+       FILTERS
+  ======================================================= -->
+
+  <app-member-filters
+
+    [searchTerm]="searchTerm"
+
+    [selectedStatus]="selectedStatus"
+
+    [selectedPlan]="selectedPlan"
+
+    [selectedLocation]="selectedLocation"
+
+    [plans]="plans"
+
+    [locations]="locations"
+
+    (searchTermChange)="onSearchChange($event)"
+
+    (statusChange)="onStatusChange($event)"
+
+    (planChange)="onPlanChange($event)"
+
+    (locationChange)="onLocationChange($event)"
+
+    (clear)="clearFilters()"
+
+  />
+
+
+  <!-- ======================================================
+       MEMBERS SECTION
+  ======================================================= -->
+
+  <section class="members-section">
+
+    <!-- Section Header -->
+    <div class="table-header">
+
+      <div>
+
+        <h3>
+          All Members
+        </h3>
+
+        <p>
+          {{ filteredMembers.length }}
+          member{{ filteredMembers.length === 1 ? '' : 's' }}
+          found
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ====================================================
+         MEMBER TABLE
+    ===================================================== -->
+
+    <app-member-table
+
+      *ngIf="filteredMembers.length > 0"
+
+      [members]="paginatedMembers"
+
+      (view)="viewMember($event)"
+
+      (edit)="editMember($event)"
+
+      (renew)="renewMembership($event)"
+
+      (payment)="recordPayment($event)"
+
+    />
+
+
+    <!-- ====================================================
+         EMPTY STATE
+    ===================================================== -->
+
+    <div
+      class="empty-state"
+      *ngIf="filteredMembers.length === 0"
+    >
+
+      <div class="empty-state-icon">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+
+      </div>
+
+      <h3>
+        No members found
+      </h3>
+
+      <p>
+        Try changing your search or filters.
+      </p>
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="clearFilters()"
+      >
+        Clear Filters
+      </button>
+
+    </div>
+
+
+    <!-- ====================================================
+         PAGINATION
+    ===================================================== -->
+
+    <app-member-pagination
+
+      *ngIf="filteredMembers.length > 0"
+
+      [currentPage]="currentPage"
+
+      [totalPages]="totalPages"
+
+      [startRecord]="startRecord"
+
+      [endRecord]="endRecord"
+
+      [totalRecords]="filteredMembers.length"
+
+      [pageSize]="pageSize"
+
+      [pageSizeOptions]="pageSizeOptions"
+
+      (pageChange)="changePage($event)"
+
+      (pageSizeChange)="onPageSizeChange($event)"
+
+    />
+
+  </section>
+
+</div>
