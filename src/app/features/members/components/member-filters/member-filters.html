@@ -1,0 +1,86 @@
+<div class="member-toolbar">
+
+  <div class="search-container">
+
+    <span class="search-icon">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m20 20-3.5-3.5"></path>
+      </svg>
+    </span>
+
+    <input
+      type="text"
+      class="form-control search-input"
+      placeholder="Search by name, member ID, phone or email..."
+      [ngModel]="searchTerm"
+      (ngModelChange)="onSearchChange($event)"
+    />
+
+  </div>
+
+
+  <div class="filter-container">
+
+    <select
+      class="form-control filter-select"
+      [ngModel]="selectedStatus"
+      (ngModelChange)="onStatusChange($event)"
+    >
+      <option value="All">All Status</option>
+      <option value="Active">Active</option>
+      <option value="Expiring">Expiring</option>
+      <option value="Expired">Expired</option>
+      <option value="Inactive">Inactive</option>
+    </select>
+
+
+    <select
+      class="form-control filter-select"
+      [ngModel]="selectedPlan"
+      (ngModelChange)="onPlanChange($event)"
+    >
+      <option value="All">All Plans</option>
+
+      <option
+        *ngFor="let plan of plans"
+        [value]="plan"
+      >
+        {{ plan }}
+      </option>
+    </select>
+
+
+    <select
+      class="form-control filter-select"
+      [ngModel]="selectedLocation"
+      (ngModelChange)="onLocationChange($event)"
+    >
+      <option value="All">All Locations</option>
+
+      <option
+        *ngFor="let location of locations"
+        [value]="location"
+      >
+        {{ location }}
+      </option>
+    </select>
+
+
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="clearFilters()"
+    >
+      Clear
+    </button>
+
+  </div>
+
+</div>

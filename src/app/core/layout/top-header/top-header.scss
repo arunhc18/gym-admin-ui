@@ -14,7 +14,10 @@
 .menu-button { flex: 0 0 auto; color: var(--text-secondary); }
 .header-copy { min-width: 0; }
 .header-copy h1 { color: var(--text-primary); font-size: 18px; line-height: 1.2; }
-.header-copy p { margin-top: 3px; color: var(--text-secondary); font-size: 12px; }
+.breadcrumbs { display: flex; align-items: center; gap: 7px; margin-top: 4px; color: var(--text-muted); font-size: 11px; }
+.breadcrumbs a { color: var(--text-secondary); text-decoration: none; }
+.breadcrumbs a:hover { color: var(--text-primary); }
+.breadcrumbs span:last-child { color: var(--text-muted); }
 app-quick-actions { margin-left: auto; }
 
 @media (max-width: 600px) {
