@@ -3,6 +3,7 @@ import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -14,6 +15,16 @@ import {
 interface MemberData {
   [key: string]: string;
 }
+
+const NAME_PATTERN = /^[\p{L}\p{M}\s'.-]+$/u;
+const PHONE_PATTERN = /^\+?[0-9\s()-]+$/;
+const LOCATION_NAME_PATTERN = /^[\p{L}\p{M}\s'.-]+$/u;
+const ALLOWED_FILE_TYPES = new Set([
+  'application/pdf',
+  'image/jpeg',
+  'image/png'
+]);
+const MAX_ID_PROOF_FILE_SIZE = 5 * 1024 * 1024;
 
 
 @Component({
@@ -712,7 +723,8 @@ export class MemberDetailsComponent {
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(100),
-          Validators.pattern(/^[a-zA-Z\s'-]+$/)
+          Validators.pattern(NAME_PATTERN),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -723,7 +735,8 @@ export class MemberDetailsComponent {
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(100),
-          Validators.pattern(/^[a-zA-Z\s'-]+$/)
+          Validators.pattern(NAME_PATTERN),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -739,7 +752,8 @@ export class MemberDetailsComponent {
       gender: [
         '',
         [
-          Validators.maxLength(20)
+          Validators.maxLength(20),
+          Validators.pattern(/^(male|female|other)$/)
         ]
       ],
 
@@ -747,7 +761,8 @@ export class MemberDetailsComponent {
       bloodGroup: [
         '',
         [
-          Validators.maxLength(10)
+          Validators.maxLength(10),
+          Validators.pattern(/^(A|B|AB|O)[+-]$/)
         ]
       ],
 
@@ -756,9 +771,9 @@ export class MemberDetailsComponent {
         '',
         [
           Validators.required,
-          Validators.pattern(
-            /^\+?[0-9\s()-]{10,20}$/
-          )
+          Validators.maxLength(20),
+          Validators.pattern(PHONE_PATTERN),
+          this.validatePhoneLength
         ]
       ],
 
@@ -766,9 +781,9 @@ export class MemberDetailsComponent {
       alternatePhone: [
         '',
         [
-          Validators.pattern(
-            /^\+?[0-9\s()-]{10,20}$/
-          )
+          Validators.maxLength(20),
+          Validators.pattern(PHONE_PATTERN),
+          this.validatePhoneLength
         ]
       ],
 
@@ -777,7 +792,8 @@ export class MemberDetailsComponent {
         '',
         [
           Validators.email,
-          Validators.maxLength(100)
+          Validators.maxLength(100),
+          Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)
         ]
       ],
 
@@ -785,7 +801,8 @@ export class MemberDetailsComponent {
       addressLine1: [
         '',
         [
-          Validators.maxLength(255)
+          Validators.maxLength(255),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -793,7 +810,8 @@ export class MemberDetailsComponent {
       addressLine2: [
         '',
         [
-          Validators.maxLength(255)
+          Validators.maxLength(255),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -802,9 +820,8 @@ export class MemberDetailsComponent {
         '',
         [
           Validators.maxLength(100),
-          Validators.pattern(
-            /^[a-zA-Z\s'-]+$/
-          )
+          Validators.pattern(LOCATION_NAME_PATTERN),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -813,9 +830,8 @@ export class MemberDetailsComponent {
         '',
         [
           Validators.maxLength(100),
-          Validators.pattern(
-            /^[a-zA-Z\s'-]+$/
-          )
+          Validators.pattern(LOCATION_NAME_PATTERN),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -824,9 +840,8 @@ export class MemberDetailsComponent {
         '',
         [
           Validators.maxLength(100),
-          Validators.pattern(
-            /^[a-zA-Z\s'-]+$/
-          )
+          Validators.pattern(LOCATION_NAME_PATTERN),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -834,9 +849,11 @@ export class MemberDetailsComponent {
       postalCode: [
         '',
         [
+          Validators.maxLength(20),
           Validators.pattern(
             /^[0-9A-Za-z\s-]{3,20}$/
-          )
+          ),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -845,9 +862,9 @@ export class MemberDetailsComponent {
         '',
         [
           Validators.maxLength(100),
-          Validators.pattern(
-            /^[a-zA-Z\s'-]+$/
-          )
+          Validators.minLength(2),
+          Validators.pattern(NAME_PATTERN),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -855,9 +872,9 @@ export class MemberDetailsComponent {
       emergencyContactPhone: [
         '',
         [
-          Validators.pattern(
-            /^\+?[0-9\s()-]{10,20}$/
-          )
+          Validators.maxLength(20),
+          Validators.pattern(PHONE_PATTERN),
+          this.validatePhoneLength
         ]
       ],
 
@@ -865,7 +882,8 @@ export class MemberDetailsComponent {
       idProofType: [
         '',
         [
-          Validators.maxLength(50)
+          Validators.maxLength(50),
+          Validators.pattern(/^(aadhaar|pan|passport|driving-license|voter-id)$/)
         ]
       ],
 
@@ -876,7 +894,8 @@ export class MemberDetailsComponent {
           Validators.maxLength(100),
           Validators.pattern(
             /^[A-Za-z0-9\s./-]+$/
-          )
+          ),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -889,7 +908,8 @@ export class MemberDetailsComponent {
       medicalConditions: [
         '',
         [
-          Validators.maxLength(1000)
+          Validators.maxLength(1000),
+          this.validateNotWhitespaceOnly
         ]
       ],
 
@@ -899,7 +919,7 @@ export class MemberDetailsComponent {
         [
           Validators.maxLength(100),
           Validators.pattern(
-            /^[a-zA-Z0-9\s'-]+$/
+            /^(walk-in|website|social-media|member-referral|advertisement|other)$/
           )
         ]
       ],
@@ -928,6 +948,18 @@ export class MemberDetailsComponent {
         ]
       ]
 
+    }, {
+      validators: [
+        this.validateDifferentPhoneNumbers,
+        this.validateIdProofDetails,
+        control => this.validateReferralDetails(control)
+      ]
+    });
+
+    // Re-run dependent validation when the primary phone changes.
+    this.memberForm.controls['phone'].valueChanges.subscribe(() => {
+      this.memberForm.controls['alternatePhone'].updateValueAndValidity({ emitEvent: false });
+      this.memberForm.controls['emergencyContactPhone'].updateValueAndValidity({ emitEvent: false });
     });
 
   }
@@ -1079,6 +1111,22 @@ export class MemberDetailsComponent {
       this.memberForm.invalid ||
       !this.memberForm.dirty
     );
+
+  }
+
+
+  // Latest date that represents an adult member (18 years).
+  get maxDateOfBirth(): string {
+
+    const today = new Date();
+
+    const latestDate = new Date(
+      today.getFullYear() - 18,
+      today.getMonth(),
+      today.getDate()
+    );
+
+    return this.toDateInputValue(latestDate);
 
   }
 
@@ -1413,12 +1461,21 @@ export class MemberDetailsComponent {
     //
     // Only overwrite values represented by the edit form.
 
+    const normalizedValues = Object.fromEntries(
+      Object.entries(this.memberForm.getRawValue()).map(
+        ([key, value]) => [
+          key,
+          typeof value === 'string' ? value.trim() : value
+        ]
+      )
+    ) as MemberData;
+
+
     this.savedMember = {
 
       ...this.savedMember,
 
-      ...this.memberForm
-        .getRawValue()
+      ...normalizedValues
 
     };
 
@@ -1487,15 +1544,188 @@ export class MemberDetailsComponent {
 
 
   // =========================================================
+  // ID PROOF FILE VALIDATION
+  // =========================================================
+
+  onIdProofFileSelected(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+    const control = this.memberForm.controls['idProofUrl'];
+    const file = input.files?.[0];
+
+    control.markAsTouched();
+    control.markAsDirty();
+
+    if (!file) {
+      control.setValue('');
+      control.setErrors(null);
+      return;
+    }
+
+    if (!ALLOWED_FILE_TYPES.has(file.type)) {
+      control.setValue('');
+      control.setErrors({ invalidFileType: true });
+      input.value = '';
+      return;
+    }
+
+    if (file.size > MAX_ID_PROOF_FILE_SIZE) {
+      control.setValue('');
+      control.setErrors({ fileTooLarge: true });
+      input.value = '';
+      return;
+    }
+
+    control.setErrors(null);
+    control.setValue(file.name);
+
+  }
+
+
+  // =========================================================
+  // GENERAL CUSTOM VALIDATORS
+  // =========================================================
+
+  private validateNotWhitespaceOnly(
+    control: AbstractControl
+  ): ValidationErrors | null {
+
+    const value = String(control.value ?? '');
+
+    return value.length > 0 && value.trim().length === 0
+      ? { whitespaceOnly: true }
+      : null;
+
+  }
+
+
+  private validatePhoneLength(
+    control: AbstractControl
+  ): ValidationErrors | null {
+
+    if (!control.value) {
+      return null;
+    }
+
+    const digitCount = String(control.value).replace(/\D/g, '').length;
+
+    return digitCount >= 10 && digitCount <= 15
+      ? null
+      : { phoneLength: true };
+
+  }
+
+
+  private validateDifferentPhoneNumbers(
+    control: AbstractControl
+  ): ValidationErrors | null {
+
+    const phone = MemberDetailsComponent.onlyDigits(
+      control.get('phone')?.value
+    );
+    const alternatePhone = MemberDetailsComponent.onlyDigits(
+      control.get('alternatePhone')?.value
+    );
+    const emergencyPhone = MemberDetailsComponent.onlyDigits(
+      control.get('emergencyContactPhone')?.value
+    );
+
+    const errors: ValidationErrors = {
+      ...(phone && alternatePhone === phone
+        ? { alternatePhoneMatchesPhone: true }
+        : {}),
+      ...(phone && emergencyPhone === phone
+        ? { emergencyPhoneMatchesPhone: true }
+        : {})
+    };
+
+    return Object.keys(errors).length ? errors : null;
+
+  }
+
+
+  private validateIdProofDetails(
+    control: AbstractControl
+  ): ValidationErrors | null {
+
+    const proofType = String(control.get('idProofType')?.value ?? '').trim();
+    const proofNumber = String(control.get('idProofNumber')?.value ?? '').trim();
+    const errors: ValidationErrors = {};
+
+    if (proofType && !proofNumber) {
+      errors['idProofNumberRequired'] = true;
+    }
+
+    if (proofNumber && !proofType) {
+      errors['idProofTypeRequired'] = true;
+    }
+
+    if (proofType && proofNumber) {
+      const patterns: Record<string, RegExp> = {
+        aadhaar: /^\d{12}$/,
+        pan: /^[A-Z]{5}\d{4}[A-Z]$/i,
+        passport: /^[A-Z][1-9]\d{6}$/i,
+        'driving-license': /^[A-Z]{2}[\s-]?\d{2}[\s-]?\d{4}[\s-]?\d{7}$/i,
+        'voter-id': /^[A-Z]{3}\d{7}$/i
+      };
+
+      if (patterns[proofType] && !patterns[proofType].test(proofNumber)) {
+        errors['invalidIdProofFormat'] = true;
+      }
+    }
+
+    return Object.keys(errors).length ? errors : null;
+
+  }
+
+
+  private validateReferralDetails(
+    control: AbstractControl
+  ): ValidationErrors | null {
+
+    const source = String(control.get('referralSource')?.value ?? '').trim();
+    const referredBy = String(control.get('referredByMemberId')?.value ?? '').trim();
+    const errors: ValidationErrors = {};
+
+    if (source === 'member-referral' && !referredBy) {
+      errors['referredByMemberRequired'] = true;
+    }
+
+    if (referredBy && source !== 'member-referral') {
+      errors['memberReferralSourceRequired'] = true;
+    }
+
+    if (referredBy && Number(referredBy) === this.memberId) {
+      errors['selfReferral'] = true;
+    }
+
+    return Object.keys(errors).length ? errors : null;
+
+  }
+
+
+  private static onlyDigits(value: unknown): string {
+    return String(value ?? '').replace(/\D/g, '');
+  }
+
+
+  private toDateInputValue(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+
+  // =========================================================
   // DATE OF BIRTH VALIDATION
   //
   // Developer 2's existing validation is retained.
   // =========================================================
 
   private validateDateOfBirth(
-    control: {
-      value: string
-    }
+    control: AbstractControl
   ): ValidationErrors | null {
 
     if (
@@ -1507,10 +1737,11 @@ export class MemberDetailsComponent {
     }
 
 
-    const selectedDate =
-      new Date(
-        control.value
-      );
+    const selectedDate = new Date(`${control.value}T00:00:00`);
+
+    if (Number.isNaN(selectedDate.getTime())) {
+      return { invalidDate: true };
+    }
 
 
     const today =
@@ -1542,6 +1773,17 @@ export class MemberDetailsComponent {
         futureDate: true
       };
 
+    }
+
+
+    const latestAdultBirthDate = new Date(
+      today.getFullYear() - 18,
+      today.getMonth(),
+      today.getDate()
+    );
+
+    if (selectedDate > latestAdultBirthDate) {
+      return { underAge: true };
     }
 
 

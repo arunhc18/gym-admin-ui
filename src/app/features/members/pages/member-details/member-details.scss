@@ -351,6 +351,10 @@
   background: var(--primary-subtle);
 }
 
+.file-upload.file-upload-invalid {
+  border-color: var(--danger);
+}
+
 .file-upload input {
   position: absolute;
 
