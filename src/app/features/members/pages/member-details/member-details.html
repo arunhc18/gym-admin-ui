@@ -194,7 +194,8 @@
 
         @if (
           memberForm.controls['firstName'].touched &&
-          memberForm.controls['firstName'].hasError('pattern')
+          (memberForm.controls['firstName'].hasError('pattern') ||
+           memberForm.controls['firstName'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             First name can contain only letters.
@@ -247,7 +248,8 @@
 
         @if (
           memberForm.controls['lastName'].touched &&
-          memberForm.controls['lastName'].hasError('pattern')
+          (memberForm.controls['lastName'].hasError('pattern') ||
+           memberForm.controls['lastName'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             Last name can contain only letters.
@@ -268,7 +270,17 @@
           id="dateOfBirth"
           type="date"
           formControlName="dateOfBirth"
+          [max]="maxDateOfBirth"
         />
+
+        @if (
+          memberForm.controls['dateOfBirth'].touched &&
+          memberForm.controls['dateOfBirth'].hasError('invalidDate')
+        ) {
+          <small class="validation-error">
+            Enter a valid date of birth.
+          </small>
+        }
 
         @if (
           memberForm.controls['dateOfBirth'].touched &&
@@ -308,6 +320,13 @@
           <option value="other">Other</option>
         </select>
 
+        @if (
+          memberForm.controls['gender'].touched &&
+          memberForm.controls['gender'].hasError('pattern')
+        ) {
+          <small class="validation-error">Select a valid gender.</small>
+        }
+
       </div>
 
 
@@ -332,6 +351,13 @@
           <option value="O+">O+</option>
           <option value="O-">O-</option>
         </select>
+
+        @if (
+          memberForm.controls['bloodGroup'].touched &&
+          memberForm.controls['bloodGroup'].hasError('pattern')
+        ) {
+          <small class="validation-error">Select a valid blood group.</small>
+        }
 
       </div>
 
@@ -412,6 +438,15 @@
           </small>
         }
 
+        @if (
+          (memberForm.controls['alternatePhone'].touched || memberForm.controls['phone'].touched) &&
+          memberForm.hasError('alternatePhoneMatchesPhone')
+        ) {
+          <small class="validation-error">
+            Alternate phone must be different from the primary phone.
+          </small>
+        }
+
       </div>
 
 
@@ -431,7 +466,8 @@
 
         @if (
           memberForm.controls['email'].touched &&
-          memberForm.controls['email'].hasError('email')
+          (memberForm.controls['email'].hasError('email') ||
+           memberForm.controls['email'].hasError('pattern'))
         ) {
           <small class="validation-error">
             Enter a valid email address.
@@ -473,6 +509,13 @@
           </small>
         }
 
+        @if (
+          memberForm.controls['addressLine1'].touched &&
+          memberForm.controls['addressLine1'].hasError('whitespaceOnly')
+        ) {
+          <small class="validation-error">Address cannot contain only spaces.</small>
+        }
+
       </div>
 
 
@@ -499,6 +542,13 @@
           </small>
         }
 
+        @if (
+          memberForm.controls['addressLine2'].touched &&
+          memberForm.controls['addressLine2'].hasError('whitespaceOnly')
+        ) {
+          <small class="validation-error">Address cannot contain only spaces.</small>
+        }
+
       </div>
 
 
@@ -518,7 +568,8 @@
 
         @if (
           memberForm.controls['city'].touched &&
-          memberForm.controls['city'].hasError('pattern')
+          (memberForm.controls['city'].hasError('pattern') ||
+           memberForm.controls['city'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             Enter a valid city.
@@ -553,7 +604,8 @@
 
         @if (
           memberForm.controls['state'].touched &&
-          memberForm.controls['state'].hasError('pattern')
+          (memberForm.controls['state'].hasError('pattern') ||
+           memberForm.controls['state'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             Enter a valid state.
@@ -588,7 +640,8 @@
 
         @if (
           memberForm.controls['country'].touched &&
-          memberForm.controls['country'].hasError('pattern')
+          (memberForm.controls['country'].hasError('pattern') ||
+           memberForm.controls['country'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             Enter a valid country.
@@ -623,10 +676,20 @@
 
         @if (
           memberForm.controls['postalCode'].touched &&
-          memberForm.controls['postalCode'].hasError('pattern')
+          (memberForm.controls['postalCode'].hasError('pattern') ||
+           memberForm.controls['postalCode'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             Enter a valid postal code.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['postalCode'].touched &&
+          memberForm.controls['postalCode'].hasError('maxlength')
+        ) {
+          <small class="validation-error">
+            Postal code cannot exceed 20 characters.
           </small>
         }
 
@@ -649,7 +712,8 @@
 
         @if (
           memberForm.controls['emergencyContactName'].touched &&
-          memberForm.controls['emergencyContactName'].hasError('pattern')
+          (memberForm.controls['emergencyContactName'].hasError('pattern') ||
+           memberForm.controls['emergencyContactName'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             Enter a valid name.
@@ -663,6 +727,13 @@
           <small class="validation-error">
             Name cannot exceed 100 characters.
           </small>
+        }
+
+        @if (
+          memberForm.controls['emergencyContactName'].touched &&
+          memberForm.controls['emergencyContactName'].hasError('minlength')
+        ) {
+          <small class="validation-error">Name must contain at least 2 characters.</small>
         }
 
       </div>
@@ -697,6 +768,15 @@
         ) {
           <small class="validation-error">
             Phone number must contain 10 to 15 digits.
+          </small>
+        }
+
+        @if (
+          (memberForm.controls['emergencyContactPhone'].touched || memberForm.controls['phone'].touched) &&
+          memberForm.hasError('emergencyPhoneMatchesPhone')
+        ) {
+          <small class="validation-error">
+            Emergency phone must be different from the primary phone.
           </small>
         }
 
@@ -735,6 +815,22 @@
           <option value="voter-id">Voter ID</option>
         </select>
 
+        @if (
+          memberForm.controls['idProofType'].touched &&
+          memberForm.controls['idProofType'].hasError('pattern')
+        ) {
+          <small class="validation-error">Select a valid ID proof type.</small>
+        }
+
+        @if (
+          (memberForm.controls['idProofType'].touched || memberForm.controls['idProofNumber'].touched) &&
+          memberForm.hasError('idProofTypeRequired')
+        ) {
+          <small class="validation-error">
+            Select an ID proof type for the entered ID number.
+          </small>
+        }
+
       </div>
 
 
@@ -754,7 +850,8 @@
 
         @if (
           memberForm.controls['idProofNumber'].touched &&
-          memberForm.controls['idProofNumber'].hasError('pattern')
+          (memberForm.controls['idProofNumber'].hasError('pattern') ||
+           memberForm.controls['idProofNumber'].hasError('whitespaceOnly'))
         ) {
           <small class="validation-error">
             Enter a valid ID number.
@@ -770,6 +867,24 @@
           </small>
         }
 
+        @if (
+          (memberForm.controls['idProofNumber'].touched || memberForm.controls['idProofType'].touched) &&
+          memberForm.hasError('idProofNumberRequired')
+        ) {
+          <small class="validation-error">
+            ID proof number is required when a proof type is selected.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['idProofNumber'].touched &&
+          memberForm.hasError('invalidIdProofFormat')
+        ) {
+          <small class="validation-error">
+            Enter a valid number for the selected ID proof type.
+          </small>
+        }
+
       </div>
 
 
@@ -780,20 +895,38 @@
           ID Proof
         </label>
 
-        <div class="file-upload">
+        <div
+          class="file-upload"
+          [class.file-upload-invalid]="memberForm.controls['idProofUrl'].touched && memberForm.controls['idProofUrl'].invalid"
+        >
 
           <input
             id="idProofUrl"
             type="file"
             accept="image/*,.pdf"
+            (change)="onIdProofFileSelected($event)"
           />
 
           <div class="upload-text">
             <strong>Upload ID proof</strong>
-            <span>PDF, JPG or PNG</span>
+            <span>PDF, JPG or PNG (max 5 MB)</span>
           </div>
 
         </div>
+
+        @if (
+          memberForm.controls['idProofUrl'].touched &&
+          memberForm.controls['idProofUrl'].hasError('invalidFileType')
+        ) {
+          <small class="validation-error">Only PDF, JPG and PNG files are allowed.</small>
+        }
+
+        @if (
+          memberForm.controls['idProofUrl'].touched &&
+          memberForm.controls['idProofUrl'].hasError('fileTooLarge')
+        ) {
+          <small class="validation-error">The ID proof file must not exceed 5 MB.</small>
+        }
 
       </div>
 
@@ -834,6 +967,15 @@
           </small>
         }
 
+        @if (
+          memberForm.controls['medicalConditions'].touched &&
+          memberForm.controls['medicalConditions'].hasError('whitespaceOnly')
+        ) {
+          <small class="validation-error">
+            Medical information cannot contain only spaces.
+          </small>
+        }
+
       </div>
 
 
@@ -856,6 +998,22 @@
           <option value="advertisement">Advertisement</option>
           <option value="other">Other</option>
         </select>
+
+        @if (
+          memberForm.controls['referralSource'].touched &&
+          memberForm.controls['referralSource'].hasError('pattern')
+        ) {
+          <small class="validation-error">Select a valid referral source.</small>
+        }
+
+        @if (
+          (memberForm.controls['referralSource'].touched || memberForm.controls['referredByMemberId'].touched) &&
+          memberForm.hasError('memberReferralSourceRequired')
+        ) {
+          <small class="validation-error">
+            Select Member Referral when a referring member ID is entered.
+          </small>
+        }
 
       </div>
 
@@ -881,6 +1039,22 @@
           <small class="validation-error">
             Member ID must contain numbers only.
           </small>
+        }
+
+        @if (
+          (memberForm.controls['referredByMemberId'].touched || memberForm.controls['referralSource'].touched) &&
+          memberForm.hasError('referredByMemberRequired')
+        ) {
+          <small class="validation-error">
+            Referring member ID is required for a member referral.
+          </small>
+        }
+
+        @if (
+          memberForm.controls['referredByMemberId'].touched &&
+          memberForm.hasError('selfReferral')
+        ) {
+          <small class="validation-error">A member cannot refer themselves.</small>
         }
 
       </div>
