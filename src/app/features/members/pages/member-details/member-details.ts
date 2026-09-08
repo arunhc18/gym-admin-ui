@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import {
   AbstractControl,
@@ -33,7 +33,8 @@ const MAX_ID_PROOF_FILE_SIZE = 5 * 1024 * 1024;
 
   imports: [
     ReactiveFormsModule,
-    TitleCasePipe
+    TitleCasePipe,
+    RouterLink
   ],
 
   templateUrl: './member-details.html',

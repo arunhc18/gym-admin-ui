@@ -5,18 +5,27 @@
 >
 
   <div class="member-actions">
-    @if (!isEditMode) {
-      <button type="button" class="btn btn-primary" (click)="startEditing()">
-        Edit Member
-      </button>
-    } @else {
-      <button type="button" class="btn btn-secondary" (click)="cancel()">
-        Cancel
-      </button>
-      <button type="submit" class="btn btn-primary" [disabled]="isSaveDisabled">
-        Save Changes
-      </button>
-    }
+    <a class="back-link" routerLink="/members" aria-label="Back to members">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+      <span>Back to Members</span>
+    </a>
+
+    <div class="member-action-buttons">
+      @if (!isEditMode) {
+        <button type="button" class="btn btn-primary" (click)="startEditing()">
+          Edit Member
+        </button>
+      } @else {
+        <button type="button" class="btn btn-secondary" (click)="cancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSaveDisabled">
+          Save Changes
+        </button>
+      }
+    </div>
   </div>
 
   <!-- Member Profile -->
