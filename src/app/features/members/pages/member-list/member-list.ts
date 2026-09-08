@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { MemberListItem } from '../../models/member-list-item.model';
 
@@ -13,6 +13,7 @@ import { MemberPaginationComponent } from '../../components/member-pagination/me
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     MemberFiltersComponent,
     MemberTableComponent,
     MemberPaginationComponent
