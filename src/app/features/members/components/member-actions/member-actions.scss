@@ -1,26 +1,60 @@
 .member-actions {
   display: flex;
   align-items: center;
+
   gap: 7px;
 }
 
+
 .view-button {
-  padding: 5px 10px;
+  min-width: 52px;
+  height: 30px;
 
-  border: 1px solid var(--border-primary);
-  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  background: transparent;
+  padding: 0 10px;
 
-  color: var(--text-secondary);
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
 
   font-size: 11px;
   font-weight: 500;
 
-  transition: var(--transition);
+  cursor: pointer;
+
+  transition:
+    var(--transition);
 }
 
+
 .view-button:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color:
+    var(--primary);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+}
+
+
+.view-button:focus-visible {
+  outline:
+    2px solid
+    var(--primary);
+
+  outline-offset: 2px;
 }
