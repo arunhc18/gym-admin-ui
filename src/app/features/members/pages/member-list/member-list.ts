@@ -1,570 +1,546 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
-import { MemberListItem } from '../../models/member-list-item.model';
+import { FormsModule } from '@angular/forms';
 
-import { MemberFiltersComponent } from '../../components/member-filters/member-filters';
-import { MemberTableComponent } from '../../components/member-table/member-table';
-import { MemberPaginationComponent } from '../../components/member-pagination/member-pagination';
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
+
+import {
+  Member,
+  MemberService
+} from '../../services/member.service';
+
 
 @Component({
   selector: 'app-member-list',
+
   standalone: true,
+
   imports: [
     CommonModule,
-    RouterLink,
-    MemberFiltersComponent,
-    MemberTableComponent,
-    MemberPaginationComponent
+    FormsModule
   ],
-  templateUrl: './member-list.html',
-  styleUrl: './member-list.scss'
+
+  templateUrl:
+    './member-list.html',
+
+  // IMPORTANT:
+  // Keep this .scss if your file is members-list.scss.
+  // If yours is members-list.css, change it to:
+  // styleUrl: './members-list.css'
+
+  styleUrl:
+    './member-list.scss'
 })
-export class MemberListComponent {
+export class MembersListComponent
+  implements OnInit {
 
-  // =========================================================
+
+  // =====================================================
+  // ALL MEMBERS
+  // =====================================================
+
+  members: Member[] = [];
+
+
+  // =====================================================
+  // FILTERED MEMBERS
+  //
+  // Your HTML loops through this collection.
+  // This allows all matching members to be available
+  // inside your scrollable grid.
+  // =====================================================
+
+  filteredMembers: Member[] = [];
+
+
+  // =====================================================
   // FILTER VALUES
-  // =========================================================
+  // =====================================================
 
-  searchTerm = '';
-  selectedStatus = 'All';
-  selectedPlan = 'All';
-  selectedLocation = 'All';
+  searchText = '';
 
+  selectedStatus = '';
 
-  // =========================================================
-  // PAGINATION
-  // =========================================================
+  selectedPlan = '';
 
-  currentPage = 1;
-  pageSize = 10;
+  selectedLocation = '';
 
-  readonly pageSizeOptions: number[] = [
-    5,
-    10,
-    25,
-    50
-  ];
 
+  // =====================================================
+  // FILTER DROPDOWN DATA
+  // =====================================================
 
-  // =========================================================
-  // MOCK MEMBER DATA
-  // Later this will come from ASP.NET Core API
-  // =========================================================
+  statuses: string[] = [];
 
-  members: MemberListItem[] = [
+  plans: string[] = [];
 
-    {
-      memberId: 1,
-      memberCode: 'MEM-00124',
+  locations: string[] = [];
 
-      firstName: 'Arun',
-      lastName: 'Kumar',
 
-      phone: '9876543210',
-      email: 'arun@example.com',
+  // =====================================================
+  // LOADING
+  // =====================================================
 
-      planName: 'Gold Annual',
-      location: 'Main Branch',
+  loading = true;
 
-      joinDate: '2026-01-12',
-      expiryDate: '2027-01-11',
 
-      status: 'Active'
-    },
-
-    {
-      memberId: 2,
-      memberCode: 'MEM-00125',
-
-      firstName: 'Rahul',
-      lastName: 'Sharma',
-
-      phone: '9876500001',
-      email: 'rahul@example.com',
-
-      planName: 'Monthly',
-      location: 'Main Branch',
-
-      joinDate: '2026-08-01',
-      expiryDate: '2026-09-30',
-
-      status: 'Expiring'
-    },
-
-    {
-      memberId: 3,
-      memberCode: 'MEM-00126',
-
-      firstName: 'Sneha',
-      lastName: 'Patil',
-
-      phone: '9900011223',
-      email: 'sneha@example.com',
-
-      planName: 'Premium Annual',
-      location: 'Indiranagar',
-
-      joinDate: '2025-09-01',
-      expiryDate: '2026-08-31',
-
-      status: 'Expired'
-    },
-
-    {
-      memberId: 4,
-      memberCode: 'MEM-00127',
-
-      firstName: 'Kiran',
-      lastName: 'Rao',
-
-      phone: '9988776655',
-      email: 'kiran@example.com',
-
-      planName: 'Quarterly',
-      location: 'HSR Layout',
-
-      joinDate: '2026-07-15',
-      expiryDate: '2026-10-15',
-
-      status: 'Active'
-    },
-
-    {
-      memberId: 5,
-      memberCode: 'MEM-00128',
-
-      firstName: 'Priya',
-      lastName: 'Shetty',
-
-      phone: '9911223344',
-      email: 'priya@example.com',
-
-      planName: 'Gold Annual',
-      location: 'Indiranagar',
-
-      joinDate: '2026-02-15',
-      expiryDate: '2027-02-14',
-
-      status: 'Active'
-    },
-
-    {
-      memberId: 6,
-      memberCode: 'MEM-00129',
-
-      firstName: 'Manoj',
-      lastName: 'Gowda',
-
-      phone: '9845012345',
-      email: 'manoj@example.com',
-
-      planName: 'Monthly',
-      location: 'Main Branch',
-
-      joinDate: '2026-08-10',
-      expiryDate: '2026-09-10',
-
-      status: 'Expiring'
-    },
-
-    {
-      memberId: 7,
-      memberCode: 'MEM-00130',
-
-      firstName: 'Ananya',
-      lastName: 'Reddy',
-
-      phone: '9900998877',
-      email: 'ananya@example.com',
-
-      planName: 'Premium Annual',
-      location: 'HSR Layout',
-
-      joinDate: '2026-03-05',
-      expiryDate: '2027-03-04',
-
-      status: 'Active'
-    },
-
-    {
-      memberId: 8,
-      memberCode: 'MEM-00131',
-
-      firstName: 'Vijay',
-      lastName: 'Kumar',
-
-      phone: '9988007766',
-      email: 'vijay@example.com',
-
-      planName: 'Quarterly',
-      location: 'Indiranagar',
-
-      joinDate: '2026-04-10',
-      expiryDate: '2026-07-10',
-
-      status: 'Expired'
-    },
-
-    {
-      memberId: 9,
-      memberCode: 'MEM-00132',
-
-      firstName: 'Megha',
-      lastName: 'Nair',
-
-      phone: '9887766554',
-      email: 'megha@example.com',
-
-      planName: 'Gold Annual',
-      location: 'Main Branch',
-
-      joinDate: '2026-06-20',
-      expiryDate: '2027-06-19',
-
-      status: 'Active'
-    },
-
-    {
-      memberId: 10,
-      memberCode: 'MEM-00133',
-
-      firstName: 'Rakesh',
-      lastName: 'Bhat',
-
-      phone: '9876123456',
-      email: 'rakesh@example.com',
-
-      planName: 'Monthly',
-      location: 'HSR Layout',
-
-      joinDate: '2026-08-25',
-      expiryDate: '2026-09-25',
-
-      status: 'Inactive'
-    },
-
-    {
-      memberId: 11,
-      memberCode: 'MEM-00134',
-
-      firstName: 'Divya',
-      lastName: 'Krishna',
-
-      phone: '9898989898',
-      email: 'divya@example.com',
-
-      planName: 'Gold Annual',
-      location: 'Main Branch',
-
-      joinDate: '2026-05-12',
-      expiryDate: '2027-05-11',
-
-      status: 'Active'
-    },
-
-    {
-      memberId: 12,
-      memberCode: 'MEM-00135',
-
-      firstName: 'Suresh',
-      lastName: 'Naik',
-
-      phone: '9812345678',
-      email: 'suresh@example.com',
-
-      planName: 'Quarterly',
-      location: 'Indiranagar',
-
-      joinDate: '2026-06-01',
-      expiryDate: '2026-09-01',
-
-      status: 'Expired'
-    }
-
-  ];
-
+  // =====================================================
+  // CONSTRUCTOR
+  // =====================================================
 
   constructor(
-    private router: Router
+
+    private memberService:
+      MemberService,
+
+    private router:
+      Router,
+
+    private route:
+      ActivatedRoute
+
   ) {}
 
 
-  // =========================================================
-  // SUMMARY COUNTS
-  // =========================================================
+  // =====================================================
+  // INITIALIZE
+  // =====================================================
 
-  get totalMembers(): number {
-    return this.members.length;
+  ngOnInit(): void {
+
+
+    // ===============================================
+    // LISTEN FOR MEMBERS
+    // ===============================================
+
+    this.memberService
+      .getMembers()
+      .subscribe({
+
+        next: (
+          members: Member[]
+        ) => {
+
+          this.members =
+            members;
+
+
+          this.prepareFilters();
+
+
+          /*
+            Apply current filters after member data
+            arrives.
+
+            This is important when opening:
+
+            /members?status=Active
+            /members?status=Expiring
+            /members?status=Expired
+          */
+
+          this.applyFilters(
+            false
+          );
+
+
+          this.loading = false;
+        },
+
+
+        error: error => {
+
+          console.error(
+            'Error loading members:',
+            error
+          );
+
+
+          this.members = [];
+
+          this.filteredMembers = [];
+
+          this.loading = false;
+        }
+
+      });
+
+
+    // ===============================================
+    // LISTEN TO DASHBOARD STATUS FILTER
+    // ===============================================
+
+    this.route.queryParamMap
+      .subscribe(
+        params => {
+
+          const status =
+            params.get(
+              'status'
+            );
+
+
+          this.selectedStatus =
+            status ?? '';
+
+
+          /*
+            If members have already loaded,
+            update immediately.
+          */
+
+          if (
+            this.members.length >
+            0
+          ) {
+
+            this.applyFilters(
+              true
+            );
+          }
+
+        }
+      );
   }
 
 
-  get activeMembers(): number {
+  // =====================================================
+  // PREPARE FILTER VALUES
+  // =====================================================
 
-    return this.members.filter(
-      member => member.status === 'Active'
-    ).length;
-  }
-
-
-  get expiringMembers(): number {
-
-    return this.members.filter(
-      member => member.status === 'Expiring'
-    ).length;
-  }
+  private prepareFilters(): void {
 
 
-  get expiredMembers(): number {
+    // STATUS
 
-    return this.members.filter(
-      member => member.status === 'Expired'
-    ).length;
-  }
+    this.statuses = [
 
-
-  // =========================================================
-  // FILTER OPTIONS
-  // =========================================================
-
-  get plans(): string[] {
-
-    return [
       ...new Set(
-        this.members.map(
-          member => member.planName
-        )
+
+        this.members
+
+          .map(
+            member =>
+              member.status
+          )
+
+          .filter(
+            Boolean
+          )
+
       )
-    ];
-  }
+
+    ].sort();
 
 
-  get locations(): string[] {
+    // PLANS
 
-    return [
+    this.plans = [
+
       ...new Set(
-        this.members.map(
-          member => member.location
-        )
+
+        this.members
+
+          .map(
+            member =>
+              member.planName
+          )
+
+          .filter(
+            Boolean
+          )
+
       )
-    ];
+
+    ].sort();
+
+
+    // LOCATIONS
+
+    this.locations = [
+
+      ...new Set(
+
+        this.members
+
+          .map(
+            member =>
+              member.locationName
+          )
+
+          .filter(
+            Boolean
+          )
+
+      )
+
+    ].sort();
   }
 
 
-  // =========================================================
-  // FILTERED MEMBERS
-  // =========================================================
+  // =====================================================
+  // APPLY FILTERS
+  // =====================================================
 
-  get filteredMembers(): MemberListItem[] {
+  applyFilters(
+    scrollToTop: boolean = true
+  ): void {
+
 
     const search =
-      this.searchTerm
+      this.searchText
+
         .trim()
+
         .toLowerCase();
 
-    return this.members.filter(member => {
 
-      const fullName =
-        `${member.firstName} ${member.lastName}`
-          .toLowerCase();
-
-
-      const matchesSearch =
-        !search ||
-        fullName.includes(search) ||
-        member.memberCode
-          .toLowerCase()
-          .includes(search) ||
-        member.phone.includes(search) ||
-        (member.email ?? '')
-          .toLowerCase()
-          .includes(search);
+    this.filteredMembers =
+      this.members.filter(
+        member => {
 
 
-      const matchesStatus =
-        this.selectedStatus === 'All' ||
-        member.status === this.selectedStatus;
+          // =============================================
+          // FULL NAME
+          // =============================================
+
+          const fullName =
+
+            `${member.firstName ?? ''} ${member.lastName ?? ''}`
+
+              .trim()
+
+              .toLowerCase();
 
 
-      const matchesPlan =
-        this.selectedPlan === 'All' ||
-        member.planName === this.selectedPlan;
+          // =============================================
+          // MEMBER CODE
+          // =============================================
+
+          const memberCode =
+
+            (
+              member.memberCode ??
+              ''
+            )
+
+              .toLowerCase();
 
 
-      const matchesLocation =
-        this.selectedLocation === 'All' ||
-        member.location === this.selectedLocation;
+          // =============================================
+          // PHONE
+          // =============================================
+
+          const phone =
+
+            (
+              member.phone ??
+              ''
+            )
+
+              .toLowerCase();
 
 
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesPlan &&
-        matchesLocation
+          // =============================================
+          // EMAIL
+          // =============================================
+
+          const email =
+
+            (
+              member.email ??
+              ''
+            )
+
+              .toLowerCase();
+
+
+          // =============================================
+          // SEARCH MATCH
+          // =============================================
+
+          const matchesSearch =
+
+            !search ||
+
+            fullName.includes(
+              search
+            ) ||
+
+            memberCode.includes(
+              search
+            ) ||
+
+            phone.includes(
+              search
+            ) ||
+
+            email.includes(
+              search
+            );
+
+
+          // =============================================
+          // STATUS MATCH
+          // =============================================
+
+          const matchesStatus =
+
+            !this.selectedStatus ||
+
+            member.status
+              .toLowerCase() ===
+
+            this.selectedStatus
+              .toLowerCase();
+
+
+          // =============================================
+          // PLAN MATCH
+          // =============================================
+
+          const matchesPlan =
+
+            !this.selectedPlan ||
+
+            member.planName
+              .toLowerCase() ===
+
+            this.selectedPlan
+              .toLowerCase();
+
+
+          // =============================================
+          // LOCATION MATCH
+          // =============================================
+
+          const matchesLocation =
+
+            !this.selectedLocation ||
+
+            member.locationName
+              .toLowerCase() ===
+
+            this.selectedLocation
+              .toLowerCase();
+
+
+          return (
+
+            matchesSearch &&
+
+            matchesStatus &&
+
+            matchesPlan &&
+
+            matchesLocation
+
+          );
+
+        }
       );
 
-    });
-  }
-
-
-  // =========================================================
-  // PAGINATION CALCULATIONS
-  // =========================================================
-
-  get totalPages(): number {
-
-    return Math.max(
-      1,
-      Math.ceil(
-        this.filteredMembers.length /
-        this.pageSize
-      )
-    );
-  }
-
-
-  get paginatedMembers(): MemberListItem[] {
-
-    const validCurrentPage =
-      Math.min(
-        this.currentPage,
-        this.totalPages
-      );
-
-    const startIndex =
-      (validCurrentPage - 1) *
-      this.pageSize;
-
-
-    return this.filteredMembers.slice(
-      startIndex,
-      startIndex + this.pageSize
-    );
-  }
-
-
-  get startRecord(): number {
 
     if (
-      this.filteredMembers.length === 0
+      scrollToTop
     ) {
-      return 0;
+
+      this.scrollTableToTop();
     }
-
-    return (
-      (this.currentPage - 1) *
-      this.pageSize +
-      1
-    );
   }
 
 
-  get endRecord(): number {
-
-    return Math.min(
-      this.currentPage *
-      this.pageSize,
-
-      this.filteredMembers.length
-    );
-  }
-
-
-  // =========================================================
-  // FILTER EVENTS
-  // =========================================================
-
-  onSearchChange(
-    value: string
-  ): void {
-
-    this.searchTerm = value;
-
-    this.currentPage = 1;
-  }
-
-
-  onStatusChange(
-    value: string
-  ): void {
-
-    this.selectedStatus = value;
-
-    this.currentPage = 1;
-  }
-
-
-  onPlanChange(
-    value: string
-  ): void {
-
-    this.selectedPlan = value;
-
-    this.currentPage = 1;
-  }
-
-
-  onLocationChange(
-    value: string
-  ): void {
-
-    this.selectedLocation = value;
-
-    this.currentPage = 1;
-  }
-
+  // =====================================================
+  // CLEAR FILTERS
+  // =====================================================
 
   clearFilters(): void {
 
-    this.searchTerm = '';
 
-    this.selectedStatus = 'All';
+    this.searchText = '';
 
-    this.selectedPlan = 'All';
 
-    this.selectedLocation = 'All';
+    this.selectedStatus = '';
 
-    this.currentPage = 1;
+
+    this.selectedPlan = '';
+
+
+    this.selectedLocation = '';
+
+
+    /*
+      Remove:
+
+      ?status=Active
+      ?status=Expiring
+      ?status=Expired
+
+      from URL.
+    */
+
+    this.router.navigate(
+      [],
+      {
+
+        relativeTo:
+          this.route,
+
+        queryParams:
+          {},
+
+        replaceUrl:
+          true
+
+      }
+    );
+
+
+    this.filteredMembers = [
+      ...this.members
+    ];
+
+
+    this.scrollTableToTop();
   }
 
 
-  // =========================================================
-  // PAGINATION EVENTS
-  // =========================================================
+  // =====================================================
+  // RETURN TO DASHBOARD
+  // =====================================================
 
-  changePage(
-    page: number
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+
+  // =====================================================
+  // CLICK MEMBER ROW
+  // =====================================================
+
+  openMemberDetails(
+    member: Member
   ): void {
 
+
     if (
-      page < 1 ||
-      page > this.totalPages
+      member.memberId ===
+        null ||
+
+      member.memberId ===
+        undefined
     ) {
+
       return;
     }
 
-    this.currentPage = page;
-  }
-
-
-  onPageSizeChange(
-    size: number
-  ): void {
-
-    this.pageSize = size;
-
-    this.currentPage = 1;
-  }
-
-
-  // =========================================================
-  // MEMBER ACTIONS
-  // =========================================================
-
-  viewMember(
-    member: MemberListItem
-  ): void {
 
     this.router.navigate([
       '/members',
@@ -573,35 +549,150 @@ export class MemberListComponent {
   }
 
 
-  editMember(
-    member: MemberListItem
-  ): void {
+  // =====================================================
+  // FULL NAME
+  // =====================================================
 
-    console.log(
-      'Edit Member:',
-      member
-    );
+  getFullName(
+    member: Member
+  ): string {
+
+
+    return [
+
+      member.firstName,
+
+      member.lastName
+
+    ]
+
+      .filter(
+        Boolean
+      )
+
+      .join(' ');
   }
 
 
-  renewMembership(
-    member: MemberListItem
-  ): void {
+  // =====================================================
+  // INITIALS
+  // =====================================================
 
-    console.log(
-      'Renew Membership:',
-      member
-    );
+  getInitials(
+    member: Member
+  ): string {
+
+
+    const firstInitial =
+
+      member.firstName
+        ?.charAt(0) ??
+      '';
+
+
+    const lastInitial =
+
+      member.lastName
+        ?.charAt(0) ??
+      '';
+
+
+    return (
+
+      firstInitial +
+
+      lastInitial
+
+    ).toUpperCase();
   }
 
 
-  recordPayment(
-    member: MemberListItem
-  ): void {
+  // =====================================================
+  // STATUS CSS CLASS
+  // =====================================================
 
-    console.log(
-      'Record Payment:',
-      member
+  getStatusClass(
+    status: string
+  ): string {
+
+
+    switch (
+      status
+        .toLowerCase()
+    ) {
+
+
+      case 'active':
+
+        return 'active';
+
+
+      case 'expiring':
+
+        return 'expiring';
+
+
+      case 'expired':
+
+        return 'expired';
+
+
+      case 'inactive':
+
+        return 'inactive';
+
+
+      case 'suspended':
+
+        return 'suspended';
+
+
+      default:
+
+        return 'default';
+
+    }
+  }
+
+
+  // =====================================================
+  // SCROLL TABLE TO TOP
+  // =====================================================
+
+  private scrollTableToTop(): void {
+
+
+    setTimeout(
+      () => {
+
+
+        const container =
+
+          document
+            .querySelector(
+              '.members-table-scroll'
+            );
+
+
+        if (
+          container
+        ) {
+
+
+          container.scrollTo({
+
+            top: 0,
+
+            behavior:
+              'smooth'
+
+          });
+
+        }
+
+      },
+
+      0
     );
   }
 }

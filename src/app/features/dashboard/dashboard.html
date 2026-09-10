@@ -1,1 +1,1319 @@
-<section class="placeholder-page"><h2>Dashboard Content</h2></section>
+<div class="dashboard-page">
+
+  <!-- =====================================================
+       WELCOME CARD
+  ====================================================== -->
+
+  <section class="welcome-card">
+
+    <div class="welcome-content">
+
+      <h1>
+        Welcome back, Admin!
+      </h1>
+
+      <p>
+        Here's an overview of your gym today.
+      </p>
+
+    </div>
+
+
+    <div class="date-box">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+
+        <rect
+          x="3"
+          y="5"
+          width="18"
+          height="16"
+          rx="2"
+        ></rect>
+
+        <path d="M16 3v4"></path>
+
+        <path d="M8 3v4"></path>
+
+        <path d="M3 11h18"></path>
+
+      </svg>
+
+      <span>
+        {{
+          today
+          | date:'EEEE, dd MMMM yyyy'
+        }}
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       KPI CARDS
+  ====================================================== -->
+
+  <section class="stats-grid">
+
+
+    <!-- TOTAL MEMBERS -->
+
+    <article
+      class="stat-card clickable-card"
+      tabindex="0"
+      (click)="viewAllMembers()"
+      (keydown.enter)="viewAllMembers()"
+    >
+
+      <div class="stat-icon red">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+
+          <path
+            d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+          ></path>
+
+          <circle
+            cx="9"
+            cy="7"
+            r="4"
+          ></circle>
+
+          <path
+            d="M22 21v-2a4 4 0 0 0-3-3.87"
+          ></path>
+
+          <path
+            d="M16 3.13a4 4 0 0 1 0 7.75"
+          ></path>
+
+        </svg>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span class="stat-label">
+          Total Members
+        </span>
+
+        <div class="stat-value-row">
+
+          <strong>
+            {{ totalMembers }}
+          </strong>
+
+          <span class="positive">
+            ↑ {{ totalMembersChange }}%
+          </span>
+
+        </div>
+
+        <small>
+          vs last month
+        </small>
+
+      </div>
+
+    </article>
+
+
+    <!-- ACTIVE MEMBERS -->
+
+    <article
+      class="stat-card clickable-card"
+      tabindex="0"
+      (click)="viewActiveMembers()"
+      (keydown.enter)="viewActiveMembers()"
+    >
+
+      <div class="stat-icon green">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+
+          <circle
+            cx="12"
+            cy="7"
+            r="4"
+          ></circle>
+
+          <path
+            d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"
+          ></path>
+
+        </svg>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span class="stat-label">
+          Active Members
+        </span>
+
+        <div class="stat-value-row">
+
+          <strong>
+            {{ activeMembers }}
+          </strong>
+
+          <span class="positive">
+            ↑ {{ activeMembersChange }}%
+          </span>
+
+        </div>
+
+        <small>
+          vs last month
+        </small>
+
+      </div>
+
+    </article>
+
+
+    <!-- EXPIRING SOON -->
+
+    <article
+      class="stat-card clickable-card"
+      tabindex="0"
+      (click)="viewExpiringMembers()"
+      (keydown.enter)="viewExpiringMembers()"
+    >
+
+      <div class="stat-icon yellow">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+          ></circle>
+
+          <path
+            d="M12 7v5l3 2"
+          ></path>
+
+        </svg>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span class="stat-label">
+          Expiring Soon
+        </span>
+
+        <div class="stat-value-row">
+
+          <strong>
+            {{ expiringSoon }}
+          </strong>
+
+          <span class="positive">
+            ↑ {{ expiringChange }}%
+          </span>
+
+        </div>
+
+        <small>
+          vs last month
+        </small>
+
+      </div>
+
+    </article>
+
+
+    <!-- EXPIRED MEMBERS -->
+
+    <article
+      class="stat-card clickable-card"
+      tabindex="0"
+      (click)="viewExpiredMembers()"
+      (keydown.enter)="viewExpiredMembers()"
+    >
+
+      <div class="stat-icon red">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+          ></circle>
+
+          <path
+            d="m9 9 6 6"
+          ></path>
+
+          <path
+            d="m15 9-6 6"
+          ></path>
+
+        </svg>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span class="stat-label">
+          Expired Members
+        </span>
+
+        <div class="stat-value-row">
+
+          <strong>
+            {{ expiredMembers }}
+          </strong>
+
+          <span class="negative">
+            ↓ {{ expiredChange }}%
+          </span>
+
+        </div>
+
+        <small>
+          vs last month
+        </small>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- =====================================================
+       ANALYTICS SECTION
+  ====================================================== -->
+
+  <section class="analytics-grid">
+
+
+    <!-- =================================================
+         MEMBER GROWTH
+    ================================================== -->
+
+    <article class="dashboard-card growth-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon red-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path d="M4 20V10"></path>
+              <path d="M10 20V4"></path>
+              <path d="M16 20v-7"></path>
+              <path d="M22 20V7"></path>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Member Growth
+            </h2>
+
+            <p>
+              New members joined in the last 6 months
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <select class="period-select">
+
+          <option>
+            Last 6 Months
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="growth-chart">
+
+        <svg
+          viewBox="0 0 640 220"
+          preserveAspectRatio="none"
+        >
+
+          <defs>
+
+            <linearGradient
+              id="growthGradient"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+
+              <stop
+                offset="0%"
+                stop-color="#ff3153"
+                stop-opacity="0.33"
+              ></stop>
+
+              <stop
+                offset="100%"
+                stop-color="#ff3153"
+                stop-opacity="0"
+              ></stop>
+
+            </linearGradient>
+
+          </defs>
+
+
+          <!-- GRID -->
+
+          <line
+            x1="40"
+            y1="30"
+            x2="600"
+            y2="30"
+            class="grid-line"
+          ></line>
+
+          <line
+            x1="40"
+            y1="67.5"
+            x2="600"
+            y2="67.5"
+            class="grid-line"
+          ></line>
+
+          <line
+            x1="40"
+            y1="105"
+            x2="600"
+            y2="105"
+            class="grid-line"
+          ></line>
+
+          <line
+            x1="40"
+            y1="142.5"
+            x2="600"
+            y2="142.5"
+            class="grid-line"
+          ></line>
+
+          <line
+            x1="40"
+            y1="180"
+            x2="600"
+            y2="180"
+            class="grid-line"
+          ></line>
+
+
+          <!-- Y VALUES -->
+
+          <text
+            x="9"
+            y="34"
+            class="chart-text"
+          >
+            40
+          </text>
+
+          <text
+            x="9"
+            y="71"
+            class="chart-text"
+          >
+            30
+          </text>
+
+          <text
+            x="9"
+            y="109"
+            class="chart-text"
+          >
+            20
+          </text>
+
+          <text
+            x="9"
+            y="146"
+            class="chart-text"
+          >
+            10
+          </text>
+
+          <text
+            x="17"
+            y="184"
+            class="chart-text"
+          >
+            0
+          </text>
+
+
+          <!-- AREA -->
+
+          <path
+            [attr.d]="memberGrowthAreaPath"
+            fill="url(#growthGradient)"
+          ></path>
+
+
+          <!-- LINE -->
+
+          <polyline
+            [attr.points]="memberGrowthPoints"
+            fill="none"
+            stroke="#ff3153"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          ></polyline>
+
+
+          <!-- POINTS -->
+
+          @for (
+            point of growthPoints;
+            track point.month
+          ) {
+
+            <circle
+              [attr.cx]="point.x"
+              [attr.cy]="point.y"
+              r="4"
+              class="chart-point"
+            ></circle>
+
+
+            <text
+              [attr.x]="point.x"
+              y="207"
+              text-anchor="middle"
+              class="chart-text"
+            >
+              {{ point.month }}
+            </text>
+
+          }
+
+        </svg>
+
+      </div>
+
+    </article>
+
+
+    <!-- =================================================
+         REVENUE AND EXPENSES
+    ================================================== -->
+
+    <article class="dashboard-card finance-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon green-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path d="M4 20V10"></path>
+              <path d="M10 20V4"></path>
+              <path d="M16 20v-7"></path>
+              <path d="M22 20V7"></path>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Revenue vs Expenses
+            </h2>
+
+            <p>
+              Financial overview for the last 6 months
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <select class="period-select">
+
+          <option>
+            Last 6 Months
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="finance-content">
+
+
+        <!-- REVENUE -->
+
+        <div class="finance-summary">
+
+          <div class="finance-heading">
+
+            <span class="finance-dot revenue">
+            </span>
+
+            Revenue
+
+          </div>
+
+
+          <div class="finance-amount">
+
+            <strong>
+              ₹{{ formatCurrency(revenue) }}
+            </strong>
+
+            <span class="positive">
+              ↑ {{ revenueChange }}%
+            </span>
+
+          </div>
+
+
+          <small>
+            vs last month
+          </small>
+
+        </div>
+
+
+        <!-- EXPENSES -->
+
+        <div class="finance-summary">
+
+          <div class="finance-heading">
+
+            <span class="finance-dot expenses">
+            </span>
+
+            Expenses
+
+          </div>
+
+
+          <div class="finance-amount">
+
+            <strong>
+              ₹{{ formatCurrency(expenses) }}
+            </strong>
+
+            <span class="negative">
+              ↑ {{ expenseChange }}%
+            </span>
+
+          </div>
+
+
+          <small>
+            vs last month
+          </small>
+
+        </div>
+
+
+        <!-- PROFIT -->
+
+        <div class="profit-summary">
+
+          <div class="profit-icon">
+
+            ₹
+
+          </div>
+
+
+          <div class="profit-info">
+
+            <span>
+              Net Profit
+            </span>
+
+            <strong>
+              ₹{{ formatCurrency(netProfit) }}
+            </strong>
+
+          </div>
+
+
+          <div class="profit-change">
+
+            <span class="positive">
+              ↑ {{ profitChange }}%
+            </span>
+
+            <small>
+              vs last month
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <!-- =================================================
+         ATTENDANCE
+    ================================================== -->
+
+    <article class="dashboard-card attendance-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon red-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+              ></circle>
+
+              <path
+                d="M12 3v9h9"
+              ></path>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Today's Attendance
+            </h2>
+
+            <p>
+              Check-in summary for today
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="attendance-content">
+
+        <div
+          class="attendance-ring"
+          [style.background]="attendanceRingBackground"
+        >
+
+          <div class="attendance-ring-center">
+
+            <strong>
+              {{ checkedIn }}
+            </strong>
+
+            <span>
+              Checked In
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="attendance-legend">
+
+          <div>
+
+            <div class="legend-label">
+
+              <span class="legend-dot checked">
+              </span>
+
+              Checked In
+
+            </div>
+
+            <strong>
+
+              {{ checkedIn }}
+
+              ({{ checkedInPercentage }}%)
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <div class="legend-label">
+
+              <span class="legend-dot not-checked">
+              </span>
+
+              Not Checked In
+
+            </div>
+
+            <strong>
+
+              {{ notCheckedIn }}
+
+              ({{ notCheckedInPercentage }}%)
+
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- =====================================================
+       LOWER TABLES
+  ====================================================== -->
+
+  <section class="bottom-grid">
+
+
+    <!-- =================================================
+         RECENT MEMBERS
+    ================================================== -->
+
+    <article class="dashboard-card table-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon red-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path
+                d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+              ></path>
+
+              <circle
+                cx="9"
+                cy="7"
+                r="4"
+              ></circle>
+
+              <path
+                d="M22 21v-2a4 4 0 0 0-3-3.87"
+              ></path>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Recent Members
+            </h2>
+
+            <p>
+              Latest 5 registered members
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="view-all-button"
+          (click)="viewAllRecentMembers()"
+        >
+
+          View All
+
+        </button>
+
+      </div>
+
+
+      <div class="dashboard-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Name
+              </th>
+
+              <th>
+                Member ID
+              </th>
+
+              <th>
+                Joined Date
+              </th>
+
+              <th>
+                Status
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              member of recentMembers;
+              track member.memberId
+            ) {
+
+              <tr
+                class="clickable-row"
+                (click)="openMember(member)"
+              >
+
+                <td>
+
+                  <div class="member-cell">
+
+                    <span class="mini-avatar">
+                      {{ member.initials }}
+                    </span>
+
+                    <span>
+                      {{ member.name }}
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <td>
+                  {{ member.memberId }}
+                </td>
+
+
+                <td>
+                  {{ member.joinedDate }}
+                </td>
+
+
+                <td>
+
+                  <span
+                    class="member-status"
+                    [ngClass]="
+                      getMemberStatusClass(
+                        member.status
+                      )
+                    "
+                  >
+
+                    <span class="small-dot">
+                    </span>
+
+                    {{ member.status }}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </article>
+
+
+    <!-- =================================================
+         UPCOMING RENEWALS
+    ================================================== -->
+
+    <article class="dashboard-card table-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon red-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="16"
+                rx="2"
+              ></rect>
+
+              <path d="M16 3v4"></path>
+
+              <path d="M8 3v4"></path>
+
+              <path d="M3 11h18"></path>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Upcoming Renewals
+            </h2>
+
+            <p>
+              Members with membership expiring soon
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="view-all-button"
+          (click)="viewAllRenewals()"
+        >
+
+          View All
+
+        </button>
+
+      </div>
+
+
+      <div class="dashboard-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Name
+              </th>
+
+              <th>
+                Member ID
+              </th>
+
+              <th>
+                Expiry Date
+              </th>
+
+              <th>
+                Days Left
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              renewal of renewals;
+              track renewal.memberId
+            ) {
+
+              <tr
+                class="clickable-row"
+                (click)="openRenewalMember(renewal)"
+              >
+
+                <td>
+                  {{ renewal.name }}
+                </td>
+
+                <td>
+                  {{ renewal.memberId }}
+                </td>
+
+                <td>
+                  {{ renewal.expiryDate }}
+                </td>
+
+                <td>
+
+                  <span
+                    class="days-left"
+                    [ngClass]="
+                      getDaysClass(
+                        renewal.daysLeft
+                      )
+                    "
+                  >
+
+                    {{ renewal.daysLeft }}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </article>
+
+
+    <!-- =================================================
+         TOP LOCATIONS
+    ================================================== -->
+
+    <article class="dashboard-card table-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon red-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path
+                d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
+              ></path>
+
+              <circle
+                cx="12"
+                cy="10"
+                r="2"
+              ></circle>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Top Locations by Revenue
+            </h2>
+
+            <p>
+              Revenue generated by each location
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="view-all-button"
+        >
+
+          View All
+
+        </button>
+
+      </div>
+
+
+      <div class="dashboard-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Location
+              </th>
+
+              <th>
+                Revenue
+              </th>
+
+              <th>
+                Members
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              location of locationRevenue;
+              track location.name
+            ) {
+
+              <tr>
+
+                <td>
+
+                  <div class="location-cell">
+
+                    <span
+                      class="location-color"
+                      [ngClass]="
+                        location.colorClass
+                      "
+                    >
+                    </span>
+
+                    {{ location.name }}
+
+                  </div>
+
+                </td>
+
+
+                <td>
+
+                  ₹{{
+                    formatCurrency(
+                      location.revenue
+                    )
+                  }}
+
+                </td>
+
+
+                <td>
+
+                  {{ location.members }}
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </article>
+
+  </section>
+
+</div>

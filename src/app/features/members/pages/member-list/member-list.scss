@@ -1,350 +1,717 @@
-.member-list-page {
+:host {
+  display: block;
   width: 100%;
-
-  display: flex;
-  flex-direction: column;
-
-  gap:
-    var(--space-lg);
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: 6px;
-  color: var(--text-secondary);
-  font-size: 14px;
-  text-decoration: none;
-}
-
-.back-link svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2;
-}
-
-.back-link:hover {
-  color: var(--text-primary);
 }
 
 
-/* =========================================================
-   SUMMARY
-========================================================= */
+/* =====================================================
+   PAGE
+===================================================== */
 
-.summary-grid {
-  display: grid;
+.members-page {
+  width: 100%;
+  height: calc(100vh - 72px);
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  padding: 14px 0 22px 8px;
 
-  gap: 14px;
-}
+  box-sizing: border-box;
 
+  background: #0a0d10;
 
-.summary-card {
-  min-height: 88px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-
-  padding: 16px;
-
-  background:
-    var(--bg-card);
-
-  border:
-    1px solid
-    var(--border-primary);
-
-  border-radius:
-    var(--radius-lg);
-}
-
-
-.summary-icon {
-  width: 42px;
-  height: 42px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius:
-    var(--radius-md);
-
-  background:
-    var(--primary-subtle);
-
-  color:
-    var(--primary);
-}
-
-
-.summary-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-
-.active-icon {
-  color:
-    var(--success);
-
-  background:
-    rgba(24, 185, 129, 0.12);
-}
-
-
-.expiring-icon {
-  color:
-    var(--warning);
-
-  background:
-    rgba(245, 165, 36, 0.12);
-}
-
-
-.expired-icon {
-  color:
-    var(--danger);
-
-  background:
-    rgba(239, 68, 68, 0.12);
-}
-
-
-.summary-content {
-  min-width: 0;
-}
-
-
-.summary-label {
-  margin: 0 0 5px;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 12px;
-}
-
-
-.summary-value {
-  margin: 0;
-
-  color:
-    var(--text-primary);
-
-  font-size: 22px;
-  font-weight: 650;
-
-  line-height: 1;
-}
-
-
-/* =========================================================
-   MEMBERS SECTION
-========================================================= */
-
-.members-section {
-  background:
-    var(--bg-card);
-
-  border:
-    1px solid
-    var(--border-primary);
-
-  border-radius:
-    var(--radius-lg);
+  color: #ffffff;
 
   overflow: hidden;
 }
 
 
-/* =========================================================
-   TABLE HEADER
-========================================================= */
+/* =====================================================
+   MEMBER CARD
+===================================================== */
 
-.table-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 16px;
-
-  padding: 17px 18px;
-
-  border-bottom:
-    1px solid
-    var(--border-primary);
-}
-
-
-.table-header h3 {
-  margin: 0 0 4px;
-
-  color:
-    var(--text-primary);
-
-  font-size: 14px;
-  font-weight: 600;
-}
-
-
-.table-header p {
-  margin: 0;
-
-  color:
-    var(--text-muted);
-
-  font-size: 12px;
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty-state {
-  min-height: 300px;
+.members-card {
+  width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
 
-  align-items: center;
-  justify-content: center;
+  background: #14181e;
 
-  padding: 40px;
+  border: 1px solid #252b33;
 
-  text-align: center;
+  border-radius: 7px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
 }
 
 
-.empty-state-icon {
-  width: 48px;
-  height: 48px;
+/* =====================================================
+   TITLE
+===================================================== */
 
-  margin-bottom: 14px;
+.members-title {
+  flex: 0 0 auto;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 15px 17px 12px;
 
-  border-radius:
-    var(--radius-md);
+  background: #14181e;
 
-  background:
-    var(--bg-elevated);
-
-  color:
-    var(--text-secondary);
+  border-bottom: 1px solid #252b33;
 }
 
+.members-title h2 {
+  margin: 0 0 4px;
 
-.empty-state-icon svg {
-  width: 22px;
-  height: 22px;
-}
-
-
-.empty-state h3 {
-  margin: 0 0 6px;
-
-  color:
-    var(--text-primary);
+  color: #f5f6f8;
 
   font-size: 15px;
+
+  font-weight: 700;
+}
+
+.members-title span {
+  color: #6f7a86;
+
+  font-size: 11px;
 }
 
 
-.empty-state p {
-  margin: 0 0 18px;
+/* =====================================================
+   FILTER BAR
+===================================================== */
 
-  color:
-    var(--text-secondary);
+.filter-bar {
+  flex: 0 0 auto;
 
-  font-size: 12px;
+  padding: 12px 16px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(300px, 2fr)
+    130px
+    130px
+    145px
+    65px;
+
+  gap: 8px;
+
+  background: #0a0d10;
+
+  border-bottom: 1px solid #252b33;
 }
 
 
-/* =========================================================
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-box {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+}
+
+.search-box svg {
+  position: absolute;
+
+  left: 11px;
+
+  width: 14px;
+  height: 14px;
+
+  color: #687482;
+
+  pointer-events: none;
+}
+
+.search-box input {
+  width: 100%;
+  height: 34px;
+
+  padding:
+    0
+    11px
+    0
+    34px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #262d35;
+
+  border-radius: 4px;
+
+  outline: none;
+
+  background: #191d24;
+
+  color: #dce1e6;
+
+  font-family: inherit;
+
+  font-size: 11px;
+}
+
+.search-box input::placeholder {
+  color: #687482;
+}
+
+.search-box input:focus {
+  border-color: #434b55;
+}
+
+
+/* =====================================================
+   SELECTS
+===================================================== */
+
+.filter-bar select {
+  height: 34px;
+
+  padding: 0 9px;
+
+  border: 1px solid #262d35;
+
+  border-radius: 4px;
+
+  outline: none;
+
+  background: #191d24;
+
+  color: #e3e6e9;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.filter-bar select:focus {
+  border-color: #434b55;
+}
+
+.filter-bar select option {
+  background: #191d24;
+
+  color: #ffffff;
+}
+
+
+/* =====================================================
+   CLEAR
+===================================================== */
+
+.clear-button {
+  height: 34px;
+
+  border: 1px solid #262d35;
+
+  border-radius: 4px;
+
+  background: #14181e;
+
+  color: #9ba5af;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.clear-button:hover {
+  border-color: #4a525d;
+
+  color: #ffffff;
+
+  background: #191d24;
+}
+
+
+/* =====================================================
+   SCROLL CONTAINER
+
+   IMPORTANT:
+   This contains ALL 12 MEMBERS.
+===================================================== */
+
+.members-table-scroll {
+  flex: 1 1 auto;
+
+  width: 100%;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  overflow-x: auto;
+
+  background: #14181e;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #3c4651
+    #101318;
+}
+
+
+/* EDGE / CHROME */
+
+.members-table-scroll::-webkit-scrollbar {
+  width: 7px;
+
+  height: 7px;
+}
+
+.members-table-scroll::-webkit-scrollbar-track {
+  background: #101318;
+}
+
+.members-table-scroll::-webkit-scrollbar-thumb {
+  background: #3c4651;
+
+  border-radius: 10px;
+}
+
+.members-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #56616d;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.members-table {
+  width: 100%;
+
+  min-width: 900px;
+
+  border-collapse: separate;
+
+  border-spacing: 0;
+
+  background: #14181e;
+}
+
+
+/* =====================================================
+   TABLE HEADER
+===================================================== */
+
+.members-table thead {
+  position: sticky;
+
+  top: 0;
+
+  z-index: 20;
+}
+
+.members-table th {
+  height: 38px;
+
+  padding: 0 16px;
+
+  background: #14181e;
+
+  border-bottom: 1px solid #252b33;
+
+  text-align: left;
+
+  color: #626d79;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.045em;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   ROWS
+
+   5-ish rows fit initially.
+   Remaining rows are reached by scrolling.
+===================================================== */
+
+.members-table td {
+  height: 55px;
+
+  padding: 7px 16px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #242a32;
+
+  color: #afb7c0;
+
+  font-size: 10px;
+
+  vertical-align: middle;
+}
+
+.member-row {
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease;
+}
+
+.member-row:hover {
+  background: #191d24;
+}
+
+
+/* RED LEFT HIGHLIGHT WHEN KEYBOARD FOCUSED */
+
+.member-row:focus {
+  outline: none;
+
+  background: #191d24;
+
+  box-shadow:
+    inset 2px 0 0
+    #ff304d;
+}
+
+
+/* =====================================================
+   MEMBER
+===================================================== */
+
+.member-wrapper {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  min-width: 155px;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+
+  min-width: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  background: #351b21;
+
+  border: 1px solid #54242e;
+
+  color: #ff304d;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+.member-name {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.member-name strong {
+  color: #edf0f3;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.member-name small {
+  color: #64707c;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   CONTACT
+===================================================== */
+
+.contact {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.contact span {
+  color: #d5d9de;
+
+  font-size: 10px;
+}
+
+.contact small {
+  color: #65717d;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   MEMBERSHIP
+===================================================== */
+
+.membership {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.membership strong {
+  color: #e7e9ec;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.membership small {
+  color: #67727e;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+  padding: 4px 7px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  border-radius: 3px;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+.status-dot {
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+
+/* ACTIVE */
+
+.status.active {
+  color: #00bd87;
+
+  background: rgba(
+    0,
+    189,
+    135,
+    0.12
+  );
+}
+
+
+/* EXPIRING */
+
+.status.expiring {
+  color: #ffb000;
+
+  background: rgba(
+    255,
+    176,
+    0,
+    0.12
+  );
+}
+
+
+/* EXPIRED */
+
+.status.expired {
+  color: #ff304d;
+
+  background: rgba(
+    255,
+    48,
+    77,
+    0.12
+  );
+}
+
+
+/* INACTIVE */
+
+.status.inactive {
+  color: #929ba5;
+
+  background: rgba(
+    146,
+    155,
+    165,
+    0.12
+  );
+}
+
+
+/* DEFAULT */
+
+.status.default {
+  color: #929ba5;
+
+  background: #20252c;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.table-footer {
+  flex: 0 0 auto;
+
+  min-height: 44px;
+
+  padding: 0 16px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  background: #101318;
+
+  border-top: 1px solid #252b33;
+
+  color: #66717d;
+
+  font-size: 10px;
+}
+
+.table-footer strong {
+  color: #cbd1d7;
+}
+
+.scroll-message {
+  color: #626d78;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-state {
+  height: 260px !important;
+
+  text-align: center;
+
+  color: #7b8590 !important;
+}
+
+
+/* =====================================================
    RESPONSIVE
-========================================================= */
+===================================================== */
 
-@media (max-width: 1100px) {
+@media (max-width: 1050px) {
 
-  .summary-grid {
+  .filter-bar {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      1fr
+      1fr
+      1fr;
   }
 
+  .search-box {
+    grid-column:
+      1 / -1;
+  }
 }
 
 
 @media (max-width: 700px) {
 
-  .member-list-page {
-    gap: 16px;
+  .members-page {
+    padding: 12px;
   }
 
-
-  .summary-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-    gap: 10px;
-  }
-
-
-  .summary-card {
-    min-height: 80px;
-
-    padding: 13px;
-  }
-
-
-  .summary-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-
-  .summary-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-
-  .summary-value {
-    font-size: 18px;
-  }
-
-
-  .table-header {
-    padding: 14px;
-  }
-
-}
-
-
-@media (max-width: 480px) {
-
-  .summary-grid {
+  .filter-bar {
     grid-template-columns: 1fr;
   }
 
-
-  .empty-state {
-    padding: 32px 16px;
+  .search-box {
+    grid-column: auto;
   }
 
+  .clear-button {
+    width: 100%;
+  }
+}
+
+
+/* =====================================================
+   BACK LINK
+===================================================== */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #8d98a5;
+  font-size: 11px;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.back-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+.back-link:hover {
+  color: #f5f6f8;
 }

@@ -1,57 +1,37 @@
-<div class="member-list-page">
+<div class="members-page">
 
-  <a class="back-link" routerLink="/dashboard" aria-label="Back to dashboard">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="m15 18-6-6 6-6" />
+  <button
+    class="back-link"
+    type="button"
+    (click)="goToDashboard()"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m15 18-6-6 6-6"></path>
     </svg>
-    <span>Back to Dashboard</span>
-  </a>
 
-  <!-- ======================================================
-       SUMMARY CARDS
-  ======================================================= -->
+    Back to Dashboard
+  </button>
 
-  <section class="summary-grid">
+  <section class="members-card">
 
-    <!-- Total Members -->
-    <div class="summary-card">
+    <!-- =====================================================
+         SEARCH + FILTERS
+    ====================================================== -->
 
-      <div class="summary-icon">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-      </div>
+    <div class="filter-bar">
 
-      <div class="summary-content">
+      <!-- SEARCH -->
 
-        <p class="summary-label">
-          Total Members
-        </p>
+      <div class="search-box">
 
-        <h3 class="summary-value">
-          {{ totalMembers }}
-        </h3>
-
-      </div>
-
-    </div>
-
-
-    <!-- Active Members -->
-    <div class="summary-card">
-
-      <div class="summary-icon active-icon">
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -59,249 +39,419 @@
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          aria-hidden="true"
         >
-          <circle cx="12" cy="12" r="9"/>
-          <path d="m8 12 2.5 2.5L16 9"/>
-        </svg>
-      </div>
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+          ></circle>
 
-      <div class="summary-content">
-
-        <p class="summary-label">
-          Active Members
-        </p>
-
-        <h3 class="summary-value">
-          {{ activeMembers }}
-        </h3>
-
-      </div>
-
-    </div>
-
-
-    <!-- Expiring Members -->
-    <div class="summary-card">
-
-      <div class="summary-icon expiring-icon">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 7v5l3 2"/>
-        </svg>
-      </div>
-
-      <div class="summary-content">
-
-        <p class="summary-label">
-          Expiring Soon
-        </p>
-
-        <h3 class="summary-value">
-          {{ expiringMembers }}
-        </h3>
-
-      </div>
-
-    </div>
-
-
-    <!-- Expired Members -->
-    <div class="summary-card">
-
-      <div class="summary-icon expired-icon">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 8v5"/>
-          <path d="M12 16h.01"/>
-        </svg>
-      </div>
-
-      <div class="summary-content">
-
-        <p class="summary-label">
-          Expired
-        </p>
-
-        <h3 class="summary-value">
-          {{ expiredMembers }}
-        </h3>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ======================================================
-       FILTERS
-  ======================================================= -->
-
-  <app-member-filters
-
-    [searchTerm]="searchTerm"
-
-    [selectedStatus]="selectedStatus"
-
-    [selectedPlan]="selectedPlan"
-
-    [selectedLocation]="selectedLocation"
-
-    [plans]="plans"
-
-    [locations]="locations"
-
-    (searchTermChange)="onSearchChange($event)"
-
-    (statusChange)="onStatusChange($event)"
-
-    (planChange)="onPlanChange($event)"
-
-    (locationChange)="onLocationChange($event)"
-
-    (clear)="clearFilters()"
-
-  />
-
-
-  <!-- ======================================================
-       MEMBERS SECTION
-  ======================================================= -->
-
-  <section class="members-section">
-
-    <!-- Section Header -->
-    <div class="table-header">
-
-      <div>
-
-        <h3>
-          All Members
-        </h3>
-
-        <p>
-          {{ filteredMembers.length }}
-          member{{ filteredMembers.length === 1 ? '' : 's' }}
-          found
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <!-- ====================================================
-         MEMBER TABLE
-    ===================================================== -->
-
-    <app-member-table
-
-      *ngIf="filteredMembers.length > 0"
-
-      [members]="paginatedMembers"
-
-      (view)="viewMember($event)"
-
-      (edit)="editMember($event)"
-
-      (renew)="renewMembership($event)"
-
-      (payment)="recordPayment($event)"
-
-    />
-
-
-    <!-- ====================================================
-         EMPTY STATE
-    ===================================================== -->
-
-    <div
-      class="empty-state"
-      *ngIf="filteredMembers.length === 0"
-    >
-
-      <div class="empty-state-icon">
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          <path
+            d="m20 20-3.5-3.5"
+          ></path>
         </svg>
 
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search by name, member ID, phone or email..."
+        />
+
       </div>
 
-      <h3>
-        No members found
-      </h3>
 
-      <p>
-        Try changing your search or filters.
-      </p>
+      <!-- STATUS FILTER -->
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        @for (
+          status of statuses;
+          track status
+        ) {
+
+          <option [value]="status">
+            {{ status }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <!-- PLAN FILTER -->
+
+      <select
+        [(ngModel)]="selectedPlan"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Plans
+        </option>
+
+        @for (
+          plan of plans;
+          track plan
+        ) {
+
+          <option [value]="plan">
+            {{ plan }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <!-- LOCATION FILTER -->
+
+      <select
+        [(ngModel)]="selectedLocation"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Locations
+        </option>
+
+        @for (
+          location of locations;
+          track location
+        ) {
+
+          <option [value]="location">
+            {{ location }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <!-- CLEAR FILTERS -->
 
       <button
         type="button"
-        class="btn btn-secondary"
+        class="clear-button"
         (click)="clearFilters()"
       >
-        Clear Filters
+        Clear
       </button>
 
     </div>
 
 
-    <!-- ====================================================
-         PAGINATION
-    ===================================================== -->
+    <!-- =====================================================
+         SCROLLABLE MEMBERS TABLE
+    ====================================================== -->
 
-    <app-member-pagination
+    <div class="members-table-scroll">
 
-      *ngIf="filteredMembers.length > 0"
+      <table class="members-table">
 
-      [currentPage]="currentPage"
+        <!-- TABLE HEADER -->
 
-      [totalPages]="totalPages"
+        <thead>
 
-      [startRecord]="startRecord"
+          <tr>
 
-      [endRecord]="endRecord"
+            <th>
+              Member
+            </th>
 
-      [totalRecords]="filteredMembers.length"
+            <th>
+              Phone
+            </th>
 
-      [pageSize]="pageSize"
+            <th>
+              Membership
+            </th>
 
-      [pageSizeOptions]="pageSizeOptions"
+            <th>
+              Join Date
+            </th>
 
-      (pageChange)="changePage($event)"
+            <th>
+              Expiry Date
+            </th>
 
-      (pageSizeChange)="onPageSizeChange($event)"
+            <th>
+              Status
+            </th>
 
-    />
+          </tr>
+
+        </thead>
+
+
+        <!-- TABLE BODY -->
+
+        <tbody>
+
+          <!--
+            IMPORTANT:
+
+            We are using filteredMembers here,
+            NOT paginatedMembers.
+
+            This means all 12 members are present
+            inside the table.
+
+            The table container itself scrolls,
+            so scrolling will display all members.
+          -->
+
+          @for (
+            member of filteredMembers;
+            track member.memberId
+          ) {
+
+            <tr
+              class="member-row"
+              tabindex="0"
+              (click)="openMemberDetails(member)"
+              (keydown.enter)="openMemberDetails(member)"
+            >
+
+              <!-- =================================================
+                   MEMBER
+              ================================================== -->
+
+              <td>
+
+                <div class="member-wrapper">
+
+                  <!-- PROFILE PHOTO -->
+
+                  @if (member.photoUrl) {
+
+                    <img
+                      [src]="member.photoUrl"
+                      [alt]="getFullName(member)"
+                      class="avatar"
+                    />
+
+                  } @else {
+
+                    <!-- INITIALS -->
+
+                    <div class="avatar">
+
+                      {{ getInitials(member) }}
+
+                    </div>
+
+                  }
+
+
+                  <!-- NAME + MEMBER ID -->
+
+                  <div class="member-name">
+
+                    <strong>
+                      {{ getFullName(member) }}
+                    </strong>
+
+                    <small>
+                      {{ member.memberCode }}
+                    </small>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <!-- =================================================
+                   PHONE + EMAIL
+              ================================================== -->
+
+              <td>
+
+                <div class="contact">
+
+                  <span>
+                    {{ member.phone }}
+                  </span>
+
+                  <small>
+                    {{ member.email }}
+                  </small>
+
+                </div>
+
+              </td>
+
+
+              <!-- =================================================
+                   MEMBERSHIP + LOCATION
+              ================================================== -->
+
+              <td>
+
+                <div class="membership">
+
+                  <strong>
+                    {{ member.planName }}
+                  </strong>
+
+                  <small>
+                    {{ member.locationName }}
+                  </small>
+
+                </div>
+
+              </td>
+
+
+              <!-- =================================================
+                   JOIN DATE
+              ================================================== -->
+
+              <td>
+
+                {{
+                  member.joinedDate
+                    | date:'dd MMM yyyy'
+                }}
+
+              </td>
+
+
+              <!-- =================================================
+                   EXPIRY DATE
+              ================================================== -->
+
+              <td>
+
+                @if (member.expiryDate) {
+
+                  {{
+                    member.expiryDate
+                      | date:'dd MMM yyyy'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <!-- =================================================
+                   STATUS
+              ================================================== -->
+
+              <td>
+
+                <span
+                  class="status"
+                  [ngClass]="
+                    getStatusClass(member.status)
+                  "
+                >
+
+                  <span class="status-dot"></span>
+
+                  {{ member.status }}
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          } @empty {
+
+            <!-- =================================================
+                 NO MEMBERS FOUND
+            ================================================== -->
+
+            <tr>
+
+              <td
+                colspan="6"
+                class="empty-state"
+              >
+
+                <div>
+
+                  <strong>
+                    No members found
+                  </strong>
+
+                  <p>
+                    Try changing your search or filters.
+                  </p>
+
+                  <button
+                    type="button"
+                    class="clear-button"
+                    (click)="clearFilters()"
+                  >
+                    Clear Filters
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLE FOOTER
+    ====================================================== -->
+
+    <div class="table-footer">
+
+      <span>
+
+        Showing
+
+        <strong>
+          {{ filteredMembers.length }}
+        </strong>
+
+        of
+
+        <strong>
+          {{ members.length }}
+        </strong>
+
+        members
+
+      </span>
+
+
+      @if (filteredMembers.length > 5) {
+
+        <span class="scroll-message">
+          Scroll to view all members ↓
+        </span>
+
+      }
+
+    </div>
 
   </section>
 
