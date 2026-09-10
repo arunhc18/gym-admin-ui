@@ -1,16 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AddMember } from './add-member';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AddMemberComponent } from './add-member';
 
-describe('AddMember', () => {
-  let component: AddMember;
-  let fixture: ComponentFixture<AddMember>;
+describe('AddMemberComponent', () => {
+  let component: AddMemberComponent;
+  let fixture: ComponentFixture<AddMemberComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddMember],
+      imports: [AddMemberComponent, RouterTestingModule],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AddMember);
+    fixture = TestBed.createComponent(AddMemberComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

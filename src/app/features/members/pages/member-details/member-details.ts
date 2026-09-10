@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 
 import { TitleCasePipe } from '@angular/common';
@@ -18,6 +17,9 @@ import {
 } from '@angular/forms';
 
 import {
+  MEMBERSHIP_PLANS,
+  PAYMENT_MODES,
+  PAYMENT_STATUSES,
   MemberRecord,
   MemberService,
   UpdateMember
@@ -27,19 +29,24 @@ interface MemberData {
   [key: string]: string;
 }
 
-const NAME_PATTERN = /^[\p{L}\p{M}\s'.-]+$/u;
+const NAME_PATTERN =
+  /^[\p{L}\p{M}\s'.-]+$/u;
 
-const PHONE_PATTERN = /^\+?[0-9\s()-]+$/;
+const PHONE_PATTERN =
+  /^\+?[0-9\s()-]+$/;
 
-const LOCATION_NAME_PATTERN = /^[\p{L}\p{M}\s'.-]+$/u;
+const LOCATION_NAME_PATTERN =
+  /^[\p{L}\p{M}\s'.-]+$/u;
 
-const ALLOWED_FILE_TYPES = new Set([
-  'application/pdf',
-  'image/jpeg',
-  'image/png'
-]);
+const ALLOWED_FILE_TYPES =
+  new Set([
+    'application/pdf',
+    'image/jpeg',
+    'image/png'
+  ]);
 
-const MAX_ID_PROOF_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_ID_PROOF_FILE_SIZE =
+  5 * 1024 * 1024;
 
 @Component({
   selector: 'app-member-details',
@@ -62,330 +69,451 @@ export class MemberDetailsComponent {
 
   isEditMode = false;
 
+  readonly membershipPlans =
+    MEMBERSHIP_PLANS;
+
+  readonly paymentModes =
+    PAYMENT_MODES;
+
+  readonly paymentStatuses =
+    PAYMENT_STATUSES;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly memberService: MemberService
   ) {
 
-    // =======================================================
-    // EXISTING FORM + VALIDATIONS
-    // =======================================================
+    this.memberForm =
+      this.fb.group({
 
-    this.memberForm = this.fb.group({
+        memberCode: [
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(50),
+            Validators.pattern(
+              /^[A-Za-z0-9_-]+$/
+            )
+          ]
+        ],
 
-      memberCode: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(50),
-          Validators.pattern(/^[A-Za-z0-9_-]+$/)
+        firstName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(100),
+            Validators.pattern(
+              NAME_PATTERN
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        lastName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(100),
+            Validators.pattern(
+              NAME_PATTERN
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        dateOfBirth: [
+          '',
+          [
+            this.validateDateOfBirth
+          ]
+        ],
+
+        gender: [
+          '',
+          [
+            Validators.maxLength(20),
+            Validators.pattern(
+              /^(male|female|other)$/
+            )
+          ]
+        ],
+
+        bloodGroup: [
+          '',
+          [
+            Validators.maxLength(10),
+            Validators.pattern(
+              /^(A|B|AB|O)[+-]$/
+            )
+          ]
+        ],
+
+        phone: [
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(20),
+            Validators.pattern(
+              PHONE_PATTERN
+            ),
+            this.validatePhoneLength
+          ]
+        ],
+
+        alternatePhone: [
+          '',
+          [
+            Validators.maxLength(20),
+            Validators.pattern(
+              PHONE_PATTERN
+            ),
+            this.validatePhoneLength
+          ]
+        ],
+
+        email: [
+          '',
+          [
+            Validators.email,
+            Validators.maxLength(100),
+            Validators.pattern(
+              /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+            )
+          ]
+        ],
+
+        addressLine1: [
+          '',
+          [
+            Validators.maxLength(255),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        addressLine2: [
+          '',
+          [
+            Validators.maxLength(255),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        city: [
+          '',
+          [
+            Validators.maxLength(100),
+            Validators.pattern(
+              LOCATION_NAME_PATTERN
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        state: [
+          '',
+          [
+            Validators.maxLength(100),
+            Validators.pattern(
+              LOCATION_NAME_PATTERN
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        country: [
+          '',
+          [
+            Validators.maxLength(100),
+            Validators.pattern(
+              LOCATION_NAME_PATTERN
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        postalCode: [
+          '',
+          [
+            Validators.maxLength(20),
+            Validators.pattern(
+              /^[0-9A-Za-z\s-]{3,20}$/
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        emergencyContactName: [
+          '',
+          [
+            Validators.maxLength(100),
+            Validators.minLength(2),
+            Validators.pattern(
+              NAME_PATTERN
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        emergencyContactPhone: [
+          '',
+          [
+            Validators.maxLength(20),
+            Validators.pattern(
+              PHONE_PATTERN
+            ),
+            this.validatePhoneLength
+          ]
+        ],
+
+        planName: [
+          '',
+          [
+            Validators.required
+          ]
+        ],
+
+        joinDate: [
+          '',
+          [
+            Validators.required
+          ]
+        ],
+
+        expiryDate: [
+          {
+            value: '',
+            disabled: true
+          }
+        ],
+
+        paymentMode: [
+          ''
+        ],
+
+        paymentStatus: [
+          'Pending',
+          [
+            Validators.required
+          ]
+        ],
+
+        membershipAmount: [
+          0,
+          [
+            Validators.required,
+            Validators.min(0.01)
+          ]
+        ],
+
+        amountPaid: [
+          0,
+          [
+            Validators.min(0),
+            this.amountPaidValidator
+          ]
+        ],
+
+        balanceAmount: [
+          {
+            value: 0,
+            disabled: true
+          }
+        ],
+
+        idProofType: [
+          '',
+          [
+            Validators.maxLength(50),
+            Validators.pattern(
+              /^(aadhaar|pan|passport|driving-license|voter-id)$/
+            )
+          ]
+        ],
+
+        idProofNumber: [
+          '',
+          [
+            Validators.maxLength(100),
+            Validators.pattern(
+              /^[A-Za-z0-9\s./-]+$/
+            ),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        idProofUrl: [
+          ''
+        ],
+
+        medicalConditions: [
+          '',
+          [
+            Validators.maxLength(1000),
+            this.validateNotWhitespaceOnly
+          ]
+        ],
+
+        referralSource: [
+          '',
+          [
+            Validators.maxLength(100),
+            Validators.pattern(
+              /^(walk-in|website|social-media|member-referral|advertisement|other)$/
+            )
+          ]
+        ],
+
+        referredByMemberId: [
+          '',
+          [
+            Validators.pattern(
+              /^[0-9]+$/
+            )
+          ]
+        ],
+
+        status: [
+          'active',
+          [
+            Validators.required,
+            Validators.pattern(
+              /^(active|expiring|inactive|suspended|expired)$/
+            )
+          ]
         ]
-      ],
 
-      firstName: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-          Validators.pattern(NAME_PATTERN),
-          this.validateNotWhitespaceOnly
+      },
+      {
+        validators: [
+          this.validateDifferentPhoneNumbers,
+          this.validateIdProofDetails,
+          control =>
+            this.validateReferralDetails(
+              control
+            ),
+          this.validatePayment
         ]
-      ],
+      });
 
-      lastName: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-          Validators.pattern(NAME_PATTERN),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      dateOfBirth: [
-        '',
-        [
-          this.validateDateOfBirth
-        ]
-      ],
-
-      gender: [
-        '',
-        [
-          Validators.maxLength(20),
-          Validators.pattern(/^(male|female|other)$/)
-        ]
-      ],
-
-      bloodGroup: [
-        '',
-        [
-          Validators.maxLength(10),
-          Validators.pattern(/^(A|B|AB|O)[+-]$/)
-        ]
-      ],
-
-      phone: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(20),
-          Validators.pattern(PHONE_PATTERN),
-          this.validatePhoneLength
-        ]
-      ],
-
-      alternatePhone: [
-        '',
-        [
-          Validators.maxLength(20),
-          Validators.pattern(PHONE_PATTERN),
-          this.validatePhoneLength
-        ]
-      ],
-
-      email: [
-        '',
-        [
-          Validators.email,
-          Validators.maxLength(100),
-          Validators.pattern(
-            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
-          )
-        ]
-      ],
-
-      addressLine1: [
-        '',
-        [
-          Validators.maxLength(255),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      addressLine2: [
-        '',
-        [
-          Validators.maxLength(255),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      city: [
-        '',
-        [
-          Validators.maxLength(100),
-          Validators.pattern(LOCATION_NAME_PATTERN),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      state: [
-        '',
-        [
-          Validators.maxLength(100),
-          Validators.pattern(LOCATION_NAME_PATTERN),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      country: [
-        '',
-        [
-          Validators.maxLength(100),
-          Validators.pattern(LOCATION_NAME_PATTERN),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      postalCode: [
-        '',
-        [
-          Validators.maxLength(20),
-          Validators.pattern(
-            /^[0-9A-Za-z\s-]{3,20}$/
-          ),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      emergencyContactName: [
-        '',
-        [
-          Validators.maxLength(100),
-          Validators.minLength(2),
-          Validators.pattern(NAME_PATTERN),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      emergencyContactPhone: [
-        '',
-        [
-          Validators.maxLength(20),
-          Validators.pattern(PHONE_PATTERN),
-          this.validatePhoneLength
-        ]
-      ],
-
-      idProofType: [
-        '',
-        [
-          Validators.maxLength(50),
-          Validators.pattern(
-            /^(aadhaar|pan|passport|driving-license|voter-id)$/
-          )
-        ]
-      ],
-
-      idProofNumber: [
-        '',
-        [
-          Validators.maxLength(100),
-          Validators.pattern(
-            /^[A-Za-z0-9\s./-]+$/
-          ),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      idProofUrl: [
-        ''
-      ],
-
-      medicalConditions: [
-        '',
-        [
-          Validators.maxLength(1000),
-          this.validateNotWhitespaceOnly
-        ]
-      ],
-
-      referralSource: [
-        '',
-        [
-          Validators.maxLength(100),
-          Validators.pattern(
-            /^(walk-in|website|social-media|member-referral|advertisement|other)$/
-          )
-        ]
-      ],
-
-      referredByMemberId: [
-        '',
-        [
-          Validators.pattern(
-            /^[0-9]+$/
-          )
-        ]
-      ],
-
-      status: [
-        'active',
-        [
-          Validators.required,
-          Validators.pattern(
-            /^(active|expiring|inactive|suspended|expired)$/
-          )
-        ]
-      ]
-
-    }, {
-
-      validators: [
-        this.validateDifferentPhoneNumbers,
-        this.validateIdProofDetails,
-        control => this.validateReferralDetails(control)
-      ]
-
-    });
-
-    // Re-run dependent validation when phone changes.
     this.memberForm.controls['phone']
       .valueChanges
       .subscribe(() => {
 
-        this.memberForm.controls['alternatePhone']
-          .updateValueAndValidity({
-            emitEvent: false
-          });
+        this.memberForm.controls[
+          'alternatePhone'
+        ].updateValueAndValidity({
+          emitEvent: false
+        });
 
-        this.memberForm.controls['emergencyContactPhone']
-          .updateValueAndValidity({
-            emitEvent: false
-          });
+        this.memberForm.controls[
+          'emergencyContactPhone'
+        ].updateValueAndValidity({
+          emitEvent: false
+        });
       });
-  }
 
-  // =========================================================
-  // INITIALIZATION
-  // =========================================================
+    this.memberForm.controls[
+      'planName'
+    ].valueChanges.subscribe(planName => {
+      this.updateMembershipValues(
+        String(planName ?? ''),
+        true
+      );
+      this.applyPaymentStatus(
+        String(
+          this.memberForm.controls[
+            'paymentStatus'
+          ].value ?? ''
+        )
+      );
+      this.memberForm.controls[
+        'amountPaid'
+      ].updateValueAndValidity({
+        emitEvent: false
+      });
+      this.memberForm.updateValueAndValidity({
+        emitEvent: false
+      });
+    });
 
-  ngOnInit(): void {
+    this.memberForm.controls[
+      'joinDate'
+    ].valueChanges.subscribe(() => {
+      this.updateMembershipValues();
+    });
 
-    this.route.paramMap.subscribe(params => {
+    this.memberForm.controls[
+      'paymentStatus'
+    ].valueChanges.subscribe(status => {
+      this.applyPaymentStatus(
+        status
+      );
+    });
 
-      const id = params.get('id');
+    this.memberForm.controls[
+      'membershipAmount'
+    ].valueChanges.subscribe(() => {
+      this.updateBalance();
+    });
 
-      if (!id) {
-
-        console.error(
-          'Member ID was not provided in the route.'
-        );
-
-        this.savedMember = {};
-
-        return;
-      }
-
-      const numericId = Number(id);
-
-      if (Number.isNaN(numericId)) {
-
-        console.error(
-          'Invalid member ID:',
-          id
-        );
-
-        this.savedMember = {};
-
-        return;
-      }
-
-      this.memberId = numericId;
-
-      this.loadMember(this.memberId);
-
-      // Preserve existing edit-mode query parameter.
-      if (
-        this.route.snapshot
-          .queryParamMap
-          .get('mode') === 'edit'
-      ) {
-        this.startEditing();
-      }
-
+    this.memberForm.controls[
+      'amountPaid'
+    ].valueChanges.subscribe(() => {
+      this.updateBalance();
     });
   }
 
-  // =========================================================
-  // LOAD MEMBER FROM CENTRALIZED SERVICE
-  // =========================================================
+  ngOnInit(): void {
 
-  private loadMember(id: number): void {
+    this.route.paramMap.subscribe(
+      params => {
 
-    const selectedMember =
-      this.memberService.getMemberById(id);
+        const id =
+          params.get('id');
 
-    if (!selectedMember) {
+        if (!id) {
+          this.savedMember = {};
+          return;
+        }
 
-      console.error(
-        'Member not found:',
-        id
-      );
+        const numericId =
+          Number(id);
+
+        if (Number.isNaN(numericId)) {
+          this.savedMember = {};
+          return;
+        }
+
+        this.memberId =
+          numericId;
+
+        this.loadMember(
+          numericId
+        );
+
+        if (
+          this.route.snapshot
+            .queryParamMap
+            .get('mode') === 'edit'
+        ) {
+          this.startEditing();
+        }
+      }
+    );
+  }
+
+  private loadMember(
+    id: number
+  ): void {
+
+    const member =
+      this.memberService
+        .getMemberById(id);
+
+    if (!member) {
 
       this.savedMember = {};
 
@@ -399,52 +527,46 @@ export class MemberDetailsComponent {
     }
 
     this.savedMember =
-      this.toMemberData(selectedMember);
+      this.toMemberData(
+        member
+      );
 
     this.memberForm.reset(
       this.savedMember
     );
+
+    this.updateMembershipValues();
+    this.updateBalance();
 
     this.memberForm.markAsPristine();
 
     this.isEditMode = false;
   }
 
-  // =========================================================
-  // CONVERT SERVICE MEMBER TO FORM/DISPLAY DATA
-  // =========================================================
-
   private toMemberData(
     member: MemberRecord
   ): MemberData {
 
-    const data: MemberData = {};
+    const data:
+      MemberData = {};
 
-    Object.entries(member).forEach(
-      ([key, value]) => {
+    Object.entries(member)
+      .forEach(
+        ([key, value]) => {
 
-        if (value !== undefined && value !== null) {
-
-          data[key] = String(value);
-        } else {
-
-          data[key] = '';
+          data[key] =
+            value !== undefined &&
+            value !== null
+              ? String(value)
+              : '';
         }
-      }
-    );
+      );
 
-    // The form uses lowercase status values,
-    // while MemberService uses the MemberStatus type
-    // with title-case values.
     data['status'] =
       member.status.toLowerCase();
 
     return data;
   }
-
-  // =========================================================
-  // SAVE BUTTON STATE
-  // =========================================================
 
   get isSaveDisabled(): boolean {
 
@@ -454,28 +576,22 @@ export class MemberDetailsComponent {
     );
   }
 
-  // =========================================================
-  // LATEST DATE ALLOWED FOR 18+ MEMBER
-  // =========================================================
-
   get maxDateOfBirth(): string {
 
-    const today = new Date();
+    const today =
+      new Date();
 
-    const latestDate = new Date(
-      today.getFullYear() - 18,
-      today.getMonth(),
-      today.getDate()
-    );
+    const latestDate =
+      new Date(
+        today.getFullYear() - 18,
+        today.getMonth(),
+        today.getDate()
+      );
 
     return this.toDateInputValue(
       latestDate
     );
   }
-
-  // =========================================================
-  // MEMBER NAME
-  // =========================================================
 
   get memberName(): string {
 
@@ -487,10 +603,6 @@ export class MemberDetailsComponent {
 
     return `${firstName} ${lastName}`.trim();
   }
-
-  // =========================================================
-  // MEMBER INITIALS
-  // =========================================================
 
   get memberInitials(): string {
 
@@ -505,10 +617,6 @@ export class MemberDetailsComponent {
     ).toUpperCase();
   }
 
-  // =========================================================
-  // MEMBER SINCE
-  // =========================================================
-
   get memberSince(): string {
 
     const joinDate =
@@ -518,21 +626,18 @@ export class MemberDetailsComponent {
       return 'Not provided';
     }
 
-    const date =
-      new Date(`${joinDate}T00:00:00`);
-
     return new Intl.DateTimeFormat(
       'en-US',
       {
         month: 'long',
         year: 'numeric'
       }
-    ).format(date);
+    ).format(
+      new Date(
+        `${joinDate}T00:00:00`
+      )
+    );
   }
-
-  // =========================================================
-  // START EDITING
-  // =========================================================
 
   startEditing(): void {
 
@@ -540,32 +645,33 @@ export class MemberDetailsComponent {
       this.savedMember
     );
 
+    this.updateMembershipValues();
+    this.updateBalance();
+
     this.memberForm.markAsPristine();
 
     this.isEditMode = true;
   }
-
-  // =========================================================
-  // DISPLAY VALUE
-  // =========================================================
 
   displayValue(
     controlName: string
   ): string {
 
     const value =
-      this.savedMember[controlName];
+      this.savedMember[
+        controlName
+      ];
 
-    if (!value) {
+    if (
+      value === undefined ||
+      value === null ||
+      value === ''
+    ) {
       return 'Not provided';
     }
 
     return value;
   }
-
-  // =========================================================
-  // OPTION LABEL
-  // =========================================================
 
   optionLabel(
     controlName: string
@@ -598,16 +704,21 @@ export class MemberDetailsComponent {
         aadhaar: 'Aadhaar',
         pan: 'PAN',
         passport: 'Passport',
-        'driving-license': 'Driving License',
-        'voter-id': 'Voter ID'
+        'driving-license':
+          'Driving License',
+        'voter-id':
+          'Voter ID'
       },
 
       referralSource: {
         'walk-in': 'Walk-in',
         website: 'Website',
-        'social-media': 'Social Media',
-        'member-referral': 'Member Referral',
-        advertisement: 'Advertisement',
+        'social-media':
+          'Social Media',
+        'member-referral':
+          'Member Referral',
+        advertisement:
+          'Advertisement',
         other: 'Other'
       }
 
@@ -615,16 +726,16 @@ export class MemberDetailsComponent {
 
     return (
       labels[controlName]?.[
-        this.savedMember[controlName]
+        this.savedMember[
+          controlName
+        ]
       ]
       ??
-      this.displayValue(controlName)
+      this.displayValue(
+        controlName
+      )
     );
   }
-
-  // =========================================================
-  // FORMAT DATE
-  // =========================================================
 
   formatDate(
     value: string
@@ -648,9 +759,28 @@ export class MemberDetailsComponent {
     );
   }
 
-  // =========================================================
-  // VALIDATION ERROR HELPER
-  // =========================================================
+  formatAmount(
+    value: string
+  ): string {
+
+    const amount =
+      Number(value);
+
+    if (
+      Number.isNaN(amount)
+    ) {
+      return '₹0.00';
+    }
+
+    return new Intl.NumberFormat(
+      'en-IN',
+      {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 2
+      }
+    ).format(amount);
+  }
 
   hasError(
     controlName: string,
@@ -658,201 +788,219 @@ export class MemberDetailsComponent {
   ): boolean {
 
     const control =
-      this.memberForm.controls[controlName];
+      this.memberForm.controls[
+        controlName
+      ];
 
     return (
       control.touched &&
-      control.hasError(errorName)
+      control.hasError(
+        errorName
+      )
     );
   }
 
-  // =========================================================
-  // SAVE MEMBER THROUGH CENTRALIZED SERVICE
-  // =========================================================
-
   saveMember(): void {
 
-    if (this.memberForm.invalid) {
+    if (
+      this.memberForm.invalid
+    ) {
 
       this.memberForm.markAllAsTouched();
 
-      this.memberForm.updateValueAndValidity();
+      this.memberForm
+        .updateValueAndValidity();
 
       return;
     }
 
-    const rawValues =
-      this.memberForm.getRawValue();
-
-    const normalizedValues:
-      Record<string, unknown> = {};
-
-    Object.entries(rawValues).forEach(
-      ([key, value]) => {
-
-        normalizedValues[key] =
-          typeof value === 'string'
-            ? value.trim()
-            : value;
-      }
-    );
-
-    /*
-     * Convert the form's lowercase status
-     * to MemberStatus used by MemberService.
-     */
-    const normalizedStatus =
-      this.toMemberStatus(
-        String(
-          normalizedValues['status'] ?? 'active'
-        )
-      );
+    const values =
+      this.memberForm
+        .getRawValue();
 
     const updateData:
       UpdateMember = {
 
       memberCode:
         this.stringValue(
-          normalizedValues['memberCode']
+          values.memberCode
         ),
 
       firstName:
         this.stringValue(
-          normalizedValues['firstName']
+          values.firstName
         ),
 
       lastName:
         this.stringValue(
-          normalizedValues['lastName']
+          values.lastName
         ),
 
       dateOfBirth:
         this.optionalStringValue(
-          normalizedValues['dateOfBirth']
+          values.dateOfBirth
         ),
 
       gender:
         this.optionalStringValue(
-          normalizedValues['gender']
+          values.gender
         ),
 
       bloodGroup:
         this.optionalStringValue(
-          normalizedValues['bloodGroup']
+          values.bloodGroup
         ),
 
       phone:
         this.stringValue(
-          normalizedValues['phone']
+          values.phone
         ),
 
       alternatePhone:
         this.optionalStringValue(
-          normalizedValues['alternatePhone']
+          values.alternatePhone
         ),
 
       email:
         this.optionalStringValue(
-          normalizedValues['email']
+          values.email
         ),
 
       addressLine1:
         this.optionalStringValue(
-          normalizedValues['addressLine1']
+          values.addressLine1
         ),
 
       addressLine2:
         this.optionalStringValue(
-          normalizedValues['addressLine2']
+          values.addressLine2
         ),
 
       city:
         this.optionalStringValue(
-          normalizedValues['city']
+          values.city
         ),
 
       state:
         this.optionalStringValue(
-          normalizedValues['state']
+          values.state
         ),
 
       country:
         this.optionalStringValue(
-          normalizedValues['country']
+          values.country
         ),
 
       postalCode:
         this.optionalStringValue(
-          normalizedValues['postalCode']
+          values.postalCode
         ),
 
       emergencyContactName:
         this.optionalStringValue(
-          normalizedValues['emergencyContactName']
+          values.emergencyContactName
         ),
 
       emergencyContactPhone:
         this.optionalStringValue(
-          normalizedValues['emergencyContactPhone']
+          values.emergencyContactPhone
+        ),
+
+      planName:
+        this.stringValue(
+          values.planName
+        ),
+
+      planDurationMonths:
+        this.memberService
+          .getMembershipPlan(
+            values.planName
+          )
+          ?.durationMonths,
+
+      joinDate:
+        this.stringValue(
+          values.joinDate
+        ),
+
+      expiryDate:
+        values.expiryDate,
+
+      paymentMode:
+        values.paymentMode ||
+        undefined,
+
+      paymentStatus:
+        values.paymentStatus,
+
+      membershipAmount:
+        Number(
+          values.membershipAmount
+        ),
+
+      amountPaid:
+        Number(
+          values.amountPaid
+        ),
+
+      balanceAmount:
+        Number(
+          values.balanceAmount
         ),
 
       idProofType:
         this.optionalStringValue(
-          normalizedValues['idProofType']
+          values.idProofType
         ),
 
       idProofNumber:
         this.optionalStringValue(
-          normalizedValues['idProofNumber']
+          values.idProofNumber
         ),
 
       idProofUrl:
         this.optionalStringValue(
-          normalizedValues['idProofUrl']
+          values.idProofUrl
         ),
 
       medicalConditions:
         this.optionalStringValue(
-          normalizedValues['medicalConditions']
+          values.medicalConditions
         ),
 
       referralSource:
         this.optionalStringValue(
-          normalizedValues['referralSource']
+          values.referralSource
         ),
 
       referredByMemberId:
         this.optionalStringValue(
-          normalizedValues['referredByMemberId']
+          values.referredByMemberId
         ),
 
-      status: normalizedStatus
+      status:
+        this.toMemberStatus(
+          String(
+            values.status ??
+            'active'
+          )
+        )
     };
 
-    const updatedMember =
+    const updated =
       this.memberService.updateMember(
         this.memberId,
         updateData
       );
 
-    if (!updatedMember) {
-
-      console.error(
-        'Unable to update member:',
-        this.memberId
-      );
-
+    if (!updated) {
       return;
     }
 
-    /*
-     * Reload the saved member from the service.
-     *
-     * This is important because the service is now
-     * the single source of truth.
-     */
     this.savedMember =
-      this.toMemberData(updatedMember);
+      this.toMemberData(
+        updated
+      );
 
     this.memberForm.reset(
       this.savedMember
@@ -861,16 +1009,7 @@ export class MemberDetailsComponent {
     this.memberForm.markAsPristine();
 
     this.isEditMode = false;
-
-    console.log(
-      'Updated member through MemberService:',
-      updatedMember
-    );
   }
-
-  // =========================================================
-  // CANCEL EDITING
-  // =========================================================
 
   cancel(): void {
 
@@ -883,9 +1022,241 @@ export class MemberDetailsComponent {
     this.isEditMode = false;
   }
 
-  // =========================================================
-  // ID PROOF FILE VALIDATION
-  // =========================================================
+  private updateMembershipValues(
+    planName?: string,
+    updateAmount = false
+  ): void {
+
+    const selectedPlan =
+      planName ??
+      String(
+        this.memberForm.get(
+          'planName'
+        )?.value ?? ''
+      );
+
+    const joinDate =
+      this.memberForm.get(
+        'joinDate'
+      )?.value;
+
+    if (
+      !selectedPlan ||
+      !joinDate
+    ) {
+      return;
+    }
+
+    if (updateAmount) {
+      this.memberForm
+        .get('membershipAmount')
+        ?.setValue(
+          this.memberService.getMembershipAmount(
+            selectedPlan
+          ) ?? null,
+          {
+            emitEvent: false
+          }
+        );
+    }
+
+    const expiry =
+      this.memberService
+        .calculateExpiryDate(
+          joinDate,
+          this.memberService.getPlanDuration(
+            selectedPlan
+          )
+        );
+
+    this.memberForm
+      .get('expiryDate')
+      ?.setValue(
+        expiry,
+        {
+          emitEvent: false
+        }
+      );
+  }
+
+  private applyPaymentStatus(
+    status: string
+  ): void {
+
+    const amount =
+      Number(
+        this.memberForm.get(
+          'membershipAmount'
+        )?.value ?? 0
+      );
+
+    const paidControl =
+      this.memberForm.get(
+        'amountPaid'
+      );
+
+    if (status === 'Paid') {
+
+      paidControl?.setValue(
+        amount,
+        {
+          emitEvent: false
+        }
+      );
+
+    } else if (
+      status === 'Pending'
+    ) {
+
+      paidControl?.setValue(
+        0,
+        {
+          emitEvent: false
+        }
+      );
+    }
+
+    this.updateBalance();
+  }
+
+  private updateBalance(): void {
+
+    const amount =
+      Number(
+        this.memberForm.get(
+          'membershipAmount'
+        )?.value ?? 0
+      );
+
+    const paid =
+      Number(
+        this.memberForm.get(
+          'amountPaid'
+        )?.value ?? 0
+      );
+
+    this.memberForm
+      .get('balanceAmount')
+      ?.setValue(
+        Math.max(
+          0,
+          amount - paid
+        ),
+        {
+          emitEvent: false
+        }
+      );
+  }
+
+  private readonly amountPaidValidator =
+    (
+      control: AbstractControl
+    ): ValidationErrors | null => {
+
+      if (
+        control.value === null ||
+        control.value === '' ||
+        control.value === undefined
+      ) {
+        return null;
+      }
+
+      const amount =
+        Number(
+          control.parent?.get(
+            'membershipAmount'
+          )?.value
+        ) || 0;
+
+      const amountPaid =
+        Number(control.value);
+
+      if (
+        Number.isNaN(amountPaid) ||
+        amountPaid < 0 ||
+        amountPaid > amount
+      ) {
+        return {
+          amountPaidExceedsAmount: true
+        };
+      }
+
+      return null;
+    };
+
+  private readonly validatePayment =
+    (
+      control: AbstractControl
+    ): ValidationErrors | null => {
+
+      const status =
+        String(
+          control.get(
+            'paymentStatus'
+          )?.value ?? ''
+        );
+
+      const mode =
+        String(
+          control.get(
+            'paymentMode'
+          )?.value ?? ''
+        );
+
+      const amount =
+        Number(
+          control.get(
+            'membershipAmount'
+          )?.value ?? 0
+        );
+
+      const paid =
+        Number(
+          control.get(
+            'amountPaid'
+          )?.value ?? 0
+        );
+
+      const errors:
+        ValidationErrors = {};
+
+      if (
+        (
+          status === 'Paid' ||
+          status === 'Partial'
+        ) &&
+        !mode
+      ) {
+        errors[
+          'paymentModeRequired'
+        ] = true;
+      }
+
+      if (
+        paid < 0 ||
+        paid > amount
+      ) {
+        errors[
+          'invalidAmountPaid'
+        ] = true;
+      }
+
+      if (
+        status === 'Partial' &&
+        (
+          paid <= 0 ||
+          paid >= amount
+        )
+      ) {
+        errors[
+          'invalidPartialPayment'
+        ] = true;
+      }
+
+      return Object.keys(errors).length
+        ? errors
+        : null;
+    };
 
   onIdProofFileSelected(
     event: Event
@@ -895,25 +1266,29 @@ export class MemberDetailsComponent {
       event.target as HTMLInputElement;
 
     const control =
-      this.memberForm.controls['idProofUrl'];
+      this.memberForm.controls[
+        'idProofUrl'
+      ];
 
     const file =
       input.files?.[0];
 
     control.markAsTouched();
-
     control.markAsDirty();
 
     if (!file) {
 
       control.setValue('');
-
       control.setErrors(null);
 
       return;
     }
 
-    if (!ALLOWED_FILE_TYPES.has(file.type)) {
+    if (
+      !ALLOWED_FILE_TYPES.has(
+        file.type
+      )
+    ) {
 
       control.setValue('');
 
@@ -944,19 +1319,19 @@ export class MemberDetailsComponent {
 
     control.setErrors(null);
 
-    control.setValue(file.name);
+    control.setValue(
+      file.name
+    );
   }
-
-  // =========================================================
-  // GENERAL CUSTOM VALIDATORS
-  // =========================================================
 
   private validateNotWhitespaceOnly(
     control: AbstractControl
   ): ValidationErrors | null {
 
     const value =
-      String(control.value ?? '');
+      String(
+        control.value ?? ''
+      );
 
     return (
       value.length > 0 &&
@@ -977,7 +1352,9 @@ export class MemberDetailsComponent {
     }
 
     const digitCount =
-      String(control.value)
+      String(
+        control.value
+      )
         .replace(/\D/g, '')
         .length;
 
@@ -997,34 +1374,45 @@ export class MemberDetailsComponent {
 
     const phone =
       MemberDetailsComponent.onlyDigits(
-        control.get('phone')?.value
+        control.get(
+          'phone'
+        )?.value
       );
 
     const alternatePhone =
       MemberDetailsComponent.onlyDigits(
-        control.get('alternatePhone')?.value
+        control.get(
+          'alternatePhone'
+        )?.value
       );
 
     const emergencyPhone =
       MemberDetailsComponent.onlyDigits(
-        control.get('emergencyContactPhone')?.value
+        control.get(
+          'emergencyContactPhone'
+        )?.value
       );
 
-    const errors: ValidationErrors = {
+    const errors:
+      ValidationErrors = {};
 
-      ...(phone && alternatePhone === phone
-        ? {
-            alternatePhoneMatchesPhone: true
-          }
-        : {}),
+    if (
+      phone &&
+      alternatePhone === phone
+    ) {
+      errors[
+        'alternatePhoneMatchesPhone'
+      ] = true;
+    }
 
-      ...(phone && emergencyPhone === phone
-        ? {
-            emergencyPhoneMatchesPhone: true
-          }
-        : {})
-
-    };
+    if (
+      phone &&
+      emergencyPhone === phone
+    ) {
+      errors[
+        'emergencyPhoneMatchesPhone'
+      ] = true;
+    }
 
     return Object.keys(errors).length
       ? errors
@@ -1037,61 +1425,57 @@ export class MemberDetailsComponent {
 
     const proofType =
       String(
-        control.get('idProofType')?.value ?? ''
+        control.get(
+          'idProofType'
+        )?.value ?? ''
       ).trim();
 
     const proofNumber =
       String(
-        control.get('idProofNumber')?.value ?? ''
+        control.get(
+          'idProofNumber'
+        )?.value ?? ''
       ).trim();
 
-    const errors: ValidationErrors = {};
+    const errors:
+      ValidationErrors = {};
 
     if (
       proofType &&
       !proofNumber
     ) {
-      errors['idProofNumberRequired'] = true;
+      errors[
+        'idProofNumberRequired'
+      ] = true;
     }
 
     if (
       proofNumber &&
       !proofType
     ) {
-      errors['idProofTypeRequired'] = true;
+      errors[
+        'idProofTypeRequired'
+      ] = true;
     }
 
     if (
       proofType &&
       proofNumber
     ) {
-
-      const patterns:
-        Record<string, RegExp> = {
-
-        aadhaar:
-          /^\d{12}$/,
-
-        pan:
-          /^[A-Z]{5}\d{4}[A-Z]$/i,
-
-        passport:
-          /^[A-Z][1-9]\d{6}$/i,
-
-        'driving-license':
-          /^[A-Z]{2}[\s-]?\d{2}[\s-]?\d{4}[\s-]?\d{7}$/i,
-
-        'voter-id':
-          /^[A-Z]{3}\d{7}$/i
+      const proofPatterns: Record<string, RegExp> = {
+        aadhaar: /^\d{12}$/,
+        pan: /^[A-Z]{5}\d{4}[A-Z]$/i,
+        passport: /^[A-Z0-9]{6,9}$/i,
+        'driving-license': /^[A-Z0-9-]{5,20}$/i,
+        'voter-id': /^[A-Z0-9]{10}$/i
       };
 
       if (
-        patterns[proofType] &&
-        !patterns[proofType].test(
-          proofNumber
-        )
+        !proofPatterns[proofType]?.test(proofNumber)
       ) {
-        errors['invalidIdProofFormat'] = true;
+        errors[
+          'invalidIdProofFormat'
+        ] = true;
       }
     }
 
@@ -1106,74 +1490,53 @@ export class MemberDetailsComponent {
 
     const source =
       String(
-        control.get('referralSource')?.value ?? ''
+        control.get(
+          'referralSource'
+        )?.value ?? ''
       ).trim();
 
     const referredBy =
       String(
-        control.get('referredByMemberId')?.value ?? ''
+        control.get(
+          'referredByMemberId'
+        )?.value ?? ''
       ).trim();
 
-    const errors: ValidationErrors = {};
+    const errors:
+      ValidationErrors = {};
 
     if (
       source === 'member-referral' &&
       !referredBy
     ) {
-      errors['referredByMemberRequired'] = true;
+      errors[
+        'referredByMemberRequired'
+      ] = true;
     }
 
     if (
       referredBy &&
       source !== 'member-referral'
     ) {
-      errors['memberReferralSourceRequired'] = true;
+      errors[
+        'memberReferralSourceRequired'
+      ] = true;
     }
 
     if (
       referredBy &&
-      Number(referredBy) === this.memberId
+      Number(referredBy) ===
+        this.memberId
     ) {
-      errors['selfReferral'] = true;
+      errors[
+        'selfReferral'
+      ] = true;
     }
 
     return Object.keys(errors).length
       ? errors
       : null;
   }
-
-  private static onlyDigits(
-    value: unknown
-  ): string {
-
-    return String(
-      value ?? ''
-    ).replace(/\D/g, '');
-  }
-
-  private toDateInputValue(
-    date: Date
-  ): string {
-
-    const year =
-      date.getFullYear();
-
-    const month =
-      String(
-        date.getMonth() + 1
-      ).padStart(2, '0');
-
-    const day =
-      String(
-        date.getDate()
-      ).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-  }
-
-  // =========================================================
-  // DATE OF BIRTH VALIDATION
-  // =========================================================
 
   private validateDateOfBirth(
     control: AbstractControl
@@ -1198,14 +1561,8 @@ export class MemberDetailsComponent {
       };
     }
 
-    const today = new Date();
-
-    selectedDate.setHours(
-      0,
-      0,
-      0,
-      0
-    );
+    const today =
+      new Date();
 
     today.setHours(
       0,
@@ -1214,43 +1571,42 @@ export class MemberDetailsComponent {
       0
     );
 
+    selectedDate.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
     if (
-      selectedDate >
-      today
+      selectedDate > today
     ) {
       return {
         futureDate: true
       };
     }
 
-    const latestAdultBirthDate =
+    const adultDate =
       new Date(
         today.getFullYear() - 18,
         today.getMonth(),
         today.getDate()
       );
 
-    if (
-      selectedDate >
-      latestAdultBirthDate
-    ) {
-      return {
-        underAge: true
-      };
-    }
-
-    return null;
+    return selectedDate > adultDate
+      ? {
+          underAge: true
+        }
+      : null;
   }
-
-  // =========================================================
-  // SERVICE DATA HELPERS
-  // =========================================================
 
   private toMemberStatus(
     value: string
   ): MemberRecord['status'] {
 
-    switch (value.toLowerCase()) {
+    switch (
+      value.toLowerCase()
+    ) {
 
       case 'expiring':
         return 'Expiring';
@@ -1291,5 +1647,36 @@ export class MemberDetailsComponent {
 
     return trimmed || undefined;
   }
-}
 
+  private static onlyDigits(
+    value: unknown
+  ): string {
+
+    return String(
+      value ?? ''
+    ).replace(
+      /\D/g,
+      ''
+    );
+  }
+
+  private toDateInputValue(
+    date: Date
+  ): string {
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, '0');
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+}

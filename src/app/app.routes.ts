@@ -84,6 +84,54 @@ export const routes: Routes = [
         }
       },
 
+      {
+        path: 'enquiries/new',
+
+        loadComponent: () =>
+          import(
+            './features/enquiries/pages/quick-enquiry/quick-enquiry'
+          ).then(
+            m => m.QuickEnquiryComponent
+          ),
+
+        data: {
+          title: 'Quick Enquiry',
+          description: 'Create a new enquiry'
+        }
+      },
+
+      {
+        path: 'enquiries/:id/edit',
+
+        loadComponent: () =>
+          import(
+            './features/enquiries/pages/edit-enquiry/edit-enquiry'
+          ).then(
+            m => m.EditEnquiryComponent
+          ),
+
+        data: {
+          title: 'Edit Enquiry',
+          description: 'Update enquiry details'
+        }
+      },
+
+      {
+        path: 'enquiries',
+
+        loadComponent: () =>
+          import(
+            './features/enquiries/pages/enquiry-list/enquiry-list'
+          ).then(
+            m => m.EnquiryListComponent
+          ),
+
+        data: {
+          title: 'Enquiries',
+          description: 'Manage prospective members'
+        }
+      },
+
       // =====================================================
       // PLACEHOLDER ROUTES
       // =====================================================

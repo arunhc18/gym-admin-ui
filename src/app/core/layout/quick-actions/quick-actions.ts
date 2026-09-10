@@ -21,6 +21,10 @@ export class QuickActionsComponent {
     console.log('Check-In action selected');
   }
 
+  onQuickEnquiry(): void {
+    this.router.navigate(['/enquiries/new']);
+  }
+
   onMoreActions(): void {
     console.log('More actions selected');
   }

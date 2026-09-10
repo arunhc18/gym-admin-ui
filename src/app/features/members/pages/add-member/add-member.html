@@ -1,485 +1,806 @@
 <form
   class="member-details-page"
-    [formGroup]="memberForm"
-    (ngSubmit)="onSubmit()"
-    novalidate
-  >
-<!-- PAGE ACTIONS -->
-<div class="member-actions">
-  <a
-    class="back-link"
-    routerLink="/members"
-    aria-label="Back to members"
-  >
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <path d="m15 18-6-6 6-6" />
-    </svg>
+  [formGroup]="memberForm"
+  (ngSubmit)="onSubmit()"
+  novalidate
+>
 
-    <span>Back to Members</span>
-  </a>
+  <!-- PAGE ACTIONS -->
+  <div class="member-actions">
 
-  <div class="member-action-buttons">
-    <button
-      type="button"
-      class="btn btn-secondary"
+    <a
+      class="back-link"
       routerLink="/members"
+      aria-label="Back to members"
     >
-      Cancel
-    </button>
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="m15 18-6-6 6-6" />
+      </svg>
 
-    <button
-      type="submit"
-      class="btn btn-primary"
-      [disabled]="memberForm.invalid || isSubmitting"
-    >
-      {{ isSubmitting ? 'Adding...' : 'Add Member' }}
-    </button>
+      <span>Back to Members</span>
+    </a>
+
+    <div class="member-action-buttons">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        routerLink="/members"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isFormInvalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'Adding...' : 'Add Member' }}
+      </button>
+
+    </div>
+
   </div>
+
+
+  <!-- PERSONAL INFORMATION -->
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Personal Information</h2>
+    </div>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="memberCode">
+          Member Code
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="memberCode"
+          type="text"
+          formControlName="memberCode"
+          placeholder="Enter member code"
+        />
+
+        @if (
+          memberForm.get('memberCode')?.touched &&
+          memberForm.get('memberCode')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid member code.
+          </span>
+        }
+      </div>
+
+
+      <div class="form-group">
+        <label for="firstName">
+          First Name
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="Enter first name"
+        />
+
+        @if (
+          memberForm.get('firstName')?.touched &&
+          memberForm.get('firstName')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid first name.
+          </span>
+        }
+      </div>
+
+
+      <div class="form-group">
+        <label for="lastName">
+          Last Name
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="Enter last name"
+        />
+
+        @if (
+          memberForm.get('lastName')?.touched &&
+          memberForm.get('lastName')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid last name.
+          </span>
+        }
+      </div>
+
+
+      <div class="form-group">
+        <label for="dateOfBirth">
+          Date of Birth
+        </label>
+
+        <input
+          id="dateOfBirth"
+          type="date"
+          formControlName="dateOfBirth"
+          [max]="maxDateOfBirth"
+        />
+
+        @if (
+          memberForm.get('dateOfBirth')?.touched &&
+          memberForm.get('dateOfBirth')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid date. Member must be at least 18 years old.
+          </span>
+        }
+      </div>
+
+
+      <div class="form-group">
+        <label for="gender">
+          Gender
+        </label>
+
+        <select
+          id="gender"
+          formControlName="gender"
+        >
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="bloodGroup">
+          Blood Group
+        </label>
+
+        <select
+          id="bloodGroup"
+          formControlName="bloodGroup"
+        >
+          <option value="">Select blood group</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="phone">
+          Phone
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          placeholder="Enter phone number"
+        />
+
+        @if (
+          memberForm.get('phone')?.touched &&
+          memberForm.get('phone')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid phone number with 10 to 15 digits.
+          </span>
+        }
+      </div>
+
+
+      <div class="form-group">
+        <label for="alternatePhone">
+          Alternate Phone
+        </label>
+
+        <input
+          id="alternatePhone"
+          type="tel"
+          formControlName="alternatePhone"
+          placeholder="Enter alternate phone"
+        />
+
+        @if (
+          memberForm.get('alternatePhone')?.touched &&
+          memberForm.get('alternatePhone')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid alternate phone number.
+          </span>
+        }
+
+        @if (
+          memberForm.hasError('alternatePhoneMatchesPhone') &&
+          memberForm.get('alternatePhone')?.touched
+        ) {
+          <span class="validation-error">
+            Alternate phone number must be different from the primary phone number.
+          </span>
+        }
+      </div>
+
+
+      <div class="form-group">
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter email address"
+        />
+
+        @if (
+          memberForm.get('email')?.touched &&
+          memberForm.get('email')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid email address.
+          </span>
+        }
+      </div>
+
+
+      <div class="form-group">
+        <label for="addressLine1">
+          Address Line 1
+        </label>
+
+        <input
+          id="addressLine1"
+          type="text"
+          formControlName="addressLine1"
+          placeholder="Enter address"
+        />
+      </div>
+
+
+      <div class="form-group">
+        <label for="addressLine2">
+          Address Line 2
+        </label>
+
+        <input
+          id="addressLine2"
+          type="text"
+          formControlName="addressLine2"
+          placeholder="Enter address line 2"
+        />
+      </div>
+
+
+      <div class="form-group">
+        <label for="city">
+          City
+        </label>
+
+        <input
+          id="city"
+          type="text"
+          formControlName="city"
+          placeholder="Enter city"
+        />
+      </div>
+
+
+      <div class="form-group">
+        <label for="state">
+          State
+        </label>
+
+        <input
+          id="state"
+          type="text"
+          formControlName="state"
+          placeholder="Enter state"
+        />
+      </div>
+
+
+      <div class="form-group">
+        <label for="country">
+          Country
+        </label>
+
+        <input
+          id="country"
+          type="text"
+          formControlName="country"
+          placeholder="Enter country"
+        />
+      </div>
+
+
+      <div class="form-group">
+        <label for="postalCode">
+          Postal Code
+        </label>
+
+        <input
+          id="postalCode"
+          type="text"
+          formControlName="postalCode"
+          placeholder="Enter postal code"
+        />
+      </div>
+
+
+      <div class="form-group">
+        <label for="emergencyContactName">
+          Emergency Contact Name
+        </label>
+
+        <input
+          id="emergencyContactName"
+          type="text"
+          formControlName="emergencyContactName"
+          placeholder="Enter emergency contact name"
+        />
+      </div>
+
+
+      <div class="form-group">
+        <label for="emergencyContactPhone">
+          Emergency Contact Phone
+        </label>
+
+        <input
+          id="emergencyContactPhone"
+          type="tel"
+          formControlName="emergencyContactPhone"
+          placeholder="Enter emergency contact phone"
+        />
+
+        @if (
+          memberForm.get('emergencyContactPhone')?.touched &&
+          memberForm.get('emergencyContactPhone')?.invalid
+        ) {
+          <span class="validation-error">
+            Enter a valid emergency contact phone number.
+          </span>
+        }
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- MEMBERSHIP PLAN -->
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Membership Plan</h2>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Membership Plan -->
+      <div class="form-group">
+
+        <label for="planName">
+          Membership Plan
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="planName"
+          formControlName="planName"
+          (change)="onPlanChange()"
+        >
+          <option value="">
+            Select membership plan
+          </option>
+
+          @for (
+            plan of membershipPlans;
+            track plan.name
+          ) {
+            <option
+              [value]="plan.name"
+            >
+              {{ plan.name }}
+            </option>
+          }
+        </select>
+
+        @if (
+          memberForm.get('planName')?.touched &&
+          memberForm.get('planName')?.hasError('required')
+        ) {
+          <span class="validation-error">
+            Membership plan is required.
+          </span>
+        }
+
+      </div>
+
+
+      <!-- Start Date -->
+      <div class="form-group">
+
+        <label for="joinDate">
+          Start Date
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="joinDate"
+          type="date"
+          formControlName="joinDate"
+          (change)="onStartDateChange()"
+        />
+
+      </div>
+
+
+      <!-- Expiry Date -->
+      <div class="form-group">
+
+        <label for="expiryDate">
+          Expiry Date
+        </label>
+
+        <input
+          id="expiryDate"
+          type="date"
+          formControlName="expiryDate"
+          readonly
+        />
+
+      </div>
+
+
+      <!-- Payment Mode -->
+      <div class="form-group">
+
+        <label for="paymentMode">
+          Payment Mode
+        </label>
+
+        <select
+          id="paymentMode"
+          formControlName="paymentMode"
+        >
+          <option value="">
+            Select payment mode
+          </option>
+
+          @for (
+            mode of paymentModes;
+            track mode
+          ) {
+            <option
+              [value]="mode"
+            >
+              {{ mode }}
+            </option>
+          }
+        </select>
+
+        @if (
+          memberForm.hasError('paymentModeRequired') &&
+          memberForm.get('paymentMode')?.touched
+        ) {
+          <span class="validation-error">
+            Payment mode is required for Paid or Partial payment.
+          </span>
+        }
+
+      </div>
+
+
+      <!-- Payment Status -->
+      <div class="form-group">
+
+        <label for="paymentStatus">
+          Payment Status
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="paymentStatus"
+          formControlName="paymentStatus"
+          (change)="onPaymentStatusChange()"
+        >
+          @for (
+            status of paymentStatuses;
+            track status
+          ) {
+            <option
+              [value]="status"
+            >
+              {{ status }}
+            </option>
+          }
+        </select>
+
+      </div>
+
+
+      <!-- Amount -->
+      <div class="form-group">
+  <label for="membershipAmount">
+    Amount
+  </label>
+
+  <input
+    id="membershipAmount"
+    type="number"
+    formControlName="membershipAmount"
+    readonly
+  />
+
+  @if (
+    memberForm.get('membershipAmount')?.touched &&
+    memberForm.get('membershipAmount')?.errors
+  ) {
+    <small class="error-message">
+      Please select a membership plan.
+    </small>
+  }
 </div>
 
-<!-- PERSONAL INFORMATION -->
-<section class="form-card">
-  <div class="section-header">
-    <h2>Personal Information</h2>
-  </div>
 
-  <div class="form-grid">
+      <!-- Amount Paid -->
+      <div class="form-group">
+  <label for="amountPaid">
+    Amount Paid
+  </label>
 
-    <!-- Member Code -->
-    <div class="form-group">
-      <label for="memberCode">
-        Member Code <span class="required">*</span>
-      </label>
+  <input
+    id="amountPaid"
+    type="number"
+    formControlName="amountPaid"
+    min="0"
+    step="0.01"
+    (input)="onAmountPaidChange()"
+    [readOnly]="memberForm.get('paymentStatus')?.value !== 'Partial'"
+  />
 
-      <input
-        id="memberCode"
-        type="text"
-        formControlName="memberCode"
-        placeholder="Enter member code"
-      />
+  @if (
+    memberForm.get('amountPaid')?.touched &&
+    memberForm.get('amountPaid')?.errors?.['amountPaidExceedsAmount']
+  ) {
+    <small class="error-message">
+      Amount Paid cannot exceed Amount.
+    </small>
+  }
 
-      @if (
-        memberForm.get('memberCode')?.touched &&
-        memberForm.get('memberCode')?.invalid
-      ) {
-        <span class="validation-error">
-          Member code is required and must contain only valid characters.
-        </span>
-      }
+  @if (
+    memberForm.get('amountPaid')?.touched &&
+    memberForm.get('amountPaid')?.errors?.['invalidPartialPayment']
+  ) {
+    <small class="error-message">
+      Partial payment must be greater than 0 and less than the total amount.
+    </small>
+  }
+</div>
+
+
+      <!-- Balance -->
+      <div class="form-group">
+
+        <label for="balanceAmount">
+          Balance
+        </label>
+
+        <input
+          id="balanceAmount"
+          type="number"
+          formControlName="balanceAmount"
+          readonly
+        />
+
+      </div>
+
     </div>
 
-    <!-- First Name -->
-    <div class="form-group">
-      <label for="firstName">
-        First Name <span class="required">*</span>
-      </label>
+  </section>
 
-      <input
-        id="firstName"
-        type="text"
-        formControlName="firstName"
-        placeholder="Enter first name"
-      />
 
-      @if (
-        memberForm.get('firstName')?.touched &&
-        memberForm.get('firstName')?.invalid
-      ) {
-        <span class="validation-error">
-          Enter a valid first name.
-        </span>
-      }
+  <!-- IDENTIFICATION -->
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Identification</h2>
     </div>
 
-    <!-- Last Name -->
-    <div class="form-group">
-      <label for="lastName">
-        Last Name <span class="required">*</span>
-      </label>
+    <div class="form-grid">
 
-      <input
-        id="lastName"
-        type="text"
-        formControlName="lastName"
-        placeholder="Enter last name"
-      />
+      <div class="form-group">
 
-      @if (
-        memberForm.get('lastName')?.touched &&
-        memberForm.get('lastName')?.invalid
-      ) {
-        <span class="validation-error">
-          Enter a valid last name.
-        </span>
-      }
+        <label for="idProofType">
+          ID Proof Type
+        </label>
+
+        <select
+          id="idProofType"
+          formControlName="idProofType"
+        >
+          <option value="">
+            Select ID proof
+          </option>
+
+          <option value="aadhaar">
+            Aadhaar
+          </option>
+
+          <option value="passport">
+            Passport
+          </option>
+
+          <option value="driving-license">
+            Driving License
+          </option>
+
+          <option value="voter-id">
+            Voter ID
+          </option>
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="idProofNumber">
+          ID Proof Number
+        </label>
+
+        <input
+          id="idProofNumber"
+          type="text"
+          formControlName="idProofNumber"
+          placeholder="Enter ID proof number"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="idProofFile">
+          ID Proof Document
+        </label>
+
+        <input
+          id="idProofFile"
+          type="file"
+          accept=".pdf,.jpg,.jpeg,.png"
+          (change)="onIdProofSelected($event)"
+        />
+
+        <small class="field-hint">
+          PDF, JPG or PNG. Maximum size: 5 MB.
+        </small>
+
+        @if (selectedIdProofFile) {
+          <span class="file-name">
+            {{ selectedIdProofFile.name }}
+          </span>
+        }
+
+        @if (idProofFileError) {
+          <span class="validation-error">
+            {{ idProofFileError }}
+          </span>
+        }
+
+      </div>
+
     </div>
 
-    <!-- Date of Birth -->
-    <div class="form-group">
-      <label for="dateOfBirth">Date of Birth</label>
+  </section>
 
-      <input
-        id="dateOfBirth"
-        type="date"
-        formControlName="dateOfBirth"
-        [max]="maxDateOfBirth"
-      />
 
-      @if (
-        memberForm.get('dateOfBirth')?.touched &&
-        memberForm.get('dateOfBirth')?.invalid
-      ) {
-        <span class="validation-error">
-          Enter a valid date of birth. Member must be at least 18 years old.
-        </span>
-      }
+  <!-- MEDICAL & REFERRAL -->
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Medical & Referral</h2>
     </div>
 
-    <!-- Gender -->
-    <div class="form-group">
-      <label for="gender">Gender</label>
+    <div class="form-grid">
 
-      <select
-        id="gender"
-        formControlName="gender"
-      >
-        <option value="">Select gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select>
+      <div class="form-group full-width">
+
+        <label for="medicalConditions">
+          Medical Conditions
+        </label>
+
+        <textarea
+          id="medicalConditions"
+          rows="4"
+          formControlName="medicalConditions"
+          placeholder="Enter any medical conditions"
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="referralSource">
+          Referral Source
+        </label>
+
+        <select
+          id="referralSource"
+          formControlName="referralSource"
+        >
+          <option value="">
+            Select referral source
+          </option>
+
+          <option value="online">
+            Online
+          </option>
+
+          <option value="walk-in">
+            Walk-in
+          </option>
+
+          <option value="referral">
+            Referral
+          </option>
+
+          <option value="social-media">
+            Social Media
+          </option>
+
+          <option value="other">
+            Other
+          </option>
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="referredByMemberId">
+          Referred By Member ID
+        </label>
+
+        <input
+          id="referredByMemberId"
+          type="text"
+          formControlName="referredByMemberId"
+          placeholder="Enter member ID"
+        />
+
+      </div>
+
     </div>
 
-    <!-- Blood Group -->
-    <div class="form-group">
-      <label for="bloodGroup">Blood Group</label>
-
-      <select
-        id="bloodGroup"
-        formControlName="bloodGroup"
-      >
-        <option value="">Select blood group</option>
-        <option value="A+">A+</option>
-        <option value="A-">A-</option>
-        <option value="B+">B+</option>
-        <option value="B-">B-</option>
-        <option value="AB+">AB+</option>
-        <option value="AB-">AB-</option>
-        <option value="O+">O+</option>
-        <option value="O-">O-</option>
-      </select>
-    </div>
-
-    <!-- Phone -->
-    <div class="form-group">
-      <label for="phone">
-        Phone <span class="required">*</span>
-      </label>
-
-      <input
-        id="phone"
-        type="tel"
-        formControlName="phone"
-        placeholder="Enter phone number"
-      />
-
-      @if (
-        memberForm.get('phone')?.touched &&
-        memberForm.get('phone')?.invalid
-      ) {
-        <span class="validation-error">
-          Enter a valid phone number.
-        </span>
-      }
-    </div>
-
-    <!-- Alternate Phone -->
-    <div class="form-group">
-      <label for="alternatePhone">Alternate Phone</label>
-
-      <input
-        id="alternatePhone"
-        type="tel"
-        formControlName="alternatePhone"
-        placeholder="Enter alternate phone"
-      />
-
-      @if (
-        memberForm.get('alternatePhone')?.touched &&
-        memberForm.get('alternatePhone')?.invalid
-      ) {
-        <span class="validation-error">
-          Enter a valid alternate phone number.
-        </span>
-      }
-
-      @if (
-        memberForm.hasError('alternatePhoneMatchesPhone') &&
-        memberForm.get('alternatePhone')?.touched
-      ) {
-        <span class="validation-error">
-          Alternate phone number must be different from the primary phone number.
-        </span>
-      }
-    </div>
-
-    <!-- Email -->
-    <div class="form-group">
-      <label for="email">Email</label>
-
-      <input
-        id="email"
-        type="email"
-        formControlName="email"
-        placeholder="Enter email address"
-      />
-
-      @if (
-        memberForm.get('email')?.touched &&
-        memberForm.get('email')?.invalid
-      ) {
-        <span class="validation-error">
-          Enter a valid email address.
-        </span>
-      }
-    </div>
-
-    <!-- Address Line 1 -->
-    <div class="form-group">
-      <label for="addressLine1">Address Line 1</label>
-
-      <input
-        id="addressLine1"
-        type="text"
-        formControlName="addressLine1"
-        placeholder="Enter address"
-      />
-    </div>
-
-    <!-- Address Line 2 -->
-    <div class="form-group">
-      <label for="addressLine2">Address Line 2</label>
-
-      <input
-        id="addressLine2"
-        type="text"
-        formControlName="addressLine2"
-        placeholder="Enter address line 2"
-      />
-    </div>
-
-    <!-- City -->
-    <div class="form-group">
-      <label for="city">City</label>
-
-      <input
-        id="city"
-        type="text"
-        formControlName="city"
-        placeholder="Enter city"
-      />
-    </div>
-
-    <!-- State -->
-    <div class="form-group">
-      <label for="state">State</label>
-
-      <input
-        id="state"
-        type="text"
-        formControlName="state"
-        placeholder="Enter state"
-      />
-    </div>
-
-    <!-- Country -->
-    <div class="form-group">
-      <label for="country">Country</label>
-
-      <input
-        id="country"
-        type="text"
-        formControlName="country"
-        placeholder="Enter country"
-      />
-    </div>
-
-    <!-- Postal Code -->
-    <div class="form-group">
-      <label for="postalCode">Postal Code</label>
-
-      <input
-        id="postalCode"
-        type="text"
-        formControlName="postalCode"
-        placeholder="Enter postal code"
-      />
-    </div>
-
-    <!-- Emergency Contact Name -->
-    <div class="form-group">
-      <label for="emergencyContactName">
-        Emergency Contact Name
-      </label>
-
-      <input
-        id="emergencyContactName"
-        type="text"
-        formControlName="emergencyContactName"
-        placeholder="Enter emergency contact name"
-      />
-    </div>
-
-    <!-- Emergency Contact Phone -->
-    <div class="form-group">
-      <label for="emergencyContactPhone">
-        Emergency Contact Phone
-      </label>
-
-      <input
-        id="emergencyContactPhone"
-        type="tel"
-        formControlName="emergencyContactPhone"
-        placeholder="Enter emergency contact phone"
-      />
-
-      @if (
-        memberForm.get('emergencyContactPhone')?.touched &&
-        memberForm.get('emergencyContactPhone')?.invalid
-      ) {
-        <span class="validation-error">
-          Enter a valid emergency contact phone number.
-        </span>
-      }
-    </div>
-
-  </div>
-</section>
-
-<!-- IDENTIFICATION -->
-<section class="form-card">
-  <div class="section-header">
-    <h2>Identification</h2>
-  </div>
-
-  <div class="form-grid">
-
-    <!-- ID Proof Type -->
-    <div class="form-group">
-      <label for="idProofType">ID Proof Type</label>
-
-      <select
-        id="idProofType"
-        formControlName="idProofType"
-      >
-        <option value="">Select ID proof</option>
-        <option value="aadhaar">Aadhaar</option>
-        <option value="passport">Passport</option>
-        <option value="driving-license">Driving License</option>
-        <option value="voter-id">Voter ID</option>
-      </select>
-    </div>
-
-    <!-- ID Proof Number -->
-    <div class="form-group">
-      <label for="idProofNumber">ID Proof Number</label>
-
-      <input
-        id="idProofNumber"
-        type="text"
-        formControlName="idProofNumber"
-        placeholder="Enter ID proof number"
-      />
-    </div>
-
-    <!-- ID Proof File -->
-    <div class="form-group">
-      <label for="idProofFile">ID Proof Document</label>
-
-      <input
-        id="idProofFile"
-        type="file"
-        accept=".pdf,.jpg,.jpeg,.png"
-        (change)="onIdProofSelected($event)"
-      />
-
-      <small class="field-hint">
-        PDF, JPG or PNG. Maximum size: 5 MB.
-      </small>
-
-      @if (selectedIdProofFile) {
-        <span class="file-name">
-          {{ selectedIdProofFile.name }}
-        </span>
-      }
-
-      @if (idProofFileError) {
-        <span class="validation-error">
-          {{ idProofFileError }}
-        </span>
-      }
-    </div>
-
-  </div>
-</section>
-
-<!-- MEDICAL & REFERRAL -->
-<section class="form-card">
-  <div class="section-header">
-    <h2>Medical & Referral</h2>
-  </div>
-
-  <div class="form-grid">
-
-    <!-- Medical Conditions -->
-    <div class="form-group full-width">
-      <label for="medicalConditions">
-        Medical Conditions
-      </label>
-
-      <textarea
-        id="medicalConditions"
-        rows="4"
-        formControlName="medicalConditions"
-        placeholder="Enter any medical conditions"
-      ></textarea>
-    </div>
-
-    <!-- Referral Source -->
-    <div class="form-group">
-      <label for="referralSource">Referral Source</label>
-
-      <select
-        id="referralSource"
-        formControlName="referralSource"
-      >
-        <option value="">Select referral source</option>
-        <option value="online">Online</option>
-        <option value="walk-in">Walk-in</option>
-        <option value="referral">Referral</option>
-        <option value="social-media">Social Media</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-
-    <!-- Referred By Member -->
-    <div class="form-group">
-      <label for="referredByMemberId">
-        Referred By Member ID
-      </label>
-
-      <input
-        id="referredByMemberId"
-        type="text"
-        formControlName="referredByMemberId"
-        placeholder="Enter member ID"
-      />
-    </div>
-
-  </div>
-</section>
+  </section>
 
 </form>

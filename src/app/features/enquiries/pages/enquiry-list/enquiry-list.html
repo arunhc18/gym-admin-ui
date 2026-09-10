@@ -1,0 +1,82 @@
+<section class="enquiries-page">
+  <div class="page-actions">
+    <a class="back-link" routerLink="/dashboard" aria-label="Back to dashboard">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+      <span>Back to Dashboard</span>
+    </a>
+
+    <a class="btn btn-primary quick-enquiry-button" routerLink="/enquiries/new">+ Quick Enquiry</a>
+  </div>
+
+  <div class="summary-grid" aria-label="Enquiry summary">
+    <div class="summary-item"><span>Total Enquiries</span><strong>{{ allEnquiries.length }}</strong></div>
+    <div class="summary-item"><span>New</span><strong>{{ newCount }}</strong></div>
+    <div class="summary-item"><span>Follow-up</span><strong>{{ followUpCount }}</strong></div>
+    <div class="summary-item"><span>Converted</span><strong>{{ convertedCount }}</strong></div>
+  </div>
+
+  <section class="list-card">
+    <div class="filters">
+      <label class="search-field">
+        <span>Search</span>
+        <input type="search" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="Name, phone, email or plan" />
+      </label>
+      <label>
+        <span>Status</span>
+        <select [(ngModel)]="selectedStatus" (ngModelChange)="onFilterChange()">
+          @for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }
+        </select>
+      </label>
+      <label>
+        <span>Page size</span>
+        <select [(ngModel)]="pageSize" (ngModelChange)="onFilterChange()">
+          @for (size of pageSizes; track size) { <option [ngValue]="size">{{ size }}</option> }
+        </select>
+      </label>
+    </div>
+
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Enquiry</th>
+            <th>Phone</th>
+            <th>Interested Plan</th>
+            <th>Source</th>
+            <th>Enquiry Date</th>
+            <th>Follow-up</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (enquiry of pagedEnquiries; track enquiry.enquiryId) {
+            <tr>
+              <td class="enquiry-cell"><strong>{{ enquiry.name }}</strong><small>{{ enquiry.email || 'No email' }}</small></td>
+              <td>{{ enquiry.phone }}</td>
+              <td>{{ enquiry.interestedPlan }}</td>
+              <td>{{ enquiry.source }}</td>
+              <td>{{ formatDate(enquiry.enquiryDate) }}</td>
+              <td>{{ formatDate(enquiry.followUpDate) }}</td>
+              <td><span class="status" [class]="'status-' + enquiry.status.toLowerCase().replace('-', '')">{{ enquiry.status }}</span></td>
+              <td><a class="edit-link" [routerLink]="editEnquiry(enquiry.enquiryId)">Edit</a></td>
+            </tr>
+          } @empty {
+            <tr><td class="empty-state" colspan="8">No enquiries match the current search.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="list-footer">
+      <span>Showing {{ firstResult }}–{{ lastResult }} of {{ filteredEnquiries.length }}</span>
+      <div class="pagination">
+        <button class="btn btn-secondary" type="button" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button class="btn btn-secondary" type="button" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+      </div>
+    </div>
+  </section>
+</section>

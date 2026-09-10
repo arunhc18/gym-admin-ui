@@ -1,0 +1,104 @@
+.enquiries-page { max-width: 1400px; margin: 0 auto; padding-bottom: 20px; }
+.page-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-decoration: none;
+}
+.back-link svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+.back-link:hover { color: var(--text-primary); }
+
+.quick-enquiry-button {
+  min-height: 30px;
+  padding: 6px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.quick-enquiry-button,
+.quick-enquiry-button:hover,
+.quick-enquiry-button:focus,
+.quick-enquiry-button:active {
+  color: var(--text-primary);
+  opacity: 1;
+  visibility: visible;
+  -webkit-text-fill-color: currentColor;
+}
+
+.summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 10px; }
+.summary-item { padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); }
+.summary-item span { display: block; color: var(--text-muted); font-size: 10px; }
+.summary-item strong { display: block; margin-top: 2px; color: var(--text-primary); font-size: 17px; font-weight: 600; }
+
+.list-card { padding: 12px; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); }
+.filters { display: grid; grid-template-columns: minmax(220px, 1fr) 150px 110px; gap: 8px; margin-bottom: 10px; }
+.filters label { display: flex; flex-direction: column; gap: 3px; color: var(--text-secondary); font-size: 10px; font-weight: 500; }
+.filters input, .filters select { width: 100%; height: 30px; padding: 5px 8px; border: 1px solid var(--border-primary); border-radius: var(--radius-sm); background: var(--bg-elevated); color: var(--text-primary); font-size: 11px; outline: none; }
+.filters input:focus, .filters select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-subtle); }
+
+.table-container {
+  max-height: 266px;
+  overflow: auto;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+}
+.data-table { min-width: 900px; font-size: 11px; }
+.data-table th, .data-table td { padding: 8px 10px; }
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-size: 9px;
+}
+.enquiry-cell strong, .enquiry-cell small { display: block; }
+.enquiry-cell strong { color: var(--text-primary); font-weight: 600; }
+.enquiry-cell small { margin-top: 1px; color: var(--text-muted); font-size: 9px; }
+.status { display: inline-block; padding: 3px 7px; border-radius: 10px; background: var(--bg-elevated); color: var(--text-secondary); font-size: 9px; font-weight: 600; }
+.status-new { color: var(--info); }
+.status-followup { color: var(--warning); }
+.status-converted { color: var(--success); }
+.status-lost { color: var(--danger); }
+.edit-link { color: var(--primary); font-size: 10px; font-weight: 600; }
+.edit-link:hover, .edit-link:focus { color: var(--primary-hover); }
+.empty-state { padding: 24px !important; color: var(--text-muted); text-align: center !important; }
+.list-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 10px; color: var(--text-muted); font-size: 10px; }
+.pagination { display: flex; align-items: center; gap: 8px; }
+.pagination .btn {
+  min-height: 30px;
+  padding: 6px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filters { grid-template-columns: 1fr 1fr; }
+  .search-field { grid-column: 1 / -1; }
+}
+
+@media (max-width: 520px) {
+  .page-actions, .list-footer { align-items: stretch; flex-direction: column; }
+  .quick-enquiry-button { text-align: center; }
+  .filters { grid-template-columns: 1fr; }
+  .search-field { grid-column: auto; }
+  .pagination { justify-content: space-between; }
+}

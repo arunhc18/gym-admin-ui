@@ -3,11 +3,70 @@ import { Injectable } from '@angular/core';
 import { Member } from '../models/member.model';
 import { MemberListItem } from '../models/member-list-item.model';
 
+export type PaymentMode =
+  | 'Cash'
+  | 'UPI'
+  | 'Card'
+  | 'Bank Transfer'
+  | 'Other';
+
+export type PaymentStatus =
+  | 'Paid'
+  | 'Partial'
+  | 'Pending';
+
+export const MEMBERSHIP_PLANS = [
+  {
+    name: 'Monthly',
+    durationMonths: 1
+  },
+  {
+    name: 'Quarterly',
+    durationMonths: 3
+  },
+  {
+    name: 'Gold Annual',
+    durationMonths: 12
+  },
+  {
+    name: 'Premium Annual',
+    durationMonths: 12
+  }
+] as const;
+
+export const MEMBERSHIP_PLAN_AMOUNTS: Record<string, number> = {
+  Monthly: 1500,
+  Quarterly: 4000,
+  'Gold Annual': 12000,
+  'Premium Annual': 18000
+};
+
+export const PAYMENT_MODES: PaymentMode[] = [
+  'Cash',
+  'UPI',
+  'Card',
+  'Bank Transfer',
+  'Other'
+];
+
+export const PAYMENT_STATUSES: PaymentStatus[] = [
+  'Paid',
+  'Partial',
+  'Pending'
+];
+
 export interface MemberRecord extends Member {
   planName: string;
   location: string;
   joinDate: string;
   expiryDate: string;
+
+  planDurationMonths?: number;
+  paymentMode?: PaymentMode;
+  paymentStatus?: PaymentStatus;
+  membershipAmount?: number;
+  amountPaid?: number;
+  balanceAmount?: number;
 
   idProofUrl?: string;
   medicalConditions?: string;
@@ -31,7 +90,13 @@ export type CreateMember = Omit<
       'planName' |
       'location' |
       'joinDate' |
-      'expiryDate'
+      'expiryDate' |
+      'planDurationMonths' |
+      'paymentMode' |
+      'paymentStatus' |
+      'membershipAmount' |
+      'amountPaid' |
+      'balanceAmount'
     >
   >;
 
@@ -422,15 +487,25 @@ export class MemberService {
   }
 
   getMemberById(id: number): MemberRecord | undefined {
-    return this.members.find(member => member.memberId === id);
+    return this.members.find(
+      member => member.memberId === id
+    );
   }
 
   createMember(member: CreateMember): MemberRecord {
-    const newId = this.members.length > 0
-      ? Math.max(...this.members.map(item => item.memberId)) + 1
-      : 1;
+    const newId =
+      this.members.length > 0
+        ? Math.max(
+            ...this.members.map(
+              item => item.memberId
+            )
+          ) + 1
+        : 1;
 
-    const today = new Date().toISOString().split('T')[0];
+    const today =
+      new Date()
+        .toISOString()
+        .split('T')[0];
 
     const newMember: MemberRecord = {
       ...member,
@@ -451,9 +526,10 @@ export class MemberService {
     id: number,
     member: UpdateMember
   ): MemberRecord | undefined {
-    const index = this.members.findIndex(
-      item => item.memberId === id
-    );
+    const index =
+      this.members.findIndex(
+        item => item.memberId === id
+      );
 
     if (index === -1) {
       return undefined;
@@ -468,13 +544,112 @@ export class MemberService {
     return this.members[index];
   }
 
-  deactivateMember(id: number): MemberRecord | undefined {
+  deactivateMember(
+    id: number
+  ): MemberRecord | undefined {
     return this.updateMember(id, {
       status: 'Inactive'
     });
   }
 
-  private toListItem(member: MemberRecord): MemberListItem {
+  getPlanDuration(
+    planName: string
+  ): number {
+    const plan =
+      MEMBERSHIP_PLANS.find(
+        item => item.name === planName
+      );
+
+    return plan?.durationMonths ?? 0;
+  }
+
+  getMembershipAmount(
+    planName: string
+  ): number | undefined {
+    return MEMBERSHIP_PLAN_AMOUNTS[planName];
+  }
+
+  getMembershipPlan(planName: string) {
+  return MEMBERSHIP_PLANS.find(
+    plan => plan.name === planName
+  );
+}
+
+
+  calculateExpiryDate(
+    startDate: string,
+    durationMonths: number
+  ): string {
+    if (
+      !startDate ||
+      !durationMonths
+    ) {
+      return '';
+    }
+
+    const [
+      year,
+      month,
+      day
+    ] = startDate
+      .split('-')
+      .map(Number);
+
+    const targetMonth =
+      new Date(
+        year,
+        month - 1 + durationMonths,
+        1
+      );
+
+    const lastDay =
+      new Date(
+        targetMonth.getFullYear(),
+        targetMonth.getMonth() + 1,
+        0
+      ).getDate();
+
+    const clampedDay =
+      Math.min(
+        day,
+        lastDay
+      );
+
+    const expiry =
+      new Date(
+        targetMonth.getFullYear(),
+        targetMonth.getMonth(),
+        clampedDay
+      );
+
+    expiry.setDate(
+      expiry.getDate() - 1
+    );
+
+    return [
+      expiry.getFullYear(),
+      String(
+        expiry.getMonth() + 1
+      ).padStart(2, '0'),
+      String(
+        expiry.getDate()
+      ).padStart(2, '0')
+    ].join('-');
+  }
+
+  calculateBalance(
+    amount: number,
+    amountPaid: number
+  ): number {
+    return Math.max(
+      0,
+      amount - amountPaid
+    );
+  }
+
+  private toListItem(
+    member: MemberRecord
+  ): MemberListItem {
     return {
       memberId: member.memberId,
       memberCode: member.memberCode,
