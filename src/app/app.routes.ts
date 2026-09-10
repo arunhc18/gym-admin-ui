@@ -3,28 +3,17 @@ import { Routes } from '@angular/router';
 import { AppLayoutComponent } from './core/layout/app-layout/app-layout';
 
 export const routes: Routes = [
-
-  // =========================================================
-  // COMMON APPLICATION LAYOUT
-  // =========================================================
   {
     path: '',
     component: AppLayoutComponent,
 
     children: [
-
-      // =====================================================
-      // DEFAULT ROUTE
-      // =====================================================
       {
         path: '',
         pathMatch: 'full',
         redirectTo: 'dashboard'
       },
 
-      // =====================================================
-      // DASHBOARD
-      // =====================================================
       {
         path: 'dashboard',
 
@@ -40,7 +29,6 @@ export const routes: Routes = [
 
       // =====================================================
       // MEMBER LIST
-      // Developer 1
       // =====================================================
       {
         path: 'members',
@@ -58,8 +46,27 @@ export const routes: Routes = [
       },
 
       // =====================================================
+      // ADD MEMBER
+      // IMPORTANT: Must come before members/:id
+      // =====================================================
+      {
+        path: 'members/new',
+
+        loadComponent: () =>
+          import(
+            './features/members/pages/add-member/add-member'
+          ).then(
+            m => m.AddMemberComponent
+          ),
+
+        data: {
+          title: 'Add Member',
+          description: 'Create a new gym member profile'
+        }
+      },
+
+      // =====================================================
       // MEMBER DETAILS
-      // Developer 2
       // =====================================================
       {
         path: 'members/:id',
@@ -79,7 +86,6 @@ export const routes: Routes = [
 
       // =====================================================
       // PLACEHOLDER ROUTES
-      // These can be replaced later when those modules are built
       // =====================================================
 
       {
@@ -172,16 +178,11 @@ export const routes: Routes = [
           description: 'Configure gym and application settings'
         }
       }
-
     ]
   },
 
-  // =========================================================
-  // UNKNOWN ROUTES
-  // =========================================================
   {
     path: '**',
     redirectTo: 'dashboard'
   }
-
 ];
