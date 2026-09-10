@@ -1,10 +1,52 @@
 .quick-actions { display: flex; align-items: center; gap: 8px; }
-.quick-actions .btn { min-height: 36px; padding: 0 12px; font-size: 12px; }
+.quick-action-button {
+  flex: 1 1 0;
+  min-width: 112px;
+  min-height: 36px;
+  padding: 0 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.quick-action-button:hover,
+.quick-action-button:focus-visible,
+.quick-action-button:active {
+  background: var(--border-primary);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+.quick-action-button svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+.quick-action-button svg { stroke: var(--primary); }
+.quick-action-button:hover svg,
+.quick-action-button:focus-visible svg,
+.quick-action-button:active svg { stroke: var(--primary); }
+.quick-actions .quick-enquiry-action,
+.quick-actions .quick-enquiry-action:hover,
+.quick-actions .quick-enquiry-action:focus,
+.quick-actions .quick-enquiry-action:active {
+  color: var(--text-primary);
+  opacity: 1;
+  visibility: visible;
+  -webkit-text-fill-color: currentColor;
+}
 .quick-actions .more-action { display: none; }
 
 @media (max-width: 600px) {
   .quick-actions { width: 100%; gap: 8px; }
-  .quick-actions .btn { flex: 1; min-width: 0; padding: 0 8px; }
+  .quick-actions .quick-action-button { min-width: 0; padding: 0 8px; }
   .quick-actions .check-in-action { display: none; }
+  .quick-actions .quick-enquiry-action { display: none; }
   .quick-actions .more-action { display: inline-flex; flex: 0 0 38px; }
 }

@@ -4,14 +4,25 @@
   padding-bottom: 20px;
 }
 
+.member-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 10px;
   color: var(--text-secondary);
   font-size: 14px;
   text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--text-primary);
 }
 
 .back-link svg {
@@ -19,106 +30,53 @@
   height: 18px;
   fill: none;
   stroke: currentColor;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 2;
-}
-
-.back-link:hover {
-  color: var(--text-primary);
-}
-
-.member-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 7px;
-  margin-bottom: 10px;
-}
-
-.member-actions .back-link {
-  margin-bottom: 0;
 }
 
 .member-action-buttons {
   display: flex;
-  align-items: center;
   gap: 7px;
 }
 
-.details-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px 18px;
-}
-
-.detail-item {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.detail-item-wide {
-  grid-column: 1 / -1;
-}
-
-.detail-item span {
-  color: var(--text-muted);
-  font-size: 10px;
+.btn {
+  min-height: 30px;
+  padding: 6px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
-.detail-item strong {
-  min-height: 18px;
-  color: var(--text-primary);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
+.btn-primary:disabled {
+  background: #4b4f57;
+  border-color: #4b4f57;
+  color: #9ca1aa;
+  cursor: not-allowed;
 }
-
-
-/* =========================
-   Profile Card
-   ========================= */
 
 .profile-card {
   display: flex;
   align-items: center;
-
   gap: 12px;
-
-  padding: 11px 14px;
   margin-bottom: 10px;
-
+  padding: 14px;
   background: var(--bg-card);
-
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
 }
 
 .profile-photo {
-  width: 46px;
-  height: 46px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  background: var(--primary-subtle);
-
-  border: 1px solid rgba(255, 59, 69, 0.25);
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 48px;
   border-radius: 50%;
-
+  background: var(--primary-subtle);
   color: var(--primary);
-
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .profile-info {
@@ -128,72 +86,48 @@
 .profile-name-row {
   display: flex;
   align-items: center;
-
   gap: 8px;
 }
 
 .profile-name-row h2 {
   margin: 0;
-
   color: var(--text-primary);
-
   font-size: 16px;
   font-weight: 600;
 }
 
-.member-code {
-  margin: 2px 0 0;
-
-  color: var(--text-secondary);
-
-  font-size: 11px;
-}
-
+.member-code,
 .member-since {
-  margin: 1px 0 0;
-
+  margin: 3px 0 0;
   color: var(--text-muted);
-
   font-size: 10px;
 }
 
 .status-badge {
-  display: inline-flex;
-  align-items: center;
-
   padding: 3px 7px;
-
-  border-radius: 999px;
-
-  font-size: 10px;
-  font-weight: 500;
+  border-radius: 20px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-size: 9px;
+  font-weight: 600;
 }
 
 .status-active {
-  background: rgba(24, 185, 129, 0.12);
-  color: var(--success);
+  color: var(--primary);
 }
 
-
-/* =========================
-   Form Cards
-   ========================= */
+.profile-sections {
+  display: grid;
+  gap: 10px;
+}
 
 .form-card {
   margin-bottom: 10px;
-
   padding: 13px 14px;
-
   background: var(--bg-card);
-
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
 }
-
-
-/* =========================
-   Section Header
-   ========================= */
 
 .section-header {
   margin-bottom: 9px;
@@ -201,24 +135,46 @@
 
 .section-header h2 {
   margin: 0;
-
   color: var(--text-primary);
-
   font-size: 13px;
   font-weight: 600;
 }
 
+.details-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 9px 11px;
+}
 
-/* =========================
-   Three Column Layout
-   ========================= */
+.detail-item {
+  min-width: 0;
+}
+
+.detail-item-wide {
+  grid-column: span 2;
+}
+
+.detail-item span {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.detail-item strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
 
 .form-grid {
   display: grid;
-
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
-
   gap: 9px 11px;
 }
 
@@ -230,55 +186,27 @@
   grid-column: 1 / -1;
 }
 
-
-/* =========================
-   Labels
-   ========================= */
-
 .form-group label {
   display: block;
-
   margin-bottom: 3px;
-
   color: var(--text-secondary);
-
   font-size: 10px;
   font-weight: 500;
 }
-
-.form-group label span {
-  color: var(--primary);
-}
-
-
-/* =========================
-   Inputs
-   ========================= */
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-
   box-sizing: border-box;
-
   padding: 5px 8px;
-
   background: var(--bg-elevated);
-
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-sm);
-
   color: var(--text-primary);
-
   font-family: inherit;
   font-size: 11px;
-
   outline: none;
-
-  transition:
-    border-color var(--transition),
-    box-shadow var(--transition);
 }
 
 .form-group input,
@@ -288,54 +216,15 @@
 
 .form-group textarea {
   min-height: 52px;
-
   resize: vertical;
-
-  line-height: 1.35;
 }
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: var(--text-muted);
-}
-
-
-/* =========================
-   Focus
-   ========================= */
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--primary);
-
   box-shadow:
     0 0 0 2px var(--primary-subtle);
-}
-
-.form-group select {
-  cursor: pointer;
-}
-
-.form-group select option {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-}
-
-
-/* =========================
-   Validation
-   ========================= */
-
-.validation-error {
-  display: block;
-
-  margin-top: 3px;
-
-  color: var(--danger);
-
-  font-size: 9px;
-  line-height: 1.25;
 }
 
 .form-group input.ng-touched.ng-invalid,
@@ -344,153 +233,34 @@
   border-color: var(--danger);
 }
 
-.form-group input.ng-touched.ng-invalid:focus,
-.form-group select.ng-touched.ng-invalid:focus,
-.form-group textarea.ng-touched.ng-invalid:focus {
-  border-color: var(--danger);
-
-  box-shadow:
-    0 0 0 2px rgba(239, 68, 68, 0.12);
-}
-
-
-/* =========================
-   File Upload
-   ========================= */
-
-.file-upload {
-  position: relative;
-
-  height: 30px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-sizing: border-box;
-
-  background: var(--bg-elevated);
-
-  border: 1px dashed var(--border-primary);
-  border-radius: var(--radius-sm);
-
-  cursor: pointer;
-
-  transition:
-    border-color var(--transition),
-    background var(--transition);
-}
-
-.file-upload:hover {
-  border-color: var(--primary);
-  background: var(--primary-subtle);
-}
-
-.file-upload.file-upload-invalid {
-  border-color: var(--danger);
-}
-
-.file-upload input {
-  position: absolute;
-
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  opacity: 0;
-
-  cursor: pointer;
-}
-
-.upload-text {
-  display: flex;
-  align-items: center;
-
-  gap: 5px;
-
-  pointer-events: none;
-}
-
-.upload-text strong {
-  color: var(--text-primary);
-
-  font-size: 10px;
-}
-
-.upload-text span {
-  color: var(--text-muted);
-
+.validation-error {
+  display: block;
+  margin-top: 3px;
+  color: var(--danger);
   font-size: 9px;
+  line-height: 1.25;
 }
-
-
-/* =========================
-   Bottom Actions
-   ========================= */
-
-.member-details-page .btn {
-  min-height: 30px;
-
-  padding: 6px 13px;
-
-  border-radius: var(--radius-sm);
-
-  font-size: 11px;
-  font-weight: 500;
-}
-
-
-/* =========================
-   Disabled Save Button
-   ========================= */
-
-.member-details-page .btn-primary {
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.member-details-page .btn-primary:disabled {
-  background: #4b4f57;
-
-  border-color: #4b4f57;
-
-  color: #9ca1aa;
-
-  opacity: 1;
-
-  cursor: not-allowed;
-
-  pointer-events: none;
-}
-
-
-/* =========================
-   Tablet
-   ========================= */
 
 @media (max-width: 900px) {
 
-  .form-grid {
+  .form-grid,
+  .details-grid {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
   }
+
+  .detail-item-wide {
+    grid-column: span 2;
+  }
 }
-
-
-/* =========================
-   Mobile
-   ========================= */
 
 @media (max-width: 600px) {
 
-  .form-grid {
-    grid-template-columns: 1fr;
+  .member-actions {
+    align-items: stretch;
   }
 
+  .form-grid,
   .details-grid {
     grid-template-columns: 1fr;
   }
@@ -499,20 +269,15 @@
     grid-column: auto;
   }
 
-  .form-group.full-width {
-    grid-column: auto;
-  }
-
-  .member-actions,
-  .member-actions .btn {
+  .member-action-buttons {
     width: 100%;
   }
 
-  .member-actions {
-    justify-content: stretch;
+  .member-action-buttons .btn {
+    flex: 1;
   }
 
-  .member-actions .btn {
-    flex: 1;
+  .profile-card {
+    padding: 12px;
   }
 }

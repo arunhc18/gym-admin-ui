@@ -5,6 +5,13 @@ import { RouterLink } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { QuickActionsComponent } from '../quick-actions/quick-actions';
 
+interface PageMeta {
+  title?: string;
+  description?: string;
+  breadcrumbParent?: string;
+  breadcrumbParentUrl?: string;
+}
+
 @Component({
   selector: 'app-top-header',
   imports: [AsyncPipe, QuickActionsComponent, RouterLink],
@@ -14,6 +21,7 @@ import { QuickActionsComponent } from '../quick-actions/quick-actions';
 export class TopHeaderComponent {
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
+
   @Output() menuClicked = new EventEmitter<void>();
 
   readonly pageMeta$ = this.router.events.pipe(
@@ -21,8 +29,34 @@ export class TopHeaderComponent {
     startWith(null),
     map(() => {
       let route = this.activatedRoute;
-      while (route.firstChild) route = route.firstChild;
-      return route.snapshot.data as { title?: string; description?: string };
+
+      while (route.firstChild) {
+        route = route.firstChild;
+      }
+
+      const routeData = route.snapshot.data as PageMeta;
+      const currentUrl = this.router.url.split('?')[0];
+
+      const isMemberChildRoute =
+        currentUrl.startsWith('/members/') &&
+        currentUrl !== '/members/new';
+
+      const isAddMemberRoute =
+        currentUrl === '/members/new';
+
+      if (isMemberChildRoute || isAddMemberRoute) {
+        return {
+          ...routeData,
+          breadcrumbParent: 'Members',
+          breadcrumbParentUrl: '/members',
+        };
+      }
+
+      return {
+        ...routeData,
+        breadcrumbParent: 'Dashboard',
+        breadcrumbParentUrl: '/dashboard',
+      };
     }),
   );
 }

@@ -1,6 +1,19 @@
 <div class="quick-actions" aria-label="Quick actions">
-  <button class="btn btn-primary" type="button" (click)="onAddMember()">+ Add Member</button>
-  <button class="btn btn-secondary" type="button" (click)="onCollectPayment()">Collect Payment</button>
-  <button class="btn btn-outline check-in-action" type="button" (click)="onCheckIn()">Check-In</button>
+  <button class="btn quick-action-button" type="button" (click)="onAddMember()">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+    <span>Add Member</span>
+  </button>
+  <button class="btn quick-action-button" type="button" (click)="onCollectPayment()">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 10h18M7 15h3" /></svg>
+    <span>Collect Payment</span>
+  </button>
+  <button class="btn quick-action-button check-in-action" type="button" (click)="onCheckIn()">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+    <span>Check-In</span>
+  </button>
+  <button class="btn quick-action-button quick-enquiry-action" type="button" (click)="onQuickEnquiry()">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v11H8l-3 3V5Z" /><path d="M8 9h8M8 12h5" /></svg>
+    <span>Quick Enquiry</span>
+  </button>
   <button class="btn btn-icon more-action" type="button" aria-label="More quick actions" (click)="onMoreActions()">...</button>
 </div>

@@ -1,0 +1,72 @@
+<form class="enquiry-page" [formGroup]="enquiryForm" (ngSubmit)="saveEnquiry()" novalidate>
+  <div class="page-actions">
+    <a
+      class="back-link"
+      routerLink="/enquiries"
+      aria-label="Back to enquiries"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+
+      <span>Back to Enquiries</span>
+    </a>
+    <div class="action-buttons">
+      <button class="btn btn-secondary" type="button" routerLink="/enquiries">Cancel</button>
+      <button class="btn btn-primary" type="submit" [disabled]="!canSave">Save Enquiry</button>
+    </div>
+  </div>
+
+  <section class="form-card">
+    <div class="section-header"><h2>Quick Enquiry</h2></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="name">Name <span class="required">*</span></label>
+        <input id="name" type="text" formControlName="name" placeholder="Enter name" />
+        @if (hasError('name')) { <span class="validation-error">Enter a name between 2 and 100 characters.</span> }
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone <span class="required">*</span></label>
+        <input id="phone" type="tel" formControlName="phone" placeholder="Enter phone number" />
+        @if (hasError('phone')) { <span class="validation-error">Enter a valid phone number with 10 to 15 digits.</span> }
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter email address" />
+        @if (hasError('email')) { <span class="validation-error">Enter a valid email address.</span> }
+      </div>
+
+      <div class="form-group">
+        <label for="interestedPlan">Interested Plan <span class="required">*</span></label>
+        <select id="interestedPlan" formControlName="interestedPlan">
+          <option value="">Select plan</option>
+          @for (plan of membershipPlans; track plan.name) { <option [value]="plan.name">{{ plan.name }}</option> }
+        </select>
+        @if (hasError('interestedPlan')) { <span class="validation-error">Select a membership plan.</span> }
+      </div>
+
+      <div class="form-group">
+        <label for="source">Source</label>
+        <select id="source" formControlName="source">
+          @for (source of sources; track source) { <option [value]="source">{{ source }}</option> }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="followUpDate">Follow-up Date</label>
+        <input id="followUpDate" type="date" formControlName="followUpDate" />
+      </div>
+
+      <div class="form-group full-width">
+        <label for="notes">Notes</label>
+        <textarea id="notes" rows="4" maxlength="500" formControlName="notes" placeholder="Add notes"></textarea>
+        @if (hasError('notes')) { <span class="validation-error">Notes cannot exceed 500 characters.</span> }
+      </div>
+    </div>
+  </section>
+</form>
