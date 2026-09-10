@@ -1,215 +1,698 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
-import { MemberListItem } from '../../models/member-list-item.model';
-import { MemberService } from '../../services/member.service';
+import { FormsModule } from '@angular/forms';
 
-import { MemberFiltersComponent } from '../../components/member-filters/member-filters';
-import { MemberTableComponent } from '../../components/member-table/member-table';
-import { MemberPaginationComponent } from '../../components/member-pagination/member-pagination';
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
+
+import {
+  Member,
+  MemberService
+} from '../../services/member.service';
+
 
 @Component({
   selector: 'app-member-list',
+
   standalone: true,
+
   imports: [
     CommonModule,
-    RouterLink,
-    MemberFiltersComponent,
-    MemberTableComponent,
-    MemberPaginationComponent
+    FormsModule
   ],
-  templateUrl: './member-list.html',
-  styleUrl: './member-list.scss'
+
+  templateUrl:
+    './member-list.html',
+
+  // IMPORTANT:
+  // Keep this .scss if your file is members-list.scss.
+  // If yours is members-list.css, change it to:
+  // styleUrl: './members-list.css'
+
+  styleUrl:
+    './member-list.scss'
 })
-export class MemberListComponent {
+export class MembersListComponent
+  implements OnInit {
 
-  members: MemberListItem[] = [];
 
-  searchTerm = '';
-  selectedStatus = 'All';
-  selectedPlan = 'All';
-  selectedLocation = 'All';
+  // =====================================================
+  // ALL MEMBERS
+  // =====================================================
 
-  currentPage = 1;
-  pageSize = 10;
+  members: Member[] = [];
 
-  pageSizeOptions = [5, 10, 25, 50];
+
+  // =====================================================
+  // FILTERED MEMBERS
+  //
+  // Your HTML loops through this collection.
+  // This allows all matching members to be available
+  // inside your scrollable grid.
+  // =====================================================
+
+  filteredMembers: Member[] = [];
+
+
+  // =====================================================
+  // FILTER VALUES
+  // =====================================================
+
+  searchText = '';
+
+  selectedStatus = '';
+
+  selectedPlan = '';
+
+  selectedLocation = '';
+
+
+  // =====================================================
+  // FILTER DROPDOWN DATA
+  // =====================================================
+
+  statuses: string[] = [];
+
+  plans: string[] = [];
+
+  locations: string[] = [];
+
+
+  // =====================================================
+  // LOADING
+  // =====================================================
+
+  loading = true;
+
+
+  // =====================================================
+  // CONSTRUCTOR
+  // =====================================================
 
   constructor(
-    private readonly router: Router,
-    private readonly memberService: MemberService
-  ) {
-    this.loadMembers();
-  }
 
-  private loadMembers(): void {
-    this.members = this.memberService.getMembers();
-  }
+    private memberService:
+      MemberService,
 
-  get totalMembers(): number {
-    return this.members.length;
-  }
+    private router:
+      Router,
 
-  get activeMembers(): number {
-    return this.members.filter(
-      member => member.status === 'Active'
-    ).length;
-  }
+    private route:
+      ActivatedRoute
 
-  get expiringMembers(): number {
-    return this.members.filter(
-      member => member.status === 'Expiring'
-    ).length;
-  }
+  ) {}
 
-  get expiredMembers(): number {
-    return this.members.filter(
-      member => member.status === 'Expired'
-    ).length;
-  }
 
-  get plans(): string[] {
-    return [
-      ...new Set(
-        this.members.map(member => member.planName)
-      )
-    ];
-  }
+  // =====================================================
+  // INITIALIZE
+  // =====================================================
 
-  get locations(): string[] {
-    return [
-      ...new Set(
-        this.members.map(member => member.location)
-      )
-    ];
-  }
+  ngOnInit(): void {
 
-  get filteredMembers(): MemberListItem[] {
-    const search = this.searchTerm.trim().toLowerCase();
 
-    return this.members.filter(member => {
+    // ===============================================
+    // LISTEN FOR MEMBERS
+    // ===============================================
 
-      const matchesSearch =
-        !search ||
-        member.memberCode.toLowerCase().includes(search) ||
-        `${member.firstName} ${member.lastName}`
-          .toLowerCase()
-          .includes(search) ||
-        member.phone.toLowerCase().includes(search) ||
-        (member.email ?? '').toLowerCase().includes(search);
+    this.memberService
+      .getMembers()
+      .subscribe({
 
-      const matchesStatus =
-        this.selectedStatus === 'All' ||
-        member.status === this.selectedStatus;
+        next: (
+          members: Member[]
+        ) => {
 
-      const matchesPlan =
-        this.selectedPlan === 'All' ||
-        member.planName === this.selectedPlan;
+          this.members =
+            members;
 
-      const matchesLocation =
-        this.selectedLocation === 'All' ||
-        member.location === this.selectedLocation;
 
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesPlan &&
-        matchesLocation
+          this.prepareFilters();
+
+
+          /*
+            Apply current filters after member data
+            arrives.
+
+            This is important when opening:
+
+            /members?status=Active
+            /members?status=Expiring
+            /members?status=Expired
+          */
+
+          this.applyFilters(
+            false
+          );
+
+
+          this.loading = false;
+        },
+
+
+        error: error => {
+
+          console.error(
+            'Error loading members:',
+            error
+          );
+
+
+          this.members = [];
+
+          this.filteredMembers = [];
+
+          this.loading = false;
+        }
+
+      });
+
+
+    // ===============================================
+    // LISTEN TO DASHBOARD STATUS FILTER
+    // ===============================================
+
+    this.route.queryParamMap
+      .subscribe(
+        params => {
+
+          const status =
+            params.get(
+              'status'
+            );
+
+
+          this.selectedStatus =
+            status ?? '';
+
+
+          /*
+            If members have already loaded,
+            update immediately.
+          */
+
+          if (
+            this.members.length >
+            0
+          ) {
+
+            this.applyFilters(
+              true
+            );
+          }
+
+        }
       );
-    });
   }
 
-  get totalPages(): number {
-    return Math.max(
-      1,
-      Math.ceil(
-        this.filteredMembers.length / this.pageSize
+
+  // =====================================================
+  // PREPARE FILTER VALUES
+  // =====================================================
+
+  private prepareFilters(): void {
+
+
+    // STATUS
+
+    this.statuses = [
+
+      ...new Set(
+
+        this.members
+
+          .map(
+            member =>
+              member.status
+          )
+
+          .filter(
+            Boolean
+          )
+
       )
-    );
+
+    ].sort();
+
+
+    // PLANS
+
+    this.plans = [
+
+      ...new Set(
+
+        this.members
+
+          .map(
+            member =>
+              member.planName
+          )
+
+          .filter(
+            Boolean
+          )
+
+      )
+
+    ].sort();
+
+
+    // LOCATIONS
+
+    this.locations = [
+
+      ...new Set(
+
+        this.members
+
+          .map(
+            member =>
+              member.locationName
+          )
+
+          .filter(
+            Boolean
+          )
+
+      )
+
+    ].sort();
   }
 
-  get paginatedMembers(): MemberListItem[] {
-    const start = (this.currentPage - 1) * this.pageSize;
 
-    return this.filteredMembers.slice(
-      start,
-      start + this.pageSize
-    );
-  }
+  // =====================================================
+  // APPLY FILTERS
+  // =====================================================
 
-  get startRecord(): number {
-    if (this.filteredMembers.length === 0) {
-      return 0;
+  applyFilters(
+    scrollToTop: boolean = true
+  ): void {
+
+
+    const search =
+      this.searchText
+
+        .trim()
+
+        .toLowerCase();
+
+
+    this.filteredMembers =
+      this.members.filter(
+        member => {
+
+
+          // =============================================
+          // FULL NAME
+          // =============================================
+
+          const fullName =
+
+            `${member.firstName ?? ''} ${member.lastName ?? ''}`
+
+              .trim()
+
+              .toLowerCase();
+
+
+          // =============================================
+          // MEMBER CODE
+          // =============================================
+
+          const memberCode =
+
+            (
+              member.memberCode ??
+              ''
+            )
+
+              .toLowerCase();
+
+
+          // =============================================
+          // PHONE
+          // =============================================
+
+          const phone =
+
+            (
+              member.phone ??
+              ''
+            )
+
+              .toLowerCase();
+
+
+          // =============================================
+          // EMAIL
+          // =============================================
+
+          const email =
+
+            (
+              member.email ??
+              ''
+            )
+
+              .toLowerCase();
+
+
+          // =============================================
+          // SEARCH MATCH
+          // =============================================
+
+          const matchesSearch =
+
+            !search ||
+
+            fullName.includes(
+              search
+            ) ||
+
+            memberCode.includes(
+              search
+            ) ||
+
+            phone.includes(
+              search
+            ) ||
+
+            email.includes(
+              search
+            );
+
+
+          // =============================================
+          // STATUS MATCH
+          // =============================================
+
+          const matchesStatus =
+
+            !this.selectedStatus ||
+
+            member.status
+              .toLowerCase() ===
+
+            this.selectedStatus
+              .toLowerCase();
+
+
+          // =============================================
+          // PLAN MATCH
+          // =============================================
+
+          const matchesPlan =
+
+            !this.selectedPlan ||
+
+            member.planName
+              .toLowerCase() ===
+
+            this.selectedPlan
+              .toLowerCase();
+
+
+          // =============================================
+          // LOCATION MATCH
+          // =============================================
+
+          const matchesLocation =
+
+            !this.selectedLocation ||
+
+            member.locationName
+              .toLowerCase() ===
+
+            this.selectedLocation
+              .toLowerCase();
+
+
+          return (
+
+            matchesSearch &&
+
+            matchesStatus &&
+
+            matchesPlan &&
+
+            matchesLocation
+
+          );
+
+        }
+      );
+
+
+    if (
+      scrollToTop
+    ) {
+
+      this.scrollTableToTop();
     }
-
-    return (this.currentPage - 1) * this.pageSize + 1;
   }
 
-  get endRecord(): number {
-    return Math.min(
-      this.currentPage * this.pageSize,
-      this.filteredMembers.length
-    );
-  }
 
-  onSearchChange(value: string): void {
-    this.searchTerm = value;
-    this.currentPage = 1;
-  }
-
-  onStatusChange(value: string): void {
-    this.selectedStatus = value;
-    this.currentPage = 1;
-  }
-
-  onPlanChange(value: string): void {
-    this.selectedPlan = value;
-    this.currentPage = 1;
-  }
-
-  onLocationChange(value: string): void {
-    this.selectedLocation = value;
-    this.currentPage = 1;
-  }
+  // =====================================================
+  // CLEAR FILTERS
+  // =====================================================
 
   clearFilters(): void {
-    this.searchTerm = '';
-    this.selectedStatus = 'All';
-    this.selectedPlan = 'All';
-    this.selectedLocation = 'All';
-    this.currentPage = 1;
+
+
+    this.searchText = '';
+
+
+    this.selectedStatus = '';
+
+
+    this.selectedPlan = '';
+
+
+    this.selectedLocation = '';
+
+
+    /*
+      Remove:
+
+      ?status=Active
+      ?status=Expiring
+      ?status=Expired
+
+      from URL.
+    */
+
+    this.router.navigate(
+      [],
+      {
+
+        relativeTo:
+          this.route,
+
+        queryParams:
+          {},
+
+        replaceUrl:
+          true
+
+      }
+    );
+
+
+    this.filteredMembers = [
+      ...this.members
+    ];
+
+
+    this.scrollTableToTop();
   }
 
-  changePage(page: number): void {
-    if (page < 1 || page > this.totalPages) {
+
+  // =====================================================
+  // RETURN TO DASHBOARD
+  // =====================================================
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+
+  // =====================================================
+  // CLICK MEMBER ROW
+  // =====================================================
+
+  openMemberDetails(
+    member: Member
+  ): void {
+
+
+    if (
+      member.memberId ===
+        null ||
+
+      member.memberId ===
+        undefined
+    ) {
+
       return;
     }
 
-    this.currentPage = page;
-  }
 
-  onPageSizeChange(size: number): void {
-    this.pageSize = size;
-    this.currentPage = 1;
-  }
-
-  viewMember(member: MemberListItem): void {
     this.router.navigate([
       '/members',
       member.memberId
     ]);
   }
 
-  editMember(member: MemberListItem): void {
-    console.log('Edit member:', member);
+
+  // =====================================================
+  // FULL NAME
+  // =====================================================
+
+  getFullName(
+    member: Member
+  ): string {
+
+
+    return [
+
+      member.firstName,
+
+      member.lastName
+
+    ]
+
+      .filter(
+        Boolean
+      )
+
+      .join(' ');
   }
 
-  renewMembership(member: MemberListItem): void {
-    console.log('Renew membership:', member);
+
+  // =====================================================
+  // INITIALS
+  // =====================================================
+
+  getInitials(
+    member: Member
+  ): string {
+
+
+    const firstInitial =
+
+      member.firstName
+        ?.charAt(0) ??
+      '';
+
+
+    const lastInitial =
+
+      member.lastName
+        ?.charAt(0) ??
+      '';
+
+
+    return (
+
+      firstInitial +
+
+      lastInitial
+
+    ).toUpperCase();
   }
 
-  recordPayment(member: MemberListItem): void {
-    console.log('Record payment:', member);
+
+  // =====================================================
+  // STATUS CSS CLASS
+  // =====================================================
+
+  getStatusClass(
+    status: string
+  ): string {
+
+
+    switch (
+      status
+        .toLowerCase()
+    ) {
+
+
+      case 'active':
+
+        return 'active';
+
+
+      case 'expiring':
+
+        return 'expiring';
+
+
+      case 'expired':
+
+        return 'expired';
+
+
+      case 'inactive':
+
+        return 'inactive';
+
+
+      case 'suspended':
+
+        return 'suspended';
+
+
+      default:
+
+        return 'default';
+
+    }
+  }
+
+
+  // =====================================================
+  // SCROLL TABLE TO TOP
+  // =====================================================
+
+  private scrollTableToTop(): void {
+
+
+    setTimeout(
+      () => {
+
+
+        const container =
+
+          document
+            .querySelector(
+              '.members-table-scroll'
+            );
+
+
+        if (
+          container
+        ) {
+
+
+          container.scrollTo({
+
+            top: 0,
+
+            behavior:
+              'smooth'
+
+          });
+
+        }
+
+      },
+
+      0
+    );
   }
 }

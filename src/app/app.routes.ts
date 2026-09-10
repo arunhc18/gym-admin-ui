@@ -37,7 +37,7 @@ export const routes: Routes = [
           import(
             './features/members/pages/member-list/member-list'
           ).then(
-            m => m.MemberListComponent
+            m => m.MembersListComponent
           ),
 
         data: {
