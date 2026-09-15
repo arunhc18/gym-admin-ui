@@ -1,0 +1,63 @@
+<form class="visitor-entry-page" [formGroup]="visitorForm" (ngSubmit)="saveVisitor()" novalidate>
+  <div class="page-actions">
+    <a class="back-link" routerLink="/visitors" aria-label="Back to visitors">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+      <span>Back to Visitors</span>
+    </a>
+    <div class="action-buttons">
+      <button class="btn btn-secondary" type="button" routerLink="/visitors">Cancel</button>
+      <button class="btn btn-primary" type="submit" [disabled]="!canSave">Save Visitor</button>
+    </div>
+  </div>
+
+  <section class="form-card">
+    <div class="section-header"><h2>Visitor Entry</h2><span>Record a guest or visitor check-in</span></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="name">Name <span class="required">*</span></label>
+        <input id="name" type="text" formControlName="name" placeholder="Enter visitor name" />
+        @if (hasError('name')) { <span class="validation-error">Enter a name between 2 and 100 characters.</span> }
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone <span class="required">*</span></label>
+        <input id="phone" type="tel" formControlName="phone" placeholder="Enter phone number" />
+        @if (hasError('phone')) { <span class="validation-error">Enter a valid phone number with 10 to 15 digits.</span> }
+      </div>
+
+      <div class="form-group">
+        <label for="purpose">Purpose <span class="required">*</span></label>
+        <select id="purpose" formControlName="purpose">
+          <option value="Guest pass">Guest pass</option>
+          <option value="Member meeting">Member meeting</option>
+          <option value="Vendor visit">Vendor visit</option>
+          <option value="Trial session">Trial session</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="host">Host <span class="required">*</span></label>
+        <input id="host" type="text" formControlName="host" placeholder="Staff member or department" />
+        @if (hasError('host')) { <span class="validation-error">Enter a host or department.</span> }
+      </div>
+
+      <div class="form-group">
+        <label for="visitDate">Visit date <span class="required">*</span></label>
+        <div class="picker-field">
+          <input id="visitDate" type="date" formControlName="visitDate" (click)="openPicker($event)" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="checkInTime">Check-in time <span class="required">*</span></label>
+        <div class="time-picker-row">
+          <div class="picker-field">
+            <input id="checkInTime" type="time" lang="en-US" formControlName="checkInTime" (click)="openPicker($event)" />
+          </div>
+          <select class="period-select" aria-label="AM or PM" formControlName="checkInPeriod"><option value="AM">AM</option><option value="PM">PM</option></select>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>

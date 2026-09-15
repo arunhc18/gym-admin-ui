@@ -132,6 +132,38 @@ export const routes: Routes = [
         }
       },
 
+      {
+        path: 'visitors/new',
+
+        loadComponent: () =>
+          import(
+            './features/visitors/pages/visitor-entry/visitor-entry'
+          ).then(
+            m => m.VisitorEntryComponent
+          ),
+
+        data: {
+          title: 'New Visitor',
+          description: 'Record a new visitor check-in'
+        }
+      },
+
+      {
+        path: 'visitors',
+
+        loadComponent: () =>
+          import(
+            './features/visitors/pages/visitor-list/visitor-list'
+          ).then(
+            m => m.VisitorListComponent
+          ),
+
+        data: {
+          title: 'Visitors',
+          description: 'Track gym visitors and guest activity'
+        }
+      },
+
       // =====================================================
       // PLACEHOLDER ROUTES
       // =====================================================
