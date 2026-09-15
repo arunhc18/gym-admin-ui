@@ -17,12 +17,12 @@ export class QuickActionsComponent {
     console.log('Collect Payment action selected');
   }
 
-  onCheckIn(): void {
-    console.log('Check-In action selected');
-  }
-
   onQuickEnquiry(): void {
     this.router.navigate(['/enquiries/new']);
+  }
+
+  onLogVisitor(): void {
+    this.router.navigate(['/visitors/new']);
   }
 
   onMoreActions(): void {
