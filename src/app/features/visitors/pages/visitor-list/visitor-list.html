@@ -17,7 +17,7 @@
     <div class="filters">
       <label class="search-field">
         <span>Search</span>
-        <input type="search" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="Name, phone, purpose or host" />
+        <input type="search" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="Name, phone, email or purpose" />
       </label>
       <label>
         <span>Status</span>
@@ -35,6 +35,10 @@
           @for (size of pageSizes; track size) { <option [ngValue]="size">{{ size }}</option> }
         </select>
       </label>
+      <button class="clear-filters-button" type="button" (click)="clearFilters()" [disabled]="!hasActiveFilters" aria-label="Clear visitor filters" title="Clear filters">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M9 6V4h6v2M19 6l-1 14H6L5 6M10 10v6M14 10v6" /></svg>
+        <span>Clear filters</span>
+      </button>
     </div>
 
     <div class="table-container">
@@ -44,7 +48,7 @@
             <th>Visitor</th>
             <th>Phone</th>
             <th>Purpose</th>
-            <th>Host</th>
+            <th>Email</th>
             <th>Visit Date</th>
             <th>Check-in</th>
             <th>Check-out</th>
@@ -55,16 +59,16 @@
         <tbody>
           @for (visitor of pagedVisitors; track visitor.visitorId) {
             <tr>
-              <td class="visitor-cell"><strong>{{ visitor.name }}</strong><small>Visitor #{{ visitor.visitorId }}</small></td>
+              <td class="visitor-cell"><strong>{{ visitor.visitorName }}</strong><small>Visitor #{{ visitor.visitorId }}</small></td>
               <td>{{ visitor.phone }}</td>
               <td>{{ visitor.purpose }}</td>
-              <td>{{ visitor.host }}</td>
+              <td>{{ visitor.email || '-' }}</td>
               <td>{{ formatDate(visitor.visitDate) }}</td>
-              <td>{{ visitor.checkInTime }}</td>
-              <td>{{ visitor.checkOutTime || '-' }}</td>
-              <td><span class="status" [class.status-in]="visitor.status === 'Checked in'" [class.status-out]="visitor.status === 'Checked out'">{{ visitor.status }}</span></td>
+              <td>{{ visitor.checkinTime || '-' }}</td>
+              <td>{{ visitor.checkoutTime || '-' }}</td>
+              <td><span class="status" [class.status-in]="visitor.status === 'checked-in'" [class.status-out]="visitor.status === 'checked-out'">{{ visitor.status }}</span></td>
               <td>
-                @if (visitor.status === 'Checked in') {
+                @if (visitor.status === 'checked-in') {
                   <button class="btn btn-secondary checkout-button" type="button" (click)="checkOutVisitor(visitor)">Check out</button>
                 } @else {
                   <span class="completed-action">Completed</span>

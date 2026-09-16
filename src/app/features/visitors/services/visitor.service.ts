@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
 
-export type VisitorStatus = 'Checked in' | 'Checked out';
+export type VisitorStatus = 'scheduled' | 'checked-in' | 'checked-out';
 
 export interface Visitor {
   visitorId: number;
-  name: string;
+  tenantId: number;
+  locationId: number;
+  visitorName: string;
   phone: string;
-  purpose: string;
-  host: string;
+  email: string | null;
+  purpose: string | null;
+  referredByMemberId: number | null;
   visitDate: string;
-  checkInTime: string;
-  checkOutTime: string;
+  checkinTime: string | null;
+  checkoutTime: string | null;
   status: VisitorStatus;
 }
 
-export type CreateVisitor = Omit<Visitor, 'visitorId' | 'status'> &
-  Partial<Pick<Visitor, 'status'>>;
+export type CreateVisitor = Omit<Visitor, 'visitorId'>;
 
 @Injectable({ providedIn: 'root' })
 export class VisitorService {
@@ -31,7 +33,7 @@ export class VisitorService {
       visitorId: this.visitors.length
         ? Math.max(...this.visitors.map(item => item.visitorId)) + 1
         : 1,
-      status: visitor.status ?? 'Checked in'
+      status: visitor.status ?? 'scheduled'
     };
 
     this.visitors.unshift(created);
@@ -40,12 +42,12 @@ export class VisitorService {
 
   checkOutVisitor(id: number): Visitor | undefined {
     const visitor = this.visitors.find(item => item.visitorId === id);
-    if (!visitor || visitor.status === 'Checked out') {
+    if (!visitor || visitor.status === 'checked-out') {
       return visitor ? { ...visitor } : undefined;
     }
 
-    visitor.status = 'Checked out';
-    visitor.checkOutTime = new Intl.DateTimeFormat('en-GB', {
+    visitor.status = 'checked-out';
+    visitor.checkoutTime = new Intl.DateTimeFormat('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false
@@ -57,7 +59,6 @@ export class VisitorService {
   private createVisitors(): Visitor[] {
     const names = ['Aarav Mehta', 'Diya Shah', 'Kabir Rao', 'Meera Nair', 'Rohan Das', 'Isha Kapoor'];
     const purposes = ['Guest pass', 'Member meeting', 'Vendor visit', 'Trial session'];
-    const hosts = ['Front desk', 'Priya Menon', 'Arjun Singh', 'Fitness team'];
 
     return Array.from({ length: 24 }, (_, index) => {
       const date = new Date();
@@ -67,14 +68,17 @@ export class VisitorService {
 
       return {
         visitorId: index + 1,
-        name: names[index % names.length],
+        tenantId: 1,
+        locationId: 1,
+        visitorName: names[index % names.length],
         phone: `98${String(76543210 + index).slice(-8)}`,
+        email: `visitor${index + 1}@example.com`,
         purpose: purposes[index % purposes.length],
-        host: hosts[index % hosts.length],
+        referredByMemberId: null,
         visitDate,
-        checkInTime: `${String(8 + (index % 9)).padStart(2, '0')}:${index % 2 ? '30' : '00'}`,
-        checkOutTime: checkedIn ? '' : `${String(10 + (index % 7)).padStart(2, '0')}:45`,
-        status: checkedIn ? 'Checked in' : 'Checked out'
+        checkinTime: `${String(8 + (index % 9)).padStart(2, '0')}:${index % 2 ? '30' : '00'}`,
+        checkoutTime: checkedIn ? '' : `${String(10 + (index % 7)).padStart(2, '0')}:45`,
+        status: checkedIn ? 'checked-in' : 'checked-out'
       };
     });
   }

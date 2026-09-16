@@ -17,8 +17,10 @@
     </button>
     <div class="submenu" [class.expanded]="membersExpanded">
       <a routerLink="/members" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="selectNavigation()">All Members</a>
-      <a routerLink="/members" [queryParams]="{ view: 'renewals' }" routerLinkActive="active" (click)="selectNavigation()">Renewals</a>
+      <a routerLink="/members/renewals" routerLinkActive="active" (click)="selectNavigation()">Renewals</a>
     </div>
+
+    <a class="nav-item" routerLink="/enquiries" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" title="Enquiries" (click)="selectNavigation()"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 0 1 4 13.5z"/><path d="M8 8h8M8 11h5"/></svg></span><span class="nav-label">Enquiries</span></a>
 
     <a class="nav-item" routerLink="/visitors" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" title="Visitors" (click)="selectNavigation()"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.5-3.5 3-5.5 7-5.5s6.5 2 7 5.5M19 8v5M16.5 10.5h5"/></svg></span><span class="nav-label">Visitors</span></a>
 

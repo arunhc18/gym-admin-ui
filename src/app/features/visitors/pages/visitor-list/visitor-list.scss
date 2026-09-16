@@ -9,10 +9,14 @@
 .summary-item span { display: block; color: var(--text-muted); font-size: 10px; }
 .summary-item strong { display: block; margin-top: 2px; color: var(--text-primary); font-size: 17px; font-weight: 600; }
 .list-card { padding: 12px; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); }
-.filters { display: grid; grid-template-columns: minmax(220px, 1fr) 140px 145px 100px; gap: 8px; margin-bottom: 10px; }
+.filters { display: grid; grid-template-columns: minmax(170px, 1fr) 120px 125px 90px auto; gap: 8px; margin-bottom: 10px; }
 .filters label { display: flex; flex-direction: column; gap: 3px; color: var(--text-secondary); font-size: 10px; font-weight: 500; }
 .filters input, .filters select { width: 100%; height: 30px; padding: 5px 8px; border: 1px solid var(--border-primary); border-radius: var(--radius-sm); background: var(--bg-elevated); color: var(--text-primary); font-size: 11px; outline: none; }
 .filters input:focus, .filters select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-subtle); }
+.clear-filters-button { align-self: end; display: inline-flex; width: max-content; height: 30px; align-items: center; justify-content: center; gap: 5px; padding: 5px 7px; border: 1px solid var(--border-primary); border-radius: var(--radius-sm); background: var(--bg-elevated); color: var(--text-secondary); font-size: 10px; cursor: pointer; }
+.clear-filters-button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+.clear-filters-button:disabled { cursor: not-allowed; opacity: .45; }
+.clear-filters-button svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 .table-container { max-height: 360px; overflow: auto; border: 1px solid var(--border-primary); border-radius: var(--radius-sm); }
 .data-table { min-width: 920px; font-size: 11px; }
 .data-table th, .data-table td { padding: 8px 10px; }

@@ -27,19 +27,23 @@ export class VisitorEntryComponent {
     private readonly router: Router
   ) {
     this.visitorForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      tenantId: [null as number | null, [Validators.required, Validators.min(1)]],
+      locationId: [null as number | null, [Validators.required, Validators.min(1)]],
+      visitorName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
       phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN), this.phoneLengthValidator]],
-      purpose: ['Guest pass', [Validators.required]],
-      host: ['Front desk', [Validators.required, Validators.maxLength(100)]],
+      email: ['', [Validators.email, Validators.maxLength(100)]],
+      purpose: ['', [Validators.maxLength(255)]],
+      referredByMemberId: [null as number | null],
       visitDate: [this.today(), [Validators.required]],
-      checkInTime: [this.currentTime(), [Validators.required]],
-      checkInPeriod: [this.currentPeriod(), [Validators.required]]
+      checkinTime: [this.currentTime()],
+      checkoutTime: [''],
+      status: ['scheduled' as const, [Validators.required]]
     });
   }
 
   get canSave(): boolean {
     return this.visitorForm.valid &&
-      String(this.visitorForm.controls.name.value ?? '').trim().length >= 2;
+      String(this.visitorForm.controls.visitorName.value ?? '').trim().length >= 2;
   }
 
   saveVisitor(): void {
@@ -50,16 +54,17 @@ export class VisitorEntryComponent {
 
     const value = this.visitorForm.getRawValue();
     const visitor: CreateVisitor = {
-      name: value.name?.trim() ?? '',
+      tenantId: value.tenantId ?? 0,
+      locationId: value.locationId ?? 0,
+      visitorName: value.visitorName?.trim() ?? '',
       phone: value.phone?.trim() ?? '',
-      purpose: value.purpose ?? '',
-      host: value.host?.trim() ?? '',
+      email: value.email?.trim() || null,
+      purpose: value.purpose?.trim() || null,
+      referredByMemberId: value.referredByMemberId ?? null,
       visitDate: value.visitDate ?? this.today(),
-      checkInTime: this.to24HourTime(
-        value.checkInTime ?? this.currentTime(),
-        value.checkInPeriod ?? 'AM'
-      ),
-      checkOutTime: ''
+      checkinTime: value.checkinTime || null,
+      checkoutTime: value.checkoutTime || null,
+      status: value.status ?? 'scheduled'
     };
 
     this.visitorService.createVisitor(visitor);
@@ -97,15 +102,4 @@ export class VisitorEntryComponent {
     }).format(new Date());
   }
 
-  private currentPeriod(): 'AM' | 'PM' {
-    return new Date().getHours() >= 12 ? 'PM' : 'AM';
-  }
-
-  private to24HourTime(time: string, period: 'AM' | 'PM'): string {
-    const [hours, minutes] = time.split(':').map(Number);
-    const normalizedHours = period === 'PM'
-      ? (hours % 12) + 12
-      : hours % 12;
-    return `${String(normalizedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-  }
 }

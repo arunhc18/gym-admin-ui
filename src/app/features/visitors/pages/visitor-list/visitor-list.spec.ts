@@ -21,11 +21,11 @@ describe('VisitorListComponent', () => {
 
   it('filters visitors by search term and status', () => {
     component.searchTerm = 'guest pass';
-    component.selectedStatus = 'Checked out';
+    component.selectedStatus = 'checked-out';
 
     expect(component.filteredVisitors.length).toBeGreaterThan(0);
     expect(component.filteredVisitors.every(visitor =>
-      visitor.purpose === 'Guest pass' && visitor.status === 'Checked out'
+      visitor.purpose === 'Guest pass' && visitor.status === 'checked-out'
     )).toBe(true);
   });
 

@@ -14,7 +14,7 @@ export class QuickActionsComponent {
   }
 
   onCollectPayment(): void {
-    console.log('Collect Payment action selected');
+    this.router.navigate(['/members/renewals']);
   }
 
   onQuickEnquiry(): void {
