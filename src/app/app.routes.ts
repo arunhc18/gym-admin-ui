@@ -65,6 +65,22 @@ export const routes: Routes = [
         }
       },
 
+      {
+        path: 'members/renewals',
+
+        loadComponent: () =>
+          import(
+            './features/members/pages/renewals/renewals'
+          ).then(
+            m => m.RenewalsComponent
+          ),
+
+        data: {
+          title: 'Renewals',
+          description: 'Manage expiring memberships and renewal payments'
+        }
+      },
+
       // =====================================================
       // MEMBER DETAILS
       // =====================================================

@@ -1,0 +1,85 @@
+<section class="members-page">
+  <button class="back-link" type="button" (click)="goToDashboard()" aria-label="Back to dashboard">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+    <span>Back to Dashboard</span>
+  </button>
+
+  <section class="members-card">
+    <div class="filter-bar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        <input type="search" [(ngModel)]="searchText" (ngModelChange)="applyFilters()" placeholder="Search by name, member ID, phone or email..." />
+      </div>
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="applyFilters()">
+        @for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }
+      </select>
+      <select [(ngModel)]="selectedPlan" (ngModelChange)="applyFilters()">
+        <option value="All">All Plans</option>
+        @for (plan of plans; track plan) { <option [value]="plan">{{ plan }}</option> }
+      </select>
+      <select [(ngModel)]="selectedLocation" (ngModelChange)="applyFilters()">
+        <option value="All">All Locations</option>
+        @for (location of locations; track location) { <option [value]="location">{{ location }}</option> }
+      </select>
+      <button type="button" class="clear-button" (click)="clearFilters()">Clear</button>
+      <button type="button" class="all-members-button" (click)="goToMembers()">All Members</button>
+    </div>
+
+    <div class="members-table-scroll">
+      <table class="members-table">
+        <thead>
+          <tr>
+            <th>Member</th>
+            <th>Plan</th>
+            <th>Expiry</th>
+            <th>Due</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading) {
+            <tr><td colspan="6" class="empty-state">Loading renewals...</td></tr>
+          } @else {
+            @for (member of filteredRenewalMembers; track member.memberId) {
+              <tr class="member-row">
+                <td>
+                  <div class="member-wrapper">
+                    @if (member.photoUrl) {
+                      <img [src]="member.photoUrl" [alt]="getFullName(member)" class="avatar" />
+                    } @else {
+                      <div class="avatar">{{ getInitials(member) }}</div>
+                    }
+                    <div class="member-name"><strong>{{ getFullName(member) }}</strong><small>{{ member.memberCode }}</small></div>
+                  </div>
+                </td>
+                <td><strong>{{ member.planName }}</strong><small class="muted-line">{{ member.locationName }}</small></td>
+                <td>
+                  {{ member.expiryDate | date:'dd MMM yyyy' }}
+                  <small class="muted-line">{{ getDaysUntilExpiry(member) }} days</small>
+                </td>
+                <td>{{ member.balanceAmount ?? 0 | currency:'INR':'symbol':'1.0-0' }}</td>
+                <td>
+                  <span class="status" [class.expired]="member.status === 'Expired'" [class.expiring]="member.status === 'Expiring'" [class.active]="member.status === 'Active'">{{ member.status }}</span>
+                  <small class="muted-line">{{ member.paymentStatus ?? 'Pending' }}</small>
+                </td>
+                <td class="actions">
+                  <button type="button" class="action-button edit-button" (click)="editMembership(member)">Edit membership</button>
+                  @if ((member.balanceAmount ?? 0) > 0) {
+                    <button type="button" class="action-button payment-button" (click)="collectPayment(member)">Collect payment</button>
+                  } @else {
+                    <span class="paid-label">Paid</span>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6" class="empty-state"><strong>No renewals due</strong><p>All memberships are current and fully paid.</p></td></tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer">Showing <strong>{{ filteredRenewalMembers.length }}</strong> of <strong>{{ renewalMembers.length }}</strong> renewal candidates</div>
+  </section>
+</section>

@@ -6,7 +6,7 @@
 
   --card-bg-light: #0f1a24;
 
-  --border-color: #1d2b37;
+  --border-color: var(--border-primary);
 
   --border-hover: #344654;
 
@@ -50,10 +50,15 @@
   box-sizing: border-box;
 
   background:
+    radial-gradient(
+      circle at 88% 0%,
+      rgba(255, 59, 69, 0.08),
+      transparent 34%
+    ),
     linear-gradient(
       180deg,
-      #071018 0%,
-      #071019 100%
+      var(--bg-app) 0%,
+      #101318 100%
     );
 
   color:
@@ -72,8 +77,8 @@
   background:
     linear-gradient(
       145deg,
-      #0d1923,
-      #09141d
+      var(--bg-card),
+      var(--bg-elevated)
     );
 
   border:
@@ -175,11 +180,11 @@
 
   border:
     1px solid
-    #263746;
+    var(--border-primary);
 
   border-radius: 7px;
 
-  background: #0b1620;
+  background: var(--bg-elevated);
 
   color: #e4e9ed;
 
@@ -590,7 +595,7 @@
 
   outline: none;
 
-  background: #0b1620;
+  background: var(--bg-elevated);
 
   color: #e1e6eb;
 
@@ -635,7 +640,7 @@
 
 .grid-line {
 
-  stroke: #1d2b37;
+  stroke: var(--border-primary);
 
   stroke-width: 1;
 }
@@ -699,11 +704,11 @@
 
   border:
     1px solid
-    #1d2b37;
+    var(--border-primary);
 
   border-radius: 8px;
 
-  background: #0a151e;
+  background: var(--bg-card);
 
 
   small {
@@ -813,11 +818,11 @@
 
   border:
     1px solid
-    #1d2b37;
+    var(--border-primary);
 
   border-radius: 8px;
 
-  background: #0a151e;
+  background: var(--bg-card);
 }
 
 
@@ -945,7 +950,7 @@
 
   border-radius: 50%;
 
-  background: #09141d;
+  background: var(--bg-elevated);
 
 
   strong {
@@ -1087,11 +1092,11 @@
 
   border:
     1px solid
-    #263746;
+    var(--border-primary);
 
   border-radius: 6px;
 
-  background: #0b1620;
+  background: var(--bg-elevated);
 
   color: #e1e6ea;
 
@@ -1137,7 +1142,7 @@
 
   thead {
 
-    background: #0c1822;
+    background: var(--bg-elevated);
   }
 
 

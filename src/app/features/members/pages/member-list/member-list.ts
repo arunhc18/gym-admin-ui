@@ -72,7 +72,6 @@ export class MembersListComponent
 
   selectedLocation = '';
 
-
   // =====================================================
   // FILTER DROPDOWN DATA
   // =====================================================
@@ -134,7 +133,6 @@ export class MembersListComponent
 
           this.prepareFilters();
 
-
           /*
             Apply current filters after member data
             arrives.
@@ -189,7 +187,6 @@ export class MembersListComponent
 
           this.selectedStatus =
             status ?? '';
-
 
           /*
             If members have already loaded,
@@ -305,7 +302,6 @@ export class MembersListComponent
     this.filteredMembers =
       this.members.filter(
         member => {
-
 
           // =============================================
           // FULL NAME
@@ -510,7 +506,6 @@ export class MembersListComponent
 
     this.scrollTableToTop();
   }
-
 
   // =====================================================
   // RETURN TO DASHBOARD

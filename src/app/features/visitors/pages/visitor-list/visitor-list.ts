@@ -13,7 +13,7 @@ import { Visitor, VisitorService, VisitorStatus } from '../../services/visitor.s
 export class VisitorListComponent {
   constructor(private readonly visitorService: VisitorService) {}
 
-  readonly statuses: Array<'All' | VisitorStatus> = ['All', 'Checked in', 'Checked out'];
+  readonly statuses: Array<'All' | VisitorStatus> = ['All', 'scheduled', 'checked-in', 'checked-out'];
   readonly pageSizes = [10, 25, 50];
 
   searchTerm = '';
@@ -29,8 +29,8 @@ export class VisitorListComponent {
   get filteredVisitors(): Visitor[] {
     const search = this.searchTerm.trim().toLowerCase();
     return this.visitors.filter(visitor => {
-      const matchesSearch = !search || [visitor.name, visitor.phone, visitor.purpose, visitor.host]
-        .some(value => value.toLowerCase().includes(search));
+      const matchesSearch = !search || [visitor.visitorName, visitor.phone, visitor.email, visitor.purpose]
+        .some(value => (value ?? '').toLowerCase().includes(search));
       const matchesStatus = this.selectedStatus === 'All' || visitor.status === this.selectedStatus;
       const matchesDate = !this.selectedDate || visitor.visitDate === this.selectedDate;
       return matchesSearch && matchesStatus && matchesDate;
@@ -47,7 +47,7 @@ export class VisitorListComponent {
   }
 
   get checkedInCount(): number {
-    return this.visitors.filter(visitor => visitor.status === 'Checked in').length;
+    return this.visitors.filter(visitor => visitor.status === 'checked-in').length;
   }
 
   get todayCount(): number {
@@ -63,7 +63,18 @@ export class VisitorListComponent {
     return Math.min(this.currentPage * this.pageSize, this.filteredVisitors.length);
   }
 
+  get hasActiveFilters(): boolean {
+    return Boolean(this.searchTerm.trim() || this.selectedDate || this.selectedStatus !== 'All');
+  }
+
   onFilterChange(): void {
+    this.currentPage = 1;
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.selectedStatus = 'All';
+    this.selectedDate = '';
     this.currentPage = 1;
   }
 
