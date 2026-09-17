@@ -1,62 +1,6 @@
 <div class="dashboard-page">
 
   <!-- =====================================================
-       WELCOME CARD
-  ====================================================== -->
-
-  <section class="welcome-card">
-
-    <div class="welcome-content">
-
-      <h1>
-        Welcome back, Admin!
-      </h1>
-
-      <p>
-        Here's an overview of your gym today.
-      </p>
-
-    </div>
-
-
-    <div class="date-box">
-
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-
-        <rect
-          x="3"
-          y="5"
-          width="18"
-          height="16"
-          rx="2"
-        ></rect>
-
-        <path d="M16 3v4"></path>
-
-        <path d="M8 3v4"></path>
-
-        <path d="M3 11h18"></path>
-
-      </svg>
-
-      <span>
-        {{
-          today
-          | date:'EEEE, dd MMMM yyyy'
-        }}
-      </span>
-
-    </div>
-
-  </section>
-
-
-  <!-- =====================================================
        KPI CARDS
   ====================================================== -->
 
@@ -318,10 +262,13 @@
 
 
   <!-- =====================================================
-       ANALYTICS SECTION
+       ALL DASHBOARD CARDS
+       (charts, finance, attendance, and the tables below
+       all share one responsive grid so they pack together
+       instead of any single card forcing a full-width row)
   ====================================================== -->
 
-  <section class="analytics-grid">
+  <section class="cards-grid">
 
 
     <!-- =================================================
@@ -845,14 +792,272 @@
 
     </article>
 
-  </section>
+
+    <!-- =================================================
+         OVERDUE PAYMENTS
+    ================================================== -->
+
+    <article class="dashboard-card table-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon red-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <rect
+                x="2"
+                y="5"
+                width="20"
+                height="14"
+                rx="2"
+              ></rect>
+
+              <path d="M2 10h20"></path>
+
+              <path d="M6 15h4"></path>
+
+            </svg>
+
+          </div>
 
 
-  <!-- =====================================================
-       LOWER TABLES
-  ====================================================== -->
+          <div>
 
-  <section class="bottom-grid">
+            <h2>
+              Overdue Payments
+            </h2>
+
+            <p>
+              Members with pending dues
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="view-all-button"
+          (click)="viewOverduePayments()"
+        >
+
+          View All
+
+        </button>
+
+      </div>
+
+
+      <div class="dashboard-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Name
+              </th>
+
+              <th>
+                Member ID
+              </th>
+
+              <th>
+                Amount Due
+              </th>
+
+              <th>
+                Days Overdue
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              payment of overduePayments;
+              track payment.memberId
+            ) {
+
+              <tr
+                class="clickable-row"
+                (click)="openOverdueMember(payment)"
+              >
+
+                <td>
+
+                  <div class="member-cell">
+
+                    <span class="mini-avatar">
+                      {{ payment.initials }}
+                    </span>
+
+                    <span>
+                      {{ payment.name }}
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <td>
+                  {{ payment.memberId }}
+                </td>
+
+
+                <td class="negative">
+                  ₹{{ formatCurrency(payment.amountDue) }}
+                </td>
+
+
+                <td>
+
+                  <span class="days-left overdue">
+
+                    {{ payment.daysOverdue }}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </article>
+
+
+    <!-- =================================================
+         LEAD CONVERSION
+    ================================================== -->
+
+    <article class="dashboard-card conversion-card">
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="heading-icon green-text">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path d="M22 5H2l8 9.5V19l4 2v-6.5z"></path>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Lead Conversion
+            </h2>
+
+            <p>
+              Enquiries converted this month
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="conversion-content">
+
+        <div class="conversion-rate">
+
+          <strong>
+            {{ conversionRate }}%
+          </strong>
+
+          <span>
+            Conversion Rate
+          </span>
+
+        </div>
+
+
+        <div class="conversion-bar">
+
+          <div
+            class="conversion-bar-fill"
+            [style.width.%]="conversionRate"
+          ></div>
+
+        </div>
+
+
+        <div class="conversion-stats">
+
+          <div>
+
+            <div class="legend-label">
+
+              <span class="legend-dot checked">
+              </span>
+
+              Converted
+
+            </div>
+
+            <strong>
+              {{ convertedEnquiries }}
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <div class="legend-label">
+
+              <span class="legend-dot not-checked">
+              </span>
+
+              Total Enquiries
+
+            </div>
+
+            <strong>
+              {{ totalEnquiries }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
 
 
     <!-- =================================================
