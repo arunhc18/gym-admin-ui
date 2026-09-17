@@ -36,6 +36,15 @@ interface GrowthData {
   value: number;
 }
 
+interface OverduePayment {
+  id: number;
+  initials: string;
+  name: string;
+  memberId: string;
+  amountDue: number;
+  daysOverdue: number;
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -178,6 +187,96 @@ export class DashboardComponent implements OnInit {
     }
 
   ];
+
+
+  // =====================================================
+  // OVERDUE PAYMENTS
+  // Members with pending dues past their due date.
+  // Demo values for now — later this should come from the
+  // payments/billing service.
+  // =====================================================
+
+  overduePayments: OverduePayment[] = [
+
+    {
+      id: 201,
+      initials: 'PN',
+      name: 'Priya Nair',
+      memberId: 'MEM-00098',
+      amountDue: 1500,
+      daysOverdue: 5
+    },
+
+    {
+      id: 202,
+      initials: 'AM',
+      name: 'Arjun Mehta',
+      memberId: 'MEM-00112',
+      amountDue: 2200,
+      daysOverdue: 12
+    },
+
+    {
+      id: 203,
+      initials: 'KR',
+      name: 'Kavya Reddy',
+      memberId: 'MEM-00076',
+      amountDue: 800,
+      daysOverdue: 3
+    },
+
+    {
+      id: 204,
+      initials: 'SV',
+      name: 'Sanjay Verma',
+      memberId: 'MEM-00143',
+      amountDue: 3000,
+      daysOverdue: 21
+    }
+
+  ];
+
+
+  get totalOverdueAmount(): number {
+
+    return this.overduePayments.reduce(
+      (sum, payment) => sum + payment.amountDue,
+      0
+    );
+  }
+
+
+  // =====================================================
+  // LEAD CONVERSION
+  // Enquiries converted into paying members this month.
+  // Demo values for now — later this should come from the
+  // enquiries service.
+  // =====================================================
+
+  totalEnquiries = 42;
+
+  convertedEnquiries = 15;
+
+  get conversionRate(): number {
+
+    if (
+      this.totalEnquiries === 0
+    ) {
+
+      return 0;
+    }
+
+    return Math.round(
+
+      (
+        this.convertedEnquiries /
+        this.totalEnquiries
+      )
+
+      * 100
+
+    );
+  }
 
 
   // =====================================================
@@ -550,6 +649,34 @@ export class DashboardComponent implements OnInit {
       '/members',
       renewal.id
     ]);
+  }
+
+
+  // =====================================================
+  // OVERDUE PAYMENT NAVIGATION
+  // =====================================================
+
+  openOverdueMember(
+    payment: OverduePayment
+  ): void {
+
+    this.router.navigate([
+      '/members',
+      payment.id
+    ]);
+  }
+
+
+  viewOverduePayments(): void {
+
+    this.router.navigate([
+      '/payments'
+    ],
+    {
+      queryParams: {
+        status: 'Overdue'
+      }
+    });
   }
 
 
