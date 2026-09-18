@@ -3,18 +3,27 @@ import { Routes } from '@angular/router';
 import { AppLayoutComponent } from './core/layout/app-layout/app-layout';
 
 export const routes: Routes = [
+
   {
+
     path: '',
+
     component: AppLayoutComponent,
 
     children: [
+
       {
+
         path: '',
+
         pathMatch: 'full',
+
         redirectTo: 'dashboard'
+
       },
 
       {
+
         path: 'dashboard',
 
         loadComponent: () =>
@@ -22,15 +31,21 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
 
         data: {
+
           title: 'Dashboard',
+
           description: 'Overview of your gym operations'
+
         }
+
       },
 
       // =====================================================
       // MEMBER LIST
       // =====================================================
+
       {
+
         path: 'members',
 
         loadComponent: () =>
@@ -41,15 +56,20 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'Members'
+
         }
+
       },
 
       // =====================================================
       // ADD MEMBER
       // IMPORTANT: Must come before members/:id
       // =====================================================
+
       {
+
         path: 'members/new',
 
         loadComponent: () =>
@@ -60,31 +80,21 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'Add Member',
+
           description: 'Create a new gym member profile'
+
         }
-      },
 
-      {
-        path: 'members/renewals',
-
-        loadComponent: () =>
-          import(
-            './features/members/pages/renewals/renewals'
-          ).then(
-            m => m.RenewalsComponent
-          ),
-
-        data: {
-          title: 'Renewals',
-          description: 'Manage expiring memberships and renewal payments'
-        }
       },
 
       // =====================================================
       // MEMBER DETAILS
       // =====================================================
+
       {
+
         path: 'members/:id',
 
         loadComponent: () =>
@@ -95,12 +105,17 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'Member Details',
+
           description: 'View member profile and membership information'
+
         }
+
       },
 
       {
+
         path: 'enquiries/new',
 
         loadComponent: () =>
@@ -111,12 +126,17 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'Quick Enquiry',
+
           description: 'Create a new enquiry'
+
         }
+
       },
 
       {
+
         path: 'enquiries/:id/edit',
 
         loadComponent: () =>
@@ -127,12 +147,17 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'Edit Enquiry',
+
           description: 'Update enquiry details'
+
         }
+
       },
 
       {
+
         path: 'enquiries',
 
         loadComponent: () =>
@@ -143,12 +168,17 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'Enquiries',
+
           description: 'Manage prospective members'
+
         }
+
       },
 
       {
+
         path: 'visitors/new',
 
         loadComponent: () =>
@@ -159,12 +189,17 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'New Visitor',
+
           description: 'Record a new visitor check-in'
+
         }
+
       },
 
       {
+
         path: 'visitors',
 
         loadComponent: () =>
@@ -175,9 +210,102 @@ export const routes: Routes = [
           ),
 
         data: {
+
           title: 'Visitors',
+
           description: 'Track gym visitors and guest activity'
+
         }
+
+      },
+
+      // =====================================================
+      // STAFF
+      // Order matters: 'staff/add' must come before 'staff/:id'
+      // =====================================================
+
+      {
+
+        path: 'staff/add',
+
+        loadComponent: () =>
+          import(
+            './features/staff/pages/staff-form/staff-form'
+          ).then(
+            m => m.StaffFormComponent
+          ),
+
+        data: {
+
+          title: 'Add Staff',
+
+          description: 'Add a new staff member'
+
+        }
+
+      },
+
+      {
+
+        path: 'staff/:id/edit',
+
+        loadComponent: () =>
+          import(
+            './features/staff/pages/staff-form/staff-form'
+          ).then(
+            m => m.StaffFormComponent
+          ),
+
+        data: {
+
+          title: 'Edit Staff',
+
+          description: 'Update staff member details'
+
+        }
+
+      },
+
+      {
+
+        path: 'staff/:id',
+
+        loadComponent: () =>
+          import(
+            './features/staff/pages/staff-details/staff-details'
+          ).then(
+            m => m.StaffDetailsComponent
+          ),
+
+        data: {
+
+          title: 'Staff Details',
+
+          description: 'View staff member profile'
+
+        }
+
+      },
+
+      {
+
+        path: 'staff',
+
+        loadComponent: () =>
+          import(
+            './features/staff/pages/staff-list/staff-list'
+          ).then(
+            m => m.StaffListComponent
+          ),
+
+        data: {
+
+          title: 'Staff',
+
+          description: 'Manage trainers and gym staff'
+
+        }
+
       },
 
       // =====================================================
@@ -185,19 +313,7 @@ export const routes: Routes = [
       // =====================================================
 
       {
-        path: 'staff',
 
-        loadComponent: () =>
-          import('./features/dashboard/dashboard')
-            .then(m => m.DashboardComponent),
-
-        data: {
-          title: 'Staff',
-          description: 'Manage trainers and gym staff'
-        }
-      },
-
-      {
         path: 'attendance',
 
         loadComponent: () =>
@@ -205,12 +321,17 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
 
         data: {
+
           title: 'Attendance',
+
           description: 'Track member and staff attendance'
+
         }
+
       },
 
       {
+
         path: 'payments',
 
         loadComponent: () =>
@@ -218,12 +339,17 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
 
         data: {
+
           title: 'Payments',
+
           description: 'Manage member payments and transactions'
+
         }
+
       },
 
       {
+
         path: 'expenses',
 
         loadComponent: () =>
@@ -231,12 +357,17 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
 
         data: {
+
           title: 'Expenses',
+
           description: 'Track and manage gym expenses'
+
         }
+
       },
 
       {
+
         path: 'plans',
 
         loadComponent: () =>
@@ -244,12 +375,17 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
 
         data: {
+
           title: 'Plans',
+
           description: 'Manage membership plans and pricing'
+
         }
+
       },
 
       {
+
         path: 'reports',
 
         loadComponent: () =>
@@ -257,12 +393,17 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
 
         data: {
+
           title: 'Reports',
+
           description: 'View gym reports and analytics'
+
         }
+
       },
 
       {
+
         path: 'settings',
 
         loadComponent: () =>
@@ -270,15 +411,25 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent),
 
         data: {
+
           title: 'Settings',
+
           description: 'Configure gym and application settings'
+
         }
+
       }
+
     ]
+
   },
 
   {
+
     path: '**',
+
     redirectTo: 'dashboard'
+
   }
+
 ];

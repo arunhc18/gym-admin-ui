@@ -1,0 +1,68 @@
+<section class="staff-details-page">
+  <div class="page-actions">
+    <a class="back-link" routerLink="/staff" aria-label="Back to staff">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+      <span>Back to Staff</span>
+    </a>
+    @if (staff) {
+      <div class="action-buttons">
+        <button class="btn btn-secondary" type="button" [routerLink]="['/staff', staff.staffId, 'edit']">Edit</button>
+        <button class="btn btn-danger" type="button" (click)="deleteStaff()">Delete</button>
+      </div>
+    }
+  </div>
+
+  @if (staff) {
+    <section class="profile-card">
+      <div class="profile-header">
+        <div class="avatar">{{ getInitials(staff) }}</div>
+        <div class="profile-heading">
+          <h1>{{ getFullName(staff) }}</h1>
+          <span class="staff-code">{{ staff.staffCode }}</span>
+          <span class="status" [class.status-active]="staff.status === 'Active'" [class.status-warning]="staff.status === 'On Leave'" [class.status-inactive]="staff.status === 'Inactive'">{{ staff.status }}</span>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span>Role</span>
+          <strong>{{ staff.role }}</strong>
+        </div>
+        @if (staff.specialization) {
+          <div class="detail-item">
+            <span>Specialization</span>
+            <strong>{{ staff.specialization }}</strong>
+          </div>
+        }
+        <div class="detail-item">
+          <span>Phone</span>
+          <strong>{{ staff.phone }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Email</span>
+          <strong>{{ staff.email }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Location</span>
+          <strong>{{ staff.location }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Joined date</span>
+          <strong>{{ staff.joinedDate | date:'dd MMM yyyy' }}</strong>
+        </div>
+        @if (staff.salary) {
+          <div class="detail-item">
+            <span>Salary</span>
+            <strong>₹{{ staff.salary | number:'1.0-0' }} / month</strong>
+          </div>
+        }
+      </div>
+    </section>
+  } @else {
+    <section class="profile-card empty-state">
+      <strong>Staff member not found</strong>
+      <p>This staff record may have been removed.</p>
+      <a class="btn btn-secondary" routerLink="/staff">Back to Staff</a>
+    </section>
+  }
+</section>
