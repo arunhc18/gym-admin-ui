@@ -113,6 +113,25 @@ export const routes: Routes = [
         }
 
       },
+      // =====================================================
+// MEMBERSHIP RENEWALS
+// =====================================================
+
+{
+  path: 'renewals',
+
+  loadComponent: () =>
+    import(
+      './features/members/pages/renewals/renewals'
+    ).then(
+      m => m.RenewalsComponent
+    ),
+
+  data: {
+    title: 'Renewals',
+    description: 'Manage membership renewals'
+  }
+},
 
       {
 
