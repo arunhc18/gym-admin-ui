@@ -1,85 +1,1285 @@
-<section class="members-page">
-  <button class="back-link" type="button" (click)="goToDashboard()" aria-label="Back to dashboard">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
-    <span>Back to Dashboard</span>
-  </button>
+<div
+  class="renewals-page"
+  [class.drawer-visible]="drawerOpen"
+>
 
-  <section class="members-card">
-    <div class="filter-bar">
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-        <input type="search" [(ngModel)]="searchText" (ngModelChange)="applyFilters()" placeholder="Search by name, member ID, phone or email..." />
+
+  <!-- =====================================================
+       TOAST
+  ====================================================== -->
+
+  @if (successMessage) {
+
+    <div class="toast success">
+
+      <div class="toast-message">
+
+        <i class="fa fa-check-circle"></i>
+
+        <span>
+          {{ successMessage }}
+        </span>
+
       </div>
-      <select [(ngModel)]="selectedStatus" (ngModelChange)="applyFilters()">
-        @for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }
-      </select>
-      <select [(ngModel)]="selectedPlan" (ngModelChange)="applyFilters()">
-        <option value="All">All Plans</option>
-        @for (plan of plans; track plan) { <option [value]="plan">{{ plan }}</option> }
-      </select>
-      <select [(ngModel)]="selectedLocation" (ngModelChange)="applyFilters()">
-        <option value="All">All Locations</option>
-        @for (location of locations; track location) { <option [value]="location">{{ location }}</option> }
-      </select>
-      <button type="button" class="clear-button" (click)="clearFilters()">Clear</button>
-      <button type="button" class="all-members-button" (click)="goToMembers()">All Members</button>
+
+
+      <button
+        type="button"
+        class="toast-close"
+        (click)="closeToast()"
+      >
+        ×
+      </button>
+
     </div>
 
-    <div class="members-table-scroll">
-      <table class="members-table">
-        <thead>
-          <tr>
-            <th>Member</th>
-            <th>Plan</th>
-            <th>Expiry</th>
-            <th>Due</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if (loading) {
-            <tr><td colspan="6" class="empty-state">Loading renewals...</td></tr>
-          } @else {
-            @for (member of filteredRenewalMembers; track member.memberId) {
-              <tr class="member-row">
+  }
+
+
+  @if (errorMessage) {
+
+    <div class="toast error">
+
+      <div class="toast-message">
+
+        <i class="fa fa-exclamation-circle"></i>
+
+        <span>
+          {{ errorMessage }}
+        </span>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="toast-close"
+        (click)="closeToast()"
+      >
+        ×
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- =====================================================
+       MAIN CONTENT
+  ====================================================== -->
+
+  <div class="renewal-content">
+
+
+    <!-- =================================================
+         FILTERS
+    ================================================== -->
+
+    <div class="renewal-filters">
+
+
+      <div class="search-control">
+
+        <i class="fa fa-search"></i>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search by name, member ID, phone or email..."
+        />
+
+      </div>
+
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        @for (
+          status of statuses;
+          track status
+        ) {
+
+          <option
+            [value]="status"
+          >
+            {{ status }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <select
+        [(ngModel)]="selectedPlan"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Plans
+        </option>
+
+        @for (
+          plan of plans;
+          track plan
+        ) {
+
+          <option
+            [value]="plan"
+          >
+            {{ plan }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <select
+        [(ngModel)]="selectedLocation"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Locations
+        </option>
+
+        @for (
+          location of locations;
+          track location
+        ) {
+
+          <option
+            [value]="location"
+          >
+            {{ location }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <button
+        type="button"
+        class="filter-button"
+        (click)="clearFilters()"
+      >
+
+        Clear
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <section class="renewal-list-card">
+
+      <div class="renewal-table-scroll">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Member
+              </th>
+
+              <th>
+                Current Plan
+              </th>
+
+              <th>
+                Expiry Date
+              </th>
+
+              <th>
+                Days Left
+              </th>
+
+              <th>
+                Due Amount
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              member of filteredMembers;
+              track member.memberId
+            ) {
+
+              <tr>
+
+
+                <!-- MEMBER -->
+
                 <td>
-                  <div class="member-wrapper">
-                    @if (member.photoUrl) {
-                      <img [src]="member.photoUrl" [alt]="getFullName(member)" class="avatar" />
+
+                  <div class="member-cell">
+
+                    @if (
+                      member.photoUrl
+                    ) {
+
+                      <img
+                        class="avatar"
+                        [src]="member.photoUrl"
+                      />
+
                     } @else {
-                      <div class="avatar">{{ getInitials(member) }}</div>
-                    }
-                    <div class="member-name"><strong>{{ getFullName(member) }}</strong><small>{{ member.memberCode }}</small></div>
-                  </div>
-                </td>
-                <td><strong>{{ member.planName }}</strong><small class="muted-line">{{ member.locationName }}</small></td>
-                <td>
-                  {{ member.expiryDate | date:'dd MMM yyyy' }}
-                  <small class="muted-line">{{ getDaysUntilExpiry(member) }} days</small>
-                </td>
-                <td>{{ member.balanceAmount ?? 0 | currency:'INR':'symbol':'1.0-0' }}</td>
-                <td>
-                  <span class="status" [class.expired]="member.status === 'Expired'" [class.expiring]="member.status === 'Expiring'" [class.active]="member.status === 'Active'">{{ member.status }}</span>
-                  <small class="muted-line">{{ member.paymentStatus ?? 'Pending' }}</small>
-                </td>
-                <td class="actions">
-                  <button type="button" class="action-button edit-button" (click)="editMembership(member)">Edit membership</button>
-                  @if ((member.balanceAmount ?? 0) > 0) {
-                    <button type="button" class="action-button payment-button" (click)="collectPayment(member)">Collect payment</button>
-                  } @else {
-                    <span class="paid-label">Paid</span>
-                  }
-                </td>
-              </tr>
-            } @empty {
-              <tr><td colspan="6" class="empty-state"><strong>No renewals due</strong><p>All memberships are current and fully paid.</p></td></tr>
-            }
-          }
-        </tbody>
-      </table>
-    </div>
 
-    <div class="table-footer">Showing <strong>{{ filteredRenewalMembers.length }}</strong> of <strong>{{ renewalMembers.length }}</strong> renewal candidates</div>
-  </section>
-</section>
+                      <div class="avatar initials">
+
+                        {{ getInitials(member) }}
+
+                      </div>
+
+                    }
+
+
+                    <div>
+
+                      <strong>
+
+                        {{ getFullName(member) }}
+
+                      </strong>
+
+                      <span>
+
+                        {{ member.memberCode }}
+
+                        ·
+
+                        {{ member.phone }}
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- CURRENT PLAN -->
+
+                <td>
+
+                  <div class="plan-cell">
+
+                    <strong>
+
+                      {{ member.planName }}
+
+                    </strong>
+
+                    <span>
+
+                      <i class="fa fa-map-marker"></i>
+
+                      {{ member.locationName }}
+
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- EXPIRY -->
+
+                <td>
+
+                  {{
+                    member.expiryDate
+                      | date:'dd MMM yyyy'
+                  }}
+
+                </td>
+
+
+                <!-- DAYS -->
+
+                <td>
+
+                  <strong
+                    class="days-left"
+                    [ngClass]="
+                      getDaysClass(
+                        member.daysLeft
+                      )
+                    "
+                  >
+
+                    {{ member.daysLeft }}
+
+                    days
+
+                  </strong>
+
+                </td>
+
+
+                <!-- DUE -->
+
+                <td>
+
+                  ₹{{
+                    member.dueAmount
+                    | number:'1.0-0'
+                  }}
+
+                </td>
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                  <span
+                    class="status"
+                    [ngClass]="
+                      getStatusClass(
+                        member.status
+                      )
+                    "
+                  >
+
+                    <span class="dot"></span>
+
+                    {{ member.status }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- ACTION -->
+
+                <td>
+
+                  <button
+                    type="button"
+                    class="renew-button"
+                    (click)="
+                      openRenewal(member)
+                    "
+                  >
+
+                    <i class="fa fa-refresh"></i>
+
+                    Renew
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+
+                <td
+                  colspan="7"
+                  class="empty"
+                >
+
+                  No renewal candidates found.
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- FOOTER -->
+
+      <div class="list-footer">
+
+        <span>
+
+          <i class="fa fa-list-alt"></i>
+
+          Showing
+
+          <strong>
+            {{ filteredMembers.length }}
+          </strong>
+
+          of
+
+          <strong>
+            {{ renewalMembers.length }}
+          </strong>
+
+          renewal candidates
+
+        </span>
+
+
+        @if (
+          filteredMembers.length > 7
+        ) {
+
+          <span>
+
+            Scroll to view all renewals
+
+            <i class="fa fa-long-arrow-down"></i>
+
+          </span>
+
+        }
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <!-- =====================================================
+       RENEWAL DRAWER
+  ====================================================== -->
+
+  @if (
+    drawerOpen &&
+    selectedMember
+  ) {
+
+    <aside class="renewal-drawer">
+
+
+      <!-- ===============================================
+           DRAWER HEADER
+      ================================================ -->
+
+      <div class="drawer-header">
+
+        <h2>
+          Renew Membership
+        </h2>
+
+
+        <button
+          type="button"
+          class="drawer-close"
+          (click)="closeRenewalDrawer()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="drawer-scroll">
+
+
+        <!-- =============================================
+             MEMBER SUMMARY
+        ============================================== -->
+
+        <section class="member-summary">
+
+          <div class="summary-left">
+
+            @if (
+              selectedMember.photoUrl
+            ) {
+
+              <img
+                class="drawer-avatar"
+                [src]="selectedMember.photoUrl"
+              />
+
+            } @else {
+
+              <div
+                class="drawer-avatar initials"
+              >
+
+                {{
+                  getInitials(
+                    selectedMember
+                  )
+                }}
+
+              </div>
+
+            }
+
+
+            <div>
+
+              <h3>
+
+                {{
+                  getFullName(
+                    selectedMember
+                  )
+                }}
+
+              </h3>
+
+
+              <span>
+
+                {{
+                  selectedMember.memberCode
+                }}
+
+              </span>
+
+
+              <span>
+
+                <i class="fa fa-phone"></i>
+
+                {{
+                  selectedMember.phone
+                }}
+
+              </span>
+
+
+              <span>
+
+                <i class="fa fa-map-marker"></i>
+
+                {{
+                  selectedMember.locationName
+                }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-right">
+
+            <span
+              class="status big"
+              [ngClass]="
+                getStatusClass(
+                  selectedMember.status
+                )
+              "
+            >
+
+              <span class="dot"></span>
+
+              {{ selectedMember.status }}
+
+            </span>
+
+
+            <strong
+              class="days-left"
+              [ngClass]="
+                getDaysClass(
+                  selectedMember.daysLeft
+                )
+              "
+            >
+
+              <i class="fa fa-clock-o"></i>
+
+              {{
+                selectedMember.daysLeft
+              }}
+
+              days left
+
+            </strong>
+
+
+            <span>
+
+              <i class="fa fa-calendar-o"></i>
+
+              Expiry:
+
+              {{
+                selectedMember.expiryDate
+                  | date:'dd MMM yyyy'
+              }}
+
+            </span>
+
+          </div>
+
+        </section>
+
+
+        <!-- =============================================
+             CURRENT MEMBERSHIP
+        ============================================== -->
+
+        <section class="drawer-card">
+
+          <h4>
+            Current Membership
+          </h4>
+
+
+          <div class="current-membership-grid">
+
+
+            <div>
+
+              <label>
+                Plan
+              </label>
+
+              <strong>
+                {{ selectedMember.planName }}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <label>
+                Plan Amount
+              </label>
+
+              <strong>
+
+                ₹{{
+                  selectedMember.membershipAmount
+                    ?? 0
+                  | number:'1.0-0'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <label>
+                Start Date
+              </label>
+
+              <strong>
+
+                {{
+                  selectedMember.joinedDate
+                    | date:'dd MMM yyyy'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <label>
+                Amount Paid
+              </label>
+
+              <strong>
+
+                ₹{{
+                  selectedMember.amountPaid
+                    ?? 0
+                  | number:'1.0-0'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <label>
+                Expiry Date
+              </label>
+
+              <strong>
+
+                {{
+                  selectedMember.expiryDate
+                    | date:'dd MMM yyyy'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <label>
+                Balance
+              </label>
+
+              <strong>
+
+                ₹{{
+                  selectedMember.balanceAmount
+                    ?? 0
+                  | number:'1.0-0'
+                }}
+
+              </strong>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =============================================
+             RENEWAL DETAILS
+        ============================================== -->
+
+        <section class="drawer-card">
+
+          <h4>
+            Renewal Details
+          </h4>
+
+
+          <div class="form-grid">
+
+
+            <!-- PLAN -->
+
+            <div class="field">
+
+              <label>
+
+                New Plan
+
+                <span>*</span>
+
+              </label>
+
+
+              <select
+                [(ngModel)]="
+                  renewalForm.newPlan
+                "
+                (change)="onPlanChange()"
+                [class.invalid]="
+                  planInvalid
+                "
+              >
+
+                <option value="">
+                  Select Plan
+                </option>
+
+
+                @for (
+                  plan of membershipPlans;
+                  track plan.name
+                ) {
+
+                  <option
+                    [value]="plan.name"
+                  >
+
+                    {{ plan.name }}
+
+                  </option>
+
+                }
+
+              </select>
+
+
+              @if (
+                planInvalid
+              ) {
+
+                <small>
+                  Plan is required.
+                </small>
+
+              }
+
+            </div>
+
+
+            <!-- DURATION -->
+
+            <div class="field">
+
+              <label>
+                Duration
+              </label>
+
+
+              <input
+                type="text"
+                [value]="
+                  renewalForm.durationMonths +
+                  ' Months'
+                "
+                readonly
+              />
+
+            </div>
+
+
+            <!-- RENEWAL START -->
+
+            <div class="field">
+
+              <label>
+                Renewal Start
+              </label>
+
+
+              <input
+                type="date"
+                [(ngModel)]="
+                  renewalForm.renewalStart
+                "
+                (change)="
+                  onRenewalStartChange()
+                "
+                [class.invalid]="
+                  renewalStartInvalid
+                "
+              />
+
+            </div>
+
+
+            <!-- NEW EXPIRY -->
+
+            <div class="field">
+
+              <label>
+                New Expiry
+              </label>
+
+
+              <input
+                type="date"
+                [(ngModel)]="
+                  renewalForm.newExpiry
+                "
+                readonly
+              />
+
+            </div>
+
+          </div>
+
+
+          <!-- MONEY -->
+
+          <div class="money-grid">
+
+
+            <div class="field">
+
+              <label>
+                Plan Amount
+              </label>
+
+              <div class="money-input">
+
+                <span>
+                  ₹
+                </span>
+
+                <input
+                  type="number"
+                  [(ngModel)]="
+                    renewalForm.planAmount
+                  "
+                  readonly
+                />
+
+              </div>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Discount
+              </label>
+
+              <div class="money-input">
+
+                <span>
+                  ₹
+                </span>
+
+                <input
+                  type="number"
+                  min="0"
+                  [(ngModel)]="
+                    renewalForm.discount
+                  "
+                  (input)="
+                    recalculateTotals()
+                  "
+                />
+
+              </div>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Tax (GST)
+              </label>
+
+              <div class="money-input">
+
+                <span>
+                  ₹
+                </span>
+
+                <input
+                  type="number"
+                  min="0"
+                  [(ngModel)]="
+                    renewalForm.tax
+                  "
+                  (input)="
+                    recalculateTotals()
+                  "
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- FINAL AMOUNT -->
+
+          <div class="final-amount">
+
+            <span>
+              Final Amount
+            </span>
+
+            <strong>
+
+              ₹{{
+                renewalForm.finalAmount
+                  | number:'1.0-0'
+              }}
+
+            </strong>
+
+          </div>
+
+        </section>
+
+
+        <!-- =============================================
+             PAYMENT
+        ============================================== -->
+
+        <section class="drawer-card">
+
+          <h4>
+            Payment Details
+          </h4>
+
+
+          <div class="form-grid">
+
+
+            <!-- PAYMENT MODE -->
+
+            <div class="field">
+
+              <label>
+
+                Payment Mode
+
+                <span>*</span>
+
+              </label>
+
+
+              <select
+                [(ngModel)]="
+                  renewalForm.paymentMode
+                "
+                [class.invalid]="
+                  paymentModeInvalid
+                "
+              >
+
+                <option value="">
+                  Select Mode
+                </option>
+
+
+                @for (
+                  mode of paymentModes;
+                  track mode
+                ) {
+
+                  <option
+                    [value]="mode"
+                  >
+
+                    {{ mode }}
+
+                  </option>
+
+                }
+
+              </select>
+
+
+              @if (
+                paymentModeInvalid
+              ) {
+
+                <small>
+                  Payment mode is required.
+                </small>
+
+              }
+
+            </div>
+
+
+            <!-- AMOUNT PAID -->
+
+            <div class="field">
+
+              <label>
+
+                Amount Paid
+
+                <span>*</span>
+
+              </label>
+
+
+              <div class="money-input">
+
+                <span>
+                  ₹
+                </span>
+
+                <input
+                  type="number"
+                  min="0"
+                  [(ngModel)]="
+                    renewalForm.amountPaid
+                  "
+                  (input)="
+                    recalculateTotals()
+                  "
+                  [class.invalid]="
+                    amountPaidInvalid
+                  "
+                />
+
+              </div>
+
+
+              @if (
+                amountPaidInvalid
+              ) {
+
+                <small>
+                  Enter a valid amount.
+                </small>
+
+              }
+
+            </div>
+
+
+            <!-- TXN -->
+
+            <div class="field txn-field">
+
+              <label>
+                Transaction Ref.
+                (Optional)
+              </label>
+
+
+              <input
+                type="text"
+                [(ngModel)]="
+                  renewalForm.transactionReference
+                "
+                placeholder="UPI / TXN Reference"
+              />
+
+            </div>
+
+
+            <!-- BALANCE -->
+
+            <div class="payment-balance">
+
+              <label>
+                Balance
+              </label>
+
+
+              <strong>
+
+                ₹{{
+                  renewalForm.balance
+                    | number:'1.0-0'
+                }}
+
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- PAYMENT STATUS -->
+
+          <div class="payment-status-row">
+
+            <span>
+              Payment Status
+            </span>
+
+
+            <strong
+              [class.paid]="
+                renewalForm.paymentStatus ===
+                'Paid'
+              "
+              [class.partial]="
+                renewalForm.paymentStatus ===
+                'Partial'
+              "
+              [class.pending]="
+                renewalForm.paymentStatus ===
+                'Pending'
+              "
+            >
+
+              <span class="dot"></span>
+
+              {{
+                renewalForm.paymentStatus
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <!-- NOTES -->
+
+          <div class="field notes-field">
+
+            <label>
+              Notes (Optional)
+            </label>
+
+
+            <textarea
+              rows="3"
+              [(ngModel)]="
+                renewalForm.notes
+              "
+              placeholder="Add notes about this renewal..."
+            ></textarea>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- ===============================================
+           DRAWER FOOTER
+      ================================================ -->
+
+      <div class="drawer-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeRenewalDrawer()"
+        >
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="button"
+          class="confirm-renewal"
+          (click)="renewMembership()"
+        >
+
+          <i class="fa fa-check"></i>
+
+          Renew Membership
+
+        </button>
+
+      </div>
+
+    </aside>
+
+  }
+
+</div>

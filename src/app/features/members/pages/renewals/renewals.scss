@@ -1,48 +1,1705 @@
-:host { display: block; width: 100%; }
-.members-page { width: 100%; height: calc(100vh - 72px); padding: 14px 0 22px 8px; box-sizing: border-box; background: #0a0d10; color: #fff; overflow: hidden; }
-.back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px; border: 0; background: transparent; color: #a3afbb; font: inherit; font-size: 14px; cursor: pointer; }
-.back-link:hover { color: #fff; }
-.back-link svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
- .members-card { width: 100%; height: calc(100% - 32px); display: flex; flex-direction: column; box-sizing: border-box; background: #14181e; border: 1px solid #252b33; border-radius: 7px; overflow: hidden; }
-.filter-bar { flex: 0 0 auto; padding: 12px 16px; display: grid; grid-template-columns: minmax(300px, 2fr) 145px 145px 145px 65px auto; gap: 8px; background: #0a0d10; border-bottom: 1px solid #252b33; }
-.search-box { position: relative; display: flex; align-items: center; }
-.search-box svg { position: absolute; left: 11px; width: 14px; height: 14px; color: #687482; pointer-events: none; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
-.search-box input, .filter-bar select { width: 100%; height: 34px; box-sizing: border-box; border: 1px solid #262d35; border-radius: 4px; outline: none; background: #191d24; color: #e3e6e9; font: inherit; font-size: 11px; }
-.search-box input { padding: 0 11px 0 34px; }
-.search-box input::placeholder { color: #687482; }
-.filter-bar select { padding: 0 9px; cursor: pointer; }
-.search-box input:focus, .filter-bar select:focus { border-color: #434b55; }
-.clear-button { height: 34px; padding: 0 12px; border: 1px solid #262d35; border-radius: 4px; background: #14181e; color: #9ba5af; font: inherit; font-size: 11px; cursor: pointer; }
-.clear-button:hover { border-color: #4a525d; color: #fff; background: #191d24; }
-.all-members-button { height: 34px; padding: 0 12px; border: 1px solid #262d35; border-radius: 4px; background: #14181e; color: #9ba5af; font: inherit; font-size: 11px; cursor: pointer; }
-.all-members-button:hover { border-color: #4a525d; color: #fff; background: #191d24; }
-.members-table-scroll { flex: 1 1 auto; min-height: 0; overflow: auto; background: #14181e; scrollbar-width: thin; scrollbar-color: #3c4651 #101318; }
- .members-table { width: 100%; min-width: 1060px; border-collapse: separate; border-spacing: 0; background: #14181e; }
-.members-table thead { position: sticky; top: 0; z-index: 20; }
-.members-table th { height: 38px; padding: 0 16px; background: #14181e; border-bottom: 1px solid #252b33; color: #626d79; font-size: 9px; font-weight: 700; text-align: left; text-transform: uppercase; letter-spacing: .045em; white-space: nowrap; }
-.members-table td { height: 55px; padding: 7px 16px; border-bottom: 1px solid #242a32; color: #afb7c0; font-size: 10px; vertical-align: middle; }
-.member-row { transition: background-color .15s ease; }
-.member-row:hover { background: #191d24; }
-.member-wrapper { display: flex; align-items: center; gap: 10px; min-width: 155px; }
-.avatar { width: 30px; height: 30px; min-width: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #351b21; border: 1px solid #54242e; color: #ff304d; font-size: 9px; font-weight: 700; object-fit: cover; }
-.member-name, .membership { display: flex; flex-direction: column; gap: 3px; }
-.member-name strong, .membership strong { color: #edf0f3; font-size: 10px; font-weight: 700; }
-.member-name small, .membership small, .muted-line { display: block; margin-top: 3px; color: #64707c; font-size: 9px; }
-.status { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; border-radius: 3px; font-size: 9px; font-weight: 700; }
-.status::before { width: 4px; height: 4px; border-radius: 50%; background: currentColor; content: ''; }
-.status.expired { color: #ff5364; background: rgba(255, 48, 77, .12); }
-.status.expiring { color: #ffb000; background: rgba(255, 176, 0, .12); }
-.status.active { color: #00bd87; background: rgba(0, 189, 135, .12); }
-.actions { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-.action-button { min-height: 28px; padding: 5px 8px; border: 1px solid transparent; border-radius: 4px; font: inherit; font-size: 10px; cursor: pointer; }
-.edit-button { border-color: #3b4652; background: #191d24; color: #c4ccd4; }
-.edit-button:hover { border-color: #687482; color: #fff; }
-.payment-button { border: 1px solid #315f50; background: #17382f; color: #5ee0ad; }
-.payment-button:hover { background: #1e493d; }
-.paid-label { color: #18b981; font-size: 10px; }
-.empty-state { padding: 30px !important; color: #9299a6; text-align: center !important; }
-.empty-state strong { color: #f5f6f8; }
-.empty-state p { margin-top: 5px; }
-.table-footer { flex: 0 0 auto; padding: 10px 16px; color: #6f7a86; font-size: 10px; border-top: 1px solid #252b33; }
-@media (max-width: 900px) { .filter-bar { grid-template-columns: minmax(220px, 1fr) 1fr 1fr; } .search-box { grid-column: 1 / -1; } }
-@media (max-width: 600px) { .members-page { padding-left: 0; } .filter-bar { grid-template-columns: 1fr; } .search-box { grid-column: auto; } .clear-button, .all-members-button { width: 100%; } }
+:host {
+  display: block;
+
+  --page: #071019;
+  --surface: #0d1821;
+  --surface-2: #101d27;
+  --surface-3: #14212b;
+
+  --border: #263743;
+  --border-light: #344956;
+
+  --text: #eef2f5;
+  --muted: #8298a9;
+
+  --red: #ff1744;
+  --green: #00d29a;
+  --yellow: #ffc107;
+  --blue: #087af5;
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.renewals-page {
+  position: relative;
+
+  width: 100%;
+
+  height:
+    calc(
+      100vh - 72px
+    );
+
+  padding: 18px 22px;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      #071019,
+      #08141e
+    );
+
+  overflow: hidden;
+
+  color: var(--text);
+}
+
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+.renewal-content {
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  transition:
+    width .25s ease;
+}
+
+
+/*
+ * Drawer takes roughly 36% of content.
+ */
+
+.drawer-visible {
+
+  .renewal-content {
+    width:
+      calc(
+        100% - 440px
+      );
+  }
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.renewal-filters {
+  flex: 0 0 auto;
+
+  min-height: 64px;
+
+  margin-bottom: 14px;
+
+  padding: 12px;
+
+  box-sizing: border-box;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      280px,
+      2fr
+    )
+    140px
+    145px
+    155px
+    75px;
+
+  gap: 9px;
+
+  align-items: center;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  background:
+    rgba(
+      13,
+      24,
+      33,
+      .92
+    );
+}
+
+
+.search-control {
+  position: relative;
+
+
+  i {
+    position: absolute;
+
+    top: 50%;
+
+    left: 13px;
+
+    transform:
+      translateY(-50%);
+
+    color:
+      #758b9c;
+  }
+
+
+  input {
+    padding-left: 38px;
+  }
+}
+
+
+.renewal-filters {
+
+  input,
+  select {
+    width: 100%;
+
+    height: 38px;
+
+    box-sizing: border-box;
+
+    border:
+      1px solid
+      var(--border-light);
+
+    border-radius: 5px;
+
+    outline: none;
+
+    background:
+      #0c1720;
+
+    color:
+      #e9eef2;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    padding:
+      0
+      11px;
+
+
+    &:focus {
+      border-color:
+        #536d7d;
+    }
+  }
+
+
+  select {
+    cursor: pointer;
+  }
+}
+
+
+.filter-button {
+  height: 38px;
+
+  border:
+    1px solid
+    var(--border-light);
+
+  border-radius: 5px;
+
+  background:
+    #111c25;
+
+  color:
+    #d9e0e5;
+
+  font-size: 10px;
+
+  cursor: pointer;
+
+
+  &:hover {
+    background:
+      #172631;
+  }
+}
+
+
+/* =====================================================
+   LIST CARD
+===================================================== */
+
+.renewal-list-card {
+  flex: 1 1 auto;
+
+  min-height: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  background:
+    rgba(
+      12,
+      24,
+      33,
+      .96
+    );
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.renewal-table-scroll {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow: auto;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #425766
+    #0d1821;
+}
+
+
+table {
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse:
+    collapse;
+
+
+  thead {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+
+    background:
+      #0f1c26;
+  }
+
+
+  th {
+    height: 42px;
+
+    padding:
+      0
+      14px;
+
+    text-align: left;
+
+    border-bottom:
+      1px solid
+      var(--border);
+
+    color:
+      #7790a2;
+
+    font-size: 9px;
+
+    text-transform:
+      uppercase;
+
+    letter-spacing:
+      .03em;
+
+    white-space: nowrap;
+  }
+
+
+  td {
+    height: 61px;
+
+    padding:
+      7px
+      14px;
+
+    border-bottom:
+      1px solid
+      #243540;
+
+    color:
+      #d4dde3;
+
+    font-size: 10px;
+
+    vertical-align:
+      middle;
+  }
+
+
+  tbody {
+
+    tr:hover {
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          .018
+        );
+    }
+  }
+}
+
+
+/* =====================================================
+   MEMBER
+===================================================== */
+
+.member-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+
+  > div:last-child {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+
+  strong {
+    color:
+      #f3f5f7;
+
+    font-size: 10px;
+  }
+
+
+  span {
+    color:
+      #7590a3;
+
+    font-size: 8.5px;
+  }
+}
+
+
+.avatar,
+.drawer-avatar {
+  object-fit: cover;
+
+  border-radius: 50%;
+}
+
+
+.avatar {
+  width: 36px;
+
+  height: 36px;
+
+  min-width: 36px;
+}
+
+
+.avatar.initials {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff3454,
+      #e71d43
+    );
+
+  color:
+    #fff;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   PLAN
+===================================================== */
+
+.plan-cell {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+
+  strong {
+    color:
+      #f0f3f5;
+  }
+
+
+  span {
+    color:
+      #7890a0;
+
+    font-size: 8.5px;
+
+
+    i {
+      margin-right: 4px;
+    }
+  }
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+  padding:
+    5px
+    9px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  border-radius: 4px;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+
+  &.active {
+    background:
+      rgba(
+        0,
+        210,
+        154,
+        .15
+      );
+
+    color:
+      var(--green);
+  }
+
+
+  &.expiring {
+    background:
+      rgba(
+        255,
+        193,
+        7,
+        .17
+      );
+
+    color:
+      var(--yellow);
+  }
+
+
+  &.expired {
+    background:
+      rgba(
+        255,
+        23,
+        68,
+        .17
+      );
+
+    color:
+      #ff4966;
+  }
+
+
+  &.default {
+    color:
+      #a3afb8;
+
+    background:
+      rgba(
+        160,
+        170,
+        180,
+        .12
+      );
+  }
+}
+
+
+.dot {
+  width: 6px;
+
+  height: 6px;
+
+  display: inline-block;
+
+  border-radius: 50%;
+
+  background:
+    currentColor;
+}
+
+
+/* =====================================================
+   DAYS
+===================================================== */
+
+.days-left {
+
+  &.expired {
+    color:
+      #ff1744;
+  }
+
+
+  &.warning {
+    color:
+      #ffc400;
+  }
+
+
+  &.normal {
+    color:
+      #15b9ff;
+  }
+}
+
+
+/* =====================================================
+   RENEW BUTTON
+===================================================== */
+
+.renew-button {
+  min-width: 92px;
+
+  height: 37px;
+
+  padding:
+    0
+    14px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  border:
+    1px solid
+    #1989ff;
+
+  border-radius: 5px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #087ef7,
+      #006be0
+    );
+
+  color:
+    #fff;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+
+  &:hover {
+    filter:
+      brightness(1.08);
+  }
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.list-footer {
+  min-height: 46px;
+
+  padding:
+    0
+    15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-top:
+    1px solid
+    var(--border);
+
+  color:
+    #7f94a5;
+
+  font-size: 9px;
+
+
+  span {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+  }
+
+
+  strong {
+    color:
+      #cfd9df;
+  }
+}
+
+
+/* =====================================================
+   DRAWER
+===================================================== */
+
+.renewal-drawer {
+  position: absolute;
+
+  top: 0;
+
+  right: 0;
+
+  z-index: 30;
+
+  width: 420px;
+
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  border-left:
+    1px solid
+    #29404f;
+
+  background:
+    linear-gradient(
+      160deg,
+      #0e1b25,
+      #0a1620
+    );
+
+  box-shadow:
+    -16px 0 36px
+    rgba(
+      0,
+      0,
+      0,
+      .25
+    );
+
+  animation:
+    drawerIn
+    .22s ease;
+}
+
+
+@keyframes drawerIn {
+
+  from {
+    transform:
+      translateX(
+        30px
+      );
+
+    opacity: 0;
+  }
+
+
+  to {
+    transform:
+      translateX(0);
+
+    opacity: 1;
+  }
+}
+
+
+/* =====================================================
+   DRAWER HEADER
+===================================================== */
+
+.drawer-header {
+  min-height: 58px;
+
+  padding:
+    0
+    18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-bottom:
+    1px solid
+    var(--border);
+
+
+  h2 {
+    margin: 0;
+
+    font-size: 18px;
+
+    color:
+      #f6f7f8;
+  }
+}
+
+
+.drawer-close {
+  width: 34px;
+
+  height: 34px;
+
+  border: none;
+
+  border-radius: 4px;
+
+  background:
+    transparent;
+
+  color:
+    #a1afb8;
+
+  font-size: 24px;
+
+  cursor: pointer;
+
+
+  &:hover {
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        .06
+      );
+
+    color:
+      #fff;
+  }
+}
+
+
+/* =====================================================
+   DRAWER BODY
+===================================================== */
+
+.drawer-scroll {
+  flex: 1;
+
+  min-height: 0;
+
+  padding:
+    14px;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+}
+
+
+/* =====================================================
+   MEMBER SUMMARY
+===================================================== */
+
+.member-summary {
+  margin-bottom: 12px;
+
+  padding:
+    13px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 7px;
+
+  background:
+    #111f29;
+}
+
+
+.summary-left {
+  display: flex;
+
+  gap: 11px;
+
+
+  > div:last-child {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+
+  h3 {
+    margin: 0;
+
+    font-size: 13px;
+  }
+
+
+  span {
+    color:
+      #8499a9;
+
+    font-size: 9px;
+
+
+    i {
+      width: 12px;
+
+      margin-right: 4px;
+    }
+  }
+}
+
+
+.drawer-avatar {
+  width: 50px;
+
+  height: 50px;
+
+  min-width: 50px;
+}
+
+
+.drawer-avatar.initials {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    var(--red);
+
+  color:
+    #fff;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+
+.summary-right {
+  display: flex;
+
+  align-items: flex-end;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+
+  > span:last-child {
+    color:
+      #8196a6;
+
+    font-size: 8.5px;
+  }
+}
+
+
+.status.big {
+  min-width: 100px;
+
+  justify-content: center;
+}
+
+
+/* =====================================================
+   DRAWER CARDS
+===================================================== */
+
+.drawer-card {
+  margin-bottom: 12px;
+
+  padding:
+    13px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 7px;
+
+  background:
+    rgba(
+      17,
+      31,
+      41,
+      .96
+    );
+
+
+  h4 {
+    margin:
+      0
+      0
+      13px;
+
+    padding-bottom:
+      9px;
+
+    border-bottom:
+      1px solid
+      #223743;
+
+    color:
+      #f2f4f6;
+
+    font-size: 11px;
+  }
+}
+
+
+/* =====================================================
+   CURRENT MEMBERSHIP
+===================================================== */
+
+.current-membership-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:
+    10px
+    20px;
+
+
+  > div {
+    display: grid;
+
+    grid-template-columns:
+      85px
+      1fr;
+
+    align-items: center;
+
+    gap: 5px;
+  }
+
+
+  label {
+    color:
+      #8296a5;
+
+    font-size: 9px;
+  }
+
+
+  strong {
+    color:
+      #eef1f3;
+
+    font-size: 9px;
+  }
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:
+    11px;
+}
+
+
+.money-grid {
+  margin-top: 11px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  gap: 9px;
+}
+
+
+.field {
+  min-width: 0;
+
+
+  label {
+    margin-bottom: 5px;
+
+    display: block;
+
+    color:
+      #9bb0be;
+
+    font-size: 9px;
+
+
+    span {
+      color:
+        var(--red);
+    }
+  }
+
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+      1px solid
+      #344a58;
+
+    border-radius: 4px;
+
+    outline: none;
+
+    background:
+      #0c1821;
+
+    color:
+      #edf1f3;
+
+    font-family: inherit;
+
+    font-size: 9px;
+
+
+    &:focus {
+      border-color:
+        #5a7383;
+    }
+
+
+    &.invalid {
+      border-color:
+        #ff3153;
+    }
+  }
+
+
+  input,
+  select {
+    height: 34px;
+
+    padding:
+      0
+      9px;
+  }
+
+
+  textarea {
+    padding:
+      9px;
+
+    resize: vertical;
+  }
+
+
+  small {
+    margin-top: 4px;
+
+    display: block;
+
+    color:
+      #ff5b72;
+
+    font-size: 8px;
+  }
+}
+
+
+.money-input {
+  position: relative;
+
+
+  > span {
+    position: absolute;
+
+    top: 50%;
+
+    left: 9px;
+
+    z-index: 2;
+
+    transform:
+      translateY(-50%);
+
+    color:
+      #91a3b0;
+
+    font-size: 10px;
+  }
+
+
+  input {
+    padding-left:
+      22px;
+  }
+}
+
+
+/* =====================================================
+   FINAL AMOUNT
+===================================================== */
+
+.final-amount {
+  margin-top: 10px;
+
+  min-height: 42px;
+
+  padding:
+    0
+    11px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border:
+    1px solid
+    #29404e;
+
+  border-radius: 5px;
+
+  background:
+    #0d1a23;
+
+
+  span {
+    font-size: 10px;
+
+    font-weight: 700;
+  }
+
+
+  strong {
+    color:
+      #00dfa5;
+
+    font-size: 16px;
+  }
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+.txn-field {
+  grid-column:
+    span 1;
+}
+
+
+.payment-balance {
+  display: flex;
+
+  justify-content: space-between;
+
+  flex-direction: column;
+
+
+  label {
+    margin-bottom: 5px;
+
+    color:
+      #9bb0be;
+
+    font-size: 9px;
+  }
+
+
+  strong {
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    color:
+      #f0f3f5;
+
+    font-size: 11px;
+  }
+}
+
+
+.payment-status-row {
+  margin-top: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  color:
+    #8397a6;
+
+  font-size: 9px;
+
+
+  strong {
+    padding:
+      4px
+      9px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    border-radius: 4px;
+
+
+    &.paid {
+      background:
+        rgba(
+          0,
+          210,
+          154,
+          .15
+        );
+
+      color:
+        var(--green);
+    }
+
+
+    &.partial {
+      background:
+        rgba(
+          255,
+          193,
+          7,
+          .15
+        );
+
+      color:
+        var(--yellow);
+    }
+
+
+    &.pending {
+      background:
+        rgba(
+          255,
+          23,
+          68,
+          .14
+        );
+
+      color:
+        #ff506b;
+    }
+  }
+}
+
+
+.notes-field {
+  margin-top: 11px;
+}
+
+
+/* =====================================================
+   DRAWER FOOTER
+===================================================== */
+
+.drawer-footer {
+  flex: 0 0 auto;
+
+  min-height: 72px;
+
+  padding:
+    0
+    14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  border-top:
+    1px solid
+    var(--border);
+
+  background:
+    #0b1720;
+}
+
+
+.cancel-button {
+  min-width: 95px;
+
+  height: 39px;
+
+  border:
+    1px solid
+    #354957;
+
+  border-radius: 5px;
+
+  background:
+    #111d26;
+
+  color:
+    #e4e9ec;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+
+.confirm-renewal {
+  min-width: 170px;
+
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  border: none;
+
+  border-radius: 5px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff1744,
+      #f0083b
+    );
+
+  color:
+    #fff;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+
+  &:hover {
+    filter:
+      brightness(1.08);
+  }
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast {
+  position: fixed;
+
+  top: 88px;
+
+  right: 24px;
+
+  z-index: 99999;
+
+  width: 360px;
+
+  min-height: 50px;
+
+  padding:
+    0
+    8px
+    0
+    15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  box-sizing: border-box;
+
+  border-radius: 6px;
+
+  box-shadow:
+    0 14px 35px
+    rgba(
+      0,
+      0,
+      0,
+      .45
+    );
+
+
+  &.success {
+    border:
+      1px solid
+      rgba(
+        0,
+        210,
+        154,
+        .4
+      );
+
+    background:
+      #10261f;
+
+    color:
+      #d4fff2;
+  }
+
+
+  &.error {
+    border:
+      1px solid
+      rgba(
+        255,
+        23,
+        68,
+        .4
+      );
+
+    background:
+      #29151b;
+
+    color:
+      #ffe0e5;
+  }
+}
+
+
+.toast-message {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  font-size: 10px;
+}
+
+
+.toast-close {
+  width: 32px;
+
+  height: 32px;
+
+  border: none;
+
+  border-radius: 4px;
+
+  background:
+    transparent;
+
+  color:
+    #b6c1c7;
+
+  font-size: 22px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+
+  &:hover {
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        .07
+      );
+
+    color:
+      #fff;
+  }
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+  height: 260px !important;
+
+  text-align: center;
+
+  color:
+    #7b909f;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 1250px
+) {
+
+  .renewal-drawer {
+    width: 390px;
+  }
+
+
+  .drawer-visible {
+
+    .renewal-content {
+      width:
+        calc(
+          100% - 410px
+        );
+    }
+  }
+
+
+  .renewal-filters {
+    grid-template-columns:
+      1fr
+      1fr;
+  }
+
+
+  .search-control {
+    grid-column:
+      1 / -1;
+  }
+}
+
+
+@media (
+  max-width: 900px
+) {
+
+  .renewal-content,
+  .drawer-visible
+  .renewal-content {
+    width: 100%;
+  }
+
+
+  .renewal-drawer {
+    width: 100%;
+
+    max-width: 440px;
+  }
+}
+
+
+@media (
+  max-width: 600px
+) {
+
+  .renewals-page {
+    padding: 10px;
+  }
+
+
+  .renewal-filters {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .search-control {
+    grid-column:
+      auto;
+  }
+
+
+  .renewal-drawer {
+    max-width: none;
+  }
+
+
+  .form-grid,
+  .money-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .current-membership-grid {
+    grid-template-columns:
+      1fr;
+  }
+}
