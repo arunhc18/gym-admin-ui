@@ -1,0 +1,166 @@
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Staff, StaffService } from '../../services/staff.service';
+
+type NewStaff = Omit<Staff, 'staffId' | 'staffCode'>;
+
+const PHONE_PATTERN = /^\+?[0-9\s()-]+$/;
+
+@Component({
+  selector: 'app-staff-form',
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink],
+  templateUrl: './staff-form.html',
+  styleUrl: './staff-form.scss'
+})
+export class StaffFormComponent implements OnInit {
+
+  readonly staffForm;
+
+  readonly roles = [
+    'Trainer',
+    'Manager',
+    'Receptionist',
+    'Accountant',
+    'Support'
+  ];
+
+  readonly statuses = [
+    'Active',
+    'On Leave',
+    'Inactive'
+  ];
+
+  editingStaffId: number | null = null;
+
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly staffService: StaffService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
+  ) {
+
+    this.staffForm = this.formBuilder.group({
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
+      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN), this.phoneLengthValidator]],
+      email: ['', [Validators.required, Validators.email]],
+      role: ['Trainer', [Validators.required]],
+      specialization: [''],
+      location: ['Main Branch', [Validators.required]],
+      joinedDate: [this.today(), [Validators.required]],
+      status: ['Active', [Validators.required]],
+      salary: [null as number | null]
+    });
+  }
+
+  ngOnInit(): void {
+
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    if (!idParam) {
+      return;
+    }
+
+    const staffId = Number(idParam);
+    const existing = this.staffService.getStaffById(staffId);
+
+    if (!existing) {
+      return;
+    }
+
+    this.editingStaffId = staffId;
+
+    this.staffForm.patchValue({
+      firstName: existing.firstName,
+      lastName: existing.lastName,
+      phone: existing.phone,
+      email: existing.email,
+      role: existing.role,
+      specialization: existing.specialization ?? '',
+      location: existing.location,
+      joinedDate: existing.joinedDate,
+      status: existing.status,
+      salary: existing.salary ?? null
+    });
+  }
+
+  get isEditMode(): boolean {
+    return this.editingStaffId !== null;
+  }
+
+  get canSave(): boolean {
+    return this.staffForm.valid;
+  }
+
+  saveStaff(): void {
+
+    if (!this.canSave) {
+      this.staffForm.markAllAsTouched();
+      return;
+    }
+
+    const value = this.staffForm.getRawValue();
+
+    const staffData: NewStaff = {
+      firstName: value.firstName?.trim() ?? '',
+      lastName: value.lastName?.trim() ?? '',
+      phone: value.phone?.trim() ?? '',
+      email: value.email?.trim() ?? '',
+      role: (value.role ?? 'Trainer') as Staff['role'],
+      specialization: value.specialization?.trim() || undefined,
+      location: value.location?.trim() ?? '',
+      joinedDate: value.joinedDate ?? this.today(),
+      status: (value.status ?? 'Active') as Staff['status'],
+      salary: this.parseSalary(value.salary)
+    };
+
+    if (this.isEditMode && this.editingStaffId !== null) {
+      this.staffService.updateStaff(this.editingStaffId, staffData);
+    } else {
+      this.staffService.addStaff(staffData);
+    }
+
+    this.router.navigate(['/staff']);
+  }
+
+  hasError(controlName: string): boolean {
+    const control = this.staffForm.controls[controlName as keyof typeof this.staffForm.controls];
+    return control.touched && control.invalid;
+  }
+
+  private phoneLengthValidator(control: { value: unknown }): { phoneLength: true } | null {
+
+    if (!control.value) {
+      return null;
+    }
+
+    const digits = String(control.value).replace(/\D/g, '').length;
+    return digits >= 10 && digits <= 15 ? null : { phoneLength: true };
+  }
+
+  private parseSalary(value: number | null): number | undefined {
+
+    if (value === null || value === undefined) {
+      return undefined;
+    }
+
+    const trimmed = String(value).trim();
+
+    if (trimmed === '') {
+      return undefined;
+    }
+
+    const parsed = Number(trimmed);
+    return Number.isNaN(parsed) ? undefined : parsed;
+  }
+
+  private today(): string {
+    return new Date().toISOString().slice(0, 10);
+  }
+}
