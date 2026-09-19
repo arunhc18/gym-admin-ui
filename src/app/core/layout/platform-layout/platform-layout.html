@@ -1,0 +1,467 @@
+<div
+  class="platform-shell"
+  [class.sidebar-collapsed]="sidebarCollapsed"
+  [class.mobile-sidebar-open]="mobileSidebarOpen"
+>
+
+
+  <!-- =====================================================
+       SIDEBAR
+  ====================================================== -->
+
+  <aside
+    class="platform-sidebar"
+    [class.collapsed]="sidebarCollapsed"
+    [class.mobile-open]="mobileSidebarOpen"
+  >
+
+
+    <!-- BRAND -->
+
+    <div class="sidebar-brand">
+
+      <span
+        class="brand-mark"
+        aria-hidden="true"
+      >
+        G
+      </span>
+
+
+      <div class="brand-copy">
+
+        <strong>
+          GymAdmin
+        </strong>
+
+        <span>
+          PLATFORM ADMINISTRATION
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <nav
+      class="sidebar-nav"
+      aria-label="Platform navigation"
+    >
+
+
+      <!-- DASHBOARD -->
+
+      <a
+        class="nav-item"
+        routerLink="/platform/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        title="Dashboard"
+        (click)="closeMobileSidebar()"
+      >
+
+        <span
+          class="nav-icon"
+          aria-hidden="true"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <rect
+              x="3"
+              y="3"
+              width="7"
+              height="7"
+              rx="1">
+            </rect>
+
+            <rect
+              x="14"
+              y="3"
+              width="7"
+              height="7"
+              rx="1">
+            </rect>
+
+            <rect
+              x="3"
+              y="14"
+              width="7"
+              height="7"
+              rx="1">
+            </rect>
+
+            <rect
+              x="14"
+              y="14"
+              width="7"
+              height="7"
+              rx="1">
+            </rect>
+
+          </svg>
+
+        </span>
+
+
+        <span class="nav-label">
+          Dashboard
+        </span>
+
+      </a>
+
+
+      <!-- TENANTS -->
+
+      <a
+        class="nav-item"
+        routerLink="/platform/tenants"
+        routerLinkActive="active"
+        title="Tenants"
+        (click)="closeMobileSidebar()"
+      >
+
+        <span
+          class="nav-icon"
+          aria-hidden="true"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <path
+              d="M4 21V5l8-3 8 3v16">
+            </path>
+
+            <path
+              d="M8 9h2M8 13h2M8 17h2">
+            </path>
+
+            <path
+              d="M14 9h2M14 13h2M14 17h2">
+            </path>
+
+            <path
+              d="M2 21h20">
+            </path>
+
+          </svg>
+
+        </span>
+
+
+        <span class="nav-label">
+          Tenants
+        </span>
+
+      </a>
+
+
+      <!-- SUBSCRIPTION PLANS -->
+
+      <a
+        class="nav-item"
+        routerLink="/platform/subscription-plans"
+        routerLinkActive="active"
+        title="Subscription Plans"
+        (click)="closeMobileSidebar()"
+      >
+
+        <span
+          class="nav-icon"
+          aria-hidden="true"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <rect
+              x="3"
+              y="4"
+              width="18"
+              height="16"
+              rx="2">
+            </rect>
+
+            <path
+              d="M3 9h18">
+            </path>
+
+            <path
+              d="M8 14h4">
+            </path>
+
+            <path
+              d="M8 17h7">
+            </path>
+
+          </svg>
+
+        </span>
+
+
+        <span class="nav-label">
+          Subscription Plans
+        </span>
+
+      </a>
+
+
+      <!-- SUBSCRIPTIONS -->
+
+      <a
+        class="nav-item"
+        routerLink="/platform/subscriptions"
+        routerLinkActive="active"
+        title="Subscriptions"
+        (click)="closeMobileSidebar()"
+      >
+
+        <span
+          class="nav-icon"
+          aria-hidden="true"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <path
+              d="M20 7H4">
+            </path>
+
+            <path
+              d="M17 3l3 4-3 4">
+            </path>
+
+            <path
+              d="M4 17h16">
+            </path>
+
+            <path
+              d="M7 13l-3 4 3 4">
+            </path>
+
+          </svg>
+
+        </span>
+
+
+        <span class="nav-label">
+          Subscriptions
+        </span>
+
+      </a>
+
+    </nav>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="sidebar-footer">
+
+
+      <!-- SETTINGS -->
+
+      <a
+        class="nav-item"
+        routerLink="/platform/settings"
+        routerLinkActive="active"
+        title="Settings"
+        (click)="closeMobileSidebar()"
+      >
+
+        <span
+          class="nav-icon"
+          aria-hidden="true"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <circle
+              cx="12"
+              cy="12"
+              r="3">
+            </circle>
+
+            <path
+              d="
+                M19 12
+                a7 7 0 0 0-.2-1.6
+                l1.7-1.3
+                -2-3.4
+                -2 .8
+                a7 7 0 0 0-2.7-1.6
+                L13.5 3
+                h-3
+                l-.3 1.9
+                a7 7 0 0 0-2.7 1.6
+                l-2-.8
+                -2 3.4
+                1.7 1.3
+                A7 7 0 0 0 5 12
+                c0 .6.1 1.1.2 1.6
+                l-1.7 1.3
+                2 3.4
+                2-.8
+                a7 7 0 0 0 2.7 1.6
+                l.3 1.9
+                h3
+                l.3-1.9
+                a7 7 0 0 0 2.7-1.6
+                l2 .8
+                2-3.4
+                -1.7-1.3
+                c.1-.5.2-1 .2-1.6Z">
+            </path>
+
+          </svg>
+
+        </span>
+
+
+        <span class="nav-label">
+          Settings
+        </span>
+
+      </a>
+
+
+      <!-- SIGN OUT -->
+
+      <button
+        class="nav-item nav-button"
+        type="button"
+        title="Sign Out"
+      >
+
+        <span
+          class="nav-icon"
+          aria-hidden="true"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <path
+              d="M10 5H5v14h5">
+            </path>
+
+            <path
+              d="M14 8l4 4-4 4">
+            </path>
+
+            <path
+              d="M8 12h10">
+            </path>
+
+          </svg>
+
+        </span>
+
+
+        <span class="nav-label">
+          Sign Out
+        </span>
+
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MOBILE OVERLAY -->
+
+  <button
+    class="sidebar-overlay"
+    type="button"
+    aria-label="Close navigation"
+    (click)="closeMobileSidebar()"
+  >
+  </button>
+
+
+  <!-- =====================================================
+       MAIN AREA
+  ====================================================== -->
+
+  <section class="platform-main">
+
+
+    <!-- TOP HEADER -->
+
+    <header class="platform-header">
+
+
+      <button
+        class="btn btn-icon menu-button"
+        type="button"
+        aria-label="Toggle sidebar"
+        (click)="toggleSidebar()"
+      >
+
+        ☰
+
+      </button>
+
+
+      <div class="header-copy">
+
+        <h1>
+          Platform Administration
+        </h1>
+
+        <div class="breadcrumbs">
+
+          GymAdmin
+
+          <span>
+            /
+          </span>
+
+          <span>
+            Platform
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-area">
+
+        <span class="admin-avatar">
+          PA
+        </span>
+
+
+        <div class="admin-copy">
+
+          <strong>
+            Platform Admin
+          </strong>
+
+          <span>
+            System Administrator
+          </span>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- ROUTED CONTENT -->
+
+    <main class="platform-content">
+
+      <router-outlet />
+
+    </main>
+
+  </section>
+
+</div>

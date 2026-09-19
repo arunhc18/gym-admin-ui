@@ -1,0 +1,380 @@
+<div class="tenants-page">
+
+
+  <div class="page-actions">
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="goToDashboard()"
+    >
+
+      ← Back to Dashboard
+
+    </button>
+
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="createTenant()"
+    >
+
+      + Create Tenant
+
+    </button>
+
+  </div>
+
+
+  <section class="tenants-card">
+
+
+    <div class="filter-bar">
+
+
+      <div class="search-box">
+
+        <span>
+          ⌕
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search tenant or subdomain..."
+        />
+
+      </div>
+
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="trial">
+          Trial
+        </option>
+
+        <option value="active">
+          Active
+        </option>
+
+        <option value="past_due">
+          Past Due
+        </option>
+
+        <option value="suspended">
+          Suspended
+        </option>
+
+        <option value="cancelled">
+          Cancelled
+        </option>
+
+        <option value="expired">
+          Expired
+        </option>
+
+      </select>
+
+
+      <select
+        [(ngModel)]="selectedPlan"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Plans
+        </option>
+
+
+        @for (
+          plan of plans;
+          track plan.subscriptionPlanId
+        ) {
+
+          <option
+            [value]="plan.subscriptionPlanId"
+          >
+
+            {{ plan.planName }}
+
+          </option>
+
+        }
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+
+        Clear
+
+      </button>
+
+    </div>
+
+
+    <div class="table-container">
+
+      <table class="data-table">
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Tenant
+            </th>
+
+            <th>
+              Subdomain
+            </th>
+
+            <th>
+              Plan
+            </th>
+
+            <th>
+              Subscription
+            </th>
+
+            <th>
+              Start Date
+            </th>
+
+            <th>
+              End Date
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          @for (
+            tenant of filteredTenants;
+            track tenant.tenantId
+          ) {
+
+            <tr
+              class="clickable-row"
+              tabindex="0"
+              (click)="openTenant(tenant)"
+              (keydown.enter)="openTenant(tenant)"
+            >
+
+
+              <td>
+
+                <div class="tenant-cell">
+
+                  <div class="tenant-avatar">
+
+                    {{
+                      tenant.tenantName
+                        .charAt(0)
+                        .toUpperCase()
+                    }}
+
+                  </div>
+
+
+                  <div>
+
+                    <strong>
+                      {{ tenant.tenantName }}
+                    </strong>
+
+                    <small>
+                      Tenant #{{ tenant.tenantId }}
+                    </small>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                <span class="subdomain">
+
+                  {{ tenant.subdomain }}.gymerp.com
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                {{ getPlanName(
+                     tenant.subscriptionPlanId
+                   ) }}
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="subscription-status"
+                  [ngClass]="
+                    getStatusClass(
+                      tenant.subscriptionStatus
+                    )
+                  "
+                >
+
+                  <span class="status-dot"></span>
+
+                  {{
+                    getStatusLabel(
+                      tenant.subscriptionStatus
+                    )
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                {{
+                  tenant.subscriptionStartDate
+                    | date:'dd MMM yyyy'
+                }}
+
+              </td>
+
+
+              <td>
+
+                @if (
+                  tenant.subscriptionEndDate
+                ) {
+
+                  {{
+                    tenant.subscriptionEndDate
+                      | date:'dd MMM yyyy'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="tenant-active-status"
+                  [class.active]="tenant.isActive"
+                  [class.inactive]="!tenant.isActive"
+                >
+
+                  {{
+                    tenant.isActive
+                      ? 'Active'
+                      : 'Inactive'
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <div class="row-actions">
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    (click)="editTenant(
+                      $event,
+                      tenant
+                    )"
+                  >
+
+                    Edit
+
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    (click)="toggleActive(
+                      $event,
+                      tenant
+                    )"
+                  >
+
+                    {{
+                      tenant.isActive
+                        ? 'Deactivate'
+                        : 'Activate'
+                    }}
+
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          } @empty {
+
+            <tr>
+
+              <td
+                colspan="8"
+                class="empty-cell"
+              >
+
+                No tenants found.
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

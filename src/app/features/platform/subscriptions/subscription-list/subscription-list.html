@@ -1,0 +1,519 @@
+<div class="subscriptions-page">
+
+
+  <!-- =====================================================
+       PAGE ACTION
+  ====================================================== -->
+
+  <div class="page-actions">
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="goToDashboard()"
+    >
+
+      ← Back to Dashboard
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       MAIN CARD
+  ====================================================== -->
+
+  <section class="subscriptions-card">
+
+
+    <!-- =================================================
+         FILTERS
+    ================================================== -->
+
+    <div class="filter-bar">
+
+
+      <div class="search-box">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+          ></circle>
+
+          <path
+            d="m20 20-3.5-3.5"
+          ></path>
+        </svg>
+
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search tenant, subdomain or plan..."
+        />
+
+      </div>
+
+
+      <!-- PLAN -->
+
+      <select
+        [(ngModel)]="selectedPlan"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Plans
+        </option>
+
+
+        @for (
+          plan of plans;
+          track plan.subscriptionPlanId
+        ) {
+
+          <option
+            [value]="plan.subscriptionPlanId"
+          >
+
+            {{ plan.planName }}
+
+          </option>
+
+        }
+
+      </select>
+
+
+      <!-- STATUS -->
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="trial">
+          Trial
+        </option>
+
+        <option value="active">
+          Active
+        </option>
+
+        <option value="past_due">
+          Past Due
+        </option>
+
+        <option value="suspended">
+          Suspended
+        </option>
+
+        <option value="cancelled">
+          Cancelled
+        </option>
+
+        <option value="expired">
+          Expired
+        </option>
+
+      </select>
+
+
+      <!-- EXPIRY -->
+
+      <select
+        [(ngModel)]="selectedExpiry"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Expiry
+        </option>
+
+        <option value="expiring-7">
+          Expiring in 7 Days
+        </option>
+
+        <option value="expiring-30">
+          Expiring in 30 Days
+        </option>
+
+        <option value="expired">
+          Expired
+        </option>
+
+        <option value="no-end-date">
+          No Expiry Date
+        </option>
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+
+        Clear
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div class="table-container">
+
+      <table class="data-table">
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Tenant
+            </th>
+
+            <th>
+              Plan
+            </th>
+
+            <th>
+              Billing
+            </th>
+
+            <th>
+              Price
+            </th>
+
+            <th>
+              Start Date
+            </th>
+
+            <th>
+              End Date
+            </th>
+
+            <th>
+              Expiry
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          @for (
+            item of filteredSubscriptions;
+            track item.tenant.tenantId
+          ) {
+
+            <tr
+              class="subscription-row"
+              tabindex="0"
+              (click)="openTenant(
+                item.tenant
+              )"
+              (keydown.enter)="
+                openTenant(
+                  item.tenant
+                )
+              "
+            >
+
+
+              <!-- TENANT -->
+
+              <td>
+
+                <div class="tenant-cell">
+
+                  <div class="tenant-avatar">
+
+                    {{
+                      item.tenant
+                        .tenantName
+                        .charAt(0)
+                        .toUpperCase()
+                    }}
+
+                  </div>
+
+
+                  <div>
+
+                    <strong>
+
+                      {{
+                        item.tenant
+                          .tenantName
+                      }}
+
+                    </strong>
+
+
+                    <small>
+
+                      {{
+                        item.tenant
+                          .subdomain
+                      }}.gymerp.com
+
+                    </small>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <!-- PLAN -->
+
+              <td>
+
+                <strong class="plan-name">
+
+                  {{
+                    item.plan?.planName ??
+                    'Unknown'
+                  }}
+
+                </strong>
+
+              </td>
+
+
+              <!-- BILLING -->
+
+              <td>
+
+                <span class="billing-badge">
+
+                  {{
+                    getBillingLabel(
+                      item.plan
+                    )
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <!-- PRICE -->
+
+              <td>
+
+                @if (
+                  getSubscriptionPrice(
+                    item.plan
+                  ) !== null
+                ) {
+
+                  <div class="price">
+
+                    {{
+                      getSubscriptionPrice(
+                        item.plan
+                      )
+                        | currency:
+                          'INR':
+                          'symbol':
+                          '1.0-2'
+                    }}
+
+                  </div>
+
+                } @else {
+
+                  <span class="muted">
+                    -
+                  </span>
+
+                }
+
+              </td>
+
+
+              <!-- START -->
+
+              <td>
+
+                {{
+                  item.tenant
+                    .subscriptionStartDate
+                    | date:
+                      'dd MMM yyyy'
+                }}
+
+              </td>
+
+
+              <!-- END -->
+
+              <td>
+
+                @if (
+                  item.tenant
+                    .subscriptionEndDate
+                ) {
+
+                  {{
+                    item.tenant
+                      .subscriptionEndDate
+                      | date:
+                        'dd MMM yyyy'
+                  }}
+
+                } @else {
+
+                  <span class="muted">
+                    -
+                  </span>
+
+                }
+
+              </td>
+
+
+              <!-- EXPIRY -->
+
+              <td>
+
+                <span
+                  class="expiry-badge"
+                  [ngClass]="
+                    getExpiryClass(
+                      item.tenant
+                    )
+                  "
+                >
+
+                  {{
+                    getExpiryLabel(
+                      item.tenant
+                    )
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <!-- STATUS -->
+
+              <td>
+
+                <span
+                  class="subscription-status"
+                  [ngClass]="
+                    getStatusClass(
+                      item.tenant
+                        .subscriptionStatus
+                    )
+                  "
+                >
+
+                  <span
+                    class="status-dot"
+                  ></span>
+
+                  {{
+                    getStatusLabel(
+                      item.tenant
+                        .subscriptionStatus
+                    )
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <!-- ACTION -->
+
+              <td>
+
+                <button
+                  type="button"
+                  class="action-button"
+                  (click)="
+                    manageSubscription(
+                      $event,
+                      item.tenant
+                    )
+                  "
+                >
+
+                  Manage
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          } @empty {
+
+            <tr>
+
+              <td
+                colspan="9"
+                class="empty-cell"
+              >
+
+                <div class="empty-state">
+
+                  <strong>
+                    No subscriptions found
+                  </strong>
+
+                  <span>
+                    Try changing the current filters.
+                  </span>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

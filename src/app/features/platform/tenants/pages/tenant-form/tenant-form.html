@@ -1,0 +1,593 @@
+<form
+  class="tenant-form-page"
+  [formGroup]="tenantForm"
+  (ngSubmit)="onSubmit()"
+  novalidate
+>
+
+
+  <div class="page-actions">
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="goBack()"
+    >
+
+      ← Back to Tenants
+
+    </button>
+
+
+    <div class="action-buttons">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="goBack()"
+      >
+
+        Cancel
+
+      </button>
+
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="tenantForm.invalid || isSubmitting"
+      >
+
+        {{
+          isEditMode
+            ? 'Save Changes'
+            : 'Create Tenant'
+        }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Organization Information
+      </h2>
+
+      <p>
+        Basic information about the gym organization.
+      </p>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="tenantName">
+
+          Tenant Name
+          <span class="required">*</span>
+
+        </label>
+
+
+        <input
+          class="form-control"
+          id="tenantName"
+          type="text"
+          formControlName="tenantName"
+          placeholder="Example: PowerFit Gym"
+          [class.invalid]="isInvalid('tenantName')"
+          [attr.aria-invalid]="isInvalid('tenantName')"
+          aria-describedby="tenantName-error"
+        />
+
+
+        @if (
+          hasError(
+            'tenantName',
+            'required'
+          )
+        ) {
+
+          <span class="form-error">
+            Tenant name is required.
+          </span>
+
+        }
+
+        @if (hasError('tenantName', 'minlength')) {
+          <span id="tenantName-error" class="form-error">Tenant name must contain at least 2 characters.</span>
+        }
+
+        @if (hasError('tenantName', 'maxlength')) {
+          <span id="tenantName-error" class="form-error">Tenant name cannot exceed 200 characters.</span>
+        }
+
+        @if (hasError('tenantName', 'noLetter')) {
+          <span id="tenantName-error" class="form-error">Tenant name must contain at least one alphabetic character.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="subdomain">
+
+          Subdomain
+          <span class="required">*</span>
+
+        </label>
+
+
+        <div class="subdomain-input">
+
+          <input
+            class="form-control"
+            id="subdomain"
+            type="text"
+            formControlName="subdomain"
+            placeholder="powerfit"
+            (input)="onSubdomainInput()"
+            [class.invalid]="isInvalid('subdomain')"
+            [attr.aria-invalid]="isInvalid('subdomain')"
+            aria-describedby="subdomain-error"
+          />
+
+          <span>
+            .gymerp.com
+          </span>
+
+        </div>
+
+
+        @if (
+          hasError(
+            'subdomain',
+            'required'
+          )
+        ) {
+
+          <span class="form-error">
+            Subdomain is required.
+          </span>
+
+        }
+
+        @if (hasError('subdomain', 'minlength')) {
+          <span id="subdomain-error" class="form-error">Subdomain must contain at least 2 characters.</span>
+        } @else if (hasError('subdomain', 'maxlength')) {
+          <span id="subdomain-error" class="form-error">Subdomain cannot exceed 100 characters.</span>
+        } @else if (hasError('subdomain', 'subdomainPattern')) {
+          <span id="subdomain-error" class="form-error">Only lowercase letters, numbers and hyphens are allowed.</span>
+        } @else if (hasError('subdomain', 'subdomainBoundary')) {
+          <span id="subdomain-error" class="form-error">Subdomain cannot start or end with a hyphen.</span>
+        } @else if (hasError('subdomain', 'subdomainConsecutiveHyphen')) {
+          <span id="subdomain-error" class="form-error">Subdomain cannot contain consecutive hyphens.</span>
+        }
+
+        <small class="field-preview">
+          {{ tenantForm.controls['subdomain'].value || 'your-gym' }}.gymerp.com
+        </small>
+
+
+        @if (
+          hasError(
+            'subdomain',
+            'duplicate'
+          )
+        ) {
+
+          <span class="form-error">
+            This subdomain is already in use.
+          </span>
+
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Subscription
+      </h2>
+
+      <p>
+        Assign the SaaS subscription used by this tenant.
+      </p>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="subscriptionPlanId">
+
+          Subscription Plan
+          <span class="required">*</span>
+
+        </label>
+
+
+        <select
+          class="form-control"
+          id="subscriptionPlanId"
+          formControlName="subscriptionPlanId"
+          [class.invalid]="isInvalid('subscriptionPlanId')"
+          [attr.aria-invalid]="isInvalid('subscriptionPlanId')"
+          aria-describedby="subscriptionPlanId-error"
+        >
+
+          <option [ngValue]="null">
+            Select subscription plan
+          </option>
+
+
+          @for (
+            plan of plans;
+            track plan.subscriptionPlanId
+          ) {
+
+            <option
+              [ngValue]="plan.subscriptionPlanId"
+            >
+
+              {{ plan.planName }}
+
+            </option>
+
+          }
+
+        </select>
+
+        @if (hasError('subscriptionPlanId', 'required')) {
+          <span id="subscriptionPlanId-error" class="form-error">Subscription plan is required.</span>
+        } @else if (hasError('subscriptionPlanId', 'inactivePlan')) {
+          <span id="subscriptionPlanId-error" class="form-error">Select an active subscription plan.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="subscriptionStatus">
+
+          Subscription Status
+          <span class="required">*</span>
+
+        </label>
+
+
+        <select
+          class="form-control"
+          id="subscriptionStatus"
+          formControlName="subscriptionStatus"
+          [class.invalid]="isInvalid('subscriptionStatus')"
+          [attr.aria-invalid]="isInvalid('subscriptionStatus')"
+          aria-describedby="subscriptionStatus-error"
+        >
+
+          <option value="trial">
+            Trial
+          </option>
+
+          <option value="active">
+            Active
+          </option>
+
+          <option value="past_due">
+            Past Due
+          </option>
+
+          <option value="suspended">
+            Suspended
+          </option>
+
+          <option value="cancelled">
+            Cancelled
+          </option>
+
+          <option value="expired">
+            Expired
+          </option>
+
+        </select>
+
+        @if (hasError('subscriptionStatus', 'allowedValue')) {
+          <span id="subscriptionStatus-error" class="form-error">Select a valid subscription status.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="subscriptionStartDate">
+
+          Start Date
+          <span class="required">*</span>
+
+        </label>
+
+
+        <input
+          class="form-control"
+          id="subscriptionStartDate"
+          type="date"
+          formControlName="subscriptionStartDate"
+          [class.invalid]="isInvalid('subscriptionStartDate')"
+          [attr.aria-invalid]="isInvalid('subscriptionStartDate')"
+          aria-describedby="subscriptionStartDate-error"
+        />
+
+        @if (hasError('subscriptionStartDate', 'required')) {
+          <span id="subscriptionStartDate-error" class="form-error">Subscription start date is required.</span>
+        } @else if (hasError('subscriptionStartDate', 'invalidDate')) {
+          <span id="subscriptionStartDate-error" class="form-error">Enter a valid date.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="subscriptionEndDate">
+
+          End Date
+
+        </label>
+
+
+        <input
+          class="form-control"
+          id="subscriptionEndDate"
+          type="date"
+          formControlName="subscriptionEndDate"
+          [class.invalid]="isInvalid('subscriptionEndDate') || dateRangeError()"
+          [attr.aria-invalid]="isInvalid('subscriptionEndDate') || dateRangeError()"
+          aria-describedby="subscriptionEndDate-error"
+        />
+
+
+        @if (
+          dateRangeError()
+        ) {
+
+          <span class="form-error">
+            Subscription end date cannot be before the start date.
+          </span>
+
+        }
+
+        @if (hasError('subscriptionEndDate', 'invalidDate')) {
+          <span id="subscriptionEndDate-error" class="form-error">Enter a valid date.</span>
+        }
+
+      </div>
+
+    </div>
+
+
+    @if (selectedPlan) {
+
+      <div class="plan-preview">
+
+        <div>
+
+          <span>
+            Plan
+          </span>
+
+          <strong>
+            {{ selectedPlan.planName }}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Locations
+          </span>
+
+          <strong>
+            {{ selectedPlan.maxLocations }}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Members
+          </span>
+
+          <strong>
+            {{ selectedPlan.maxMembers }}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Staff
+          </span>
+
+          <strong>
+            {{ selectedPlan.maxStaffUsers ?? '-' }}
+          </strong>
+
+        </div>
+
+        <div>
+          <span>Billing</span>
+          <strong>{{ selectedPlan.billingCycle }}</strong>
+        </div>
+
+        <div>
+          <span>Monthly</span>
+          <strong>{{ selectedPlan.priceMonthly ?? '-' }}</strong>
+        </div>
+
+        <div>
+          <span>Yearly</span>
+          <strong>{{ selectedPlan.priceYearly ?? '-' }}</strong>
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Resource Limits
+      </h2>
+
+      <p>
+        Use subscription-plan limits or provide tenant-specific overrides.
+      </p>
+
+    </div>
+
+
+    <label class="toggle-row">
+
+      <input
+        type="checkbox"
+        formControlName="inheritPlanLimits"
+      />
+
+      <span>
+        Use subscription plan limits
+      </span>
+
+    </label>
+
+
+    @if (
+      !tenantForm.controls
+        .inheritPlanLimits.value
+    ) {
+
+      <div class="form-grid override-grid">
+
+
+        <div class="form-group">
+
+          <label class="form-label" for="maxLocations">
+            Maximum Locations
+          </label>
+
+          <input
+            class="form-control"
+            id="maxLocations"
+            type="number"
+            min="1"
+            formControlName="maxLocations"
+            [class.invalid]="isInvalid('maxLocations')"
+            [attr.aria-invalid]="isInvalid('maxLocations')"
+            aria-describedby="maxLocations-error"
+          />
+
+          @if (hasError('maxLocations', 'required') || formHasError('limitsRequired')) {
+            <span id="maxLocations-error" class="form-error">Maximum locations is required.</span>
+          } @else if (hasError('maxLocations', 'min')) {
+            <span id="maxLocations-error" class="form-error">Maximum locations must be at least 1.</span>
+          } @else if (hasError('maxLocations', 'wholeNumber') || hasError('maxLocations', 'max')) {
+            <span id="maxLocations-error" class="form-error">Enter a valid whole number.</span>
+          }
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label" for="maxMembers">
+            Maximum Members
+          </label>
+
+          <input
+            class="form-control"
+            id="maxMembers"
+            type="number"
+            min="1"
+            formControlName="maxMembers"
+            [class.invalid]="isInvalid('maxMembers')"
+            [attr.aria-invalid]="isInvalid('maxMembers')"
+            aria-describedby="maxMembers-error"
+          />
+
+          @if (hasError('maxMembers', 'required') || formHasError('limitsRequired')) {
+            <span id="maxMembers-error" class="form-error">Maximum members is required.</span>
+          } @else if (hasError('maxMembers', 'min')) {
+            <span id="maxMembers-error" class="form-error">Maximum members must be at least 1.</span>
+          } @else if (hasError('maxMembers', 'wholeNumber') || hasError('maxMembers', 'max')) {
+            <span id="maxMembers-error" class="form-error">Enter a valid whole number.</span>
+          }
+
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Tenant Status
+      </h2>
+
+    </div>
+
+
+    <label class="toggle-row">
+
+      <input
+        type="checkbox"
+        formControlName="isActive"
+      />
+
+      <span>
+        Tenant Active
+      </span>
+
+    </label>
+
+  </section>
+
+</form>

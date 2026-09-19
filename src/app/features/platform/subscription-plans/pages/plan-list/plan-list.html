@@ -1,0 +1,378 @@
+<div class="plans-page">
+
+
+  <!-- PAGE ACTIONS -->
+
+  <div class="page-actions">
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="goToDashboard()"
+    >
+
+      <span aria-hidden="true">
+        ←
+      </span>
+
+      Back to Dashboard
+
+    </button>
+
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="createPlan()"
+    >
+
+      + Create Plan
+
+    </button>
+
+  </div>
+
+
+  <!-- MAIN CARD -->
+
+  <section class="plans-card">
+
+
+    <!-- FILTER BAR -->
+
+    <div class="filter-bar">
+
+
+      <div class="search-box">
+
+        <span class="search-icon">
+          ⌕
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search plan name or code..."
+        />
+
+      </div>
+
+
+      <select
+        [(ngModel)]="selectedBillingCycle"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Billing Cycles
+        </option>
+
+        <option value="monthly">
+          Monthly
+        </option>
+
+        <option value="yearly">
+          Yearly
+        </option>
+
+        <option value="lifetime">
+          Lifetime
+        </option>
+
+      </select>
+
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="active">
+          Active
+        </option>
+
+        <option value="inactive">
+          Inactive
+        </option>
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+        Clear
+      </button>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="table-container">
+
+      <table class="data-table">
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Plan
+            </th>
+
+            <th>
+              Members
+            </th>
+
+            <th>
+              Locations
+            </th>
+
+            <th>
+              Staff
+            </th>
+
+            <th>
+              Monthly
+            </th>
+
+            <th>
+              Yearly
+            </th>
+
+            <th>
+              Billing
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          @for (
+            plan of filteredPlans;
+            track plan.subscriptionPlanId
+          ) {
+
+            <tr
+              class="clickable-row"
+              tabindex="0"
+              (click)="openPlan(plan)"
+              (keydown.enter)="openPlan(plan)"
+            >
+
+
+              <!-- PLAN -->
+
+              <td>
+
+                <div class="plan-cell">
+
+                  <div class="plan-icon">
+
+                    {{ plan.planName.charAt(0) }}
+
+                  </div>
+
+
+                  <div>
+
+                    <strong>
+
+                      {{ plan.planName }}
+
+                    </strong>
+
+                    <small>
+
+                      {{ plan.planCode }}
+
+                    </small>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                {{ plan.maxMembers }}
+
+              </td>
+
+
+              <td>
+
+                {{ plan.maxLocations }}
+
+              </td>
+
+
+              <td>
+
+                {{ plan.maxStaffUsers ?? '-' }}
+
+              </td>
+
+
+              <td>
+
+                @if (
+                  plan.priceMonthly !== null &&
+                  plan.priceMonthly !== undefined
+                ) {
+
+                  {{
+                    plan.priceMonthly
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.0-0'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <td>
+
+                @if (
+                  plan.priceYearly !== null &&
+                  plan.priceYearly !== undefined
+                ) {
+
+                  {{
+                    plan.priceYearly
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.0-0'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <td>
+
+                <span class="billing-badge">
+
+                  {{ plan.billingCycle | titlecase }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="status"
+                  [class.active]="plan.isActive"
+                  [class.inactive]="!plan.isActive"
+                >
+
+                  <span class="status-dot"></span>
+
+                  {{
+                    plan.isActive
+                      ? 'Active'
+                      : 'Inactive'
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <div class="row-actions">
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    (click)="editPlan($event, plan)"
+                  >
+
+                    Edit
+
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    (click)="toggleStatus($event, plan)"
+                  >
+
+                    {{
+                      plan.isActive
+                        ? 'Deactivate'
+                        : 'Activate'
+                    }}
+
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          } @empty {
+
+            <tr>
+
+              <td
+                colspan="9"
+                class="empty-cell"
+              >
+
+                No subscription plans found.
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

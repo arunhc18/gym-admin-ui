@@ -1,0 +1,517 @@
+:host {
+  display: block;
+}
+
+
+.tenants-page {
+  width: 100%;
+}
+
+
+.page-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 16px;
+
+  margin-bottom: 16px;
+
+}
+
+
+.back-link {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  background: transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+}
+
+
+.back-link:hover {
+  color:
+    var(--text-primary);
+}
+
+
+.tenants-card {
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.filter-bar {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1fr)
+    160px
+    170px
+    auto;
+
+  gap: 10px;
+
+  padding: 14px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+
+}
+
+
+.search-box {
+
+  display: flex;
+
+  min-height: 40px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding:
+    0 12px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.search-box span {
+  color:
+    var(--text-muted);
+}
+
+
+.search-box input {
+
+  width: 100%;
+
+  border: 0;
+
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.search-box input::placeholder {
+  color:
+    var(--text-muted);
+}
+
+
+.filter-bar select {
+
+  min-height: 40px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+}
+
+
+.clear-button {
+
+  min-height: 40px;
+
+  padding:
+    0 15px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+}
+
+
+.clear-button:hover {
+
+  border-color:
+    var(--text-secondary);
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.clickable-row {
+  cursor: pointer;
+}
+
+
+.tenant-cell {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+
+.tenant-avatar {
+
+  display: grid;
+
+  width: 34px;
+
+  height: 34px;
+
+  place-items: center;
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+  font-weight: 700;
+
+}
+
+
+.tenant-cell strong {
+
+  display: block;
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.tenant-cell small {
+
+  display: block;
+
+  margin-top: 2px;
+
+  color:
+    var(--text-muted);
+
+  font-size: 10px;
+
+}
+
+
+.subdomain {
+
+  color:
+    var(--text-secondary);
+
+  font-size: 12px;
+
+}
+
+
+.subscription-status {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding:
+    5px 8px;
+
+  border-radius:
+    var(--radius-sm);
+
+  font-size: 11px;
+
+}
+
+
+.status-dot {
+
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+}
+
+
+.subscription-status.active {
+
+  background:
+    rgba(24, 185, 129, .1);
+
+  color:
+    var(--success);
+
+}
+
+
+.subscription-status.active
+.status-dot {
+
+  background:
+    var(--success);
+
+}
+
+
+.subscription-status.trial {
+
+  background:
+    rgba(79, 140, 255, .1);
+
+  color:
+    var(--info);
+
+}
+
+
+.subscription-status.trial
+.status-dot {
+
+  background:
+    var(--info);
+
+}
+
+
+.subscription-status.past-due {
+
+  background:
+    rgba(245, 165, 36, .12);
+
+  color:
+    var(--warning);
+
+}
+
+
+.subscription-status.past-due
+.status-dot {
+
+  background:
+    var(--warning);
+
+}
+
+
+.subscription-status.suspended,
+.subscription-status.cancelled {
+
+  background:
+    rgba(239, 68, 68, .1);
+
+  color:
+    var(--danger);
+
+}
+
+
+.subscription-status.suspended
+.status-dot,
+.subscription-status.cancelled
+.status-dot {
+
+  background:
+    var(--danger);
+
+}
+
+
+.subscription-status.expired {
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+}
+
+
+.subscription-status.expired
+.status-dot {
+
+  background:
+    var(--text-muted);
+
+}
+
+
+.tenant-active-status {
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+}
+
+
+.tenant-active-status.active {
+  color:
+    var(--success);
+}
+
+
+.tenant-active-status.inactive {
+  color:
+    var(--text-muted);
+}
+
+
+.row-actions {
+
+  display: flex;
+
+  gap: 6px;
+
+}
+
+
+.action-button {
+
+  padding:
+    6px 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+}
+
+
+.action-button:hover {
+
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+
+}
+
+
+.empty-cell {
+
+  padding: 40px !important;
+
+  color:
+    var(--text-muted);
+
+  text-align: center !important;
+
+}
+
+
+@media (max-width: 950px) {
+
+  .filter-bar {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .page-actions {
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+  }
+
+
+  .filter-bar {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}
