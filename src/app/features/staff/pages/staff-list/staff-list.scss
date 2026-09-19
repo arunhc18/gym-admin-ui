@@ -44,6 +44,10 @@
   white-space: nowrap;
 }
 
+.add-staff-button:hover {
+  color: var(--text-primary);
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

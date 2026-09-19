@@ -22,7 +22,7 @@ export class StaffFormComponent implements OnInit {
 
   readonly staffForm;
 
-  readonly roles = [
+  readonly roles: Staff['role'][] = [
     'Trainer',
     'Manager',
     'Receptionist',
@@ -30,7 +30,7 @@ export class StaffFormComponent implements OnInit {
     'Support'
   ];
 
-  readonly statuses = [
+  readonly statuses: Staff['status'][] = [
     'Active',
     'On Leave',
     'Inactive'
@@ -44,30 +44,95 @@ export class StaffFormComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute
   ) {
-
     this.staffForm = this.formBuilder.group({
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
-      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN), this.phoneLengthValidator]],
-      email: ['', [Validators.required, Validators.email]],
-      role: ['Trainer', [Validators.required]],
-      specialization: [''],
-      location: ['Main Branch', [Validators.required]],
-      joinedDate: [this.today(), [Validators.required]],
-      status: ['Active', [Validators.required]],
-      salary: [null as number | null]
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(60)
+        ]
+      ],
+
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(60)
+        ]
+      ],
+
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(PHONE_PATTERN),
+          this.phoneLengthValidator
+        ]
+      ],
+
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      // IMPORTANT:
+      // Empty in Add mode so user must select it.
+      role: [
+        '',
+        Validators.required
+      ],
+
+      specialization: [
+        ''
+      ],
+
+      // IMPORTANT:
+      // Empty in Add mode so user must enter it.
+      location: [
+        '',
+        Validators.required
+      ],
+
+      // IMPORTANT:
+      // Empty in Add mode so user must select it.
+      joinedDate: [
+        '',
+        Validators.required
+      ],
+
+      // IMPORTANT:
+      // Empty in Add mode so user must select it.
+      status: [
+        '',
+        Validators.required
+      ],
+
+      salary: [
+        null as number | null
+      ]
     });
   }
 
   ngOnInit(): void {
-
     const idParam = this.route.snapshot.paramMap.get('id');
 
+    // Add Staff mode
     if (!idParam) {
       return;
     }
 
+    // Edit Staff mode
     const staffId = Number(idParam);
+
+    if (Number.isNaN(staffId)) {
+      return;
+    }
+
     const existing = this.staffService.getStaffById(staffId);
 
     if (!existing) {
@@ -99,7 +164,6 @@ export class StaffFormComponent implements OnInit {
   }
 
   saveStaff(): void {
-
     if (!this.canSave) {
       this.staffForm.markAllAsTouched();
       return;
@@ -112,16 +176,22 @@ export class StaffFormComponent implements OnInit {
       lastName: value.lastName?.trim() ?? '',
       phone: value.phone?.trim() ?? '',
       email: value.email?.trim() ?? '',
-      role: (value.role ?? 'Trainer') as Staff['role'],
+      role: value.role as Staff['role'],
       specialization: value.specialization?.trim() || undefined,
       location: value.location?.trim() ?? '',
-      joinedDate: value.joinedDate ?? this.today(),
-      status: (value.status ?? 'Active') as Staff['status'],
+      joinedDate: value.joinedDate ?? '',
+      status: value.status as Staff['status'],
       salary: this.parseSalary(value.salary)
     };
 
-    if (this.isEditMode && this.editingStaffId !== null) {
-      this.staffService.updateStaff(this.editingStaffId, staffData);
+    if (
+      this.isEditMode &&
+      this.editingStaffId !== null
+    ) {
+      this.staffService.updateStaff(
+        this.editingStaffId,
+        staffData
+      );
     } else {
       this.staffService.addStaff(staffData);
     }
@@ -130,37 +200,52 @@ export class StaffFormComponent implements OnInit {
   }
 
   hasError(controlName: string): boolean {
-    const control = this.staffForm.controls[controlName as keyof typeof this.staffForm.controls];
+    const control =
+      this.staffForm.controls[
+        controlName as keyof typeof this.staffForm.controls
+      ];
+
     return control.touched && control.invalid;
   }
 
-  private phoneLengthValidator(control: { value: unknown }): { phoneLength: true } | null {
-
+  private phoneLengthValidator(
+    control: { value: unknown }
+  ): { phoneLength: true } | null {
     if (!control.value) {
       return null;
     }
 
-    const digits = String(control.value).replace(/\D/g, '').length;
-    return digits >= 10 && digits <= 15 ? null : { phoneLength: true };
+    const digits =
+      String(control.value)
+        .replace(/\D/g, '')
+        .length;
+
+    return digits >= 10 && digits <= 15
+      ? null
+      : { phoneLength: true };
   }
 
-  private parseSalary(value: number | null): number | undefined {
-
-    if (value === null || value === undefined) {
+  private parseSalary(
+    value: number | null
+  ): number | undefined {
+    if (
+      value === null ||
+      value === undefined
+    ) {
       return undefined;
     }
 
-    const trimmed = String(value).trim();
+    const trimmed =
+      String(value).trim();
 
     if (trimmed === '') {
       return undefined;
     }
 
     const parsed = Number(trimmed);
-    return Number.isNaN(parsed) ? undefined : parsed;
-  }
 
-  private today(): string {
-    return new Date().toISOString().slice(0, 10);
+    return Number.isNaN(parsed)
+      ? undefined
+      : parsed;
   }
 }
