@@ -1,0 +1,348 @@
+@if (plan) {
+
+  <div class="details-page">
+
+
+    <!-- ACTIONS -->
+
+    <div class="page-actions">
+
+      <button
+        class="back-link"
+        type="button"
+        (click)="goBack()"
+      >
+
+        ←
+
+        Back to Subscription Plans
+
+      </button>
+
+
+      <div class="action-buttons">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="toggleStatus()"
+        >
+
+          {{
+            plan.isActive
+              ? 'Deactivate'
+              : 'Activate'
+          }}
+
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="editPlan()"
+        >
+
+          Edit Plan
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <section class="plan-hero">
+
+      <div class="plan-avatar">
+
+        {{ plan.planName.charAt(0) }}
+
+      </div>
+
+
+      <div class="plan-heading">
+
+        <div class="title-row">
+
+          <h1>
+
+            {{ plan.planName }}
+
+          </h1>
+
+
+          <span
+            class="status"
+            [class.active]="plan.isActive"
+            [class.inactive]="!plan.isActive"
+          >
+
+            <span class="status-dot"></span>
+
+            {{
+              plan.isActive
+                ? 'Active'
+                : 'Inactive'
+            }}
+
+          </span>
+
+        </div>
+
+
+        <span class="plan-code">
+
+          {{ plan.planCode }}
+
+        </span>
+
+
+        <p>
+
+          {{
+            plan.description ||
+            'No description provided.'
+          }}
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- DETAIL GRID -->
+
+    <section class="details-grid">
+
+
+      <!-- PLAN INFO -->
+
+      <article class="detail-card">
+
+        <h2>
+          Plan Information
+        </h2>
+
+
+        <div class="detail-row">
+
+          <span>
+            Plan Code
+          </span>
+
+          <strong>
+            {{ plan.planCode }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Plan Name
+          </span>
+
+          <strong>
+            {{ plan.planName }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Billing Cycle
+          </span>
+
+          <strong>
+            {{ plan.billingCycle | titlecase }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Display Order
+          </span>
+
+          <strong>
+            {{ plan.displayOrder }}
+          </strong>
+
+        </div>
+
+      </article>
+
+
+      <!-- LIMITS -->
+
+      <article class="detail-card">
+
+        <h2>
+          Usage Limits
+        </h2>
+
+
+        <div class="limit-grid">
+
+          <div>
+
+            <strong>
+              {{ plan.maxLocations }}
+            </strong>
+
+            <span>
+              Locations
+            </span>
+
+          </div>
+
+
+          <div>
+
+            <strong>
+              {{ plan.maxMembers }}
+            </strong>
+
+            <span>
+              Members
+            </span>
+
+          </div>
+
+
+          <div>
+
+            <strong>
+              {{ plan.maxStaffUsers ?? '-' }}
+            </strong>
+
+            <span>
+              Staff Users
+            </span>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- PRICING -->
+
+      <article class="detail-card">
+
+        <h2>
+          Pricing
+        </h2>
+
+
+        <div class="price-grid">
+
+          <div>
+
+            <span>
+              Monthly
+            </span>
+
+            <strong>
+
+              {{
+                plan.priceMonthly
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.0-0'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Yearly
+            </span>
+
+            <strong>
+
+              {{
+                plan.priceYearly
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.0-0'
+              }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- SYSTEM -->
+
+      <article class="detail-card">
+
+        <h2>
+          System Information
+        </h2>
+
+
+        <div class="detail-row">
+
+          <span>
+            Created
+          </span>
+
+          <strong>
+
+            {{
+              plan.createdAt
+                | date:
+                  'dd MMM yyyy'
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Updated
+          </span>
+
+          <strong>
+
+            {{
+              plan.updatedAt
+                | date:
+                  'dd MMM yyyy'
+            }}
+
+          </strong>
+
+        </div>
+
+      </article>
+
+    </section>
+
+  </div>
+
+}

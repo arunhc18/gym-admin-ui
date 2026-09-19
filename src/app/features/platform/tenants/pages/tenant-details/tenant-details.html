@@ -1,0 +1,354 @@
+@if (tenant) {
+
+  <div class="tenant-details-page">
+
+
+    <div class="page-actions">
+
+      <button
+        type="button"
+        class="back-link"
+        (click)="goBack()"
+      >
+
+        ← Back to Tenants
+
+      </button>
+
+
+      <div class="action-buttons">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="toggleActive()"
+        >
+
+          {{
+            tenant.isActive
+              ? 'Deactivate'
+              : 'Activate'
+          }}
+
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="editTenant()"
+        >
+
+          Edit Tenant
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <section class="tenant-hero">
+
+      <div class="tenant-avatar">
+
+        {{
+          tenant.tenantName
+            .charAt(0)
+            .toUpperCase()
+        }}
+
+      </div>
+
+
+      <div>
+
+        <div class="tenant-title">
+
+          <h1>
+            {{ tenant.tenantName }}
+          </h1>
+
+
+          <span
+            class="active-badge"
+            [class.inactive]="!tenant.isActive"
+          >
+
+            {{
+              tenant.isActive
+                ? 'Active'
+                : 'Inactive'
+            }}
+
+          </span>
+
+        </div>
+
+
+        <span class="subdomain">
+
+          {{ tenant.subdomain }}.gymerp.com
+
+        </span>
+
+
+        <p>
+
+          {{
+            plan?.planName ??
+            'Subscription plan'
+          }}
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <section class="details-grid">
+
+
+      <article class="detail-card">
+
+        <h2>
+          Organization
+        </h2>
+
+
+        <div class="detail-row">
+
+          <span>
+            Tenant ID
+          </span>
+
+          <strong>
+            {{ tenant.tenantId }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Tenant Name
+          </span>
+
+          <strong>
+            {{ tenant.tenantName }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Subdomain
+          </span>
+
+          <strong>
+            {{ tenant.subdomain }}
+          </strong>
+
+        </div>
+
+      </article>
+
+
+      <article class="detail-card">
+
+        <h2>
+          Subscription
+        </h2>
+
+
+        <div class="detail-row">
+
+          <span>
+            Plan
+          </span>
+
+          <strong>
+            {{ plan?.planName ?? '-' }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Status
+          </span>
+
+          <strong>
+            {{ tenant.subscriptionStatus }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Start Date
+          </span>
+
+          <strong>
+
+            {{
+              tenant.subscriptionStartDate
+                | date:'dd MMM yyyy'
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            End Date
+          </span>
+
+          <strong>
+
+            @if (
+              tenant.subscriptionEndDate
+            ) {
+
+              {{
+                tenant.subscriptionEndDate
+                  | date:'dd MMM yyyy'
+              }}
+
+            } @else {
+
+              -
+
+            }
+
+          </strong>
+
+        </div>
+
+      </article>
+
+
+      <article class="detail-card">
+
+        <h2>
+          Resource Limits
+        </h2>
+
+
+        <div class="limits-grid">
+
+          <div>
+
+            <strong>
+              {{ getEffectiveLocations() }}
+            </strong>
+
+            <span>
+              Locations
+            </span>
+
+          </div>
+
+
+          <div>
+
+            <strong>
+              {{ getEffectiveMembers() }}
+            </strong>
+
+            <span>
+              Members
+            </span>
+
+          </div>
+
+
+          <div>
+
+            <strong>
+              {{ plan?.maxStaffUsers ?? '-' }}
+            </strong>
+
+            <span>
+              Staff Users
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <p class="limit-note">
+
+          {{
+            tenant.maxLocations === null ||
+            tenant.maxLocations === undefined
+              ? 'Using subscription plan limits'
+              : 'Tenant-specific limits are applied'
+          }}
+
+        </p>
+
+      </article>
+
+
+      <article class="detail-card">
+
+        <h2>
+          System Information
+        </h2>
+
+
+        <div class="detail-row">
+
+          <span>
+            Created
+          </span>
+
+          <strong>
+
+            {{
+              tenant.createdAt
+                | date:'dd MMM yyyy'
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            Updated
+          </span>
+
+          <strong>
+
+            {{
+              tenant.updatedAt
+                | date:'dd MMM yyyy'
+            }}
+
+          </strong>
+
+        </div>
+
+      </article>
+
+    </section>
+
+  </div>
+
+}

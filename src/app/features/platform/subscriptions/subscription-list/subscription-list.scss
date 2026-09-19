@@ -1,0 +1,671 @@
+:host {
+  display: block;
+}
+
+
+.subscriptions-page {
+  width: 100%;
+}
+
+
+/* =====================================================
+   PAGE ACTIONS
+===================================================== */
+
+.page-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  margin-bottom: 16px;
+
+}
+
+
+.back-link {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: 0;
+
+  background: transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 13px;
+
+}
+
+
+.back-link:hover {
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.subscriptions-card {
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+/* =====================================================
+   FILTER BAR
+===================================================== */
+
+.filter-bar {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(250px, 1fr)
+    160px
+    160px
+    180px
+    auto;
+
+  gap: 10px;
+
+  padding: 14px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+
+}
+
+
+.search-box {
+
+  display: flex;
+
+  min-height: 40px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding:
+    0 12px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.search-box svg {
+
+  width: 16px;
+
+  height: 16px;
+
+  flex:
+    0 0 16px;
+
+  color:
+    var(--text-muted);
+
+}
+
+
+.search-box input {
+
+  width: 100%;
+
+  border: 0;
+
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-primary);
+
+  font-size: 12px;
+
+}
+
+
+.search-box input::placeholder {
+
+  color:
+    var(--text-muted);
+
+}
+
+
+.filter-bar select {
+
+  min-height: 40px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: 0;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+}
+
+
+.filter-bar select:focus {
+
+  border-color:
+    var(--primary);
+
+}
+
+
+.clear-button {
+
+  min-height: 40px;
+
+  padding:
+    0 14px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+}
+
+
+.clear-button:hover {
+
+  border-color:
+    var(--text-secondary);
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.subscription-row {
+
+  cursor: pointer;
+
+}
+
+
+.tenant-cell {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+
+.tenant-avatar {
+
+  display: grid;
+
+  width: 34px;
+
+  height: 34px;
+
+  flex:
+    0 0 34px;
+
+  place-items: center;
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+  font-weight: 700;
+
+}
+
+
+.tenant-cell strong {
+
+  display: block;
+
+  color:
+    var(--text-primary);
+
+  font-size: 12px;
+
+}
+
+
+.tenant-cell small {
+
+  display: block;
+
+  margin-top: 3px;
+
+  color:
+    var(--text-muted);
+
+  font-size: 9px;
+
+}
+
+
+.plan-name {
+
+  color:
+    var(--text-primary);
+
+  font-size: 12px;
+
+}
+
+
+.billing-badge {
+
+  display: inline-flex;
+
+  padding:
+    4px 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  font-size: 10px;
+
+}
+
+
+.price {
+
+  color:
+    var(--text-primary);
+
+  font-weight: 600;
+
+}
+
+
+.muted {
+
+  color:
+    var(--text-muted);
+
+}
+
+
+/* =====================================================
+   SUBSCRIPTION STATUS
+===================================================== */
+
+.subscription-status {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding:
+    5px 8px;
+
+  border-radius:
+    var(--radius-sm);
+
+  font-size: 10px;
+
+}
+
+
+.status-dot {
+
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+}
+
+
+.subscription-status.active {
+
+  background:
+    rgba(24, 185, 129, .1);
+
+  color:
+    var(--success);
+
+}
+
+
+.subscription-status.active
+.status-dot {
+
+  background:
+    var(--success);
+
+}
+
+
+.subscription-status.trial {
+
+  background:
+    rgba(79, 140, 255, .1);
+
+  color:
+    var(--info);
+
+}
+
+
+.subscription-status.trial
+.status-dot {
+
+  background:
+    var(--info);
+
+}
+
+
+.subscription-status.past-due {
+
+  background:
+    rgba(245, 165, 36, .12);
+
+  color:
+    var(--warning);
+
+}
+
+
+.subscription-status.past-due
+.status-dot {
+
+  background:
+    var(--warning);
+
+}
+
+
+.subscription-status.suspended,
+.subscription-status.cancelled {
+
+  background:
+    rgba(239, 68, 68, .1);
+
+  color:
+    var(--danger);
+
+}
+
+
+.subscription-status.suspended
+.status-dot,
+.subscription-status.cancelled
+.status-dot {
+
+  background:
+    var(--danger);
+
+}
+
+
+.subscription-status.expired {
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+}
+
+
+.subscription-status.expired
+.status-dot {
+
+  background:
+    var(--text-muted);
+
+}
+
+
+/* =====================================================
+   EXPIRY
+===================================================== */
+
+.expiry-badge {
+
+  display: inline-flex;
+
+  padding:
+    4px 7px;
+
+  border-radius:
+    var(--radius-sm);
+
+  font-size: 9px;
+
+}
+
+
+.expiry-badge.normal {
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+}
+
+
+.expiry-badge.warning {
+
+  background:
+    rgba(245, 165, 36, .1);
+
+  color:
+    var(--warning);
+
+}
+
+
+.expiry-badge.critical,
+.expiry-badge.expired {
+
+  background:
+    rgba(239, 68, 68, .1);
+
+  color:
+    var(--danger);
+
+}
+
+
+/* =====================================================
+   ACTION
+===================================================== */
+
+.action-button {
+
+  padding:
+    6px 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 10px;
+
+}
+
+
+.action-button:hover {
+
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-cell {
+
+  padding: 50px !important;
+
+  text-align: center !important;
+
+}
+
+
+.empty-state {
+
+  display: flex;
+
+  align-items: center;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+}
+
+
+.empty-state strong {
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.empty-state span {
+
+  color:
+    var(--text-muted);
+
+  font-size: 11px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .filter-bar {
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .filter-bar {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}

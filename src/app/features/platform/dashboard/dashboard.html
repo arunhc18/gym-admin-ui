@@ -1,0 +1,628 @@
+<div class="platform-dashboard">
+
+
+  <!-- =====================================================
+       PLATFORM OVERVIEW
+  ====================================================== -->
+
+  <section class="overview-banner">
+
+    <div>
+
+      <span class="eyebrow">
+        PLATFORM OVERVIEW
+      </span>
+
+      <h1>
+        Platform Overview
+      </h1>
+
+      <p>
+        Manage GymAdmin tenants, subscriptions
+        and platform operations.
+      </p>
+
+    </div>
+
+
+    <div class="platform-status">
+
+      <span class="status-dot"></span>
+
+      Platform Active
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       METRICS
+  ====================================================== -->
+
+  <section class="metrics-grid">
+
+
+    <!-- TOTAL TENANTS -->
+
+    <button
+      type="button"
+      class="metric-card"
+      (click)="openTenants()"
+    >
+
+      <div class="metric-top">
+
+        <span>
+          Total Tenants
+        </span>
+
+
+        <div class="metric-icon red">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path
+              d="M4 21V5l8-3 8 3v16"
+            ></path>
+
+            <path
+              d="M9 9h1"
+            ></path>
+
+            <path
+              d="M14 9h1"
+            ></path>
+
+            <path
+              d="M9 13h1"
+            ></path>
+
+            <path
+              d="M14 13h1"
+            ></path>
+          </svg>
+
+        </div>
+
+      </div>
+
+
+      <strong class="metric-value">
+
+        {{ totalTenants }}
+
+      </strong>
+
+
+      <small>
+        Registered organizations
+      </small>
+
+    </button>
+
+
+    <!-- ACTIVE TENANTS -->
+
+    <button
+      type="button"
+      class="metric-card"
+      (click)="openActiveTenants()"
+    >
+
+      <div class="metric-top">
+
+        <span>
+          Active Tenants
+        </span>
+
+
+        <div class="metric-icon green">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+            ></circle>
+
+            <path
+              d="m8.5 12 2.2 2.2 4.8-5"
+            ></path>
+          </svg>
+
+        </div>
+
+      </div>
+
+
+      <strong class="metric-value">
+
+        {{ activeTenants }}
+
+      </strong>
+
+
+      <small>
+        Currently active subscriptions
+      </small>
+
+    </button>
+
+
+    <!-- SUBSCRIPTION PLANS -->
+
+    <button
+      type="button"
+      class="metric-card"
+      (click)="openSubscriptionPlans()"
+    >
+
+      <div class="metric-top">
+
+        <span>
+          Subscription Plans
+        </span>
+
+
+        <div class="metric-icon blue">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect
+              x="3"
+              y="5"
+              width="18"
+              height="14"
+              rx="2"
+            ></rect>
+
+            <path
+              d="M3 10h18"
+            ></path>
+          </svg>
+
+        </div>
+
+      </div>
+
+
+      <strong class="metric-value">
+
+        {{ totalPlans }}
+
+      </strong>
+
+
+      <small>
+        Available SaaS plans
+      </small>
+
+    </button>
+
+
+    <!-- MONTHLY REVENUE -->
+
+    <button
+      type="button"
+      class="metric-card"
+      (click)="openSubscriptions()"
+    >
+
+      <div class="metric-top">
+
+        <span>
+          Monthly Revenue
+        </span>
+
+
+        <div class="metric-icon yellow">
+
+          <span class="rupee">
+            ₹
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <strong class="metric-value">
+
+        {{
+          monthlyRevenue
+            | currency:
+              'INR':
+              'symbol':
+              '1.0-0'
+        }}
+
+      </strong>
+
+
+      <small>
+        Estimated recurring revenue
+      </small>
+
+    </button>
+
+  </section>
+
+
+  <!-- =====================================================
+       LOWER GRID
+  ====================================================== -->
+
+  <section class="dashboard-grid">
+
+
+    <!-- =================================================
+         RECENT TENANTS
+    ================================================== -->
+
+    <article class="dashboard-card recent-tenants-card">
+
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="section-icon">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                d="M4 21V5l8-3 8 3v16"
+              ></path>
+
+              <path
+                d="M9 9h1"
+              ></path>
+
+              <path
+                d="M14 9h1"
+              ></path>
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Recent Tenants
+            </h2>
+
+            <p>
+              Recently registered gym organizations
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="text-button"
+          (click)="openTenants()"
+        >
+
+          View All
+
+        </button>
+
+      </div>
+
+
+      @if (
+        recentTenants.length > 0
+      ) {
+
+        <div class="tenant-list">
+
+          @for (
+            tenant of recentTenants;
+            track tenant.tenantId
+          ) {
+
+            <button
+              type="button"
+              class="tenant-row"
+              (click)="openTenant(tenant)"
+            >
+
+              <div class="tenant-main">
+
+                <div class="tenant-avatar">
+
+                  {{
+                    tenant.tenantName
+                      .charAt(0)
+                      .toUpperCase()
+                  }}
+
+                </div>
+
+
+                <div class="tenant-info">
+
+                  <strong>
+
+                    {{ tenant.tenantName }}
+
+                  </strong>
+
+
+                  <span>
+
+                    {{ tenant.subdomain }}.gymerp.com
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <div class="tenant-plan">
+
+                <span>
+                  Plan
+                </span>
+
+                <strong>
+
+                  {{
+                    getPlanName(
+                      tenant.subscriptionPlanId
+                    )
+                  }}
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span
+                  class="subscription-status"
+                  [ngClass]="
+                    getStatusClass(
+                      tenant.subscriptionStatus
+                    )
+                  "
+                >
+
+                  <span
+                    class="mini-dot"
+                  ></span>
+
+                  {{
+                    getStatusLabel(
+                      tenant.subscriptionStatus
+                    )
+                  }}
+
+                </span>
+
+              </div>
+
+
+              <div class="tenant-date">
+
+                {{
+                  tenant.createdAt
+                    | date:
+                      'dd MMM yyyy'
+                }}
+
+              </div>
+
+            </button>
+
+          }
+
+        </div>
+
+      } @else {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            +
+          </div>
+
+          <h3>
+            No tenants yet
+          </h3>
+
+          <p>
+            Create your first tenant organization.
+          </p>
+
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openTenants()"
+          >
+
+            Manage Tenants
+
+          </button>
+
+        </div>
+
+      }
+
+    </article>
+
+
+    <!-- =================================================
+         SUBSCRIPTION OVERVIEW
+    ================================================== -->
+
+    <article class="dashboard-card">
+
+
+      <div class="card-header">
+
+        <div class="card-heading">
+
+          <div class="section-icon teal">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path
+                d="M4 19V9"
+              ></path>
+
+              <path
+                d="M10 19V5"
+              ></path>
+
+              <path
+                d="M16 19v-7"
+              ></path>
+
+              <path
+                d="M22 19V2"
+              ></path>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              Subscription Overview
+            </h2>
+
+            <p>
+              Current tenant plan distribution
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="text-button"
+          (click)="openSubscriptionPlans()"
+        >
+
+          Manage Plans
+
+        </button>
+
+      </div>
+
+
+      @if (
+        planOverview.length > 0
+      ) {
+
+        <div class="plan-overview-list">
+
+          @for (
+            item of planOverview;
+            track item.plan.subscriptionPlanId
+          ) {
+
+            <div class="plan-overview-item">
+
+              <div class="plan-overview-header">
+
+                <div>
+
+                  <strong>
+
+                    {{ item.plan.planName }}
+
+                  </strong>
+
+                  <span>
+
+                    {{ item.tenantCount }}
+                    {{
+                      item.tenantCount === 1
+                        ? 'tenant'
+                        : 'tenants'
+                    }}
+
+                  </span>
+
+                </div>
+
+
+                <strong class="percentage">
+
+                  {{ item.percentage }}%
+
+                </strong>
+
+              </div>
+
+
+              <div class="progress-track">
+
+                <div
+                  class="progress-value"
+                  [style.width.%]="
+                    item.percentage
+                  "
+                ></div>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      } @else {
+
+        <div class="empty-state compact">
+
+          <p>
+            No tenant subscriptions available.
+          </p>
+
+        </div>
+
+      }
+
+    </article>
+
+  </section>
+
+</div>

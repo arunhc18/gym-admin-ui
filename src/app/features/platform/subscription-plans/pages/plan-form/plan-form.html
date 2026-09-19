@@ -1,0 +1,584 @@
+<form
+  class="plan-form-page"
+  [formGroup]="planForm"
+  (ngSubmit)="onSubmit()"
+  novalidate
+>
+
+
+  <!-- ACTIONS -->
+
+  <div class="page-actions">
+
+    <a
+      class="back-link"
+      routerLink="/platform/subscription-plans"
+    >
+
+      ←
+
+      Back to Subscription Plans
+
+    </a>
+
+
+    <div class="action-buttons">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        routerLink="/platform/subscription-plans"
+      >
+
+        Cancel
+
+      </button>
+
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="planForm.invalid || isSubmitting"
+      >
+
+        {{
+          isEditMode
+            ? 'Save Changes'
+            : 'Create Plan'
+        }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- PLAN INFORMATION -->
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Plan Information
+      </h2>
+
+      <p>
+        Basic information used to identify the subscription plan.
+      </p>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="planCode">
+
+          Plan Code
+          <span class="required">*</span>
+
+        </label>
+
+
+        <input
+          class="form-control"
+          id="planCode"
+          type="text"
+          formControlName="planCode"
+          placeholder="Example: GROWTH"
+          (input)="onPlanCodeInput()"
+          [class.invalid]="isInvalid('planCode')"
+          [attr.aria-invalid]="isInvalid('planCode')"
+          aria-describedby="planCode-error"
+        />
+
+
+        @if (
+          hasError(
+            'planCode',
+            'required'
+          )
+        ) {
+
+          <span class="form-error">
+            Plan code is required.
+          </span>
+
+        }
+
+
+        @if (
+          hasError(
+            'planCode',
+            'pattern'
+          )
+        ) {
+
+          <span id="planCode-error" class="form-error">
+            Only letters, numbers, hyphens and underscores are allowed.
+          </span>
+
+        }
+
+        @if (hasError('planCode', 'minlength')) {
+          <span id="planCode-error" class="form-error">Plan code must contain at least 2 characters.</span>
+        }
+
+        @if (hasError('planCode', 'maxlength')) {
+          <span id="planCode-error" class="form-error">Plan code cannot exceed 50 characters.</span>
+        }
+
+        @if (hasError('planCode', 'noLetterOrNumber')) {
+          <span id="planCode-error" class="form-error">Plan code must contain at least one letter or number.</span>
+        }
+
+
+        @if (
+          hasError(
+            'planCode',
+            'duplicate'
+          )
+        ) {
+
+          <span class="form-error">
+            This plan code already exists.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="planName">
+
+          Plan Name
+          <span class="required">*</span>
+
+        </label>
+
+
+        <input
+          class="form-control"
+          id="planName"
+          type="text"
+          formControlName="planName"
+          placeholder="Example: Growth"
+          [class.invalid]="isInvalid('planName')"
+          [attr.aria-invalid]="isInvalid('planName')"
+          aria-describedby="planName-error"
+        />
+
+
+        @if (
+          hasError(
+            'planName',
+            'required'
+          )
+        ) {
+
+          <span class="form-error">
+            Plan name is required.
+          </span>
+
+        }
+
+        @if (hasError('planName', 'minlength')) {
+          <span id="planName-error" class="form-error">Plan name must contain at least 2 characters.</span>
+        }
+
+        @if (hasError('planName', 'maxlength')) {
+          <span id="planName-error" class="form-error">Plan name cannot exceed 100 characters.</span>
+        }
+
+        @if (hasError('planName', 'noLetter')) {
+          <span id="planName-error" class="form-error">Plan name must contain at least one alphabetic character.</span>
+        }
+
+      </div>
+
+
+      <div class="
+        form-group
+        full-width
+      ">
+
+        <label class="form-label" for="description">
+
+          Description
+
+        </label>
+
+
+        <textarea
+          class="form-control"
+          id="description"
+          rows="4"
+          formControlName="description"
+          placeholder="Describe this subscription plan..."
+          [class.invalid]="isInvalid('description')"
+          [attr.aria-invalid]="isInvalid('description')"
+          aria-describedby="description-error"
+        >
+        </textarea>
+
+
+        @if (
+          hasError(
+            'description',
+            'maxlength'
+          )
+        ) {
+
+          <span class="form-error">
+            Maximum 500 characters allowed.
+          </span>
+
+        }
+
+        <small class="character-count">
+          {{ (planForm.controls['description'].value || '').length }} / 500
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- USAGE LIMITS -->
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Usage Limits
+      </h2>
+
+      <p>
+        Define the resources available to tenants using this plan.
+      </p>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="maxLocations">
+
+          Maximum Locations
+          <span class="required">*</span>
+
+        </label>
+
+        <input
+          class="form-control"
+          id="maxLocations"
+          type="number"
+          min="1"
+          formControlName="maxLocations"
+          [class.invalid]="isInvalid('maxLocations')"
+          [attr.aria-invalid]="isInvalid('maxLocations')"
+          aria-describedby="maxLocations-error"
+        />
+
+        @if (hasError('maxLocations', 'min')) {
+          <span id="maxLocations-error" class="form-error">Maximum locations must be at least 1.</span>
+        } @else if (hasError('maxLocations', 'wholeNumber') || hasError('maxLocations', 'max')) {
+          <span id="maxLocations-error" class="form-error">Enter a valid whole number.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="maxMembers">
+
+          Maximum Members
+          <span class="required">*</span>
+
+        </label>
+
+        <input
+          class="form-control"
+          id="maxMembers"
+          type="number"
+          min="1"
+          formControlName="maxMembers"
+          [class.invalid]="isInvalid('maxMembers')"
+          [attr.aria-invalid]="isInvalid('maxMembers')"
+          aria-describedby="maxMembers-error"
+        />
+
+        @if (hasError('maxMembers', 'min')) {
+          <span id="maxMembers-error" class="form-error">Maximum members must be at least 1.</span>
+        } @else if (hasError('maxMembers', 'wholeNumber') || hasError('maxMembers', 'max')) {
+          <span id="maxMembers-error" class="form-error">Enter a valid whole number.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="maxStaffUsers">
+
+          Maximum Staff Users
+
+        </label>
+
+        <input
+          class="form-control"
+          id="maxStaffUsers"
+          type="number"
+          min="1"
+          formControlName="maxStaffUsers"
+          [class.invalid]="isInvalid('maxStaffUsers')"
+          [attr.aria-invalid]="isInvalid('maxStaffUsers')"
+          aria-describedby="maxStaffUsers-error"
+        />
+
+        @if (hasError('maxStaffUsers', 'min')) {
+          <span id="maxStaffUsers-error" class="form-error">Maximum staff users must be at least 1.</span>
+        } @else if (hasError('maxStaffUsers', 'wholeNumber') || hasError('maxStaffUsers', 'max')) {
+          <span id="maxStaffUsers-error" class="form-error">Enter a valid whole number.</span>
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PRICING -->
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Pricing
+      </h2>
+
+      <p>
+        Configure plan pricing and preferred billing cycle.
+      </p>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="priceMonthly">
+
+          Monthly Price
+
+        </label>
+
+        <div class="currency-input">
+
+          <span>
+            ₹
+          </span>
+
+          <input
+            class="form-control"
+            id="priceMonthly"
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="priceMonthly"
+            [class.invalid]="isInvalid('priceMonthly')"
+            [attr.aria-invalid]="isInvalid('priceMonthly')"
+            aria-describedby="priceMonthly-error"
+          />
+
+        </div>
+
+        @if (hasError('priceMonthly', 'min') || hasError('priceMonthly', 'decimalPlaces')) {
+          <span id="priceMonthly-error" class="form-error">Enter a valid amount with up to 2 decimal places.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="priceYearly">
+
+          Yearly Price
+
+        </label>
+
+        <div class="currency-input">
+
+          <span>
+            ₹
+          </span>
+
+          <input
+            class="form-control"
+            id="priceYearly"
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="priceYearly"
+            [class.invalid]="isInvalid('priceYearly')"
+            [attr.aria-invalid]="isInvalid('priceYearly')"
+            aria-describedby="priceYearly-error"
+          />
+
+        </div>
+
+        @if (hasError('priceYearly', 'min') || hasError('priceYearly', 'decimalPlaces')) {
+          <span id="priceYearly-error" class="form-error">Enter a valid amount with up to 2 decimal places.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="billingCycle">
+
+          Billing Cycle
+          <span class="required">*</span>
+
+        </label>
+
+
+        <select
+          class="form-control"
+          id="billingCycle"
+          formControlName="billingCycle"
+          [class.invalid]="isInvalid('billingCycle')"
+          [attr.aria-invalid]="isInvalid('billingCycle')"
+          aria-describedby="billingCycle-error"
+        >
+
+          <option value="monthly">
+            Monthly
+          </option>
+
+          <option value="yearly">
+            Yearly
+          </option>
+
+          <option value="lifetime">
+            Lifetime
+          </option>
+
+        </select>
+
+        @if (hasError('billingCycle', 'allowedValue')) {
+          <span id="billingCycle-error" class="form-error">Select a valid billing cycle.</span>
+        }
+
+        @if (formHasError('monthlyPriceRequired')) {
+          <span class="form-error">Monthly price is required for monthly billing.</span>
+        }
+
+        @if (formHasError('yearlyPriceRequired')) {
+          <span class="form-error">Yearly price is required for yearly billing.</span>
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DISPLAY -->
+
+  <section class="form-card">
+
+    <div class="section-header">
+
+      <h2>
+        Display & Status
+      </h2>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label class="form-label" for="displayOrder">
+
+          Display Order
+
+        </label>
+
+        <input
+          class="form-control"
+          id="displayOrder"
+          type="number"
+          min="0"
+          formControlName="displayOrder"
+          [class.invalid]="isInvalid('displayOrder')"
+          [attr.aria-invalid]="isInvalid('displayOrder')"
+          aria-describedby="displayOrder-error"
+        />
+
+        @if (hasError('displayOrder', 'min')) {
+          <span id="displayOrder-error" class="form-error">Display order cannot be negative.</span>
+        } @else if (hasError('displayOrder', 'wholeNumber') || hasError('displayOrder', 'max')) {
+          <span id="displayOrder-error" class="form-error">Enter a valid whole number.</span>
+        }
+
+      </div>
+
+
+      <div class="
+        form-group
+        status-control
+      ">
+
+        <label class="toggle-row">
+
+          <input
+            type="checkbox"
+            formControlName="isActive"
+          />
+
+          <span>
+
+            Active Plan
+
+          </span>
+
+        </label>
+
+
+        <small>
+
+          Active plans can be assigned to new tenants.
+
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</form>
