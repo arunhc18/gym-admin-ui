@@ -1,81 +1,313 @@
-<form class="staff-form-page" [formGroup]="staffForm" (ngSubmit)="saveStaff()" novalidate>
+<form
+  class="staff-form-page"
+  [formGroup]="staffForm"
+  (ngSubmit)="saveStaff()"
+  novalidate
+>
   <div class="page-actions">
-    <a class="back-link" routerLink="/staff" aria-label="Back to staff">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+
+    <a
+      class="back-link"
+      routerLink="/staff"
+      aria-label="Back to staff"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+
       <span>Back to Staff</span>
     </a>
+
     <div class="action-buttons">
-      <button class="btn btn-secondary" type="button" routerLink="/staff">Cancel</button>
-      <button class="btn btn-primary" type="submit" [disabled]="!canSave">{{ isEditMode ? 'Save Changes' : 'Save Staff' }}</button>
+
+      <button
+        class="btn btn-secondary"
+        type="button"
+        routerLink="/staff"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="!canSave"
+      >
+        {{ isEditMode ? 'Save Changes' : 'Save Staff' }}
+      </button>
+
     </div>
   </div>
 
   <section class="form-card">
+
     <div class="section-header">
-      <h2>{{ isEditMode ? 'Edit Staff Member' : 'New Staff Member' }}</h2>
-      <span>{{ isEditMode ? 'Update this staff member\'s details' : 'Add a trainer or staff member to your gym' }}</span>
+
+      <h2>
+        {{ isEditMode ? 'Edit Staff Member' : 'Add Staff Member' }}
+      </h2>
+
+      <span>
+        {{
+          isEditMode
+            ? "Update this staff member's details"
+            : 'Add a trainer or staff member to your gym'
+        }}
+      </span>
+
     </div>
+
     <div class="form-grid">
+
+      <!-- FIRST NAME -->
       <div class="form-group">
-        <label for="firstName">First name <span class="required">*</span></label>
-        <input id="firstName" type="text" formControlName="firstName" placeholder="Enter first name" />
-        @if (hasError('firstName')) { <span class="validation-error">Enter a name between 2 and 60 characters.</span> }
+
+        <label for="firstName">
+          First name
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="Enter first name"
+        />
+
+        @if (hasError('firstName')) {
+          <span class="validation-error">
+            Enter a name between 2 and 60 characters.
+          </span>
+        }
+
       </div>
 
+      <!-- LAST NAME -->
       <div class="form-group">
-        <label for="lastName">Last name <span class="required">*</span></label>
-        <input id="lastName" type="text" formControlName="lastName" placeholder="Enter last name" />
-        @if (hasError('lastName')) { <span class="validation-error">Enter a name between 2 and 60 characters.</span> }
+
+        <label for="lastName">
+          Last name
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="Enter last name"
+        />
+
+        @if (hasError('lastName')) {
+          <span class="validation-error">
+            Enter a name between 2 and 60 characters.
+          </span>
+        }
+
       </div>
 
+      <!-- PHONE -->
       <div class="form-group">
-        <label for="phone">Phone <span class="required">*</span></label>
-        <input id="phone" type="tel" formControlName="phone" placeholder="Enter phone number" />
-        @if (hasError('phone')) { <span class="validation-error">Enter a valid phone number with 10 to 15 digits.</span> }
+
+        <label for="phone">
+          Phone
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          placeholder="Enter phone number"
+        />
+
+        @if (hasError('phone')) {
+          <span class="validation-error">
+            Enter a valid phone number with 10 to 15 digits.
+          </span>
+        }
+
       </div>
 
+      <!-- EMAIL -->
       <div class="form-group">
-        <label for="email">Email <span class="required">*</span></label>
-        <input id="email" type="email" formControlName="email" placeholder="Enter email address" />
-        @if (hasError('email')) { <span class="validation-error">Enter a valid email address.</span> }
+
+        <label for="email">
+          Email
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter email address"
+        />
+
+        @if (hasError('email')) {
+          <span class="validation-error">
+            Enter a valid email address.
+          </span>
+        }
+
       </div>
 
+      <!-- ROLE -->
       <div class="form-group">
-        <label for="role">Role <span class="required">*</span></label>
-        <select id="role" formControlName="role">
-          @for (role of roles; track role) { <option [value]="role">{{ role }}</option> }
+
+        <label for="role">
+          Role
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="role"
+          formControlName="role"
+        >
+          <option
+            value=""
+            disabled
+          >
+            Select role
+          </option>
+
+          @for (role of roles; track role) {
+            <option [value]="role">
+              {{ role }}
+            </option>
+          }
         </select>
+
+        @if (hasError('role')) {
+          <span class="validation-error">
+            Select a role.
+          </span>
+        }
+
       </div>
 
+      <!-- SPECIALIZATION -->
       <div class="form-group">
-        <label for="specialization">Specialization</label>
-        <input id="specialization" type="text" formControlName="specialization" placeholder="e.g. Strength & Conditioning" />
+
+        <label for="specialization">
+          Specialization
+        </label>
+
+        <input
+          id="specialization"
+          type="text"
+          formControlName="specialization"
+          placeholder="e.g. Strength & Conditioning"
+        />
+
       </div>
 
+      <!-- LOCATION -->
       <div class="form-group">
-        <label for="location">Location <span class="required">*</span></label>
-        <input id="location" type="text" formControlName="location" placeholder="Branch or location" />
-        @if (hasError('location')) { <span class="validation-error">Enter a location.</span> }
+
+        <label for="location">
+          Location
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="location"
+          type="text"
+          formControlName="location"
+          placeholder="Branch or location"
+        />
+
+        @if (hasError('location')) {
+          <span class="validation-error">
+            Enter a location.
+          </span>
+        }
+
       </div>
 
+      <!-- JOINED DATE -->
       <div class="form-group">
-        <label for="joinedDate">Joined date <span class="required">*</span></label>
+
+        <label for="joinedDate">
+          Joined date
+          <span class="required">*</span>
+        </label>
+
         <div class="picker-field">
-          <input id="joinedDate" type="date" formControlName="joinedDate" (click)="$any($event.currentTarget).showPicker?.()" />
+
+          <input
+            id="joinedDate"
+            type="date"
+            formControlName="joinedDate"
+            (click)="$any($event.currentTarget).showPicker?.()"
+          />
+
         </div>
+
+        @if (hasError('joinedDate')) {
+          <span class="validation-error">
+            Select the joined date.
+          </span>
+        }
+
       </div>
 
+      <!-- STATUS -->
       <div class="form-group">
-        <label for="status">Status <span class="required">*</span></label>
-        <select id="status" formControlName="status">
-          @for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }
+
+        <label for="status">
+          Status
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="status"
+          formControlName="status"
+        >
+          <option
+            value=""
+            disabled
+          >
+            Select status
+          </option>
+
+          @for (status of statuses; track status) {
+            <option [value]="status">
+              {{ status }}
+            </option>
+          }
         </select>
+
+        @if (hasError('status')) {
+          <span class="validation-error">
+            Select a status.
+          </span>
+        }
+
       </div>
 
+      <!-- SALARY -->
       <div class="form-group">
-        <label for="salary">Salary (₹ / month)</label>
-        <input id="salary" type="number" min="0" step="500" formControlName="salary" placeholder="Optional" />
+
+        <label for="salary">
+          Salary (₹ / month)
+        </label>
+
+        <input
+          id="salary"
+          type="number"
+          min="0"
+          step="500"
+          formControlName="salary"
+          placeholder="Optional"
+        />
+
       </div>
+
     </div>
+
   </section>
+
 </form>
