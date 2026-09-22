@@ -242,42 +242,22 @@ export class PlatformDashboardComponent
 
       }
 
-
-      // MONTHLY PLAN
-
-      if (
-        plan.billingCycle ===
-          'monthly'
-      ) {
-
-        total +=
-          plan.priceMonthly ??
-          0;
-
+      switch (tenant.subscriptionBillingCycle) {
+        case 'monthly':
+          total += plan.priceMonthly ?? 0;
+          break;
+        case 'quarterly':
+          total += (plan.priceQuarterly ?? 0) / 3;
+          break;
+        case 'half_yearly':
+          total += (plan.priceHalfYearly ?? 0) / 6;
+          break;
+        case 'annual':
+          total += (plan.priceAnnual ?? 0) / 12;
+          break;
+        default:
+          break;
       }
-
-
-      // YEARLY PLAN
-      // Convert annual price to estimated monthly revenue.
-
-      else if (
-        plan.billingCycle ===
-          'yearly'
-      ) {
-
-        total +=
-          (
-            plan.priceYearly ??
-            0
-          ) / 12;
-
-      }
-
-
-      // LIFETIME
-      // Current DB does not have price_lifetime,
-      // therefore lifetime revenue is not included
-      // in monthly recurring revenue.
 
     }
 
@@ -295,68 +275,37 @@ export class PlatformDashboardComponent
 
   private calculatePlanOverview(): void {
 
-    if (
-      this.tenants.length === 0
-    ) {
+    const billingPeriods = ['monthly', 'quarterly', 'half_yearly', 'annual'];
 
-      this.planOverview = [];
+    this.planOverview = billingPeriods.map(period => {
+      const tenantCount = this.tenants.filter(
+        tenant => tenant.subscriptionBillingCycle === period
+      ).length;
 
-      return;
+      const percentage = this.totalTenants === 0
+        ? 0
+        : Math.round((tenantCount / this.totalTenants) * 100);
 
-    }
-
-
-    this.planOverview =
-      this.plans
-
-        .map(
-          plan => {
-
-            const tenantCount =
-              this.tenants.filter(
-                tenant =>
-                  tenant.subscriptionPlanId ===
-                    plan.subscriptionPlanId
-              ).length;
-
-
-            const percentage =
-
-              this.totalTenants === 0
-
-                ? 0
-
-                : Math.round(
-                    (
-                      tenantCount /
-                      this.totalTenants
-                    ) * 100
-                  );
-
-
-            return {
-
-              plan,
-
-              tenantCount,
-
-              percentage
-
-            };
-
-          }
-        )
-
-        .filter(
-          item =>
-            item.tenantCount > 0
-        )
-
-        .sort(
-          (a, b) =>
-            b.tenantCount -
-            a.tenantCount
-        );
+      return {
+        plan: {
+          subscriptionPlanId: 0,
+          planCode: 'GYMADMIN',
+          planName: period === 'monthly'
+            ? 'Monthly'
+            : period === 'quarterly'
+              ? 'Quarterly'
+              : period === 'half_yearly'
+                ? 'Half Yearly'
+                : 'Annual',
+          maxLocations: 0,
+          maxMembers: 0,
+          isActive: true,
+          displayOrder: 0,
+        },
+        tenantCount,
+        percentage
+      };
+    }).filter(item => item.tenantCount > 0).sort((a, b) => b.tenantCount - a.tenantCount);
 
   }
 
@@ -483,7 +432,7 @@ export class PlatformDashboardComponent
   openSubscriptions(): void {
 
     this.router.navigate([
-      '/platform/subscriptions'
+      '/platform/subscription-plans'
     ]);
 
   }

@@ -319,7 +319,7 @@
 
                   {{
                     getBillingLabel(
-                      item.plan
+                      item.tenant
                     )
                   }}
 
@@ -334,6 +334,7 @@
 
                 @if (
                   getSubscriptionPrice(
+                    item.tenant,
                     item.plan
                   ) !== null
                 ) {
@@ -342,6 +343,7 @@
 
                     {{
                       getSubscriptionPrice(
+                        item.tenant,
                         item.plan
                       )
                         | currency:

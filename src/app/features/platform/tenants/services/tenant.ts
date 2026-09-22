@@ -28,7 +28,9 @@ export class TenantService {
 
         subdomain: 'powerfit',
 
-        subscriptionPlanId: 2,
+        subscriptionPlanId: 1,
+
+        subscriptionBillingCycle: 'quarterly',
 
         subscriptionStatus: 'active',
 
@@ -36,7 +38,7 @@ export class TenantService {
           '2026-09-01',
 
         subscriptionEndDate:
-          '2027-09-01',
+          '2026-12-01',
 
         maxLocations: null,
 
@@ -61,13 +63,15 @@ export class TenantService {
 
         subscriptionPlanId: 1,
 
+        subscriptionBillingCycle: 'monthly',
+
         subscriptionStatus: 'active',
 
         subscriptionStartDate:
           '2026-09-05',
 
         subscriptionEndDate:
-          '2027-09-05',
+          '2026-10-05',
 
         maxLocations: null,
 
@@ -90,7 +94,9 @@ export class TenantService {
 
         subdomain: 'fitzone',
 
-        subscriptionPlanId: 3,
+        subscriptionPlanId: 1,
+
+        subscriptionBillingCycle: 'annual',
 
         subscriptionStatus: 'trial',
 
@@ -98,7 +104,7 @@ export class TenantService {
           '2026-09-10',
 
         subscriptionEndDate:
-          '2026-10-10',
+          '2027-09-10',
 
         maxLocations: 12,
 

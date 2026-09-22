@@ -89,7 +89,7 @@
           id="planCode"
           type="text"
           formControlName="planCode"
-          placeholder="Example: GROWTH"
+          placeholder="Example: GYMADMIN"
           (input)="onPlanCodeInput()"
           [class.invalid]="isInvalid('planCode')"
           [attr.aria-invalid]="isInvalid('planCode')"
@@ -168,7 +168,7 @@
           id="planName"
           type="text"
           formControlName="planName"
-          placeholder="Example: Growth"
+          placeholder="Example: GymAdmin Plan"
           [class.invalid]="isInvalid('planName')"
           [attr.aria-invalid]="isInvalid('planName')"
           aria-describedby="planName-error"
@@ -373,7 +373,7 @@
       </h2>
 
       <p>
-        Configure plan pricing and preferred billing cycle.
+        Configure pricing for all billing periods on the single SaaS plan.
       </p>
 
     </div>
@@ -419,9 +419,10 @@
 
       <div class="form-group">
 
-        <label class="form-label" for="priceYearly">
+        <label class="form-label" for="priceQuarterly">
 
-          Yearly Price
+          Quarterly Price
+          <span class="required">*</span>
 
         </label>
 
@@ -433,20 +434,20 @@
 
           <input
             class="form-control"
-            id="priceYearly"
+            id="priceQuarterly"
             type="number"
             min="0"
             step="0.01"
-            formControlName="priceYearly"
-            [class.invalid]="isInvalid('priceYearly')"
-            [attr.aria-invalid]="isInvalid('priceYearly')"
-            aria-describedby="priceYearly-error"
+            formControlName="priceQuarterly"
+            [class.invalid]="isInvalid('priceQuarterly')"
+            [attr.aria-invalid]="isInvalid('priceQuarterly')"
+            aria-describedby="priceQuarterly-error"
           />
 
         </div>
 
-        @if (hasError('priceYearly', 'min') || hasError('priceYearly', 'decimalPlaces')) {
-          <span id="priceYearly-error" class="form-error">Enter a valid amount with up to 2 decimal places.</span>
+        @if (hasError('priceQuarterly', 'required') || hasError('priceQuarterly', 'min') || hasError('priceQuarterly', 'decimalPlaces')) {
+          <span id="priceQuarterly-error" class="form-error">Enter a valid amount with up to 2 decimal places.</span>
         }
 
       </div>
@@ -454,47 +455,71 @@
 
       <div class="form-group">
 
-        <label class="form-label" for="billingCycle">
+        <label class="form-label" for="priceHalfYearly">
 
-          Billing Cycle
+          Half Yearly Price
           <span class="required">*</span>
 
         </label>
 
+        <div class="currency-input">
 
-        <select
-          class="form-control"
-          id="billingCycle"
-          formControlName="billingCycle"
-          [class.invalid]="isInvalid('billingCycle')"
-          [attr.aria-invalid]="isInvalid('billingCycle')"
-          aria-describedby="billingCycle-error"
-        >
+          <span>
+            ₹
+          </span>
 
-          <option value="monthly">
-            Monthly
-          </option>
+          <input
+            class="form-control"
+            id="priceHalfYearly"
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="priceHalfYearly"
+            [class.invalid]="isInvalid('priceHalfYearly')"
+            [attr.aria-invalid]="isInvalid('priceHalfYearly')"
+            aria-describedby="priceHalfYearly-error"
+          />
 
-          <option value="yearly">
-            Yearly
-          </option>
+        </div>
 
-          <option value="lifetime">
-            Lifetime
-          </option>
-
-        </select>
-
-        @if (hasError('billingCycle', 'allowedValue')) {
-          <span id="billingCycle-error" class="form-error">Select a valid billing cycle.</span>
+        @if (hasError('priceHalfYearly', 'required') || hasError('priceHalfYearly', 'min') || hasError('priceHalfYearly', 'decimalPlaces')) {
+          <span id="priceHalfYearly-error" class="form-error">Enter a valid amount with up to 2 decimal places.</span>
         }
 
-        @if (formHasError('monthlyPriceRequired')) {
-          <span class="form-error">Monthly price is required for monthly billing.</span>
-        }
+      </div>
 
-        @if (formHasError('yearlyPriceRequired')) {
-          <span class="form-error">Yearly price is required for yearly billing.</span>
+
+      <div class="form-group">
+
+        <label class="form-label" for="priceAnnual">
+
+          Annual Price
+          <span class="required">*</span>
+
+        </label>
+
+        <div class="currency-input">
+
+          <span>
+            ₹
+          </span>
+
+          <input
+            class="form-control"
+            id="priceAnnual"
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="priceAnnual"
+            [class.invalid]="isInvalid('priceAnnual')"
+            [attr.aria-invalid]="isInvalid('priceAnnual')"
+            aria-describedby="priceAnnual-error"
+          />
+
+        </div>
+
+        @if (hasError('priceAnnual', 'required') || hasError('priceAnnual', 'min') || hasError('priceAnnual', 'decimalPlaces')) {
+          <span id="priceAnnual-error" class="form-error">Enter a valid amount with up to 2 decimal places.</span>
         }
 
       </div>

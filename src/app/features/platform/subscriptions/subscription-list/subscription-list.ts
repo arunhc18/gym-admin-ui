@@ -524,6 +524,7 @@ export class SubscriptionListComponent
   // =====================================================
 
   getSubscriptionPrice(
+    tenant: Tenant,
     plan?: SubscriptionPlan
   ): number | null {
 
@@ -533,53 +534,29 @@ export class SubscriptionListComponent
 
     }
 
-
-    if (
-      plan.billingCycle ===
-        'monthly'
-    ) {
-
-      return (
-        plan.priceMonthly ??
-        null
-      );
-
+    switch (tenant.subscriptionBillingCycle) {
+      case 'monthly':
+        return plan.priceMonthly ?? null;
+      case 'quarterly':
+        return plan.priceQuarterly ?? null;
+      case 'half_yearly':
+        return plan.priceHalfYearly ?? null;
+      case 'annual':
+        return plan.priceAnnual ?? null;
+      default:
+        return null;
     }
-
-
-    if (
-      plan.billingCycle ===
-        'yearly'
-    ) {
-
-      return (
-        plan.priceYearly ??
-        null
-      );
-
-    }
-
-
-    return null;
 
   }
 
 
   getBillingLabel(
-    plan?: SubscriptionPlan
+    tenant: Tenant
   ): string {
 
-    if (!plan) {
-
-      return '-';
-
-    }
-
-
-    return plan.billingCycle
-      .charAt(0)
-      .toUpperCase() +
-      plan.billingCycle.slice(1);
+    return tenant.subscriptionBillingCycle
+      .replace('_', ' ')
+      .replace(/\b\w/g, value => value.toUpperCase());
 
   }
 

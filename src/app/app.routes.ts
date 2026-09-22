@@ -230,33 +230,6 @@ export const routes: Routes = [
       },
 
 
-      // =================================================
-      // SUBSCRIPTIONS
-      // TEMPORARY PLACEHOLDER
-      //
-      // We are keeping this because you wanted
-      // Subscriptions in the Platform sidebar.
-      //
-      // Later this will get its own component.
-      // =================================================
-
-      {
-  path: 'subscriptions',
-
-  loadComponent: () =>
-    import(
-      './features/platform/subscriptions/subscription-list/subscription-list'
-    ).then(
-      m => m.SubscriptionListComponent
-    ),
-
-  data: {
-    title: 'Subscriptions',
-    description:
-      'Manage tenant subscriptions, renewals and plan assignments'
-  }
-},
-
 
       // =================================================
       // PLATFORM SETTINGS

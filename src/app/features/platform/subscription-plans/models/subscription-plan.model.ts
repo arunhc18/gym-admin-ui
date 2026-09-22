@@ -1,7 +1,8 @@
-export type BillingCycle =
+export type SubscriptionBillingPeriod =
   | 'monthly'
-  | 'yearly'
-  | 'lifetime';
+  | 'quarterly'
+  | 'half_yearly'
+  | 'annual';
 
 
 export interface SubscriptionPlan {
@@ -22,9 +23,11 @@ export interface SubscriptionPlan {
 
   priceMonthly?: number | null;
 
-  priceYearly?: number | null;
+  priceQuarterly?: number | null;
 
-  billingCycle: BillingCycle;
+  priceHalfYearly?: number | null;
+
+  priceAnnual?: number | null;
 
   isActive: boolean;
 
@@ -56,9 +59,11 @@ export interface SubscriptionPlanRequest {
 
   priceMonthly?: number | null;
 
-  priceYearly?: number | null;
+  priceQuarterly?: number | null;
 
-  billingCycle: BillingCycle;
+  priceHalfYearly?: number | null;
+
+  priceAnnual?: number | null;
 
   isActive: boolean;
 

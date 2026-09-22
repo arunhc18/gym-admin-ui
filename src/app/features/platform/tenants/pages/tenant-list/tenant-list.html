@@ -143,7 +143,7 @@
             </th>
 
             <th>
-              Plan
+              Billing Period
             </th>
 
             <th>
@@ -231,9 +231,9 @@
 
               <td>
 
-                {{ getPlanName(
-                     tenant.subscriptionPlanId
-                   ) }}
+                <strong>
+                  {{ getBillingPeriodLabel(tenant.subscriptionBillingCycle) }}
+                </strong>
 
               </td>
 

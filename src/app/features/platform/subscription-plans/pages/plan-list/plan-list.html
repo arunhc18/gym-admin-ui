@@ -1,8 +1,5 @@
 <div class="plans-page">
 
-
-  <!-- PAGE ACTIONS -->
-
   <div class="page-actions">
 
     <button
@@ -11,367 +8,147 @@
       (click)="goToDashboard()"
     >
 
-      <span aria-hidden="true">
-        ←
-      </span>
-
+      <span aria-hidden="true">←</span>
       Back to Dashboard
-
-    </button>
-
-
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="createPlan()"
-    >
-
-      + Create Plan
 
     </button>
 
   </div>
 
-
-  <!-- MAIN CARD -->
-
   <section class="plans-card">
 
+    @if (getCurrentPlan()) {
+      <div class="plan-overview">
 
-    <!-- FILTER BAR -->
+        <article class="plan-main-card">
 
-    <div class="filter-bar">
+          <div class="plan-top-row">
 
+            <div class="plan-heading-wrap">
 
-      <div class="search-box">
+              <div class="plan-icon-large">
+                {{ getCurrentPlan()!.planName.charAt(0) }}
+              </div>
 
-        <span class="search-icon">
-          ⌕
-        </span>
+              <div>
 
-        <input
-          type="text"
-          [(ngModel)]="searchText"
-          (input)="applyFilters()"
-          placeholder="Search plan name or code..."
-        />
+                <div class="plan-header-row">
+                  <h2>{{ getCurrentPlan()!.planName }}</h2>
+
+                  <span
+                    class="status"
+                    [class.active]="getCurrentPlan()!.isActive"
+                    [class.inactive]="!getCurrentPlan()!.isActive"
+                  >
+                    <span class="status-dot"></span>
+                    {{ getCurrentPlan()!.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+
+                </div>
+
+                <div class="plan-code">
+                  {{ getCurrentPlan()!.planCode }}
+                </div>
+
+                <p class="plan-description">
+                  {{ getCurrentPlan()!.description || 'Complete Gym Management SaaS subscription' }}
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="plan-actions">
+
+              <button
+                type="button"
+                class="action-button primary"
+                (click)="editPlan($event, getCurrentPlan()!)"
+              >
+                Edit Plan
+              </button>
+
+              <button
+                type="button"
+                class="action-button"
+                (click)="toggleStatus($event, getCurrentPlan()!)"
+              >
+                {{ getCurrentPlan()!.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="plan-stats">
+
+            <div class="stat-item">
+              <strong>{{ getCurrentPlan()!.maxMembers }}</strong>
+              <span>Members</span>
+            </div>
+
+            <div class="stat-item">
+              <strong>{{ getCurrentPlan()!.maxLocations }}</strong>
+              <span>Locations</span>
+            </div>
+
+            <div class="stat-item">
+              <strong>{{ getCurrentPlan()!.maxStaffUsers ?? '-' }}</strong>
+              <span>Staff</span>
+            </div>
+
+          </div>
+
+        </article>
+
+        <div class="pricing-section">
+
+          <h3>Billing Options</h3>
+
+          <div class="pricing-grid">
+
+            <article class="pricing-card">
+              <span class="pricing-label">Monthly</span>
+              <strong class="price-value">
+                {{ getCurrentPlan()!.priceMonthly | currency:'INR':'symbol':'1.0-0' }}
+              </strong>
+              <small>per month</small>
+            </article>
+
+            <article class="pricing-card">
+              <span class="pricing-label">Quarterly</span>
+              <strong class="price-value">
+                {{ getCurrentPlan()!.priceQuarterly | currency:'INR':'symbol':'1.0-0' }}
+              </strong>
+              <small>every 3 months</small>
+            </article>
+
+            <article class="pricing-card">
+              <span class="pricing-label">Half Yearly</span>
+              <strong class="price-value">
+                {{ getCurrentPlan()!.priceHalfYearly | currency:'INR':'symbol':'1.0-0' }}
+              </strong>
+              <small>every 6 months</small>
+            </article>
+
+            <article class="pricing-card">
+              <span class="pricing-label">Annual</span>
+              <strong class="price-value">
+                {{ getCurrentPlan()!.priceAnnual | currency:'INR':'symbol':'1.0-0' }}
+              </strong>
+              <small>per year</small>
+            </article>
+
+          </div>
+
+        </div>
 
       </div>
-
-
-      <select
-        [(ngModel)]="selectedBillingCycle"
-        (change)="applyFilters()"
-      >
-
-        <option value="">
-          All Billing Cycles
-        </option>
-
-        <option value="monthly">
-          Monthly
-        </option>
-
-        <option value="yearly">
-          Yearly
-        </option>
-
-        <option value="lifetime">
-          Lifetime
-        </option>
-
-      </select>
-
-
-      <select
-        [(ngModel)]="selectedStatus"
-        (change)="applyFilters()"
-      >
-
-        <option value="">
-          All Status
-        </option>
-
-        <option value="active">
-          Active
-        </option>
-
-        <option value="inactive">
-          Inactive
-        </option>
-
-      </select>
-
-
-      <button
-        type="button"
-        class="clear-button"
-        (click)="clearFilters()"
-      >
-        Clear
-      </button>
-
-    </div>
-
-
-    <!-- TABLE -->
-
-    <div class="table-container">
-
-      <table class="data-table">
-
-        <thead>
-
-          <tr>
-
-            <th>
-              Plan
-            </th>
-
-            <th>
-              Members
-            </th>
-
-            <th>
-              Locations
-            </th>
-
-            <th>
-              Staff
-            </th>
-
-            <th>
-              Monthly
-            </th>
-
-            <th>
-              Yearly
-            </th>
-
-            <th>
-              Billing
-            </th>
-
-            <th>
-              Status
-            </th>
-
-            <th>
-              Actions
-            </th>
-
-          </tr>
-
-        </thead>
-
-
-        <tbody>
-
-          @for (
-            plan of filteredPlans;
-            track plan.subscriptionPlanId
-          ) {
-
-            <tr
-              class="clickable-row"
-              tabindex="0"
-              (click)="openPlan(plan)"
-              (keydown.enter)="openPlan(plan)"
-            >
-
-
-              <!-- PLAN -->
-
-              <td>
-
-                <div class="plan-cell">
-
-                  <div class="plan-icon">
-
-                    {{ plan.planName.charAt(0) }}
-
-                  </div>
-
-
-                  <div>
-
-                    <strong>
-
-                      {{ plan.planName }}
-
-                    </strong>
-
-                    <small>
-
-                      {{ plan.planCode }}
-
-                    </small>
-
-                  </div>
-
-                </div>
-
-              </td>
-
-
-              <td>
-
-                {{ plan.maxMembers }}
-
-              </td>
-
-
-              <td>
-
-                {{ plan.maxLocations }}
-
-              </td>
-
-
-              <td>
-
-                {{ plan.maxStaffUsers ?? '-' }}
-
-              </td>
-
-
-              <td>
-
-                @if (
-                  plan.priceMonthly !== null &&
-                  plan.priceMonthly !== undefined
-                ) {
-
-                  {{
-                    plan.priceMonthly
-                      | currency:
-                        'INR':
-                        'symbol':
-                        '1.0-0'
-                  }}
-
-                } @else {
-
-                  -
-
-                }
-
-              </td>
-
-
-              <td>
-
-                @if (
-                  plan.priceYearly !== null &&
-                  plan.priceYearly !== undefined
-                ) {
-
-                  {{
-                    plan.priceYearly
-                      | currency:
-                        'INR':
-                        'symbol':
-                        '1.0-0'
-                  }}
-
-                } @else {
-
-                  -
-
-                }
-
-              </td>
-
-
-              <td>
-
-                <span class="billing-badge">
-
-                  {{ plan.billingCycle | titlecase }}
-
-                </span>
-
-              </td>
-
-
-              <td>
-
-                <span
-                  class="status"
-                  [class.active]="plan.isActive"
-                  [class.inactive]="!plan.isActive"
-                >
-
-                  <span class="status-dot"></span>
-
-                  {{
-                    plan.isActive
-                      ? 'Active'
-                      : 'Inactive'
-                  }}
-
-                </span>
-
-              </td>
-
-
-              <td>
-
-                <div class="row-actions">
-
-                  <button
-                    type="button"
-                    class="action-button"
-                    (click)="editPlan($event, plan)"
-                  >
-
-                    Edit
-
-                  </button>
-
-
-                  <button
-                    type="button"
-                    class="action-button"
-                    (click)="toggleStatus($event, plan)"
-                  >
-
-                    {{
-                      plan.isActive
-                        ? 'Deactivate'
-                        : 'Activate'
-                    }}
-
-                  </button>
-
-                </div>
-
-              </td>
-
-            </tr>
-
-          } @empty {
-
-            <tr>
-
-              <td
-                colspan="9"
-                class="empty-cell"
-              >
-
-                No subscription plans found.
-
-              </td>
-
-            </tr>
-
-          }
-
-        </tbody>
-
-      </table>
-
-    </div>
+    } @else {
+      <div class="empty-state">
+        <p>No subscription plan available.</p>
+      </div>
+    }
 
   </section>
 
