@@ -29,96 +29,30 @@ export class SubscriptionPlanService {
       {
         subscriptionPlanId: 1,
 
-        planCode: 'STARTER',
+        planCode: 'GYMADMIN',
 
-        planName: 'Starter',
+        planName: 'GymAdmin Plan',
 
         description:
-          'Suitable for small gyms getting started with GymAdmin.',
+          'Single SaaS subscription plan for all GymAdmin tenants.',
 
-        maxLocations: 1,
+        maxLocations: 10,
 
-        maxMembers: 100,
+        maxMembers: 5000,
 
-        maxStaffUsers: 5,
+        maxStaffUsers: 50,
 
         priceMonthly: 999,
 
-        priceYearly: 9999,
+        priceQuarterly: 2699,
 
-        billingCycle: 'monthly',
+        priceHalfYearly: 4999,
+
+        priceAnnual: 8999,
 
         isActive: true,
 
         displayOrder: 1,
-
-        createdAt:
-          '2026-09-01T10:00:00+05:30',
-
-        updatedAt:
-          '2026-09-01T10:00:00+05:30'
-      },
-
-
-      {
-        subscriptionPlanId: 2,
-
-        planCode: 'GROWTH',
-
-        planName: 'Growth',
-
-        description:
-          'Designed for growing gyms with multiple locations.',
-
-        maxLocations: 3,
-
-        maxMembers: 500,
-
-        maxStaffUsers: 15,
-
-        priceMonthly: 2499,
-
-        priceYearly: 24999,
-
-        billingCycle: 'monthly',
-
-        isActive: true,
-
-        displayOrder: 2,
-
-        createdAt:
-          '2026-09-01T10:00:00+05:30',
-
-        updatedAt:
-          '2026-09-01T10:00:00+05:30'
-      },
-
-
-      {
-        subscriptionPlanId: 3,
-
-        planCode: 'PREMIUM',
-
-        planName: 'Premium',
-
-        description:
-          'For large gyms and multi-location fitness businesses.',
-
-        maxLocations: 10,
-
-        maxMembers: 2000,
-
-        maxStaffUsers: 50,
-
-        priceMonthly: 5999,
-
-        priceYearly: 59999,
-
-        billingCycle: 'monthly',
-
-        isActive: true,
-
-        displayOrder: 3,
 
         createdAt:
           '2026-09-01T10:00:00+05:30',

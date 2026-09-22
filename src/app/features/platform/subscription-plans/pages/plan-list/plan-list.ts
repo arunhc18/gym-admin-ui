@@ -50,8 +50,6 @@ export class PlanListComponent
 
   searchText = '';
 
-  selectedBillingCycle = '';
-
   selectedStatus = '';
 
 
@@ -116,14 +114,6 @@ export class PlanListComponent
               .includes(search);
 
 
-          const matchesBilling =
-
-            !this.selectedBillingCycle ||
-
-            plan.billingCycle ===
-              this.selectedBillingCycle;
-
-
           const matchesStatus =
 
             !this.selectedStatus ||
@@ -140,8 +130,6 @@ export class PlanListComponent
 
             matchesSearch &&
 
-            matchesBilling &&
-
             matchesStatus
 
           );
@@ -156,8 +144,6 @@ export class PlanListComponent
 
     this.searchText = '';
 
-    this.selectedBillingCycle = '';
-
     this.selectedStatus = '';
 
     this.applyFilters();
@@ -167,9 +153,34 @@ export class PlanListComponent
 
   createPlan(): void {
 
+    const activePlan =
+      this.plans.find(
+        plan =>
+          plan.isActive
+      );
+
+    if (activePlan) {
+
+      this.router.navigate([
+        '/platform/subscription-plans',
+        activePlan.subscriptionPlanId,
+        'edit'
+      ]);
+
+      return;
+
+    }
+
     this.router.navigate([
       '/platform/subscription-plans/new'
     ]);
+
+  }
+
+
+  getCurrentPlan(): SubscriptionPlan | undefined {
+
+    return this.plans[0];
 
   }
 

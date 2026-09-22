@@ -6,6 +6,12 @@ export type SubscriptionStatus =
   | 'cancelled'
   | 'expired';
 
+export type TenantBillingCycle =
+  | 'monthly'
+  | 'quarterly'
+  | 'half_yearly'
+  | 'annual';
+
 
 export interface Tenant {
 
@@ -16,6 +22,8 @@ export interface Tenant {
   subdomain: string;
 
   subscriptionPlanId: number;
+
+  subscriptionBillingCycle: TenantBillingCycle;
 
   subscriptionStatus: SubscriptionStatus;
 
@@ -46,6 +54,8 @@ export interface TenantRequest {
   subdomain: string;
 
   subscriptionPlanId: number;
+
+  subscriptionBillingCycle: TenantBillingCycle;
 
   subscriptionStatus: SubscriptionStatus;
 

@@ -270,6 +270,49 @@
 
       <div class="form-group">
 
+        <label class="form-label" for="subscriptionBillingCycle">
+
+          Billing Period
+          <span class="required">*</span>
+
+        </label>
+
+        <select
+          class="form-control"
+          id="subscriptionBillingCycle"
+          formControlName="subscriptionBillingCycle"
+          [class.invalid]="isInvalid('subscriptionBillingCycle')"
+          [attr.aria-invalid]="isInvalid('subscriptionBillingCycle')"
+          aria-describedby="subscriptionBillingCycle-error"
+        >
+
+          <option value="monthly">
+            Monthly
+          </option>
+
+          <option value="quarterly">
+            Quarterly
+          </option>
+
+          <option value="half_yearly">
+            Half Yearly
+          </option>
+
+          <option value="annual">
+            Annual
+          </option>
+
+        </select>
+
+        @if (hasError('subscriptionBillingCycle', 'allowedValue')) {
+          <span id="subscriptionBillingCycle-error" class="form-error">Select a valid billing period.</span>
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
         <label class="form-label" for="subscriptionStatus">
 
           Subscription Status
@@ -444,18 +487,23 @@
         </div>
 
         <div>
-          <span>Billing</span>
-          <strong>{{ selectedPlan.billingCycle }}</strong>
-        </div>
-
-        <div>
           <span>Monthly</span>
           <strong>{{ selectedPlan.priceMonthly ?? '-' }}</strong>
         </div>
 
         <div>
-          <span>Yearly</span>
-          <strong>{{ selectedPlan.priceYearly ?? '-' }}</strong>
+          <span>Quarterly</span>
+          <strong>{{ selectedPlan.priceQuarterly ?? '-' }}</strong>
+        </div>
+
+        <div>
+          <span>Half Yearly</span>
+          <strong>{{ selectedPlan.priceHalfYearly ?? '-' }}</strong>
+        </div>
+
+        <div>
+          <span>Annual</span>
+          <strong>{{ selectedPlan.priceAnnual ?? '-' }}</strong>
         </div>
 
       </div>

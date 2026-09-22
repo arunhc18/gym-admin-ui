@@ -157,19 +157,6 @@
         <div class="detail-row">
 
           <span>
-            Billing Cycle
-          </span>
-
-          <strong>
-            {{ plan.billingCycle | titlecase }}
-          </strong>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span>
             Display Order
           </span>
 
@@ -271,13 +258,55 @@
           <div>
 
             <span>
-              Yearly
+              Quarterly
             </span>
 
             <strong>
 
               {{
-                plan.priceYearly
+                plan.priceQuarterly
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.0-0'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Half Yearly
+            </span>
+
+            <strong>
+
+              {{
+                plan.priceHalfYearly
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.0-0'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Annual
+            </span>
+
+            <strong>
+
+              {{
+                plan.priceAnnual
                   | currency:
                     'INR':
                     'symbol':

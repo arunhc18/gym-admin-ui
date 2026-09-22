@@ -16,12 +16,10 @@ import {
 import {
   decimalPlacesValidator,
   noWhitespaceValidator,
-  pricingValidator,
   trimmedMinLengthValidator,
   wholeNumberValidator,
   containsLetterValidator,
-  containsLetterOrNumberValidator,
-  allowedValueValidator
+  containsLetterOrNumberValidator
 } from '../../../../../shared/validators/platform-form.validators';
 
 import {
@@ -153,25 +151,36 @@ export class PlanFormComponent
         priceMonthly: [
           '',
           [
+            Validators.required,
             Validators.min(0),
             decimalPlacesValidator(2)
           ]
         ],
 
-        priceYearly: [
+        priceQuarterly: [
           '',
           [
+            Validators.required,
             Validators.min(0),
             decimalPlacesValidator(2)
           ]
         ],
 
-        billingCycle: [
-          'monthly',
+        priceHalfYearly: [
+          '',
           [
-            Validators.required
-            ,
-            allowedValueValidator(['monthly', 'yearly', 'lifetime'])
+            Validators.required,
+            Validators.min(0),
+            decimalPlacesValidator(2)
+          ]
+        ],
+
+        priceAnnual: [
+          '',
+          [
+            Validators.required,
+            Validators.min(0),
+            decimalPlacesValidator(2)
           ]
         ],
 
@@ -186,13 +195,6 @@ export class PlanFormComponent
         ],
 
         isActive: [true]
-
-      }, {
-        validators: pricingValidator(
-          'billingCycle',
-          'priceMonthly',
-          'priceYearly'
-        )
 
       });
 
@@ -262,13 +264,20 @@ export class PlanFormComponent
                   ? ''
                   : String(plan.priceMonthly),
 
-              priceYearly:
-                plan.priceYearly === null || plan.priceYearly === undefined
+              priceQuarterly:
+                plan.priceQuarterly === null || plan.priceQuarterly === undefined
                   ? ''
-                  : String(plan.priceYearly),
+                  : String(plan.priceQuarterly),
 
-              billingCycle:
-                plan.billingCycle,
+              priceHalfYearly:
+                plan.priceHalfYearly === null || plan.priceHalfYearly === undefined
+                  ? ''
+                  : String(plan.priceHalfYearly),
+
+              priceAnnual:
+                plan.priceAnnual === null || plan.priceAnnual === undefined
+                  ? ''
+                  : String(plan.priceAnnual),
 
               displayOrder:
                 plan.displayOrder,
@@ -366,14 +375,14 @@ export class PlanFormComponent
       priceMonthly:
         this.optionalNumber(formValue.priceMonthly),
 
-      priceYearly:
-        this.optionalNumber(formValue.priceYearly),
+      priceQuarterly:
+        this.optionalNumber(formValue.priceQuarterly),
 
-      billingCycle:
-        formValue.billingCycle as
-          'monthly' |
-          'yearly' |
-          'lifetime',
+      priceHalfYearly:
+        this.optionalNumber(formValue.priceHalfYearly),
+
+      priceAnnual:
+        this.optionalNumber(formValue.priceAnnual),
 
       displayOrder:
         Number(

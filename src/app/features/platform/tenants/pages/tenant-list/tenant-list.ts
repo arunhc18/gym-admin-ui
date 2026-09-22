@@ -183,8 +183,23 @@ export class TenantListComponent
           plan.subscriptionPlanId ===
           planId
       )?.planName ??
-      '-'
+      'GymAdmin Plan'
     );
+
+  }
+
+
+  getBillingPeriodLabel(
+    billingPeriod: string
+  ): string {
+
+    return billingPeriod
+      .replace('_', ' ')
+      .replace(
+        /\b\w/g,
+        value =>
+          value.toUpperCase()
+      );
 
   }
 

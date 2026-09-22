@@ -25,8 +25,7 @@ import {
 
 import {
   ActivatedRoute,
-  Router,
-  RouterLink
+  Router
 } from '@angular/router';
 
 import {
@@ -54,8 +53,7 @@ import {
 
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    RouterLink
+    ReactiveFormsModule
   ],
 
   templateUrl:
@@ -134,15 +132,14 @@ export class TenantFormComponent
           null as number | null,
           [
             Validators.required
-            ,
-            allowedValueValidator([
-              'trial',
-              'active',
-              'past_due',
-              'suspended',
-              'cancelled',
-              'expired'
-            ])
+          ]
+        ],
+
+        subscriptionBillingCycle: [
+          'monthly',
+          [
+            Validators.required,
+            allowedValueValidator(['monthly', 'quarterly', 'half_yearly', 'annual'])
           ]
         ],
 
@@ -223,6 +220,10 @@ export class TenantFormComponent
           this.allPlans = plans;
           this.refreshAvailablePlans();
 
+          if (!this.tenantForm.controls['subscriptionPlanId'].value && this.plans.length > 0) {
+            const defaultPlan = this.plans.find(plan => plan.isActive) ?? this.plans[0];
+            this.tenantForm.controls['subscriptionPlanId'].setValue(defaultPlan.subscriptionPlanId, { emitEvent: false });
+          }
 
           this.updateSelectedPlan();
 
@@ -241,6 +242,14 @@ export class TenantFormComponent
 
         }
       );
+
+    this.tenantForm.controls['subscriptionStartDate'].valueChanges.subscribe(() => {
+      this.updateSubscriptionEndDate();
+    });
+
+    this.tenantForm.controls['subscriptionBillingCycle'].valueChanges.subscribe(() => {
+      this.updateSubscriptionEndDate();
+    });
 
     this.tenantForm.controls['inheritPlanLimits'].valueChanges.subscribe(
       inherit => this.updateOverrideControls(inherit ?? true)
@@ -298,6 +307,9 @@ export class TenantFormComponent
 
               subscriptionPlanId:
                 tenant.subscriptionPlanId,
+
+              subscriptionBillingCycle:
+                tenant.subscriptionBillingCycle,
 
               subscriptionStatus:
                 tenant.subscriptionStatus,
@@ -461,6 +473,14 @@ export class TenantFormComponent
       formValue.inheritPlanLimits ??
       true;
 
+    const selectedPlan = this.allPlans.find(
+      plan => plan.subscriptionPlanId === Number(formValue.subscriptionPlanId)
+    ) ?? this.plans[0];
+
+    const computedEndDate = this.calculateSubscriptionEndDate(
+      String(formValue.subscriptionStartDate ?? ''),
+      (formValue.subscriptionBillingCycle ?? 'monthly') as any
+    );
 
     const request:
       TenantRequest = {
@@ -472,8 +492,11 @@ export class TenantFormComponent
 
       subscriptionPlanId:
         Number(
-          formValue.subscriptionPlanId
+          formValue.subscriptionPlanId ?? selectedPlan?.subscriptionPlanId ?? 1
         ),
+
+      subscriptionBillingCycle:
+        (formValue.subscriptionBillingCycle ?? 'monthly') as any,
 
       subscriptionStatus:
         formValue.subscriptionStatus as
@@ -483,8 +506,7 @@ export class TenantFormComponent
         String(formValue.subscriptionStartDate ?? ''),
 
       subscriptionEndDate:
-        formValue.subscriptionEndDate ||
-        null,
+        formValue.subscriptionEndDate || computedEndDate,
 
       maxLocations:
 
@@ -631,6 +653,52 @@ export class TenantFormComponent
     ]);
     locations.updateValueAndValidity({ emitEvent: false });
     members.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private updateSubscriptionEndDate(): void {
+    const startDate = this.tenantForm.controls['subscriptionStartDate'].value;
+    const billingCycle = this.tenantForm.controls['subscriptionBillingCycle'].value as
+      | 'monthly'
+      | 'quarterly'
+      | 'half_yearly'
+      | 'annual'
+      | null;
+
+    if (!startDate || !billingCycle) {
+      return;
+    }
+
+    const calculated = this.calculateSubscriptionEndDate(startDate, billingCycle);
+    const currentEnd = this.tenantForm.controls['subscriptionEndDate'].value;
+
+    if (!currentEnd || currentEnd === '' || currentEnd < calculated) {
+      this.tenantForm.controls['subscriptionEndDate'].setValue(calculated, { emitEvent: false });
+    }
+  }
+
+  private calculateSubscriptionEndDate(
+    startDate: string,
+    billingCycle: 'monthly' | 'quarterly' | 'half_yearly' | 'annual'
+  ): string {
+    const [year, month, day] = startDate.split('-').map(Number);
+    const baseDate = new Date(year, month - 1, day);
+    const monthOffset =
+      billingCycle === 'monthly'
+        ? 1
+        : billingCycle === 'quarterly'
+          ? 3
+          : billingCycle === 'half_yearly'
+            ? 6
+            : 12;
+
+    const nextDate = new Date(baseDate.getFullYear(), baseDate.getMonth() + monthOffset, baseDate.getDate());
+    const formatted = [
+      nextDate.getFullYear(),
+      String(nextDate.getMonth() + 1).padStart(2, '0'),
+      String(nextDate.getDate()).padStart(2, '0')
+    ].join('-');
+
+    return formatted;
   }
 
 
