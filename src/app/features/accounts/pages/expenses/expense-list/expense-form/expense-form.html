@@ -1,0 +1,271 @@
+<form
+  class="expense-form-page"
+  [formGroup]="expenseForm"
+  (ngSubmit)="save()"
+>
+
+
+  <div class="page-actions">
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="cancel()"
+    >
+      ← Back to Expenses
+    </button>
+
+
+    <div>
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="saving"
+      >
+
+        {{
+          saving
+            ? 'Saving...'
+            : 'Save Expense'
+        }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <h2>
+        Expense Details
+      </h2>
+
+      <p>
+        Record a gym operational expense.
+      </p>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label>
+          Location *
+        </label>
+
+        <select
+          formControlName="locationId"
+        >
+
+          <option
+            [ngValue]="null"
+          >
+            Select location
+          </option>
+
+
+          @for (
+            location of locations;
+            track location.id
+          ) {
+
+            <option
+              [ngValue]="location.id"
+            >
+
+              {{ location.name }}
+
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Expense Date *
+        </label>
+
+        <input
+          type="date"
+          formControlName="expenseDate"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Category *
+        </label>
+
+        <select
+          formControlName="category"
+        >
+
+          <option value="">
+            Select category
+          </option>
+
+
+          @for (
+            category of categories;
+            track category
+          ) {
+
+            <option
+              [value]="category"
+            >
+              {{ category }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Description *
+        </label>
+
+        <input
+          type="text"
+          formControlName="description"
+          placeholder="Expense description"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Amount *
+        </label>
+
+        <input
+          type="number"
+          min="0.01"
+          step="0.01"
+          formControlName="amount"
+          placeholder="0.00"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Payment Method
+        </label>
+
+        <select
+          formControlName="paymentMethodId"
+        >
+
+          <option
+            [ngValue]="null"
+          >
+            Select payment method
+          </option>
+
+
+          @for (
+            method of paymentMethods;
+            track method.paymentMethodId
+          ) {
+
+            <option
+              [ngValue]="method.paymentMethodId"
+            >
+
+              {{ method.methodName }}
+
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Payee
+        </label>
+
+        <input
+          type="text"
+          formControlName="payee"
+          placeholder="Person or company paid"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Reference Number
+        </label>
+
+        <input
+          type="text"
+          formControlName="referenceNumber"
+          placeholder="Receipt / transaction reference"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Notes
+        </label>
+
+        <input
+          type="text"
+          formControlName="notes"
+          placeholder="Optional notes"
+        />
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+</form>

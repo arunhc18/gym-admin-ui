@@ -1,0 +1,993 @@
+<form
+  class="invoice-form-page"
+  [formGroup]="invoiceForm"
+  (ngSubmit)="saveInvoice()"
+  novalidate
+>
+
+
+  <!-- =====================================================
+       PAGE ACTIONS
+  ====================================================== -->
+
+  <div class="page-actions">
+
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="cancel()"
+    >
+      ← Back to Invoices
+    </button>
+
+
+    <div class="action-buttons">
+
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="saving"
+      >
+
+        {{
+          saving
+            ? 'Saving...'
+            : 'Generate Invoice'
+        }}
+
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       INVOICE INFORMATION
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>
+          Invoice Information
+        </h2>
+
+        <p>
+          Select the member and basic billing information.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <!-- MEMBER -->
+      <div class="form-group">
+
+
+        <label>
+
+          Member
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          formControlName="memberId"
+          [class.invalid]="
+            isInvalid(
+              'memberId'
+            )
+          "
+        >
+
+          <option
+            [ngValue]="null"
+          >
+            Select member
+          </option>
+
+
+          @for (
+            member of members;
+            track member.memberId
+          ) {
+
+            <option
+              [ngValue]="member.memberId"
+            >
+
+              {{ member.memberCode }}
+              -
+              {{ member.memberName }}
+
+            </option>
+
+          }
+
+        </select>
+
+
+        @if (
+          isInvalid(
+            'memberId'
+          )
+        ) {
+
+          <span class="form-error">
+            Member is required.
+          </span>
+
+        }
+
+
+      </div>
+
+
+      <!-- LOCATION -->
+      <div class="form-group">
+
+
+        <label>
+
+          Location
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          formControlName="locationId"
+        >
+
+          <option
+            [ngValue]="null"
+          >
+            Select location
+          </option>
+
+
+          @for (
+            location of locations;
+            track location.locationId
+          ) {
+
+            <option
+              [ngValue]="location.locationId"
+            >
+
+              {{ location.locationName }}
+
+            </option>
+
+          }
+
+        </select>
+
+
+      </div>
+
+
+      <!-- INVOICE TYPE -->
+      <div class="form-group">
+
+
+        <label>
+
+          Invoice Type
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          formControlName="invoiceType"
+        >
+
+          <option value="membership">
+            Membership
+          </option>
+
+          <option value="pt_package">
+            PT Package
+          </option>
+
+          <option value="retail">
+            Retail
+          </option>
+
+          <option value="other">
+            Other
+          </option>
+
+        </select>
+
+
+      </div>
+
+
+      <!-- INVOICE DATE -->
+      <div class="form-group">
+
+
+        <label>
+
+          Invoice Date
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          type="date"
+          formControlName="invoiceDate"
+        />
+
+
+      </div>
+
+
+      <!-- DUE DATE -->
+      <div class="form-group">
+
+
+        <label>
+          Due Date
+        </label>
+
+
+        <input
+          type="date"
+          formControlName="dueDate"
+        />
+
+
+      </div>
+
+
+      <!-- NOTES -->
+      <div class="form-group">
+
+
+        <label>
+          Notes
+        </label>
+
+
+        <input
+          type="text"
+          formControlName="notes"
+          placeholder="Optional invoice notes"
+        />
+
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       INVOICE ITEMS
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header item-header">
+
+
+      <div>
+
+        <h2>
+          Invoice Items
+        </h2>
+
+        <p>
+          Add membership, PT sessions, products or services.
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="btn-add-item"
+        (click)="addItem()"
+      >
+        + Add Item
+      </button>
+
+
+    </div>
+
+
+    <div
+      class="invoice-items"
+      formArrayName="items"
+    >
+
+
+      @for (
+        row of items.controls;
+        track $index;
+        let i = $index
+      ) {
+
+
+        <div
+          class="invoice-item-row"
+          [formGroupName]="i"
+        >
+
+
+          <!-- ITEM TYPE -->
+          <div class="form-group">
+
+
+            <label>
+              Type
+            </label>
+
+
+            <select
+              formControlName="itemType"
+              (change)="
+                onItemTypeChange(
+                  i
+                )
+              "
+            >
+
+              <option value="membership">
+                Membership
+              </option>
+
+              <option value="pt_session">
+                PT Session
+              </option>
+
+              <option value="product">
+                Product
+              </option>
+
+              <option value="service">
+                Service
+              </option>
+
+            </select>
+
+
+          </div>
+
+
+          <!-- ITEM -->
+          <div
+            class="
+              form-group
+              item-selector
+            "
+          >
+
+
+            <label>
+              Item
+            </label>
+
+
+            <select
+              formControlName="referenceId"
+              (change)="
+                onBillingItemChange(
+                  i
+                )
+              "
+            >
+
+              <option
+                [ngValue]="null"
+              >
+                Select item
+              </option>
+
+
+              @for (
+                option of
+                  getItemsByType(
+                    row.get('itemType')?.value
+                  );
+                track option.id
+              ) {
+
+                <option
+                  [ngValue]="option.id"
+                >
+
+                  {{ option.name }}
+
+                </option>
+
+              }
+
+
+            </select>
+
+
+          </div>
+
+
+          <!-- QUANTITY -->
+          <div class="form-group">
+
+
+            <label>
+              Qty
+            </label>
+
+
+            <input
+              type="number"
+              min="1"
+              formControlName="quantity"
+            />
+
+
+          </div>
+
+
+          <!-- UNIT PRICE -->
+          <div class="form-group">
+
+
+            <label>
+              Unit Price
+            </label>
+
+
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              formControlName="unitPrice"
+            />
+
+
+          </div>
+
+
+          <!-- DISCOUNT -->
+          <div class="form-group">
+
+
+            <label>
+              Discount
+            </label>
+
+
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              formControlName="discountAmount"
+            />
+
+
+          </div>
+
+
+          <!-- TAX -->
+          <div class="form-group">
+
+
+            <label>
+              Tax %
+            </label>
+
+
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              formControlName="taxPercentage"
+            />
+
+
+          </div>
+
+
+          <!-- TOTAL -->
+          <div class="item-total">
+
+
+            <span>
+              Total
+            </span>
+
+
+            <strong>
+
+              {{
+                getRowTotal(i)
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.2-2'
+              }}
+
+            </strong>
+
+
+          </div>
+
+
+          <!-- DELETE -->
+          <button
+            type="button"
+            class="remove-item"
+            title="Remove item"
+            [disabled]="
+              items.length === 1
+            "
+            (click)="
+              removeItem(
+                i
+              )
+            "
+          >
+
+            ×
+
+          </button>
+
+
+        </div>
+
+
+      }
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       TOTALS
+  ====================================================== -->
+
+  <section class="totals-section">
+
+
+    <div class="totals-card">
+
+
+      <div>
+
+        <span>
+          Subtotal
+        </span>
+
+        <strong>
+
+          {{
+            subtotal
+              | currency:
+                'INR':
+                'symbol':
+                '1.2-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Discount
+        </span>
+
+        <strong>
+
+          - {{
+            discountTotal
+              | currency:
+                'INR':
+                'symbol':
+                '1.2-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Tax
+        </span>
+
+        <strong>
+
+          {{
+            taxTotal
+              | currency:
+                'INR':
+                'symbol':
+                '1.2-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+      <div class="grand-total">
+
+        <span>
+          Invoice Total
+        </span>
+
+        <strong>
+
+          {{
+            invoiceTotal
+              | currency:
+                'INR':
+                'symbol':
+                '1.2-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       PAYMENT
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+
+      <div>
+
+        <h2>
+          Payment
+        </h2>
+
+        <p>
+          Choose whether payment is collected now or later.
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- PAYMENT OPTIONS -->
+
+    <div class="payment-options">
+
+
+      <label
+        class="payment-option"
+        [class.selected]="
+          paymentOption ===
+          'pay_now'
+        "
+      >
+
+
+        <input
+          type="radio"
+          value="pay_now"
+          formControlName="paymentOption"
+          (change)="
+            onPaymentOptionChange()
+          "
+        />
+
+
+        <span>
+
+          <strong>
+            Pay Now
+          </strong>
+
+          <small>
+            Collect the full invoice amount.
+          </small>
+
+        </span>
+
+
+      </label>
+
+
+      <label
+        class="payment-option"
+        [class.selected]="
+          paymentOption ===
+          'partial'
+        "
+      >
+
+
+        <input
+          type="radio"
+          value="partial"
+          formControlName="paymentOption"
+          (change)="
+            onPaymentOptionChange()
+          "
+        />
+
+
+        <span>
+
+          <strong>
+            Partial Payment
+          </strong>
+
+          <small>
+            Collect part of the invoice amount.
+          </small>
+
+        </span>
+
+
+      </label>
+
+
+      <label
+        class="payment-option"
+        [class.selected]="
+          paymentOption ===
+          'pay_later'
+        "
+      >
+
+
+        <input
+          type="radio"
+          value="pay_later"
+          formControlName="paymentOption"
+          (change)="
+            onPaymentOptionChange()
+          "
+        />
+
+
+        <span>
+
+          <strong>
+            Pay Later
+          </strong>
+
+          <small>
+            Create invoice without payment.
+          </small>
+
+        </span>
+
+
+      </label>
+
+
+    </div>
+
+
+    @if (
+      showPaymentFields
+    ) {
+
+
+      <div
+        class="
+          form-grid
+          payment-fields
+        "
+      >
+
+
+        <!-- PAYMENT METHOD -->
+        <div class="form-group">
+
+
+          <label>
+
+            Payment Method
+
+            <span class="required">
+              *
+            </span>
+
+          </label>
+
+
+          <select
+            formControlName="paymentMethodId"
+          >
+
+            <option
+              [ngValue]="null"
+            >
+              Select payment method
+            </option>
+
+
+            @for (
+              method of paymentMethods;
+              track method.paymentMethodId
+            ) {
+
+              <option
+                [ngValue]="method.paymentMethodId"
+              >
+
+                {{ method.methodName }}
+
+              </option>
+
+            }
+
+
+          </select>
+
+
+        </div>
+
+
+        <!-- PAYMENT AMOUNT -->
+        <div class="form-group">
+
+
+          <label>
+
+            Payment Amount
+
+            <span class="required">
+              *
+            </span>
+
+          </label>
+
+
+          <input
+            type="number"
+            min="0.01"
+            step="0.01"
+            formControlName="paymentAmount"
+            [readonly]="
+              paymentOption ===
+              'pay_now'
+            "
+          />
+
+
+        </div>
+
+
+        <!-- TRANSACTION ID -->
+        <div class="form-group">
+
+
+          <label>
+            Transaction ID
+          </label>
+
+
+          <input
+            type="text"
+            formControlName="transactionId"
+            placeholder="UPI / Card / Gateway transaction ID"
+          />
+
+
+        </div>
+
+
+        <!-- REFERENCE -->
+        <div class="form-group">
+
+
+          <label>
+            Reference Number
+          </label>
+
+
+          <input
+            type="text"
+            formControlName="referenceNumber"
+            placeholder="Optional reference number"
+          />
+
+
+        </div>
+
+
+        <!-- PAYMENT NOTES -->
+        <div
+          class="
+            form-group
+            payment-note
+          "
+        >
+
+
+          <label>
+            Payment Notes
+          </label>
+
+
+          <input
+            type="text"
+            formControlName="paymentNotes"
+            placeholder="Optional payment notes"
+          />
+
+
+        </div>
+
+
+      </div>
+
+
+    }
+
+
+  </section>
+
+
+</form>

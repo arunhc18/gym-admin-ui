@@ -1,0 +1,885 @@
+:host {
+  display: block;
+}
+
+
+.invoice-form-page {
+
+  width: 100%;
+
+  padding-bottom:
+    20px;
+
+}
+
+
+/* =====================================================
+   PAGE ACTIONS
+===================================================== */
+
+.page-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 10px;
+
+  margin-bottom:
+    10px;
+
+}
+
+
+.back-link {
+
+  padding: 0;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size:
+    12px;
+
+}
+
+
+.back-link:hover {
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.action-buttons {
+
+  display: flex;
+
+  gap: 7px;
+
+}
+
+
+.invoice-form-page
+.btn {
+
+  min-height:
+    30px;
+
+  padding:
+    0 13px;
+
+  font-size:
+    11px;
+
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.form-card {
+
+  margin-bottom:
+    10px;
+
+  padding:
+    13px 14px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.section-header {
+
+  display: flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap: 10px;
+
+  margin-bottom:
+    9px;
+
+}
+
+
+.section-header h2 {
+
+  margin: 0;
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    13px;
+
+  font-weight:
+    600;
+
+}
+
+
+.section-header p {
+
+  margin:
+    2px 0 0;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    9px;
+
+}
+
+
+/* =====================================================
+   GENERAL FORM GRID
+===================================================== */
+
+.form-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    9px 11px;
+
+}
+
+
+.form-group {
+
+  min-width: 0;
+
+}
+
+
+.form-group label {
+
+  display: block;
+
+  margin-bottom:
+    3px;
+
+  color:
+    var(--text-secondary);
+
+  font-size:
+    10px;
+
+  font-weight:
+    500;
+
+}
+
+
+.required {
+
+  color:
+    var(--danger);
+
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+  width: 100%;
+
+  box-sizing:
+    border-box;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-primary);
+
+  font-family:
+    inherit;
+
+  font-size:
+    11px;
+
+}
+
+
+.form-group input,
+.form-group select {
+
+  height:
+    30px;
+
+  padding:
+    0 8px;
+
+}
+
+
+.form-group textarea {
+
+  min-height:
+    52px;
+
+  padding:
+    6px 8px;
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    0 0 0 2px
+    var(--primary-subtle);
+
+}
+
+
+.form-group input.invalid,
+.form-group select.invalid {
+
+  border-color:
+    var(--danger);
+
+}
+
+
+.form-error {
+
+  display: block;
+
+  margin-top:
+    3px;
+
+  color:
+    var(--danger);
+
+  font-size:
+    9px;
+
+}
+
+
+.field-help {
+
+  display: block;
+
+  margin-top:
+    3px;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+
+}
+
+
+/* =====================================================
+   ADD ITEM
+===================================================== */
+
+.btn-add-item {
+
+  min-height:
+    28px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    var(--primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+  cursor:
+    pointer;
+
+  font-size:
+    10px;
+
+  font-weight:
+    600;
+
+}
+
+
+/* =====================================================
+   INVOICE ITEMS
+===================================================== */
+
+.invoice-items {
+
+  display: grid;
+
+  gap: 7px;
+
+}
+
+
+.invoice-item-row {
+
+  display: grid;
+
+  grid-template-columns:
+    120px
+    minmax(180px, 1.5fr)
+    70px
+    100px
+    100px
+    80px
+    110px
+    30px;
+
+  align-items:
+    end;
+
+  gap: 7px;
+
+  padding:
+    9px;
+
+  border:
+    1px solid
+    var(--border-secondary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.invoice-item-row
+.form-group input,
+.invoice-item-row
+.form-group select {
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.item-total {
+
+  display: grid;
+
+  min-height:
+    30px;
+
+  align-content:
+    center;
+
+  justify-content:
+    end;
+
+  gap: 1px;
+
+  text-align:
+    right;
+
+}
+
+
+.item-total span {
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+
+}
+
+
+.item-total strong {
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    11px;
+
+}
+
+
+.remove-item {
+
+  width:
+    28px;
+
+  height:
+    30px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-muted);
+
+  cursor:
+    pointer;
+
+  font-size:
+    18px;
+
+}
+
+
+.remove-item:hover:not(:disabled) {
+
+  border-color:
+    var(--danger);
+
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .08
+    );
+
+  color:
+    var(--danger);
+
+}
+
+
+.remove-item:disabled {
+
+  opacity:
+    .35;
+
+  cursor:
+    not-allowed;
+
+}
+
+
+/* =====================================================
+   TOTALS
+===================================================== */
+
+.totals-section {
+
+  display: flex;
+
+  justify-content:
+    flex-end;
+
+  margin-bottom:
+    10px;
+
+}
+
+
+.totals-card {
+
+  width:
+    min(
+      100%,
+      350px
+    );
+
+  padding:
+    10px 12px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.totals-card > div {
+
+  display: flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    20px;
+
+  padding:
+    5px 0;
+
+  color:
+    var(--text-secondary);
+
+  font-size:
+    10px;
+
+}
+
+
+.totals-card strong {
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.totals-card
+.grand-total {
+
+  margin-top:
+    4px;
+
+  padding-top:
+    9px;
+
+  border-top:
+    1px solid
+    var(--border-primary);
+
+  font-size:
+    13px;
+
+}
+
+
+.totals-card
+.grand-total strong {
+
+  color:
+    var(--primary);
+
+  font-size:
+    15px;
+
+}
+
+
+/* =====================================================
+   PAYMENT OPTIONS
+===================================================== */
+
+.payment-options {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+
+  margin-bottom:
+    11px;
+
+}
+
+
+.payment-option {
+
+  display: flex;
+
+  min-height:
+    55px;
+
+  align-items:
+    flex-start;
+
+  gap: 8px;
+
+  padding:
+    9px 10px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  cursor:
+    pointer;
+
+}
+
+
+.payment-option:hover {
+
+  border-color:
+    var(--text-muted);
+
+}
+
+
+.payment-option.selected {
+
+  border-color:
+    var(--primary);
+
+  background:
+    var(--primary-subtle);
+
+}
+
+
+.payment-option input {
+
+  margin-top:
+    2px;
+
+}
+
+
+.payment-option span {
+
+  display: grid;
+
+  gap: 2px;
+
+}
+
+
+.payment-option strong {
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    10px;
+
+}
+
+
+.payment-option small {
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+
+  line-height:
+    1.4;
+
+}
+
+
+/* =====================================================
+   PAYMENT FIELDS
+===================================================== */
+
+.payment-fields {
+
+  padding-top:
+    10px;
+
+  border-top:
+    1px solid
+    var(--border-secondary);
+
+}
+
+
+.payment-note {
+
+  grid-column:
+    span 2;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 1150px
+) {
+
+  .invoice-item-row {
+
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+
+  }
+
+
+  .item-selector {
+
+    grid-column:
+      span 2;
+
+  }
+
+}
+
+
+@media (
+  max-width: 900px
+) {
+
+  .form-grid {
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+  }
+
+
+  .payment-options {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}
+
+
+@media (
+  max-width: 650px
+) {
+
+  .page-actions {
+
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .action-buttons {
+
+    width: 100%;
+
+  }
+
+
+  .action-buttons
+  .btn {
+
+    flex: 1;
+
+  }
+
+
+  .form-grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .invoice-item-row {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+
+  .item-selector,
+  .payment-note {
+
+    grid-column:
+      1 / -1;
+
+  }
+
+
+  .totals-card {
+
+    width:
+      100%;
+
+  }
+
+}

@@ -1,0 +1,912 @@
+:host {
+  display: block;
+}
+
+
+.accounts-page {
+
+  width: 100%;
+
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.page-actions {
+
+  display: flex;
+
+  justify-content:
+    flex-end;
+
+  gap: 7px;
+
+  margin-bottom:
+    10px;
+
+}
+
+
+.action {
+
+  min-height:
+    30px;
+
+  padding:
+    0 11px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  cursor: pointer;
+
+  font-size:
+    10px;
+
+  font-weight:
+    600;
+
+}
+
+
+.action.secondary {
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-secondary);
+
+}
+
+
+.action.secondary:hover {
+
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+
+}
+
+
+.action.primary {
+
+  border-color:
+    var(--primary);
+
+  background:
+    var(--primary);
+
+  color:
+    #fff;
+
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summary-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+
+  margin-bottom:
+    10px;
+
+}
+
+
+.summary-card {
+
+  display: flex;
+
+  min-width: 0;
+
+  align-items:
+    center;
+
+  gap: 10px;
+
+  padding:
+    12px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.summary-icon {
+
+  display: grid;
+
+  width: 36px;
+
+  height: 36px;
+
+  flex:
+    0 0 36px;
+
+  place-items:
+    center;
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+}
+
+
+.summary-icon svg {
+
+  width: 18px;
+
+  height: 18px;
+
+  fill: none;
+
+  stroke:
+    currentColor;
+
+  stroke-width:
+    1.7;
+
+  stroke-linecap:
+    round;
+
+  stroke-linejoin:
+    round;
+
+}
+
+
+.summary-card > div:last-child {
+
+  min-width: 0;
+
+}
+
+
+.summary-card span {
+
+  display: block;
+
+  margin-bottom:
+    2px;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+
+  font-weight:
+    600;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+.summary-card strong {
+
+  display: block;
+
+  overflow: hidden;
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    16px;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+}
+
+
+/* =====================================================
+   STATUS STRIP
+===================================================== */
+
+.status-strip {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  margin-bottom:
+    10px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.status-strip > div {
+
+  padding:
+    9px 12px;
+
+  border-right:
+    1px solid
+    var(--border-secondary);
+
+}
+
+
+.status-strip > div:last-child {
+
+  border-right: 0;
+
+}
+
+
+.status-strip span {
+
+  display: block;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+
+}
+
+
+.status-strip strong {
+
+  display: block;
+
+  margin-top:
+    2px;
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    12px;
+
+}
+
+
+/* =====================================================
+   COMMON COLORS
+===================================================== */
+
+.success {
+
+  color:
+    var(--success) !important;
+
+}
+
+
+.warning {
+
+  color:
+    var(--warning) !important;
+
+}
+
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+.content-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.7fr)
+    minmax(280px, .8fr);
+
+  gap: 10px;
+
+  margin-bottom:
+    10px;
+
+}
+
+
+.content-card {
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.card-header {
+
+  display: flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap: 10px;
+
+  padding:
+    10px 12px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+
+}
+
+
+.card-header h2 {
+
+  margin: 0;
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    11px;
+
+}
+
+
+.card-header p {
+
+  margin:
+    2px 0 0;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+
+}
+
+
+.link-button {
+
+  padding: 0;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--primary);
+
+  cursor: pointer;
+
+  font-size:
+    9px;
+
+  font-weight:
+    600;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+
+  width: 100%;
+
+  overflow-x:
+    auto;
+
+}
+
+
+table {
+
+  width: 100%;
+
+  border-collapse:
+    collapse;
+
+}
+
+
+th,
+td {
+
+  padding:
+    8px 10px;
+
+  border-bottom:
+    1px solid
+    var(--border-secondary);
+
+  color:
+    var(--text-secondary);
+
+  font-size:
+    9px;
+
+  text-align:
+    left;
+
+}
+
+
+th {
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+
+  font-weight:
+    700;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+tbody tr:last-child td {
+
+  border-bottom: 0;
+
+}
+
+
+.clickable {
+
+  cursor: pointer;
+
+}
+
+
+.clickable:hover {
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.primary-cell {
+
+  display: grid;
+
+  gap: 2px;
+
+}
+
+
+.primary-cell strong {
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    9px;
+
+}
+
+
+.primary-cell small {
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    7px;
+
+}
+
+
+.right {
+
+  text-align:
+    right;
+
+}
+
+
+.money {
+
+  white-space:
+    nowrap;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-pill {
+
+  display:
+    inline-flex;
+
+  min-width:
+    58px;
+
+  justify-content:
+    center;
+
+  padding:
+    3px 6px;
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    rgba(
+      79,
+      140,
+      255,
+      .1
+    );
+
+  color:
+    var(--info);
+
+  font-size:
+    8px;
+
+  font-weight:
+    600;
+
+  text-transform:
+    capitalize;
+
+}
+
+
+.status-pill.partial {
+
+  background:
+    rgba(
+      245,
+      165,
+      36,
+      .12
+    );
+
+  color:
+    var(--warning);
+
+}
+
+
+/* =====================================================
+   METHOD PILL
+===================================================== */
+
+.method-pill {
+
+  display:
+    inline-flex;
+
+  padding:
+    3px 6px;
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+  font-size:
+    8px;
+
+}
+
+
+/* =====================================================
+   PAYMENT METHODS
+===================================================== */
+
+.method-list {
+
+  display: grid;
+
+  gap: 12px;
+
+  padding:
+    12px;
+
+}
+
+
+.method-row {
+
+  display: grid;
+
+  gap: 6px;
+
+}
+
+
+.method-top {
+
+  display: flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap: 10px;
+
+}
+
+
+.method-top > div {
+
+  display: grid;
+
+  gap: 2px;
+
+}
+
+
+.method-top strong {
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    9px;
+
+}
+
+
+.method-top small {
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    7px;
+
+}
+
+
+.method-value {
+
+  text-align:
+    right;
+
+}
+
+
+.progress-track {
+
+  height:
+    5px;
+
+  overflow:
+    hidden;
+
+  border-radius:
+    999px;
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.progress-value {
+
+  height:
+    100%;
+
+  border-radius:
+    inherit;
+
+  background:
+    var(--primary);
+
+  transition:
+    width .25s ease;
+
+}
+
+
+/* =====================================================
+   OUTSTANDING
+===================================================== */
+
+.outstanding-card {
+
+  margin-bottom:
+    10px;
+
+}
+
+
+.outstanding-card table {
+
+  min-width:
+    700px;
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+
+  padding:
+    25px !important;
+
+  color:
+    var(--text-muted);
+
+  text-align:
+    center !important;
+
+  font-size:
+    9px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 1050px
+) {
+
+  .summary-grid {
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+  }
+
+
+  .content-grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}
+
+
+@media (
+  max-width: 700px
+) {
+
+  .page-actions {
+
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+
+  .status-strip {
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+  }
+
+
+  .status-strip > div {
+
+    border-bottom:
+      1px solid
+      var(--border-secondary);
+
+  }
+
+}
+
+
+@media (
+  max-width: 500px
+) {
+
+  .summary-grid,
+  .status-strip,
+  .page-actions {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .status-strip > div {
+
+    border-right: 0;
+
+  }
+
+}

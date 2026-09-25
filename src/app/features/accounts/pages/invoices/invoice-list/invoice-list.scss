@@ -1,0 +1,741 @@
+:host {
+  display: block;
+}
+
+
+.invoice-list-page {
+
+  width: 100%;
+
+}
+
+
+/* =====================================================
+   PAGE ACTIONS
+===================================================== */
+
+.page-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 10px;
+
+  margin-bottom:
+    10px;
+
+}
+
+
+.page-actions .btn {
+
+  min-height:
+    30px;
+
+  padding:
+    0 13px;
+
+  font-size:
+    11px;
+
+}
+
+
+.page-actions-spacer {
+
+  flex: 1;
+
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.invoice-card {
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+/* =====================================================
+   FILTER BAR
+===================================================== */
+
+.filter-bar {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      260px,
+      1fr
+    )
+    140px
+    150px
+    auto;
+
+  gap: 8px;
+
+  padding:
+    10px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-box {
+
+  display: flex;
+
+  height:
+    32px;
+
+  align-items:
+    center;
+
+  gap: 7px;
+
+  padding:
+    0 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.search-icon {
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    13px;
+
+}
+
+
+.search-box input {
+
+  width: 100%;
+
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    11px;
+
+}
+
+
+.search-box input::placeholder {
+
+  color:
+    var(--text-muted);
+
+}
+
+
+/* =====================================================
+   FILTER SELECTS
+===================================================== */
+
+.filter-bar select {
+
+  height:
+    32px;
+
+  padding:
+    0 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor:
+    pointer;
+
+  font-size:
+    11px;
+
+}
+
+
+.filter-bar select:focus {
+
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    0 0 0 2px
+    var(--primary-subtle);
+
+}
+
+
+/* =====================================================
+   CLEAR
+===================================================== */
+
+.clear-button {
+
+  height:
+    32px;
+
+  padding:
+    0 12px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor:
+    pointer;
+
+  font-size:
+    11px;
+
+}
+
+
+.clear-button:hover {
+
+  border-color:
+    var(--text-secondary);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-container {
+
+  width: 100%;
+
+  overflow-x:
+    auto;
+
+}
+
+
+.invoices-table {
+
+  width: 100%;
+
+  min-width:
+    1250px;
+
+}
+
+
+.invoices-table th,
+.invoices-table td {
+
+  padding:
+    9px 11px;
+
+  vertical-align:
+    middle;
+
+  font-size:
+    11px;
+
+}
+
+
+.invoice-row {
+
+  cursor:
+    pointer;
+
+}
+
+
+.invoice-row:hover {
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+/* =====================================================
+   INVOICE NUMBER
+===================================================== */
+
+.invoice-number {
+
+  display: grid;
+
+  gap: 2px;
+
+}
+
+
+.invoice-number strong {
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    11px;
+
+  font-weight:
+    600;
+
+}
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+.money {
+
+  white-space:
+    nowrap;
+
+}
+
+
+.total-amount {
+
+  color:
+    var(--text-primary);
+
+  font-weight:
+    600;
+
+}
+
+
+.paid-amount {
+
+  color:
+    var(--success);
+
+  font-weight:
+    600;
+
+}
+
+
+.balance-due {
+
+  color:
+    var(--warning);
+
+  font-weight:
+    600;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-pill {
+
+  display:
+    inline-flex;
+
+  min-width:
+    64px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    4px 7px;
+
+  border-radius:
+    var(--radius-sm);
+
+  font-size:
+    9px;
+
+  font-weight:
+    600;
+
+  text-transform:
+    capitalize;
+
+}
+
+
+/* PAID */
+
+.status-pill.paid {
+
+  background:
+    rgba(
+      24,
+      185,
+      129,
+      .10
+    );
+
+  color:
+    var(--success);
+
+}
+
+
+/* PARTIAL */
+
+.status-pill.partial {
+
+  background:
+    rgba(
+      245,
+      165,
+      36,
+      .12
+    );
+
+  color:
+    var(--warning);
+
+}
+
+
+/* PENDING */
+
+.status-pill.pending {
+
+  background:
+    rgba(
+      79,
+      140,
+      255,
+      .10
+    );
+
+  color:
+    var(--info);
+
+}
+
+
+/* CANCELLED */
+
+.status-pill.cancelled {
+
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .10
+    );
+
+  color:
+    var(--danger);
+
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.invoice-actions {
+
+  display: flex;
+
+  align-items:
+    center;
+
+  gap: 5px;
+
+}
+
+
+.action-button {
+
+  display:
+    inline-flex;
+
+  height:
+    26px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    0 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor:
+    pointer;
+
+  font-size:
+    9px;
+
+  font-weight:
+    500;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.action-button:hover {
+
+  border-color:
+    var(--primary);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+}
+
+
+.payment-button {
+
+  border-color:
+    rgba(
+      24,
+      185,
+      129,
+      .25
+    );
+
+  color:
+    var(--success);
+
+}
+
+
+.payment-button:hover {
+
+  border-color:
+    var(--success);
+
+  background:
+    rgba(
+      24,
+      185,
+      129,
+      .08
+    );
+
+  color:
+    var(--success);
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-cell {
+
+  padding:
+    42px 20px !important;
+
+  text-align:
+    center !important;
+
+}
+
+
+.empty-state {
+
+  display: grid;
+
+  justify-items:
+    center;
+
+  gap: 6px;
+
+}
+
+
+.empty-state strong {
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    12px;
+
+}
+
+
+.empty-state span {
+
+  margin-bottom:
+    6px;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    10px;
+
+}
+
+
+.empty-state .btn {
+
+  min-height:
+    29px;
+
+  padding:
+    0 11px;
+
+  font-size:
+    10px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 900px
+) {
+
+  .filter-bar {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+}
+
+
+@media (
+  max-width: 600px
+) {
+
+  .page-actions {
+
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .page-actions-spacer {
+
+    display: none;
+
+  }
+
+
+  .page-actions .btn {
+
+    width: 100%;
+
+  }
+
+
+  .filter-bar {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}

@@ -21,9 +21,8 @@
 .data-table { min-width: 920px; font-size: 11px; }
 .data-table th, .data-table td { padding: 8px 10px; }
 .data-table th { position: sticky; top: 0; z-index: 1; font-size: 9px; }
-.visitor-cell strong, .visitor-cell small { display: block; }
+.visitor-cell strong { display: block; }
 .visitor-cell strong { color: var(--text-primary); font-weight: 600; }
-.visitor-cell small { margin-top: 1px; color: var(--text-muted); font-size: 9px; }
 .status { display: inline-block; padding: 3px 7px; border-radius: 10px; background: var(--bg-elevated); font-size: 9px; font-weight: 600; }
 .status-in { color: var(--success); }
 .status-out { color: var(--text-muted); }

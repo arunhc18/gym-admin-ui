@@ -1,0 +1,1571 @@
+:host {
+  display: block;
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.attendance-page {
+  width: 100%;
+}
+
+
+/* =====================================================
+   TOP PERIOD CONTROLS
+===================================================== */
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 6px;
+
+  margin-bottom: 6px;
+}
+
+
+.period-area {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+
+/* =====================================================
+   WEEK / MONTH SWITCH
+===================================================== */
+
+.view-switch {
+  display: flex;
+
+  height: 27px;
+
+  padding: 2px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-card);
+}
+
+
+.view-switch button {
+  min-width: 58px;
+
+  padding:
+    0 7px;
+
+  border: 0;
+
+  border-radius:
+    calc(
+      var(--radius-sm) - 2px
+    );
+
+  background:
+    transparent;
+
+  color:
+    var(--text-muted);
+
+  cursor: pointer;
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  line-height: 1;
+}
+
+
+.view-switch button.active {
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+}
+
+
+/* =====================================================
+   PERIOD NAVIGATION
+===================================================== */
+
+.period-navigation {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+}
+
+
+.period-label {
+  display: grid;
+
+  min-width: 120px;
+
+  gap: 0;
+
+  padding:
+    0 4px;
+}
+
+
+.period-label span {
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  font-weight: 600;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+}
+
+
+.period-label strong {
+  margin-top: 2px;
+
+  color:
+    var(--text-primary);
+
+  font-size: 9px;
+
+  line-height: 1;
+}
+
+
+.month-title {
+  min-width: 105px;
+}
+
+
+.icon-button,
+.current-button {
+  height: 27px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+}
+
+
+.icon-button {
+  width: 27px;
+
+  padding: 0;
+
+  font-size: 14px;
+}
+
+
+.current-button {
+  padding:
+    0 8px;
+
+  font-size: 7px;
+}
+
+
+.icon-button:hover,
+.current-button:hover {
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+}
+
+
+/* =====================================================
+   MONTH PICKER
+===================================================== */
+
+.month-picker {
+  height: 27px;
+
+  box-sizing: border-box;
+
+  padding:
+    0 6px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-secondary);
+
+  font-size: 8px;
+}
+
+
+.month-picker:focus {
+  border-color:
+    var(--primary);
+}
+
+
+/* =====================================================
+   SUMMARY CARDS
+===================================================== */
+
+.summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 6px;
+
+  margin-bottom: 7px;
+}
+
+
+.summary-card {
+  min-height: 43px;
+
+  box-sizing: border-box;
+
+  padding:
+    7px 10px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+}
+
+
+.summary-card span {
+  display: block;
+
+  margin: 0;
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  font-weight: 600;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+}
+
+
+.summary-card strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--text-primary);
+
+  font-size: 13px;
+
+  line-height: 1;
+}
+
+
+.summary-card small {
+  display: none;
+}
+
+
+.present-text {
+  color:
+    var(--success) !important;
+}
+
+
+.absent-text {
+  color:
+    var(--danger) !important;
+}
+
+
+/* =====================================================
+   ATTENDANCE CARD
+===================================================== */
+
+.attendance-card {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+}
+
+
+/* =====================================================
+   FILTER BAR
+===================================================== */
+
+.filter-bar {
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      260px,
+      1fr
+    )
+    130px
+    145px
+    auto;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding:
+    7px 9px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-box {
+  display: flex;
+
+  height: 28px;
+
+  align-items: center;
+
+  gap: 5px;
+
+  box-sizing: border-box;
+
+  padding:
+    0 7px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+}
+
+
+.search-box svg {
+  width: 11px;
+
+  height: 11px;
+
+  flex:
+    0 0 11px;
+
+  fill: none;
+
+  stroke:
+    var(--text-muted);
+
+  stroke-width: 1.8;
+}
+
+
+.search-box input {
+  width: 100%;
+
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+
+  line-height: 1;
+}
+
+
+.search-box input::placeholder {
+  color:
+    var(--text-muted);
+}
+
+
+/* =====================================================
+   FILTER SELECT
+===================================================== */
+
+.filter-bar select {
+  height: 28px;
+
+  box-sizing: border-box;
+
+  padding:
+    0 7px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  font-size: 8px;
+}
+
+
+.clear-button {
+  height: 28px;
+
+  padding:
+    0 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 8px;
+}
+
+
+.clear-button:hover {
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+}
+
+
+/* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
+.table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  overflow-y: visible;
+}
+
+
+/* =====================================================
+   COMMON TABLE
+===================================================== */
+
+.attendance-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  border-spacing: 0;
+
+  table-layout: auto;
+}
+
+
+.weekly-table {
+  min-width: 950px;
+}
+
+
+/* =====================================================
+   TABLE HEADER / CELL
+===================================================== */
+
+.attendance-table th,
+.attendance-table td {
+  margin: 0;
+
+  padding:
+    4px 6px;
+
+  border-bottom:
+    1px solid
+    var(--border-secondary);
+
+  vertical-align: middle;
+
+  line-height: 1.1;
+}
+
+
+.attendance-table th {
+  height: 28px;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+
+.attendance-table td {
+  height: 35px;
+
+  color:
+    var(--text-secondary);
+
+  font-size: 8px;
+}
+
+
+.attendance-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+
+/* =====================================================
+   PERSON COLUMN
+===================================================== */
+
+.person-column {
+  width: 200px;
+
+  min-width: 200px;
+}
+
+
+.type-column {
+  width: 62px;
+
+  min-width: 62px;
+}
+
+
+/* =====================================================
+   DAY HEADERS
+===================================================== */
+
+.day-column {
+  width: 62px;
+
+  min-width: 62px;
+
+  padding:
+    4px 3px !important;
+
+  text-align:
+    center !important;
+}
+
+
+.day-column span {
+  display: block;
+
+  margin: 0;
+
+  font-size: 6px;
+
+  line-height: 1;
+}
+
+
+.day-column strong {
+  display: block;
+
+  margin-top: 2px;
+
+  color:
+    var(--text-secondary);
+
+  font-size: 7px;
+
+  line-height: 1;
+}
+
+
+/* =====================================================
+   TODAY COLUMN
+===================================================== */
+
+.today-column {
+  background:
+    rgba(
+      255,
+      23,
+      68,
+      .11
+    ) !important;
+}
+
+
+.today-column strong {
+  color:
+    var(--danger);
+}
+
+
+.today-cell {
+  background:
+    rgba(
+      255,
+      23,
+      68,
+      .018
+    );
+}
+
+
+/* =====================================================
+   PERSON INFORMATION
+===================================================== */
+
+.person-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin: 0;
+
+  padding: 0;
+}
+
+
+.person-avatar {
+  display: grid;
+
+  width: 24px;
+
+  height: 24px;
+
+  flex:
+    0 0 24px;
+
+  place-items: center;
+
+  margin: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      23,
+      68,
+      .12
+    );
+
+  color:
+    var(--danger);
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+.person-info > div:last-child {
+  display: block;
+
+  min-width: 0;
+
+  margin: 0;
+
+  padding: 0;
+}
+
+
+.person-info strong {
+  display: block;
+
+  margin: 0;
+
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  line-height: 1.1;
+
+  white-space: nowrap;
+}
+
+
+/*
+ * Secondary information is hidden to keep
+ * attendance rows compact.
+ */
+
+.person-info span,
+.person-info small {
+  display: none;
+}
+
+
+/* =====================================================
+   PERSON TYPE
+===================================================== */
+
+.person-type {
+  display:
+    inline-flex;
+
+  min-width: 43px;
+
+  height: 18px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  margin: 0;
+
+  padding:
+    0 5px;
+
+  border-radius:
+    4px;
+
+  font-size: 6px;
+
+  font-weight: 600;
+
+  line-height: 1;
+
+  text-transform: capitalize;
+}
+
+
+.person-type.member {
+  background:
+    rgba(
+      255,
+      23,
+      68,
+      .12
+    );
+
+  color:
+    var(--danger);
+}
+
+
+.person-type.staff {
+  background:
+    rgba(
+      168,
+      85,
+      247,
+      .12
+    );
+
+  color:
+    #a855f7;
+}
+
+
+/* =====================================================
+   WEEKLY ATTENDANCE CELL
+===================================================== */
+
+.attendance-cell {
+  padding:
+    3px 4px !important;
+
+  text-align:
+    center !important;
+}
+
+
+/* =====================================================
+   ATTENDANCE STATUS
+===================================================== */
+
+.attendance-status {
+  display: grid;
+
+  width: 43px;
+
+  height: 29px;
+
+  min-height: 29px;
+
+  margin:
+    0 auto;
+
+  padding: 0;
+
+  place-items: center;
+
+  align-content: center;
+
+  gap: 0;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    var(--border-secondary);
+
+  border-radius:
+    4px;
+
+  line-height: 1;
+}
+
+
+.attendance-status
+.status-icon {
+  display: block;
+
+  margin: 0;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+.attendance-status small {
+  display: block;
+
+  margin-top: 1px;
+
+  font-size: 5px;
+
+  line-height: 1;
+}
+
+
+/* PRESENT */
+
+.attendance-status.present {
+  border-color:
+    rgba(
+      16,
+      185,
+      129,
+      .3
+    );
+
+  background:
+    rgba(
+      16,
+      185,
+      129,
+      .075
+    );
+
+  color:
+    var(--success);
+}
+
+
+/* ABSENT */
+
+.attendance-status.absent {
+  border-color:
+    rgba(
+      239,
+      68,
+      68,
+      .35
+    );
+
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .075
+    );
+
+  color:
+    var(--danger);
+}
+
+
+/* NOT MARKED */
+
+.attendance-status.not-marked {
+  border-color:
+    var(--border-secondary);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+}
+
+
+.attendance-status.future {
+  opacity: .5;
+}
+
+
+/* =====================================================
+   MONTHLY HEADER AREA
+===================================================== */
+
+.monthly-info {
+  display: flex;
+
+  min-height: 30px;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 6px;
+
+  padding:
+    5px 8px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+}
+
+
+.monthly-info > div {
+  display: block;
+}
+
+
+.monthly-info span {
+  display: block;
+
+  margin: 0;
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+}
+
+
+.monthly-info strong {
+  display: block;
+
+  margin-top: 2px;
+
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+
+  line-height: 1;
+}
+
+
+.monthly-info small {
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+}
+
+
+/* =====================================================
+   MONTHLY TABLE
+===================================================== */
+
+.monthly-wrapper {
+  max-width: 100%;
+}
+
+
+.monthly-table {
+  width: max-content;
+
+  min-width: 100%;
+}
+
+
+.monthly-table th,
+.monthly-table td {
+  padding:
+    3px 3px;
+
+  height: 30px;
+}
+
+
+/* =====================================================
+   STICKY PERSON
+===================================================== */
+
+.sticky-person {
+  position: sticky;
+
+  z-index: 3;
+
+  left: 0;
+
+  width: 180px;
+
+  min-width: 180px;
+
+  background:
+    var(--bg-card);
+}
+
+
+thead
+.sticky-person {
+  z-index: 5;
+
+  background:
+    var(--bg-elevated);
+}
+
+
+.monthly-person {
+  box-shadow:
+    5px 0 8px
+    rgba(
+      0,
+      0,
+      0,
+      .05
+    );
+}
+
+
+/* =====================================================
+   MONTH SUMMARY
+===================================================== */
+
+.month-summary-column {
+  width: 31px;
+
+  min-width: 31px;
+
+  padding:
+    3px !important;
+
+  text-align:
+    center !important;
+}
+
+
+.month-summary {
+  width: 31px;
+
+  min-width: 31px;
+
+  padding:
+    3px !important;
+
+  text-align:
+    center !important;
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+.month-present {
+  color:
+    var(--success);
+}
+
+
+.month-absent {
+  color:
+    var(--danger);
+}
+
+
+.month-rate {
+  color:
+    var(--text-primary);
+}
+
+
+/* =====================================================
+   MONTH DAY HEADER
+===================================================== */
+
+.month-day-column {
+  width: 29px;
+
+  min-width: 29px;
+
+  padding:
+    3px 2px !important;
+
+  text-align:
+    center !important;
+}
+
+
+.month-day-column span {
+  display: block;
+
+  margin: 0;
+
+  font-size: 5px;
+
+  line-height: 1;
+}
+
+
+.month-day-column strong {
+  display: block;
+
+  margin-top: 2px;
+
+  color:
+    var(--text-secondary);
+
+  font-size: 7px;
+
+  line-height: 1;
+}
+
+
+/* =====================================================
+   MONTHLY CELL
+===================================================== */
+
+.monthly-cell {
+  width: 29px;
+
+  min-width: 29px;
+
+  padding:
+    2px !important;
+
+  text-align:
+    center !important;
+}
+
+
+.monthly-status {
+  display: grid;
+
+  width: 20px;
+
+  height: 20px;
+
+  margin:
+    0 auto;
+
+  padding: 0;
+
+  place-items: center;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    var(--border-secondary);
+
+  border-radius:
+    4px;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+.monthly-status.present {
+  border-color:
+    rgba(
+      16,
+      185,
+      129,
+      .28
+    );
+
+  background:
+    rgba(
+      16,
+      185,
+      129,
+      .075
+    );
+
+  color:
+    var(--success);
+}
+
+
+.monthly-status.absent {
+  border-color:
+    rgba(
+      239,
+      68,
+      68,
+      .32
+    );
+
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .075
+    );
+
+  color:
+    var(--danger);
+}
+
+
+.monthly-status.not-marked {
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+}
+
+
+.monthly-status.future {
+  opacity: .45;
+}
+
+
+/* =====================================================
+   LEGEND
+===================================================== */
+
+.legend {
+  display: flex;
+
+  min-height: 30px;
+
+  align-items: center;
+
+  gap: 12px;
+
+  box-sizing: border-box;
+
+  padding:
+    5px 8px;
+
+  border-top:
+    1px solid
+    var(--border-primary);
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  line-height: 1;
+
+  flex-wrap: wrap;
+}
+
+
+.legend span {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  margin: 0;
+}
+
+
+.legend i {
+  display: grid;
+
+  width: 15px;
+
+  height: 15px;
+
+  place-items: center;
+
+  margin: 0;
+
+  border-radius:
+    3px;
+
+  font-size: 7px;
+
+  font-style: normal;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+.legend-present {
+  background:
+    rgba(
+      16,
+      185,
+      129,
+      .1
+    );
+
+  color:
+    var(--success);
+}
+
+
+.legend-absent {
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .1
+    );
+
+  color:
+    var(--danger);
+}
+
+
+.legend-none {
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+}
+
+
+.summary-help {
+  margin-left: auto;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-state {
+  height: 45px;
+
+  padding:
+    8px !important;
+
+  color:
+    var(--text-muted);
+
+  font-size: 8px;
+
+  text-align:
+    center !important;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.table-wrapper {
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    var(--border-primary)
+    transparent;
+}
+
+
+.table-wrapper::-webkit-scrollbar {
+  height: 5px;
+}
+
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background:
+    var(--border-primary);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 1000px
+) {
+
+  .summary-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+
+  .filter-bar {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+}
+
+
+@media (
+  max-width: 700px
+) {
+
+  .period-area {
+    width: 100%;
+
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+
+  .period-navigation {
+    flex-wrap: wrap;
+  }
+
+
+  .view-switch {
+    width: fit-content;
+  }
+
+
+  .summary-grid {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .filter-bar {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .person-column {
+    min-width: 170px;
+  }
+
+
+  .summary-help {
+    width: 100%;
+
+    margin-left: 0;
+  }
+
+}

@@ -59,7 +59,7 @@
         <tbody>
           @for (visitor of pagedVisitors; track visitor.visitorId) {
             <tr>
-              <td class="visitor-cell"><strong>{{ visitor.visitorName }}</strong><small>Visitor #{{ visitor.visitorId }}</small></td>
+              <td class="visitor-cell"><strong>{{ visitor.visitorName }}</strong></td>
               <td>{{ visitor.phone }}</td>
               <td>{{ visitor.purpose }}</td>
               <td>{{ visitor.email || '-' }}</td>

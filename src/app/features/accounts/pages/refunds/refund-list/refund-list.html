@@ -1,0 +1,291 @@
+<div class="refund-page">
+
+
+  <div class="page-actions">
+
+    <div></div>
+
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="goToPayments()"
+    >
+      Select Payment to Refund
+    </button>
+
+  </div>
+
+
+  <section class="summary-card">
+
+    <span>
+      Total Refunded
+    </span>
+
+    <strong>
+
+      {{
+        totalRefunded
+          | currency:
+            'INR':
+            'symbol':
+            '1.2-2'
+      }}
+
+    </strong>
+
+  </section>
+
+
+  <section class="refund-card">
+
+
+    <div class="filter-bar">
+
+
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="applyFilters()"
+        placeholder="Search payment, invoice or refund reason..."
+      />
+
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="pending">
+          Pending
+        </option>
+
+        <option value="processed">
+          Processed
+        </option>
+
+        <option value="rejected">
+          Rejected
+        </option>
+
+        <option value="cancelled">
+          Cancelled
+        </option>
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+        Clear
+      </button>
+
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Refund ID
+            </th>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Payment
+            </th>
+
+            <th>
+              Invoice
+            </th>
+
+            <th>
+              Method
+            </th>
+
+            <th>
+              Reason
+            </th>
+
+            <th>
+              Amount
+            </th>
+
+            <th>
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          @for (
+            refund of filteredRefunds;
+            track refund.refundId
+          ) {
+
+            <tr>
+
+
+              <td>
+
+                #{{ refund.refundId }}
+
+              </td>
+
+
+              <td>
+
+                {{
+                  refund.refundDate
+                    | date:
+                      'dd MMM yyyy'
+                }}
+
+              </td>
+
+
+              <td>
+
+                <strong>
+                  {{ refund.paymentNumber }}
+                </strong>
+
+              </td>
+
+
+              <td>
+
+
+                @if (
+                  refund.invoiceId
+                ) {
+
+                  <button
+                    type="button"
+                    class="invoice-link"
+                    (click)="openInvoice(refund)"
+                  >
+
+                    {{
+                      refund.invoiceNumber
+                    }}
+
+                  </button>
+
+                } @else {
+
+                  -
+
+                }
+
+
+              </td>
+
+
+              <td>
+
+                {{
+                  refund.paymentMethodName
+                }}
+
+              </td>
+
+
+              <td>
+
+                {{
+                  refund.refundReason
+                  || '-'
+                }}
+
+              </td>
+
+
+              <td class="amount">
+
+                {{
+                  refund.refundAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="status-pill"
+                  [ngClass]="
+                    refund.refundStatus
+                  "
+                >
+
+                  {{
+                    refund.refundStatus
+                  }}
+
+                </span>
+
+              </td>
+
+
+            </tr>
+
+          } @empty {
+
+            <tr>
+
+              <td
+                colspan="8"
+                class="empty"
+              >
+
+                No refunds have been processed.
+
+              </td>
+
+            </tr>
+
+          }
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </section>
+
+
+</div>

@@ -1,0 +1,856 @@
+<div class="accounts-page">
+
+
+  <!-- =====================================================
+       QUICK ACTIONS
+  ====================================================== -->
+
+  <div class="page-actions">
+
+
+    <button
+      type="button"
+      class="action secondary"
+      (click)="viewPayments()"
+    >
+      View Payments
+    </button>
+
+
+    <button
+      type="button"
+      class="action secondary"
+      (click)="viewInvoices()"
+    >
+      View Invoices
+    </button>
+
+
+    <button
+      type="button"
+      class="action secondary"
+      (click)="viewExpenses()"
+    >
+      + Expense
+    </button>
+
+
+    <button
+      type="button"
+      class="action primary"
+      (click)="createInvoice()"
+    >
+      + Create Invoice
+    </button>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       SUMMARY CARDS
+  ====================================================== -->
+
+  <section class="summary-grid">
+
+
+    <!-- TODAY REVENUE -->
+
+    <article class="summary-card">
+
+
+      <div class="summary-icon">
+
+        <svg viewBox="0 0 24 24">
+
+          <rect
+            x="3"
+            y="5"
+            width="18"
+            height="14"
+            rx="2">
+          </rect>
+
+          <path d="M3 10h18M7 15h3">
+          </path>
+
+        </svg>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Today's Revenue
+        </span>
+
+        <strong>
+
+          {{
+            todayRevenue
+              | currency:
+                'INR':
+                'symbol':
+                '1.0-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+    </article>
+
+
+    <!-- OUTSTANDING -->
+
+    <article class="summary-card">
+
+
+      <div class="summary-icon">
+
+        <svg viewBox="0 0 24 24">
+
+          <circle
+            cx="12"
+            cy="12"
+            r="8">
+          </circle>
+
+          <path d="M12 7v5M12 16h.01">
+          </path>
+
+        </svg>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Outstanding Amount
+        </span>
+
+        <strong class="warning">
+
+          {{
+            outstandingAmount
+              | currency:
+                'INR':
+                'symbol':
+                '1.0-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+    </article>
+
+
+    <!-- EXPENSES -->
+
+    <article class="summary-card">
+
+
+      <div class="summary-icon">
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M5 4h14v16H5z">
+          </path>
+
+          <path d="M8 8h8M8 12h8M8 16h5">
+          </path>
+
+        </svg>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Today's Expenses
+        </span>
+
+        <strong>
+
+          {{
+            todayExpenses
+              | currency:
+                'INR':
+                'symbol':
+                '1.0-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+    </article>
+
+
+    <!-- NET -->
+
+    <article class="summary-card">
+
+
+      <div class="summary-icon">
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M4 18 10 12l4 3 6-8">
+          </path>
+
+          <path d="M16 7h4v4">
+          </path>
+
+        </svg>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Net Collection
+        </span>
+
+        <strong class="success">
+
+          {{
+            netCollection
+              | currency:
+                'INR':
+                'symbol':
+                '1.0-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+    </article>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       INVOICE STATUS
+  ====================================================== -->
+
+  <section class="status-strip">
+
+
+    <div>
+
+      <span>
+        Total Collected
+      </span>
+
+      <strong>
+
+        {{
+          totalCollected
+            | currency:
+              'INR':
+              'symbol':
+              '1.0-2'
+        }}
+
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        Paid Invoices
+      </span>
+
+      <strong class="success">
+
+        {{ paidInvoiceCount }}
+
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        Partial
+      </span>
+
+      <strong class="warning">
+
+        {{ partialInvoiceCount }}
+
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        Pending
+      </span>
+
+      <strong>
+
+        {{ pendingInvoiceCount }}
+
+      </strong>
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       MAIN GRID
+  ====================================================== -->
+
+  <div class="content-grid">
+
+
+    <!-- ===================================================
+         RECENT PAYMENTS
+    ==================================================== -->
+
+    <section class="content-card recent-payments">
+
+
+      <div class="card-header">
+
+
+        <div>
+
+          <h2>
+            Recent Payments
+          </h2>
+
+          <p>
+            Latest member payment transactions
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="link-button"
+          (click)="viewPayments()"
+        >
+          View All
+        </button>
+
+
+      </div>
+
+
+      <div class="table-wrapper">
+
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Payment
+              </th>
+
+              <th>
+                Member
+              </th>
+
+              <th>
+                Method
+              </th>
+
+              <th class="right">
+                Amount
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              payment of recentPayments;
+              track payment.paymentId
+            ) {
+
+              <tr
+                [class.clickable]="payment.invoiceId"
+                (click)="openPaymentInvoice(payment)"
+              >
+
+
+                <td>
+
+                  <div class="primary-cell">
+
+                    <strong>
+
+                      {{
+                        payment.paymentNumber
+                      }}
+
+                    </strong>
+
+                    <small>
+
+                      {{
+                        payment.paymentDate
+                          | date:
+                            'dd MMM yyyy'
+                      }}
+
+                    </small>
+
+                  </div>
+
+                </td>
+
+
+                <td>
+
+                  {{
+                    getMemberDisplay(
+                      payment.memberId
+                    )
+                  }}
+
+                </td>
+
+
+                <td>
+
+                  <span class="method-pill">
+
+                    {{
+                      payment.paymentMethodName
+                    }}
+
+                  </span>
+
+                </td>
+
+
+                <td class="right money success">
+
+                  {{
+                    payment.amount
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.0-2'
+                  }}
+
+                </td>
+
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+
+                <td
+                  colspan="4"
+                  class="empty"
+                >
+
+                  No payments available.
+
+                </td>
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- ===================================================
+         PAYMENT METHOD BREAKDOWN
+    ==================================================== -->
+
+    <section class="content-card">
+
+
+      <div class="card-header">
+
+
+        <div>
+
+          <h2>
+            Payment Methods
+          </h2>
+
+          <p>
+            Collection by payment method
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="method-list">
+
+
+        @for (
+          method of paymentMethodSummary;
+          track method.paymentMethodId
+        ) {
+
+
+          <div class="method-row">
+
+
+            <div class="method-top">
+
+
+              <div>
+
+                <strong>
+
+                  {{
+                    method.paymentMethodName
+                  }}
+
+                </strong>
+
+                <small>
+
+                  {{
+                    method.transactionCount
+                  }}
+                  transactions
+
+                </small>
+
+              </div>
+
+
+              <div class="method-value">
+
+                <strong>
+
+                  {{
+                    method.amount
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.0-2'
+                  }}
+
+                </strong>
+
+                <small>
+
+                  {{
+                    method.percentage
+                  }}%
+
+                </small>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="progress-track">
+
+              <div
+                class="progress-value"
+                [style.width.%]="
+                  method.percentage
+                "
+              >
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+        } @empty {
+
+
+          <div class="empty">
+
+            No completed payments available.
+
+          </div>
+
+
+        }
+
+
+      </div>
+
+
+    </section>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       OUTSTANDING INVOICES
+  ====================================================== -->
+
+  <section class="content-card outstanding-card">
+
+
+    <div class="card-header">
+
+
+      <div>
+
+        <h2>
+          Outstanding Invoices
+        </h2>
+
+        <p>
+          Pending balances requiring collection
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="link-button"
+        (click)="viewInvoices()"
+      >
+        View All
+      </button>
+
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Invoice
+            </th>
+
+            <th>
+              Member
+            </th>
+
+            <th>
+              Invoice Total
+            </th>
+
+            <th>
+              Paid
+            </th>
+
+            <th>
+              Balance
+            </th>
+
+            <th>
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          @for (
+            invoice of outstandingInvoices;
+            track invoice.invoiceId
+          ) {
+
+
+            <tr
+              class="clickable"
+              (click)="
+                openInvoice(
+                  invoice.invoiceId
+                )
+              "
+            >
+
+
+              <td>
+
+                <div class="primary-cell">
+
+                  <strong>
+
+                    {{
+                      invoice.invoiceNumber
+                    }}
+
+                  </strong>
+
+                  <small>
+
+                    {{
+                      invoice.invoiceDate
+                        | date:
+                          'dd MMM yyyy'
+                    }}
+
+                  </small>
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                {{
+                  getMemberDisplay(
+                    invoice.memberId
+                  )
+                }}
+
+              </td>
+
+
+              <td class="money">
+
+                {{
+                  invoice.totalAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.0-2'
+                }}
+
+              </td>
+
+
+              <td class="money success">
+
+                {{
+                  invoice.paidAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.0-2'
+                }}
+
+              </td>
+
+
+              <td class="money warning">
+
+                {{
+                  invoice.balanceAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.0-2'
+                }}
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="status-pill"
+                  [class.partial]="
+                    invoice.status ===
+                    'partial'
+                  "
+                >
+
+                  {{
+                    invoice.status
+                  }}
+
+                </span>
+
+              </td>
+
+
+            </tr>
+
+
+          } @empty {
+
+
+            <tr>
+
+              <td
+                colspan="6"
+                class="empty"
+              >
+
+                No outstanding invoices.
+
+              </td>
+
+            </tr>
+
+
+          }
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </section>
+
+
+</div>

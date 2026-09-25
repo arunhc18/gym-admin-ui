@@ -1,0 +1,609 @@
+@if (invoice) {
+
+  <form
+    class="payment-form-page"
+    [formGroup]="paymentForm"
+    (ngSubmit)="savePayment()"
+    novalidate
+  >
+
+
+    <!-- =====================================================
+         PAGE ACTIONS
+    ====================================================== -->
+
+    <div class="page-actions">
+
+
+      <button
+        type="button"
+        class="back-link"
+        (click)="goToInvoice()"
+      >
+
+        ← Back to Invoice
+
+      </button>
+
+
+      <div class="action-buttons">
+
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="goToInvoice()"
+        >
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving"
+        >
+
+          {{
+            saving
+              ? 'Saving...'
+              : 'Record Payment'
+          }}
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         INVOICE SUMMARY
+    ====================================================== -->
+
+    <section class="summary-card">
+
+
+      <div class="summary-header">
+
+
+        <div>
+
+          <span class="section-label">
+
+            Invoice
+
+          </span>
+
+
+          <strong class="invoice-number">
+
+            {{
+              invoice.invoiceNumber
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <span
+          class="status-pill"
+          [ngClass]="invoice.status"
+        >
+
+          {{ invoice.status }}
+
+        </span>
+
+
+      </div>
+
+
+      <div class="summary-grid">
+
+
+        <!-- MEMBER -->
+        <div>
+
+          <span>
+            Member
+          </span>
+
+          <strong>
+
+            #{{ invoice.memberId || '-' }}
+
+          </strong>
+
+        </div>
+
+
+        <!-- LOCATION -->
+        <div>
+
+          <span>
+            Location
+          </span>
+
+          <strong>
+
+            #{{ invoice.locationId }}
+
+          </strong>
+
+        </div>
+
+
+        <!-- TOTAL -->
+        <div>
+
+          <span>
+            Invoice Total
+          </span>
+
+          <strong>
+
+            {{
+              invoice.totalAmount
+                | currency:
+                  'INR':
+                  'symbol':
+                  '1.2-2'
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <!-- PAID -->
+        <div>
+
+          <span>
+            Already Paid
+          </span>
+
+          <strong class="paid-value">
+
+            {{
+              invoice.paidAmount
+                | currency:
+                  'INR':
+                  'symbol':
+                  '1.2-2'
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <!-- BALANCE -->
+        <div>
+
+          <span>
+            Outstanding Balance
+          </span>
+
+          <strong class="balance-value">
+
+            {{
+              invoice.balanceAmount
+                | currency:
+                  'INR':
+                  'symbol':
+                  '1.2-2'
+            }}
+
+          </strong>
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         PAYMENT DETAILS
+    ====================================================== -->
+
+    <section class="form-card">
+
+
+      <div class="section-header">
+
+
+        <div>
+
+          <h2>
+            Payment Details
+          </h2>
+
+          <p>
+            Record a payment against this invoice.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="form-grid">
+
+
+        <!-- PAYMENT DATE -->
+        <div class="form-group">
+
+
+          <label>
+
+            Payment Date
+
+            <span class="required">
+              *
+            </span>
+
+          </label>
+
+
+          <input
+            type="date"
+            formControlName="paymentDate"
+            [class.invalid]="
+              isInvalid(
+                'paymentDate'
+              )
+            "
+          />
+
+
+          @if (
+            isInvalid(
+              'paymentDate'
+            )
+          ) {
+
+            <span class="form-error">
+
+              Payment date is required.
+
+            </span>
+
+          }
+
+
+        </div>
+
+
+        <!-- PAYMENT METHOD -->
+        <div class="form-group">
+
+
+          <label>
+
+            Payment Method
+
+            <span class="required">
+              *
+            </span>
+
+          </label>
+
+
+          <select
+            formControlName="paymentMethodId"
+            [class.invalid]="
+              isInvalid(
+                'paymentMethodId'
+              )
+            "
+          >
+
+            <option
+              [ngValue]="null"
+            >
+
+              Select payment method
+
+            </option>
+
+
+            @for (
+              method of paymentMethods;
+              track method.paymentMethodId
+            ) {
+
+              <option
+                [ngValue]="method.paymentMethodId"
+              >
+
+                {{ method.methodName }}
+
+              </option>
+
+            }
+
+
+          </select>
+
+
+          @if (
+            isInvalid(
+              'paymentMethodId'
+            )
+          ) {
+
+            <span class="form-error">
+
+              Payment method is required.
+
+            </span>
+
+          }
+
+
+        </div>
+
+
+        <!-- AMOUNT -->
+        <div class="form-group">
+
+
+          <label>
+
+            Amount
+
+            <span class="required">
+              *
+            </span>
+
+          </label>
+
+
+          <div class="amount-input">
+
+
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              formControlName="amount"
+              [class.invalid]="
+                isInvalid(
+                  'amount'
+                )
+              "
+            />
+
+
+            <button
+              type="button"
+              (click)="useFullBalance()"
+            >
+
+              Full Balance
+
+            </button>
+
+
+          </div>
+
+
+          @if (
+            isInvalid(
+              'amount'
+            )
+          ) {
+
+            <span class="form-error">
+
+              Enter a valid payment amount.
+
+            </span>
+
+          }
+
+
+        </div>
+
+
+        <!-- TRANSACTION ID -->
+        <div class="form-group">
+
+
+          <label>
+            Transaction ID
+          </label>
+
+
+          <input
+            type="text"
+            maxlength="100"
+            formControlName="transactionId"
+            placeholder="UPI / Card / Gateway transaction ID"
+          />
+
+
+        </div>
+
+
+        <!-- REFERENCE NUMBER -->
+        <div class="form-group">
+
+
+          <label>
+            Reference Number
+          </label>
+
+
+          <input
+            type="text"
+            maxlength="100"
+            formControlName="referenceNumber"
+            placeholder="Optional reference number"
+          />
+
+
+        </div>
+
+
+        <!-- NOTES -->
+        <div class="form-group">
+
+
+          <label>
+            Notes
+          </label>
+
+
+          <input
+            type="text"
+            formControlName="notes"
+            placeholder="Optional payment notes"
+          />
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         PAYMENT RESULT PREVIEW
+    ====================================================== -->
+
+    <section class="result-card">
+
+
+      <div class="result-item">
+
+        <span>
+          Current Balance
+        </span>
+
+        <strong>
+
+          {{
+            invoice.balanceAmount
+              | currency:
+                'INR':
+                'symbol':
+                '1.2-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+      <span class="result-arrow">
+
+        →
+
+      </span>
+
+
+      <div class="result-item">
+
+        <span>
+          Payment
+        </span>
+
+        <strong class="payment-value">
+
+          {{
+            (
+              paymentForm.controls
+                .amount
+                .value || 0
+            )
+              | currency:
+                'INR':
+                'symbol':
+                '1.2-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+      <span class="result-arrow">
+
+        →
+
+      </span>
+
+
+      <div class="result-item">
+
+        <span>
+          Remaining
+        </span>
+
+        <strong
+          [class.zero-balance]="
+            remainingBalance === 0
+          "
+        >
+
+          {{
+            remainingBalance
+              | currency:
+                'INR':
+                'symbol':
+                '1.2-2'
+          }}
+
+        </strong>
+
+      </div>
+
+
+      <span class="result-arrow">
+
+        →
+
+      </span>
+
+
+      <div class="result-item">
+
+        <span>
+          New Status
+        </span>
+
+        <strong
+          class="result-status"
+          [class.paid]="
+            resultingStatus === 'Paid'
+          "
+        >
+
+          {{ resultingStatus }}
+
+        </strong>
+
+      </div>
+
+
+    </section>
+
+
+  </form>
+
+
+}
