@@ -5,16 +5,54 @@
   background: var(--bg-card);
 }
 
+/* Keep all application data tables dense without changing their layout. */
+.app-shell table {
+  line-height: 1.2 !important;
+}
+
+.app-shell table th,
+.app-shell table td {
+  padding: 9px 10px !important;
+  vertical-align: middle !important;
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.app-shell table th {
+  font-size: 8px !important;
+}
+
+.app-shell table tr {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.app-shell .filter-bar,
+.app-shell .filters {
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.app-shell .filter-bar input,
+.app-shell .filter-bar select,
+.app-shell .filters input,
+.app-shell .filters select,
+.app-shell .filter-bar button,
+.app-shell .filters button {
+  height: 30px;
+  font-size: 9px;
+}
 .data-table {
   width: 100%;
   min-width: 850px;
   border-collapse: collapse;
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 9px;
 
   th,
   td {
-    padding: 13px 16px;
+    padding: 9px 10px;
     border-bottom: 1px solid var(--border-secondary);
     text-align: left;
     white-space: nowrap;
@@ -23,7 +61,7 @@
   th {
     background: var(--bg-elevated);
     color: var(--text-muted);
-    font-size: 11px;
+    font-size: 8px;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;

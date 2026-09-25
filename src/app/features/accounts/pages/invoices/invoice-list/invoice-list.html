@@ -1,0 +1,512 @@
+<div class="invoice-list-page">
+
+
+  <!-- =====================================================
+       TOP ACTIONS
+  ====================================================== -->
+
+  <div class="page-actions">
+
+
+    <div class="page-actions-spacer">
+    </div>
+
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="createInvoice()"
+    >
+
+      + Create Invoice
+
+    </button>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       INVOICE LIST
+  ====================================================== -->
+
+  <section class="invoice-card">
+
+
+    <!-- ===================================================
+         FILTER BAR
+    ==================================================== -->
+
+    <div class="filter-bar">
+
+
+      <!-- SEARCH -->
+      <div class="search-box">
+
+        <span class="search-icon">
+
+          ⌕
+
+        </span>
+
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search invoice, member or location..."
+        />
+
+      </div>
+
+
+      <!-- STATUS -->
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="pending">
+          Pending
+        </option>
+
+        <option value="partial">
+          Partial
+        </option>
+
+        <option value="paid">
+          Paid
+        </option>
+
+        <option value="cancelled">
+          Cancelled
+        </option>
+
+      </select>
+
+
+      <!-- TYPE -->
+      <select
+        [(ngModel)]="selectedType"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Types
+        </option>
+
+        <option value="membership">
+          Membership
+        </option>
+
+        <option value="pt_package">
+          PT Package
+        </option>
+
+        <option value="retail">
+          Retail
+        </option>
+
+        <option value="other">
+          Other
+        </option>
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+
+        Clear
+
+      </button>
+
+
+    </div>
+
+
+    <!-- ===================================================
+         TABLE
+    ==================================================== -->
+
+    <div class="table-container">
+
+
+      <table
+        class="data-table invoices-table"
+      >
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Invoice #
+            </th>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Member
+            </th>
+
+            <th>
+              Location
+            </th>
+
+            <th>
+              Type
+            </th>
+
+            <th>
+              Total
+            </th>
+
+            <th>
+              Paid
+            </th>
+
+            <th>
+              Balance
+            </th>
+
+            <th>
+              Due Date
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          @for (
+            invoice of filteredInvoices;
+            track invoice.invoiceId
+          ) {
+
+
+            <tr
+              class="invoice-row"
+              (click)="
+                viewInvoice(
+                  invoice
+                )
+              "
+            >
+
+
+              <!-- INVOICE NUMBER -->
+              <td>
+
+                <div
+                  class="invoice-number"
+                >
+
+                  <strong>
+
+                    {{
+                      invoice.invoiceNumber
+                    }}
+
+                  </strong>
+
+                </div>
+
+              </td>
+
+
+              <!-- DATE -->
+              <td>
+
+                {{
+                  invoice.invoiceDate
+                    | date:
+                      'dd MMM yyyy'
+                }}
+
+              </td>
+
+
+              <!-- MEMBER -->
+              <td>
+
+                {{
+                  getMemberDisplay(
+                    invoice.memberId
+                  )
+                }}
+
+              </td>
+
+
+              <!-- LOCATION -->
+              <td>
+
+                Location
+                #{{ invoice.locationId }}
+
+              </td>
+
+
+              <!-- TYPE -->
+              <td>
+
+                {{
+                  getTypeLabel(
+                    invoice.invoiceType
+                  )
+                }}
+
+              </td>
+
+
+              <!-- TOTAL -->
+              <td
+                class="money total-amount"
+              >
+
+                {{
+                  invoice.totalAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- PAID -->
+              <td
+                class="money paid-amount"
+              >
+
+                {{
+                  invoice.paidAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- BALANCE -->
+              <td
+                class="money"
+                [class.balance-due]="
+                  invoice.balanceAmount > 0
+                "
+              >
+
+                {{
+                  invoice.balanceAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- DUE -->
+              <td>
+
+                @if (
+                  invoice.dueDate
+                ) {
+
+                  {{
+                    invoice.dueDate
+                      | date:
+                        'dd MMM yyyy'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <!-- STATUS -->
+              <td>
+
+                <span
+                  class="status-pill"
+                  [ngClass]="
+                    getStatusClass(
+                      invoice.status
+                    )
+                  "
+                >
+
+                  {{
+                    invoice.status
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <!-- ACTIONS -->
+              <td
+                (click)="
+                  $event.stopPropagation()
+                "
+              >
+
+                <div
+                  class="invoice-actions"
+                >
+
+
+                  <!-- VIEW -->
+                  <button
+                    type="button"
+                    class="action-button"
+                    title="View invoice"
+                    (click)="
+                      viewInvoice(
+                        invoice
+                      )
+                    "
+                  >
+
+                    View
+
+                  </button>
+
+
+                  <!-- PRINT -->
+                  <button
+                    type="button"
+                    class="action-button"
+                    title="Print invoice"
+                    (click)="
+                      printInvoice(
+                        $event,
+                        invoice
+                      )
+                    "
+                  >
+
+                    Print
+
+                  </button>
+
+
+                  <!-- RECORD PAYMENT -->
+                  @if (
+                    canRecordPayment(
+                      invoice
+                    )
+                  ) {
+
+                    <button
+                      type="button"
+                      class="
+                        action-button
+                        payment-button
+                      "
+                      title="Record payment"
+                      (click)="
+                        recordPayment(
+                          $event,
+                          invoice
+                        )
+                      "
+                    >
+
+                      Payment
+
+                    </button>
+
+                  }
+
+
+                </div>
+
+              </td>
+
+
+            </tr>
+
+
+          } @empty {
+
+
+            <tr>
+
+              <td
+                colspan="11"
+                class="empty-cell"
+              >
+
+                <div class="empty-state">
+
+                  <strong>
+                    No invoices found
+                  </strong>
+
+                  <span>
+                    Create an invoice to start billing members.
+                  </span>
+
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="createInvoice()"
+                  >
+                    + Create Invoice
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+
+          }
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </section>
+
+
+</div>

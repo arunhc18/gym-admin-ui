@@ -177,11 +177,8 @@
   h1 {
 
     margin:
-
       0
-
       0
-
       5px;
 
     color: #ffffff;
@@ -195,8 +192,6 @@
 
 
   p {
-
-    margin: 0;
 
     color:
 
@@ -2028,13 +2023,9 @@
 
 ===================================================== */
 
-@media (
+@media (max-width: 1050px) {
 
-  max-width: 1050px
-
-) {
-
-  .stats-grid {
+  .cards-grid {
 
     grid-template-columns:
 
@@ -2052,13 +2043,9 @@
 
 
 
-@media (
+@media (max-width: 680px) {
 
-  max-width: 680px
-
-) {
-
-  .dashboard-page {
+  .dashboard-table td {
 
     padding: 12px;
 

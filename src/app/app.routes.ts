@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
 
-import { AppLayoutComponent } from './core/layout/app-layout/app-layout';
-import { PlatformLayoutComponent } from './core/layout/platform-layout/platform-layout';
+import {
+  AppLayoutComponent
+} from './core/layout/app-layout/app-layout';
+
+import {
+  PlatformLayoutComponent
+} from './core/layout/platform-layout/platform-layout';
 
 
 export const routes: Routes = [
+
 
   // =====================================================
   // PLATFORM ADMIN
@@ -13,12 +19,14 @@ export const routes: Routes = [
   {
     path: 'platform',
 
-    component: PlatformLayoutComponent,
+    component:
+      PlatformLayoutComponent,
 
     children: [
 
+
       // =================================================
-      // DEFAULT PLATFORM ROUTE
+      // PLATFORM DEFAULT
       // =================================================
 
       {
@@ -39,219 +47,409 @@ export const routes: Routes = [
           import(
             './features/platform/dashboard/dashboard'
           ).then(
-            m => m.PlatformDashboardComponent
+            m =>
+              m.PlatformDashboardComponent
           ),
 
         data: {
-          title: 'Platform Dashboard',
+
+          title:
+            'Platform Dashboard',
+
           description:
             'Manage tenants, subscriptions and platform operations'
+
         }
       },
 
 
-      // =================================================
-      // SUBSCRIPTION PLANS - CREATE
-      // IMPORTANT: Keep before :id
-      // =================================================
+      // =====================================================
+      // PLATFORM SUBSCRIPTION PLANS
+      // =====================================================
 
+
+      // CREATE PLAN
       {
-        path: 'subscription-plans/new',
+        path:
+          'subscription-plans/new',
 
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-form/plan-form'
           ).then(
-            m => m.PlanFormComponent
+            m =>
+              m.PlanFormComponent
           ),
 
         data: {
-          title: 'Create Subscription Plan',
+
+          title:
+            'Create Subscription Plan',
+
           description:
             'Create a new SaaS subscription plan'
+
         }
       },
 
 
-      // =================================================
-      // SUBSCRIPTION PLANS - EDIT
-      // IMPORTANT: Keep before :id
-      // =================================================
-
+      // EDIT PLAN
       {
-        path: 'subscription-plans/:id/edit',
+        path:
+          'subscription-plans/:id/edit',
 
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-form/plan-form'
           ).then(
-            m => m.PlanFormComponent
+            m =>
+              m.PlanFormComponent
           ),
 
         data: {
-          title: 'Edit Subscription Plan',
+
+          title:
+            'Edit Subscription Plan',
+
           description:
             'Update subscription plan information'
+
         }
       },
 
 
-      // =================================================
-      // SUBSCRIPTION PLANS - DETAILS
-      // =================================================
-
+      // PLAN DETAILS
       {
-        path: 'subscription-plans/:id',
+        path:
+          'subscription-plans/:id',
 
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-details/plan-details'
           ).then(
-            m => m.PlanDetailsComponent
+            m =>
+              m.PlanDetailsComponent
           ),
 
         data: {
-          title: 'Subscription Plan Details',
+
+          title:
+            'Subscription Plan Details',
+
           description:
             'View subscription plan information'
+
         }
       },
 
 
-      // =================================================
-      // SUBSCRIPTION PLANS - LIST
-      // =================================================
-
+      // PLAN LIST
       {
-        path: 'subscription-plans',
+        path:
+          'subscription-plans',
 
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-list/plan-list'
           ).then(
-            m => m.PlanListComponent
+            m =>
+              m.PlanListComponent
           ),
 
         data: {
-          title: 'Subscription Plans',
+
+          title:
+            'Subscription Plans',
+
           description:
             'Manage GymAdmin SaaS subscription plans'
+
         }
       },
 
 
-      // =================================================
-      // TENANTS - CREATE
-      // IMPORTANT: Keep before :id
-      // =================================================
+      // =====================================================
+      // PLATFORM TENANTS
+      // =====================================================
 
+
+      // CREATE TENANT
       {
-        path: 'tenants/new',
+        path:
+          'tenants/new',
 
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-form/tenant-form'
           ).then(
-            m => m.TenantFormComponent
+            m =>
+              m.TenantFormComponent
           ),
 
         data: {
-          title: 'Create Tenant',
+
+          title:
+            'Create Tenant',
+
           description:
             'Create a new gym organization'
+
         }
       },
 
 
-      // =================================================
-      // TENANTS - EDIT
-      // IMPORTANT: Keep before :id
-      // =================================================
-
+      // EDIT TENANT
       {
-        path: 'tenants/:id/edit',
+        path:
+          'tenants/:id/edit',
 
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-form/tenant-form'
           ).then(
-            m => m.TenantFormComponent
+            m =>
+              m.TenantFormComponent
           ),
 
         data: {
-          title: 'Edit Tenant',
+
+          title:
+            'Edit Tenant',
+
           description:
             'Update tenant and subscription information'
+
         }
       },
 
 
-      // =================================================
-      // TENANTS - DETAILS
-      // =================================================
-
+      // TENANT DETAILS
       {
-        path: 'tenants/:id',
+        path:
+          'tenants/:id',
 
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-details/tenant-details'
           ).then(
-            m => m.TenantDetailsComponent
+            m =>
+              m.TenantDetailsComponent
           ),
 
         data: {
-          title: 'Tenant Details',
+
+          title:
+            'Tenant Details',
+
           description:
             'View tenant organization information'
+
         }
       },
 
 
-      // =================================================
-      // TENANTS - LIST
-      // =================================================
-
+      // TENANT LIST
       {
-        path: 'tenants',
+        path:
+          'tenants',
 
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-list/tenant-list'
           ).then(
-            m => m.TenantListComponent
+            m =>
+              m.TenantListComponent
           ),
 
         data: {
-          title: 'Tenants',
+
+          title:
+            'Tenants',
+
           description:
             'Manage gym organizations using the platform'
+
         }
       },
 
 
-
-      // =================================================
-      // PLATFORM SETTINGS
-      // TEMPORARY PLACEHOLDER
-      // =================================================
+      // =====================================================
+      // TENANT SUBSCRIPTIONS
+      // =====================================================
 
       {
-        path: 'settings',
+        path:
+          'subscriptions',
+
+        loadComponent: () =>
+          import(
+            './features/platform/subscriptions/subscription-list/subscription-list'
+          ).then(
+            m =>
+              m.SubscriptionListComponent
+          ),
+
+        data: {
+
+          title:
+            'Subscriptions',
+
+          description:
+            'Manage tenant subscriptions, renewals and plan assignments'
+
+        }
+      },
+
+
+      // =====================================================
+      // PLATFORM ACCOUNTS
+      //
+      // SaaS / TENANT BILLING
+      //
+      // Completely separate from Gym Accounts.
+      // =====================================================
+
+
+      // PLATFORM ACCOUNTS DEFAULT
+      {
+        path:
+          'accounts',
+
+        pathMatch:
+          'full',
+
+        redirectTo:
+          'accounts/payments'
+      },
+
+
+      // PLATFORM CREATE PAYMENT
+      {
+        path:
+          'accounts/payments/new',
+
+        loadComponent: () =>
+          import(
+            './features/platform/accounts/pages/payment-form/payment-form'
+          ).then(
+            m =>
+              m.PaymentFormComponent
+          ),
+
+        data: {
+
+          title:
+            'New Payment',
+
+          description:
+            'Record a new tenant payment'
+
+        }
+      },
+
+
+      // PLATFORM PAYMENTS
+      {
+        path:
+          'accounts/payments',
+
+        loadComponent: () =>
+          import(
+            './features/platform/accounts/pages/payment-list/payment-list'
+          ).then(
+            m =>
+              m.PaymentListComponent
+          ),
+
+        data: {
+
+          title:
+            'Payments',
+
+          description:
+            'View and manage tenant payments'
+
+        }
+      },
+
+
+      // PLATFORM INVOICE DETAILS
+      {
+        path:
+          'accounts/invoices/:id',
+
+        loadComponent: () =>
+          import(
+            './features/platform/accounts/pages/invoice-details/invoice-details'
+          ).then(
+            m =>
+              m.InvoiceDetailsComponent
+          ),
+
+        data: {
+
+          title:
+            'Invoice Details',
+
+          description:
+            'View and print invoice information'
+
+        }
+      },
+
+
+      // PLATFORM INVOICE LIST
+      {
+        path:
+          'accounts/invoices',
+
+        loadComponent: () =>
+          import(
+            './features/platform/accounts/pages/invoice/invoice-list'
+          ).then(
+            m =>
+              m.InvoiceListComponent
+          ),
+
+        data: {
+
+          title:
+            'Invoices',
+
+          description:
+            'View tenant invoices and outstanding balances'
+
+        }
+      },
+
+
+      // =====================================================
+      // PLATFORM SETTINGS
+      // =====================================================
+
+      {
+        path:
+          'settings',
 
         loadComponent: () =>
           import(
             './features/platform/dashboard/dashboard'
           ).then(
-            m => m.PlatformDashboardComponent
+            m =>
+              m.PlatformDashboardComponent
           ),
 
         data: {
-          title: 'Platform Settings',
+
+          title:
+            'Platform Settings',
+
           description:
             'Configure platform settings'
+
         }
       }
+
 
     ]
 
@@ -259,18 +457,20 @@ export const routes: Routes = [
 
 
   // =====================================================
-  // GYM ADMIN / TENANT ADMIN
+  // GYM ADMIN / MANAGER
   // =====================================================
 
   {
     path: '',
 
-    component: AppLayoutComponent,
+    component:
+      AppLayoutComponent,
 
     children: [
 
+
       // =================================================
-      // DEFAULT
+      // DEFAULT GYM ROUTE
       // =================================================
 
       {
@@ -280,455 +480,867 @@ export const routes: Routes = [
       },
 
 
-      // =================================================
+      // =====================================================
       // DASHBOARD
-      // =================================================
+      // =====================================================
 
       {
-        path: 'dashboard',
+        path:
+          'dashboard',
 
         loadComponent: () =>
           import(
             './features/dashboard/dashboard'
           ).then(
-            m => m.DashboardComponent
+            m =>
+              m.DashboardComponent
           ),
 
         data: {
-          title: 'Dashboard',
+
+          title:
+            'Dashboard',
+
           description:
             'Overview of your gym operations'
+
         }
       },
 
 
-      // =================================================
-      // MEMBERS - NEW
-      // IMPORTANT: Before members/:id
-      // =================================================
+      // =====================================================
+      // MEMBERS
+      // =====================================================
 
+
+      // ADD MEMBER
       {
-        path: 'members/new',
+        path:
+          'members/new',
 
         loadComponent: () =>
           import(
             './features/members/pages/add-member/add-member'
           ).then(
-            m => m.AddMemberComponent
+            m =>
+              m.AddMemberComponent
           ),
 
         data: {
-          title: 'Add Member',
+
+          title:
+            'Add Member',
+
           description:
             'Create a new gym member profile'
+
         }
       },
 
 
-      // =================================================
       // MEMBER DETAILS
-      // =================================================
-
       {
-        path: 'members/:id',
+        path:
+          'members/:id',
 
         loadComponent: () =>
           import(
             './features/members/pages/member-details/member-details'
           ).then(
-            m => m.MemberDetailsComponent
+            m =>
+              m.MemberDetailsComponent
           ),
 
         data: {
-          title: 'Member Details',
+
+          title:
+            'Member Details',
+
           description:
             'View member profile and membership information'
+
         }
       },
 
 
-      // =================================================
       // MEMBER LIST
-      // =================================================
-
       {
-        path: 'members',
+        path:
+          'members',
 
         loadComponent: () =>
           import(
             './features/members/pages/member-list/member-list'
           ).then(
-            m => m.MembersListComponent
+            m =>
+              m.MembersListComponent
           ),
 
         data: {
-          title: 'Members',
+
+          title:
+            'Members',
+
           description:
             'Manage gym members'
+
         }
       },
 
 
-      // =================================================
       // RENEWALS
-      // =================================================
-
       {
-        path: 'renewals',
+        path:
+          'renewals',
 
         loadComponent: () =>
           import(
             './features/members/pages/renewals/renewals'
           ).then(
-            m => m.RenewalsComponent
+            m =>
+              m.RenewalsComponent
           ),
 
         data: {
-          title: 'Renewals',
+
+          title:
+            'Renewals',
+
           description:
             'Manage membership renewals'
+
         }
       },
 
 
-      // =================================================
-      // ENQUIRY - NEW
-      // =================================================
+      // =====================================================
+      // ENQUIRIES
+      // =====================================================
 
+
+      // NEW ENQUIRY
       {
-        path: 'enquiries/new',
+        path:
+          'enquiries/new',
 
         loadComponent: () =>
           import(
             './features/enquiries/pages/quick-enquiry/quick-enquiry'
           ).then(
-            m => m.QuickEnquiryComponent
+            m =>
+              m.QuickEnquiryComponent
           ),
 
         data: {
-          title: 'Quick Enquiry',
+
+          title:
+            'Quick Enquiry',
+
           description:
             'Create a new enquiry'
+
         }
       },
 
 
-      // =================================================
-      // ENQUIRY - EDIT
-      // =================================================
-
+      // EDIT ENQUIRY
       {
-        path: 'enquiries/:id/edit',
+        path:
+          'enquiries/:id/edit',
 
         loadComponent: () =>
           import(
             './features/enquiries/pages/edit-enquiry/edit-enquiry'
           ).then(
-            m => m.EditEnquiryComponent
+            m =>
+              m.EditEnquiryComponent
           ),
 
         data: {
-          title: 'Edit Enquiry',
+
+          title:
+            'Edit Enquiry',
+
           description:
             'Update enquiry details'
+
         }
       },
 
 
-      // =================================================
       // ENQUIRY LIST
-      // =================================================
-
       {
-        path: 'enquiries',
+        path:
+          'enquiries',
 
         loadComponent: () =>
           import(
             './features/enquiries/pages/enquiry-list/enquiry-list'
           ).then(
-            m => m.EnquiryListComponent
+            m =>
+              m.EnquiryListComponent
           ),
 
         data: {
-          title: 'Enquiries',
+
+          title:
+            'Enquiries',
+
           description:
             'Manage prospective members'
+
         }
       },
 
 
-      // =================================================
-      // VISITOR - NEW
-      // =================================================
+      // =====================================================
+      // VISITORS
+      // =====================================================
 
+
+      // NEW VISITOR
       {
-        path: 'visitors/new',
+        path:
+          'visitors/new',
 
         loadComponent: () =>
           import(
             './features/visitors/pages/visitor-entry/visitor-entry'
           ).then(
-            m => m.VisitorEntryComponent
+            m =>
+              m.VisitorEntryComponent
           ),
 
         data: {
-          title: 'New Visitor',
+
+          title:
+            'New Visitor',
+
           description:
             'Record a new visitor check-in'
+
         }
       },
 
 
-      // =================================================
       // VISITOR LIST
-      // =================================================
-
       {
-        path: 'visitors',
+        path:
+          'visitors',
 
         loadComponent: () =>
           import(
             './features/visitors/pages/visitor-list/visitor-list'
           ).then(
-            m => m.VisitorListComponent
+            m =>
+              m.VisitorListComponent
           ),
 
         data: {
-          title: 'Visitors',
+
+          title:
+            'Visitors',
+
           description:
             'Track gym visitors and guest activity'
+
         }
       },
 
 
-      // =================================================
-      // STAFF - ADD
-      // IMPORTANT: Before staff/:id
-      // =================================================
+      // =====================================================
+      // STAFF
+      // =====================================================
 
+
+      // ADD STAFF
       {
-        path: 'staff/add',
+        path:
+          'staff/add',
 
         loadComponent: () =>
           import(
             './features/staff/pages/staff-form/staff-form'
           ).then(
-            m => m.StaffFormComponent
+            m =>
+              m.StaffFormComponent
           ),
 
         data: {
-          title: 'Add Staff',
+
+          title:
+            'Add Staff',
+
           description:
             'Add a new staff member'
+
         }
       },
 
 
-      // =================================================
-      // STAFF - EDIT
-      // =================================================
-
+      // EDIT STAFF
       {
-        path: 'staff/:id/edit',
+        path:
+          'staff/:id/edit',
 
         loadComponent: () =>
           import(
             './features/staff/pages/staff-form/staff-form'
           ).then(
-            m => m.StaffFormComponent
+            m =>
+              m.StaffFormComponent
           ),
 
         data: {
-          title: 'Edit Staff',
+
+          title:
+            'Edit Staff',
+
           description:
             'Update staff member details'
+
         }
       },
 
 
-      // =================================================
       // STAFF DETAILS
-      // =================================================
-
       {
-        path: 'staff/:id',
+        path:
+          'staff/:id',
 
         loadComponent: () =>
           import(
             './features/staff/pages/staff-details/staff-details'
           ).then(
-            m => m.StaffDetailsComponent
+            m =>
+              m.StaffDetailsComponent
           ),
 
         data: {
-          title: 'Staff Details',
+
+          title:
+            'Staff Details',
+
           description:
             'View staff member profile'
+
         }
       },
 
 
-      // =================================================
       // STAFF LIST
-      // =================================================
-
       {
-        path: 'staff',
+        path:
+          'staff',
 
         loadComponent: () =>
           import(
             './features/staff/pages/staff-list/staff-list'
           ).then(
-            m => m.StaffListComponent
+            m =>
+              m.StaffListComponent
           ),
 
         data: {
-          title: 'Staff',
+
+          title:
+            'Staff',
+
           description:
             'Manage trainers and gym staff'
+
         }
       },
 
 
-      // =================================================
+      // =====================================================
       // ATTENDANCE
-      // CURRENT PLACEHOLDER
+      //
+      // Temporary placeholder until the attendance page
+      // is connected here.
+      // =====================================================
+
+      // =====================================================
+// ATTENDANCE
+// =====================================================
+
+{
+  path: 'attendance',
+
+  loadComponent: () =>
+    import(
+      './features/attendance/attendance-list/attendance-list'
+    ).then(
+      m => m.AttendanceListComponent
+    ),
+
+  data: {
+    title: 'Attendance',
+    description:
+      'Weekly attendance for members and staff'
+  }
+},
+
+
+      // =====================================================
+      // GYM ACCOUNTS
+      // =====================================================
+
+
+      // =================================================
+      // ACCOUNTS DEFAULT
       // =================================================
 
       {
-        path: 'attendance',
+        path:
+          'accounts',
+
+        pathMatch:
+          'full',
+
+        redirectTo:
+          'accounts/overview'
+      },
+
+
+      // =====================================================
+      // ACCOUNTS OVERVIEW
+      // =====================================================
+
+      {
+        path:
+          'accounts/overview',
 
         loadComponent: () =>
           import(
-            './features/dashboard/dashboard'
+            './features/accounts/pages/accounts-overview/accounts-overview'
           ).then(
-            m => m.DashboardComponent
+            m =>
+              m.AccountsOverviewComponent
           ),
 
         data: {
-          title: 'Attendance',
+
+          title:
+            'Accounts',
+
           description:
-            'Track member and staff attendance'
+            'Financial overview of gym collections and outstanding invoices'
+
         }
       },
 
 
-      // =================================================
+      // =====================================================
+      // INVOICES
+      // =====================================================
+
+
+      // CREATE INVOICE
+      //
+      // IMPORTANT:
+      // Keep before accounts/invoices/:id
+      {
+        path:
+          'accounts/invoices/new',
+
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/invoices/invoice-form/invoice-form'
+          ).then(
+            m =>
+              m.InvoiceFormComponent
+          ),
+
+        data: {
+
+          title:
+            'Create Invoice',
+
+          description:
+            'Generate a member invoice and record payment'
+
+        }
+      },
+
+
+      // RECORD PAYMENT
+      //
+      // IMPORTANT:
+      // Keep before accounts/invoices/:id
+      {
+        path:
+          'accounts/invoices/:id/payment',
+
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/payments/payment-form/payment-form'
+          ).then(
+            m =>
+              m.PaymentFormComponent
+          ),
+
+        data: {
+
+          title:
+            'Record Payment',
+
+          description:
+            'Record payment against a member invoice'
+
+        }
+      },
+
+
+      // INVOICE DETAILS
+      {
+        path:
+          'accounts/invoices/:id',
+
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/invoices/invoice-details/invoice-details'
+          ).then(
+            m =>
+              m.InvoiceDetailsComponent
+          ),
+
+        data: {
+
+          title:
+            'Invoice Details',
+
+          description:
+            'View and print member invoice'
+
+        }
+      },
+
+
+      // INVOICE LIST
+      {
+        path:
+          'accounts/invoices',
+
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/invoices/invoice-list/invoice-list'
+          ).then(
+            m =>
+              m.InvoiceListComponent
+          ),
+
+        data: {
+
+          title:
+            'Invoices',
+
+          description:
+            'Manage member invoices and outstanding balances'
+
+        }
+      },
+
+
+      // =====================================================
       // PAYMENTS
-      // CURRENT PLACEHOLDER
-      // =================================================
+      // =====================================================
 
       {
-        path: 'payments',
+        path:
+          'accounts/payments',
 
         loadComponent: () =>
           import(
-            './features/dashboard/dashboard'
+            './features/accounts/pages/payments/payment-list/payment-list'
           ).then(
-            m => m.DashboardComponent
+            m =>
+              m.PaymentListComponent
           ),
 
         data: {
-          title: 'Payments',
+
+          title:
+            'Payments',
+
           description:
-            'Manage member payments and transactions'
+            'View member payment transactions and collections'
+
         }
       },
 
 
-      // =================================================
+      // =====================================================
       // EXPENSES
-      // CURRENT PLACEHOLDER
-      // =================================================
+      // =====================================================
 
+
+      // CREATE EXPENSE
+      //
+      // Keep before accounts/expenses
       {
-        path: 'expenses',
+        path:
+          'accounts/expenses/new',
 
         loadComponent: () =>
           import(
-            './features/dashboard/dashboard'
+            './features/accounts/pages/expenses/expense-list/expense-form/expense-form'
           ).then(
-            m => m.DashboardComponent
+            m =>
+              m.ExpenseFormComponent
           ),
 
         data: {
-          title: 'Expenses',
+
+          title:
+            'Add Expense',
+
           description:
-            'Track and manage gym expenses'
+            'Record a new gym operational expense'
+
         }
       },
 
 
+      // EXPENSE LIST
+      {
+        path:
+          'accounts/expenses',
+
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/expenses/expense-list/expense-list'
+          ).then(
+            m =>
+              m.ExpenseListComponent
+          ),
+
+        data: {
+
+          title:
+            'Expenses',
+
+          description:
+            'Track and manage gym operational expenses'
+
+        }
+      },
+
+
+      // =====================================================
+      // REFUNDS
+      // =====================================================
+
+
+      // PROCESS REFUND
+      //
+      // IMPORTANT:
+      // Keep before accounts/refunds
+      //
+      // Example:
+      //
+      // /accounts/refunds/new/1
+      //
+      // where 1 is paymentId.
       // =================================================
+
+      {
+        path:
+          'accounts/refunds/new/:paymentId',
+
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/refunds/refund-form/refund-form'
+          ).then(
+            m =>
+              m.RefundFormComponent
+          ),
+
+        data: {
+
+          title:
+            'Process Refund',
+
+          description:
+            'Refund an existing member payment'
+
+        }
+      },
+
+
+      // REFUND LIST
+      {
+        path:
+          'accounts/refunds',
+
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/refunds/refund-list/refund-list'
+          ).then(
+            m =>
+              m.RefundListComponent
+          ),
+
+        data: {
+
+          title:
+            'Refunds',
+
+          description:
+            'View and manage member payment refunds'
+
+        }
+      },
+      // =====================================================
+// PAYMENT METHODS
+// =====================================================
+
+{
+  path:
+    'accounts/payment-methods',
+
+  loadComponent: () =>
+    import(
+      './features/accounts/pages/payment-methods/payment-method-list/payment-method-list'
+    ).then(
+      m =>
+        m.PaymentMethodListComponent
+    ),
+
+  data: {
+
+    title:
+      'Payment Methods',
+
+    description:
+      'Configure payment methods available for gym transactions'
+
+  }
+},
+
+
+      // =====================================================
+      // LEGACY PAYMENT ROUTE
+      //
+      // Existing old sidebar/bookmarks using /payments
+      // will automatically use the new Accounts page.
+      // =====================================================
+
+      {
+        path:
+          'payments',
+
+        pathMatch:
+          'full',
+
+        redirectTo:
+          'accounts/payments'
+      },
+
+
+      // =====================================================
+      // LEGACY EXPENSE ROUTE
+      // =====================================================
+
+      {
+        path:
+          'expenses',
+
+        pathMatch:
+          'full',
+
+        redirectTo:
+          'accounts/expenses'
+      },
+
+
+      // =====================================================
       // GYM MEMBERSHIP PLANS
       //
-      // This is NOT the same as:
+      // Temporary placeholder.
       //
-      // /platform/subscription-plans
-      // =================================================
+      // This is different from Platform subscription plans.
+      // =====================================================
 
       {
-        path: 'plans',
+        path:
+          'plans',
 
         loadComponent: () =>
           import(
             './features/dashboard/dashboard'
           ).then(
-            m => m.DashboardComponent
+            m =>
+              m.DashboardComponent
           ),
 
         data: {
-          title: 'Plans',
+
+          title:
+            'Plans',
+
           description:
             'Manage gym membership plans and pricing'
+
         }
       },
 
 
-      // =================================================
+      // =====================================================
       // REPORTS
-      // CURRENT PLACEHOLDER
-      // =================================================
+      // =====================================================
 
       {
-        path: 'reports',
+        path:
+          'reports',
 
         loadComponent: () =>
           import(
             './features/dashboard/dashboard'
           ).then(
-            m => m.DashboardComponent
+            m =>
+              m.DashboardComponent
           ),
 
         data: {
-          title: 'Reports',
+
+          title:
+            'Reports',
+
           description:
             'View gym reports and analytics'
+
         }
       },
 
 
-      // =================================================
-      // GYM SETTINGS
-      // CURRENT PLACEHOLDER
-      // =================================================
+      // =====================================================
+      // SETTINGS
+      // =====================================================
 
       {
-        path: 'settings',
+        path:
+          'settings',
 
         loadComponent: () =>
           import(
             './features/dashboard/dashboard'
           ).then(
-            m => m.DashboardComponent
+            m =>
+              m.DashboardComponent
           ),
 
         data: {
-          title: 'Settings',
+
+          title:
+            'Settings',
+
           description:
             'Configure gym and application settings'
+
         }
       }
+
 
     ]
 
@@ -739,12 +1351,13 @@ export const routes: Routes = [
   // GLOBAL FALLBACK
   //
   // IMPORTANT:
-  // Always keep this as the final route.
+  // ALWAYS KEEP THIS AS THE LAST ROUTE.
   // =====================================================
 
   {
     path: '**',
     redirectTo: 'dashboard'
   }
+
 
 ];

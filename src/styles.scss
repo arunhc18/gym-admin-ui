@@ -79,3 +79,186 @@ a {
 	.card { padding: var(--space-md); }
 	.btn { flex: 1 1 auto; }
 }
+/* =====================================================
+   GYM INVOICE PRINT
+===================================================== */
+
+@media print {
+
+
+  @page {
+
+    size:
+      A4;
+
+    margin:
+      12mm;
+
+  }
+
+
+  body {
+
+    margin: 0;
+
+    background:
+      #ffffff !important;
+
+    color:
+      #111827 !important;
+
+  }
+
+
+  /* Hide Gym Admin navigation */
+
+  .sidebar,
+  .sidebar-overlay,
+  app-top-header,
+  .no-print {
+
+    display:
+      none !important;
+
+  }
+
+
+  /* Remove application shell spacing */
+
+  .app-shell {
+
+    display:
+      block !important;
+
+  }
+
+
+  .app-main {
+
+    margin-left:
+      0 !important;
+
+    width:
+      100% !important;
+
+  }
+
+
+  .page-content {
+
+    padding:
+      0 !important;
+
+    overflow:
+      visible !important;
+
+  }
+
+
+  /* Invoice */
+
+  .invoice-details-page {
+
+    max-width:
+      none !important;
+
+    width:
+      100% !important;
+
+    margin:
+      0 !important;
+
+  }
+
+
+  .invoice-document {
+
+    padding:
+      0 !important;
+
+    border:
+      0 !important;
+
+    border-radius:
+      0 !important;
+
+    background:
+      #ffffff !important;
+
+    box-shadow:
+      none !important;
+
+  }
+
+
+  .invoice-document * {
+
+    color:
+      #111827 !important;
+
+  }
+
+
+  .business-logo {
+
+    background:
+      #111827 !important;
+
+    color:
+      #ffffff !important;
+
+  }
+
+
+  .status-pill,
+  .payment-status {
+
+    border:
+      1px solid
+      #d1d5db !important;
+
+    background:
+      transparent !important;
+
+  }
+
+
+  .invoice-items-table th,
+  .payment-table th {
+
+    background:
+      #f3f4f6 !important;
+
+  }
+
+
+  .invoice-items-wrapper,
+  .payment-table-wrapper {
+
+    overflow:
+      visible !important;
+
+  }
+
+
+  .invoice-items-table,
+  .invoice-items-table th,
+  .invoice-items-table td,
+  .payment-table,
+  .payment-table th,
+  .payment-table td {
+
+    border-color:
+      #d1d5db !important;
+
+  }
+
+
+  .invoice-total {
+
+    background:
+      #f3f4f6 !important;
+
+  }
+
+}

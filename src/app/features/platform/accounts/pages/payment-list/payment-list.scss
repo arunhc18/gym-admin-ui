@@ -1,0 +1,500 @@
+:host {
+  display: block;
+}
+
+
+.payments-page {
+  width: 100%;
+}
+
+
+/* =====================================================
+   PAGE ACTIONS
+===================================================== */
+
+.page-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 10px;
+
+  margin-bottom: 10px;
+
+}
+
+
+.back-link {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+}
+
+
+.back-link:hover {
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.payments-card {
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.filter-bar {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(220px, 1fr)
+    150px
+    130px
+    130px
+    auto;
+
+  gap: 8px;
+
+  padding: 10px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+
+}
+
+
+.search-box {
+
+  display: flex;
+
+  min-height: 32px;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding:
+    0 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.search-icon {
+
+  color:
+    var(--text-muted);
+
+}
+
+
+.search-box input {
+
+  width: 100%;
+
+  border: 0;
+
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-primary);
+
+  font-size: 11px;
+
+}
+
+
+.search-box input::placeholder {
+
+  color:
+    var(--text-muted);
+
+}
+
+
+.filter-bar select,
+.clear-button {
+
+  min-height: 32px;
+
+  padding:
+    0 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  font-size: 11px;
+
+}
+
+
+.clear-button {
+
+  background:
+    transparent;
+
+  cursor: pointer;
+
+}
+
+
+.clear-button:hover {
+
+  border-color:
+    var(--text-secondary);
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.payments-table {
+
+  min-width: 1450px;
+
+}
+
+
+.payments-table th,
+.payments-table td {
+
+  padding:
+    9px 11px;
+
+  font-size: 11px;
+
+}
+
+
+.payment-number {
+
+  color:
+    var(--text-primary);
+
+  font-weight: 600;
+
+}
+
+
+.amount-cell {
+
+  color:
+    var(--text-primary);
+
+  font-weight: 600;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-pill {
+
+  display: inline-flex;
+
+  min-width: 70px;
+
+  justify-content: center;
+
+  padding:
+    4px 7px;
+
+  border-radius:
+    var(--radius-sm);
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  text-transform:
+    capitalize;
+
+}
+
+
+.status-pill.completed {
+
+  background:
+    rgba(24, 185, 129, .1);
+
+  color:
+    var(--success);
+
+}
+
+
+.status-pill.pending {
+
+  background:
+    rgba(245, 165, 36, .12);
+
+  color:
+    var(--warning);
+
+}
+
+
+.status-pill.failed {
+
+  background:
+    rgba(239, 68, 68, .1);
+
+  color:
+    var(--danger);
+
+}
+
+
+.status-pill.refunded {
+
+  background:
+    rgba(79, 140, 255, .1);
+
+  color:
+    var(--info);
+
+}
+
+
+/* =====================================================
+   REMINDER
+===================================================== */
+
+.reminder-actions {
+
+  display: flex;
+
+  gap: 5px;
+
+}
+
+
+.action-button {
+
+  min-height: 26px;
+
+  padding:
+    0 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 10px;
+
+}
+
+
+.action-button:hover:not(:disabled) {
+
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+
+}
+
+
+.action-button:disabled {
+
+  opacity: .45;
+
+  cursor:
+    not-allowed;
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-cell {
+
+  padding:
+    34px !important;
+
+  color:
+    var(--text-muted);
+
+  text-align:
+    center !important;
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast {
+
+  position: fixed;
+
+  right: 22px;
+
+  bottom: 22px;
+
+  z-index: 100;
+
+  max-width: 360px;
+
+  padding:
+    10px 13px;
+
+  border:
+    1px solid
+    rgba(24, 185, 129, .28);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--success);
+
+  box-shadow:
+    0 12px 30px
+    rgba(0, 0, 0, .28);
+
+  font-size: 11px;
+
+}
+
+
+.toast.error {
+
+  border-color:
+    rgba(239, 68, 68, .28);
+
+  color:
+    var(--danger);
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 1000px
+) {
+
+  .filter-bar {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+}
+
+
+@media (
+  max-width: 600px
+) {
+
+  .page-actions {
+
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .filter-bar {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}

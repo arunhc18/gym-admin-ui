@@ -1,0 +1,514 @@
+<div class="invoices-page">
+
+
+  <!-- =====================================================
+       PAGE ACTIONS
+  ====================================================== -->
+
+  <div class="page-actions">
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="goToPayments()"
+    >
+      ← View Payments
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       INVOICE CARD
+  ====================================================== -->
+
+  <section class="invoices-card">
+
+
+    <!-- ===================================================
+         FILTERS
+    ==================================================== -->
+
+    <div class="filter-bar">
+
+
+      <!-- SEARCH -->
+      <div class="search-box">
+
+        <span class="search-icon">
+          ⌕
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search invoice, tenant or member..."
+        />
+
+      </div>
+
+
+      <!-- TENANT FILTER -->
+      <select
+        [(ngModel)]="selectedTenant"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Tenants
+        </option>
+
+
+        @for (
+          tenant of tenants;
+          track tenant.tenantId
+        ) {
+
+          <option
+            [value]="tenant.tenantId"
+          >
+            {{ tenant.tenantName }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <!-- STATUS FILTER -->
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="pending">
+          Pending
+        </option>
+
+        <option value="partial">
+          Partial
+        </option>
+
+        <option value="paid">
+          Paid
+        </option>
+
+        <option value="cancelled">
+          Cancelled
+        </option>
+
+      </select>
+
+
+      <!-- INVOICE TYPE FILTER -->
+      <select
+        [(ngModel)]="selectedType"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Types
+        </option>
+
+        <option value="membership">
+          Membership
+        </option>
+
+        <option value="pt_package">
+          PT Package
+        </option>
+
+        <option value="retail">
+          Retail
+        </option>
+
+        <option value="other">
+          Other
+        </option>
+
+      </select>
+
+
+      <!-- CLEAR FILTER -->
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+        Clear
+      </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         INVOICE TABLE
+    ==================================================== -->
+
+    <div class="table-container">
+
+      <table
+        class="data-table invoices-table"
+      >
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Invoice #
+            </th>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Tenant
+            </th>
+
+            <th>
+              Location
+            </th>
+
+            <th>
+              Member
+            </th>
+
+            <th>
+              Type
+            </th>
+
+            <th>
+              Subtotal
+            </th>
+
+            <th>
+              Discount
+            </th>
+
+            <th>
+              Tax
+            </th>
+
+            <th>
+              Total
+            </th>
+
+            <th>
+              Paid
+            </th>
+
+            <th>
+              Balance
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Due Date
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          @for (
+            invoice of filteredInvoices;
+            track invoice.invoiceId
+          ) {
+
+            <tr
+              class="clickable-row"
+              (click)="viewInvoice(invoice)"
+              style="cursor: pointer;"
+            >
+
+
+              <!-- INVOICE NUMBER -->
+              <td>
+
+                <strong
+                  class="invoice-number"
+                >
+                  {{ invoice.invoiceNumber }}
+                </strong>
+
+              </td>
+
+
+              <!-- DATE -->
+              <td>
+
+                {{
+                  invoice.invoiceDate
+                    | date:'dd MMM yyyy'
+                }}
+
+              </td>
+
+
+              <!-- TENANT -->
+              <td>
+
+                {{
+                  getTenantName(
+                    invoice.tenantId
+                  )
+                }}
+
+              </td>
+
+
+              <!-- LOCATION -->
+              <td>
+
+                #{{ invoice.locationId }}
+
+              </td>
+
+
+              <!-- MEMBER -->
+              <td>
+
+                @if (
+                  invoice.memberId
+                ) {
+
+                  #{{ invoice.memberId }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <!-- TYPE -->
+              <td>
+
+                {{
+                  getTypeLabel(
+                    invoice.invoiceType
+                  )
+                }}
+
+              </td>
+
+
+              <!-- SUBTOTAL -->
+              <td>
+
+                {{
+                  invoice.subtotal
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- DISCOUNT -->
+              <td>
+
+                {{
+                  invoice.discountAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- TAX -->
+              <td>
+
+                {{
+                  invoice.taxAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- TOTAL -->
+              <td
+                class="amount-cell"
+              >
+
+                {{
+                  invoice.totalAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- PAID -->
+              <td
+                class="paid-cell"
+              >
+
+                {{
+                  invoice.paidAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- BALANCE -->
+              <td
+                class="balance-cell"
+              >
+
+                {{
+                  invoice.balanceAmount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <!-- STATUS -->
+              <td>
+
+                <span
+                  class="status-pill"
+                  [ngClass]="
+                    getStatusClass(
+                      invoice.status
+                    )
+                  "
+                >
+
+                  {{ invoice.status }}
+
+                </span>
+
+              </td>
+
+
+              <!-- DUE DATE -->
+              <td>
+
+                @if (
+                  invoice.dueDate
+                ) {
+
+                  {{
+                    invoice.dueDate
+                      | date:'dd MMM yyyy'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <!-- ACTIONS -->
+              <td>
+
+                <div
+                  class="invoice-actions"
+                  (click)="$event.stopPropagation()"
+                >
+
+                  <!-- PRINT -->
+                  <button
+                    type="button"
+                    class="
+                      action-button
+                      print-button
+                    "
+                    title="Print Invoice"
+                    (click)="
+                      printInvoice(
+                        $event,
+                        invoice
+                      )
+                    "
+                  >
+
+                    Print
+
+                  </button>
+
+
+                </div>
+
+              </td>
+
+
+            </tr>
+
+          } @empty {
+
+
+            <tr>
+
+              <td
+                colspan="15"
+                class="empty-cell"
+              >
+
+                No invoices found.
+
+              </td>
+
+            </tr>
+
+
+          }
+
+
+        </tbody>
+
+
+      </table>
+
+    </div>
+
+
+  </section>
+
+
+</div>

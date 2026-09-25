@@ -1,0 +1,574 @@
+<form
+  class="payment-form-page"
+  [formGroup]="paymentForm"
+  (ngSubmit)="onSubmit()"
+  novalidate
+>
+
+
+  <!-- PAGE ACTIONS -->
+  <div class="page-actions">
+
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="cancel()"
+    >
+
+      ← Back to Payments
+
+    </button>
+
+
+    <div class="action-buttons">
+
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()"
+      >
+
+        Cancel
+
+      </button>
+
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isSubmitting"
+      >
+
+        Save Payment
+
+      </button>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- PAYMENT INFORMATION -->
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <h2>
+        Payment Details
+      </h2>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <!-- TENANT -->
+      <div class="form-group">
+
+        <label for="tenantId">
+
+          Tenant
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          id="tenantId"
+          formControlName="tenantId"
+          (change)="onTenantChange()"
+          [class.invalid]="
+            isInvalid(
+              'tenantId'
+            )
+          "
+        >
+
+          <option
+            [ngValue]="null"
+          >
+
+            Select tenant
+
+          </option>
+
+
+          @for (
+            tenant of tenants;
+            track tenant.tenantId
+          ) {
+
+            <option
+              [ngValue]="
+                tenant.tenantId
+              "
+            >
+
+              {{
+                tenant.tenantName
+              }}
+
+            </option>
+
+          }
+
+        </select>
+
+
+        @if (
+          hasError(
+            'tenantId',
+            'required'
+          )
+        ) {
+
+          <span class="form-error">
+
+            Tenant is required.
+
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- LOCATION -->
+      <div class="form-group">
+
+        <label for="locationId">
+
+          Location ID
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="locationId"
+          type="number"
+          min="1"
+          formControlName="locationId"
+          placeholder="Enter location ID"
+          [class.invalid]="
+            isInvalid(
+              'locationId'
+            )
+          "
+        />
+
+
+        @if (
+          isInvalid(
+            'locationId'
+          )
+        ) {
+
+          <span class="form-error">
+
+            Enter a valid location ID.
+
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- PAYMENT NUMBER -->
+      <div class="form-group">
+
+        <label for="paymentNumber">
+
+          Payment Number
+
+        </label>
+
+
+        <input
+          id="paymentNumber"
+          type="text"
+          formControlName="paymentNumber"
+          placeholder="Generated automatically"
+          readonly
+        />
+
+      </div>
+
+
+      <!-- PAYMENT DATE -->
+      <div class="form-group">
+
+        <label for="paymentDate">
+
+          Payment Date
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="paymentDate"
+          type="date"
+          formControlName="paymentDate"
+          [class.invalid]="
+            isInvalid(
+              'paymentDate'
+            )
+          "
+        />
+
+      </div>
+
+
+      <!-- MEMBER -->
+      <div class="form-group">
+
+        <label for="memberId">
+
+          Member ID
+
+        </label>
+
+
+        <input
+          id="memberId"
+          type="number"
+          min="1"
+          formControlName="memberId"
+          placeholder="Optional member ID"
+          [class.invalid]="
+            isInvalid(
+              'memberId'
+            )
+          "
+        />
+
+
+        @if (
+          isInvalid(
+            'memberId'
+          )
+        ) {
+
+          <span class="form-error">
+
+            Enter a valid member ID.
+
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- INVOICE -->
+      <div class="form-group">
+
+        <label for="invoiceId">
+
+          Invoice
+
+        </label>
+
+
+        <select
+          id="invoiceId"
+          formControlName="invoiceId"
+          (change)="onInvoiceChange()"
+        >
+
+          <option
+            [ngValue]="null"
+          >
+
+            No invoice
+
+          </option>
+
+
+          @for (
+            invoice of invoices;
+            track invoice.invoiceId
+          ) {
+
+            <option
+              [ngValue]="
+                invoice.invoiceId
+              "
+            >
+
+              {{
+                invoice.invoiceNumber
+              }}
+
+              -
+              Balance ₹{{
+                invoice.balanceAmount
+              }}
+
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- PAYMENT METHOD -->
+      <div class="form-group">
+
+        <label for="paymentMethodId">
+
+          Payment Method
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          id="paymentMethodId"
+          formControlName="paymentMethodId"
+          [class.invalid]="
+            isInvalid(
+              'paymentMethodId'
+            )
+          "
+        >
+
+          <option
+            [ngValue]="null"
+          >
+
+            Select payment method
+
+          </option>
+
+
+          @for (
+            method of paymentMethods;
+            track method.paymentMethodId
+          ) {
+
+            <option
+              [ngValue]="
+                method.paymentMethodId
+              "
+            >
+
+              {{
+                method.methodName
+              }}
+
+            </option>
+
+          }
+
+        </select>
+
+
+        @if (
+          hasError(
+            'paymentMethodId',
+            'required'
+          )
+        ) {
+
+          <span class="form-error">
+
+            Payment method is required.
+
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- AMOUNT -->
+      <div class="form-group">
+
+        <label for="amount">
+
+          Amount
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="amount"
+          type="number"
+          min="0.01"
+          step="0.01"
+          formControlName="amount"
+          placeholder="0.00"
+          [class.invalid]="
+            isInvalid(
+              'amount'
+            )
+          "
+        />
+
+
+        @if (
+          isInvalid(
+            'amount'
+          )
+        ) {
+
+          <span class="form-error">
+
+            Amount must be greater than 0.
+
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- PAYMENT STATUS -->
+      <div class="form-group">
+
+        <label for="paymentStatus">
+
+          Payment Status
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          id="paymentStatus"
+          formControlName="paymentStatus"
+        >
+
+          <option value="pending">
+
+            Pending
+
+          </option>
+
+          <option value="completed">
+
+            Completed
+
+          </option>
+
+          <option value="failed">
+
+            Failed
+
+          </option>
+
+          <option value="refunded">
+
+            Refunded
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- TRANSACTION ID -->
+      <div class="form-group">
+
+        <label for="transactionId">
+
+          Transaction ID
+
+        </label>
+
+
+        <input
+          id="transactionId"
+          type="text"
+          maxlength="100"
+          formControlName="transactionId"
+          placeholder="UPI / Card / Gateway ID"
+        />
+
+      </div>
+
+
+      <!-- REFERENCE -->
+      <div class="form-group">
+
+        <label for="referenceNumber">
+
+          Reference Number
+
+        </label>
+
+
+        <input
+          id="referenceNumber"
+          type="text"
+          maxlength="100"
+          formControlName="referenceNumber"
+          placeholder="Optional reference"
+        />
+
+      </div>
+
+
+      <!-- NOTES -->
+      <div
+        class="
+          form-group
+          full-width
+        "
+      >
+
+        <label for="notes">
+
+          Notes
+
+        </label>
+
+
+        <textarea
+          id="notes"
+          rows="3"
+          maxlength="2000"
+          formControlName="notes"
+          placeholder="Enter payment notes"
+        >
+        </textarea>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+</form>

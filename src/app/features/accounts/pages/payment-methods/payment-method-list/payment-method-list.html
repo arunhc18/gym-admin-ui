@@ -1,0 +1,340 @@
+<div class="payment-method-page">
+
+
+  <div class="page-actions">
+
+    <div></div>
+
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="addMethod()"
+    >
+      + Add Payment Method
+    </button>
+
+  </div>
+
+
+  @if (
+    showForm
+  ) {
+
+    <form
+      class="form-card"
+      [formGroup]="methodForm"
+      (ngSubmit)="save()"
+    >
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h2>
+
+            {{
+              editingId
+                ? 'Edit Payment Method'
+                : 'Add Payment Method'
+            }}
+
+          </h2>
+
+          <p>
+            Configure the payment options available to your gym.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-row">
+
+
+        <div class="form-group">
+
+          <label>
+            Method Name *
+          </label>
+
+          <input
+            type="text"
+            formControlName="methodName"
+            placeholder="Example: Google Pay UPI"
+            [class.invalid]="
+              isInvalid(
+                'methodName'
+              )
+            "
+          />
+
+          @if (
+            isInvalid(
+              'methodName'
+            )
+          ) {
+
+            <span class="error">
+              Payment method name is required.
+            </span>
+
+          }
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Method Type *
+          </label>
+
+          <select
+            formControlName="methodType"
+            [class.invalid]="
+              isInvalid(
+                'methodType'
+              )
+            "
+          >
+
+            <option value="">
+              Select type
+            </option>
+
+            @for (
+              type of methodTypes;
+              track type.value
+            ) {
+
+              <option
+                [value]="type.value"
+              >
+
+                {{ type.label }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="cancel()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+          >
+
+            {{
+              editingId
+                ? 'Update Method'
+                : 'Save Method'
+            }}
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+
+    </form>
+
+  }
+
+
+  <section class="methods-card">
+
+
+    <div class="table-wrapper">
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              ID
+            </th>
+
+            <th>
+              Method Name
+            </th>
+
+            <th>
+              Type
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          @for (
+            method of paymentMethods;
+            track method.paymentMethodId
+          ) {
+
+            <tr>
+
+
+              <td>
+
+                #{{ method.paymentMethodId }}
+
+              </td>
+
+
+              <td>
+
+                <strong>
+
+                  {{ method.methodName }}
+
+                </strong>
+
+              </td>
+
+
+              <td>
+
+                <span class="type-pill">
+
+                  {{
+                    getTypeLabel(
+                      method.methodType
+                    )
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="status-pill"
+                  [class.active]="
+                    method.isActive
+                  "
+                  [class.inactive]="
+                    !method.isActive
+                  "
+                >
+
+                  {{
+                    method.isActive
+                      ? 'Active'
+                      : 'Inactive'
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <div class="action-buttons">
+
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    (click)="editMethod(method)"
+                  >
+                    Edit
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    [class.deactivate]="
+                      method.isActive
+                    "
+                    [class.activate]="
+                      !method.isActive
+                    "
+                    (click)="toggleStatus(method)"
+                  >
+
+                    {{
+                      method.isActive
+                        ? 'Deactivate'
+                        : 'Activate'
+                    }}
+
+                  </button>
+
+
+                </div>
+
+              </td>
+
+
+            </tr>
+
+          } @empty {
+
+            <tr>
+
+              <td
+                colspan="5"
+                class="empty"
+              >
+
+                No payment methods configured.
+
+              </td>
+
+            </tr>
+
+          }
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </section>
+
+
+</div>

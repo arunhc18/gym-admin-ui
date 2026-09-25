@@ -1,0 +1,467 @@
+<div class="payments-page">
+
+
+  <!-- PAGE ACTIONS -->
+  <div class="page-actions">
+
+    <button
+      type="button"
+      class="back-link"
+      (click)="goToInvoices()"
+    >
+      View Invoices
+    </button>
+
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="createPayment()"
+    >
+      + New Payment
+    </button>
+
+  </div>
+
+
+  <!-- PAYMENTS CARD -->
+  <section class="payments-card">
+
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+
+
+      <!-- SEARCH -->
+      <div class="search-box">
+
+        <span class="search-icon">
+          ⌕
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search payment, tenant, transaction..."
+        />
+
+      </div>
+
+
+      <!-- TENANT FILTER -->
+      <select
+        [(ngModel)]="selectedTenant"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Tenants
+        </option>
+
+
+        @for (
+          tenant of tenants;
+          track tenant.tenantId
+        ) {
+
+          <option
+            [value]="tenant.tenantId"
+          >
+
+            {{ tenant.tenantName }}
+
+          </option>
+
+        }
+
+      </select>
+
+
+      <!-- STATUS FILTER -->
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="pending">
+          Pending
+        </option>
+
+        <option value="completed">
+          Completed
+        </option>
+
+        <option value="failed">
+          Failed
+        </option>
+
+        <option value="refunded">
+          Refunded
+        </option>
+
+      </select>
+
+
+      <!-- PAYMENT METHOD FILTER -->
+      <select
+        [(ngModel)]="selectedMethod"
+        (change)="applyFilters()"
+      >
+
+        <option value="">
+          All Methods
+        </option>
+
+
+        @for (
+          method of paymentMethods;
+          track method.paymentMethodId
+        ) {
+
+          <option
+            [value]="method.paymentMethodId"
+          >
+
+            {{ method.methodName }}
+
+          </option>
+
+        }
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+        Clear
+      </button>
+
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="table-container">
+
+      <table
+        class="data-table payments-table"
+      >
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Payment #
+            </th>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Tenant
+            </th>
+
+            <th>
+              Location
+            </th>
+
+            <th>
+              Member
+            </th>
+
+            <th>
+              Invoice
+            </th>
+
+            <th>
+              Method
+            </th>
+
+            <th>
+              Amount
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Transaction
+            </th>
+
+            <th>
+              Reference
+            </th>
+
+            <th>
+              Renewal Reminder
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          @for (
+            payment of filteredPayments;
+            track payment.paymentId
+          ) {
+
+            <tr>
+
+
+              <td>
+
+                <strong
+                  class="payment-number"
+                >
+
+                  {{
+                    payment.paymentNumber
+                  }}
+
+                </strong>
+
+              </td>
+
+
+              <td>
+
+                {{
+                  payment.paymentDate
+                    | date:'dd MMM yyyy'
+                }}
+
+              </td>
+
+
+              <td>
+
+                {{
+                  getTenantName(
+                    payment.tenantId
+                  )
+                }}
+
+              </td>
+
+
+              <td>
+
+                #{{ payment.locationId }}
+
+              </td>
+
+
+              <td>
+
+                @if (
+                  payment.memberId
+                ) {
+
+                  #{{ payment.memberId }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <td>
+
+                @if (
+                  payment.invoiceId
+                ) {
+
+                  #{{ payment.invoiceId }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+
+              <td>
+
+                {{
+                  getPaymentMethodName(
+                    payment.paymentMethodId
+                  )
+                }}
+
+              </td>
+
+
+              <td
+                class="amount-cell"
+              >
+
+                {{
+                  payment.amount
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.2-2'
+                }}
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="status-pill"
+                  [ngClass]="
+                    getStatusClass(
+                      payment.paymentStatus
+                    )
+                  "
+                >
+
+                  {{
+                    payment.paymentStatus
+                  }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                {{
+                  payment.transactionId
+                    || '-'
+                }}
+
+              </td>
+
+
+              <td>
+
+                {{
+                  payment.referenceNumber
+                    || '-'
+                }}
+
+              </td>
+
+
+              <td>
+
+                <div
+                  class="reminder-actions"
+                >
+
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    [disabled]="
+                      !payment.memberId
+                    "
+                    (click)="
+                      sendReminder(
+                        $event,
+                        payment,
+                        'email'
+                      )
+                    "
+                  >
+
+                    Email
+
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    [disabled]="
+                      !payment.memberId
+                    "
+                    (click)="
+                      sendReminder(
+                        $event,
+                        payment,
+                        'sms'
+                      )
+                    "
+                  >
+
+                    SMS
+
+                  </button>
+
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          } @empty {
+
+            <tr>
+
+              <td
+                colspan="12"
+                class="empty-cell"
+              >
+
+                No payments found.
+
+              </td>
+
+            </tr>
+
+          }
+
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <!-- TOAST -->
+  @if (
+    toastMessage
+  ) {
+
+    <div
+      class="toast"
+      [class.error]="
+        toastType === 'error'
+      "
+    >
+
+      {{ toastMessage }}
+
+    </div>
+
+  }
+
+
+</div>

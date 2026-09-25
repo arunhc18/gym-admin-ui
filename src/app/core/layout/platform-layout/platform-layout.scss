@@ -547,7 +547,227 @@
   padding: 24px;
 
 }
+/* =====================================================
+   ACCOUNTS NAVIGATION GROUP
+===================================================== */
 
+.nav-group {
+
+  width: 100%;
+
+}
+
+
+/* =====================================================
+   ACCOUNTS PARENT
+===================================================== */
+
+.nav-parent {
+
+  position: relative;
+
+  cursor: pointer;
+
+}
+
+
+.nav-parent.active {
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+}
+
+
+/* =====================================================
+   CHEVRON
+===================================================== */
+
+.nav-chevron {
+
+  margin-left: auto;
+
+  color:
+    var(--text-muted);
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  transition:
+    transform
+    var(--transition);
+
+}
+
+
+.nav-parent.expanded
+.nav-chevron {
+
+  transform:
+    rotate(90deg);
+
+}
+
+
+/* =====================================================
+   ACCOUNTS SUB MENU
+===================================================== */
+
+.nav-submenu {
+
+  display: grid;
+
+  gap: 2px;
+
+  margin:
+    3px
+    0
+    7px
+    30px;
+
+  padding-left:
+    10px;
+
+  border-left:
+    1px solid
+    var(--border-secondary);
+
+}
+
+
+/* =====================================================
+   SUB MENU ITEM
+===================================================== */
+
+.sub-nav-item {
+
+  display: flex;
+
+  min-height:
+    30px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding:
+    0 9px;
+
+  border-radius:
+    var(--radius-sm);
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    11px;
+
+  text-decoration:
+    none;
+
+  transition:
+    background-color
+      var(--transition),
+    color
+      var(--transition);
+
+}
+
+
+.sub-nav-item:hover {
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.sub-nav-item.active {
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+}
+
+
+/* =====================================================
+   SMALL DOT
+===================================================== */
+
+.sub-nav-dot {
+
+  width:
+    5px;
+
+  height:
+    5px;
+
+  flex:
+    0 0 5px;
+
+  border-radius:
+    50%;
+
+  background:
+    currentColor;
+
+}
+
+
+/* =====================================================
+   COLLAPSED SIDEBAR
+===================================================== */
+
+.platform-sidebar.collapsed
+.nav-chevron {
+
+  display: none;
+
+}
+
+
+.platform-sidebar.collapsed
+.nav-submenu {
+
+  display: none;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (
+  max-width: 899px
+) {
+
+  .platform-sidebar.collapsed
+  .nav-chevron {
+
+    display: inline;
+
+  }
+
+
+  .platform-sidebar.collapsed
+  .nav-submenu {
+
+    display: grid;
+
+  }
+
+}
 
 /* =====================================================
    MOBILE

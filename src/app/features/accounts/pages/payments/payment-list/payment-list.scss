@@ -1,0 +1,929 @@
+:host {
+  display: block;
+}
+
+
+
+/* =====================================================
+   PAGE ACTIONS
+===================================================== */
+
+.page-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 10px;
+
+}
+
+
+.back-link {
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+}
+
+
+.back-link:hover {
+
+  color:
+    var(--text-primary);
+
+}
+
+
+.page-actions .btn {
+
+  min-height: 30px;
+
+  padding:
+    0 12px;
+
+  font-size: 10px;
+
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summary-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 8px;
+
+  margin-bottom: 10px;
+
+}
+
+
+.summary-card {
+
+  padding:
+    11px 12px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+.summary-card span {
+
+  display: block;
+
+  margin-bottom: 4px;
+
+  color:
+    var(--text-muted);
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+}
+
+
+.success-value {
+
+  color:
+    var(--success) !important;
+
+}
+
+
+.refund-value {
+
+  color:
+    var(--danger) !important;
+
+}
+
+
+/* =====================================================
+   PAYMENTS CARD
+===================================================== */
+
+.payments-card {
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+}
+
+
+/* =====================================================
+   FILTER BAR
+===================================================== */
+
+.filter-bar {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      260px,
+      1fr
+    )
+    150px
+    130px
+    auto;
+
+  gap: 8px;
+
+  padding: 10px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-box {
+
+  display: flex;
+
+  height: 32px;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding:
+    0 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+.search-icon {
+
+  display: grid;
+
+  width: 15px;
+
+  flex:
+    0 0 15px;
+
+  place-items: center;
+
+  color:
+    var(--text-muted);
+
+}
+
+
+.search-icon svg {
+
+  width: 14px;
+
+  height: 14px;
+
+  fill: none;
+
+  stroke:
+    currentColor;
+
+  stroke-width: 1.8;
+
+  stroke-linecap: round;
+
+}
+
+
+.search-box input {
+
+  width: 100%;
+
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: none;
+
+  background: transparent;
+
+  color:
+    var(--text-primary);
+
+  font-size: 11px;
+
+}
+
+
+.search-box input::placeholder {
+
+  color:
+    var(--text-muted);
+
+}
+
+
+/* =====================================================
+   FILTER SELECTS
+===================================================== */
+
+.filter-bar select {
+
+  height: 32px;
+
+  padding:
+    0 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+}
+
+
+.filter-bar select:focus {
+
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    0 0 0 2px
+    var(--primary-subtle);
+
+}
+
+
+/* =====================================================
+   CLEAR BUTTON
+===================================================== */
+
+.clear-button {
+
+  height: 32px;
+
+  padding:
+    0 12px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+}
+
+
+.clear-button:hover {
+
+  border-color:
+    var(--text-secondary);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-container {
+
+  width: 100%;
+
+  overflow-x: auto;
+
+}
+
+
+.payments-table {
+
+  width: 100%;
+
+  min-width: 980px;
+
+  border-collapse: collapse;
+
+}
+
+
+.payments-table th,
+.payments-table td {
+
+  padding:
+    9px 10px;
+
+  border-bottom:
+    1px solid
+    var(--border-secondary);
+
+  vertical-align: middle;
+
+  font-size: 9px;
+
+  text-align: left;
+
+}
+
+
+.payments-table th {
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+
+}
+
+
+.payments-table td {
+
+  color:
+    var(--text-secondary);
+
+}
+
+
+.payments-table tbody tr:last-child td {
+
+  border-bottom: 0;
+
+}
+
+
+.payments-table tbody tr:hover {
+
+  background:
+    var(--bg-elevated);
+
+}
+
+
+/* =====================================================
+   PAYMENT NUMBER
+===================================================== */
+
+.primary-cell {
+
+  display: grid;
+
+  gap: 2px;
+
+}
+
+
+.primary-cell strong {
+
+  color:
+    var(--text-primary);
+
+  font-size: 10px;
+
+  white-space: nowrap;
+
+}
+
+
+.primary-cell small {
+
+  color:
+    var(--text-muted);
+
+  font-size: 7px;
+
+}
+
+
+/* =====================================================
+   PAYMENT METHOD
+===================================================== */
+
+.method-display {
+
+  display: grid;
+
+  gap: 2px;
+
+}
+
+
+.method-display strong {
+
+  color:
+    var(--text-primary);
+
+  font-size: 9px;
+
+  white-space: nowrap;
+
+}
+
+
+/* =====================================================
+   INVOICE LINK
+===================================================== */
+
+.invoice-link {
+
+  padding: 0;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--primary);
+
+  cursor: pointer;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+}
+
+
+.invoice-link:hover {
+
+  text-decoration: underline;
+
+}
+
+
+/* =====================================================
+   AMOUNT
+===================================================== */
+
+.amount-heading,
+.amount-cell {
+
+  text-align: right !important;
+
+}
+
+
+.amount-cell {
+
+  color:
+    var(--success) !important;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-pill {
+
+  display: inline-flex;
+
+  min-width: 70px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    4px 7px;
+
+  border-radius:
+    var(--radius-sm);
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  text-transform: capitalize;
+
+  white-space: nowrap;
+
+}
+
+
+/* COMPLETED */
+
+.status-pill.completed {
+
+  background:
+    rgba(
+      24,
+      185,
+      129,
+      .10
+    );
+
+  color:
+    var(--success);
+
+}
+
+
+/* PENDING */
+
+.status-pill.pending {
+
+  background:
+    rgba(
+      245,
+      165,
+      36,
+      .12
+    );
+
+  color:
+    var(--warning);
+
+}
+
+
+/* FAILED */
+
+.status-pill.failed {
+
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .10
+    );
+
+  color:
+    var(--danger);
+
+}
+
+
+/* REFUNDED */
+
+.status-pill.refunded {
+
+  background:
+    rgba(
+      79,
+      140,
+      255,
+      .10
+    );
+
+  color:
+    var(--info);
+
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.actions-heading {
+
+  min-width: 125px;
+
+}
+
+
+.action-buttons {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  white-space: nowrap;
+
+}
+
+
+.action-button {
+
+  height: 26px;
+
+  padding:
+    0 8px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+}
+
+
+/* =====================================================
+   INVOICE ACTION
+===================================================== */
+
+.invoice-button:hover {
+
+  border-color:
+    var(--primary);
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+}
+
+
+/* =====================================================
+   REFUND ACTION
+===================================================== */
+
+.refund-button {
+
+  border-color:
+    rgba(
+      239,
+      68,
+      68,
+      .35
+    );
+
+  color:
+    var(--danger);
+
+}
+
+
+.refund-button:hover {
+
+  border-color:
+    var(--danger);
+
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .10
+    );
+
+  color:
+    var(--danger);
+
+}
+
+
+/* =====================================================
+   MUTED
+===================================================== */
+
+.muted-value {
+
+  color:
+    var(--text-muted);
+
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-cell {
+
+  padding:
+    40px !important;
+
+  text-align:
+    center !important;
+
+}
+
+
+.empty-state {
+
+  display: grid;
+
+  justify-items: center;
+
+  gap: 5px;
+
+}
+
+
+.empty-state strong {
+
+  color:
+    var(--text-primary);
+
+  font-size: 12px;
+
+}
+
+
+.empty-state span {
+
+  margin-bottom: 5px;
+
+  color:
+    var(--text-muted);
+
+  font-size: 9px;
+
+}
+
+
+.empty-state .btn {
+
+  min-height: 29px;
+
+  padding:
+    0 10px;
+
+  font-size: 9px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 1000px
+) {
+
+  .summary-grid {
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+  }
+
+
+  .filter-bar {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+}
+
+
+@media (
+  max-width: 600px
+) {
+
+  .page-actions {
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+  }
+
+
+  .page-actions .btn {
+
+    width: 100%;
+
+  }
+
+
+  .summary-grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .filter-bar {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}

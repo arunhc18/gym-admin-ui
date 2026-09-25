@@ -1,0 +1,1086 @@
+<div class="attendance-page">
+
+
+  <!-- =====================================================
+       PERIOD NAVIGATION
+  ====================================================== -->
+
+  <div class="page-actions">
+
+
+    <div class="period-area">
+
+
+      <!-- VIEW SWITCH -->
+
+      <div class="view-switch">
+
+
+        <button
+          type="button"
+          [class.active]="
+            viewMode === 'week'
+          "
+          (click)="
+            setViewMode(
+              'week'
+            )
+          "
+        >
+          Weekly
+        </button>
+
+
+        <button
+          type="button"
+          [class.active]="
+            viewMode === 'month'
+          "
+          (click)="
+            setViewMode(
+              'month'
+            )
+          "
+        >
+          Monthly
+        </button>
+
+
+      </div>
+
+
+      <!-- WEEK CONTROLS -->
+
+      @if (
+        viewMode === 'week'
+      ) {
+
+
+        <div class="period-navigation">
+
+
+          <button
+            type="button"
+            class="icon-button"
+            (click)="previousWeek()"
+            title="Previous week"
+          >
+            ‹
+          </button>
+
+
+          <div class="period-label">
+
+            <span>
+              Week
+            </span>
+
+            <strong>
+              {{ weekRangeLabel }}
+            </strong>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="icon-button"
+            (click)="nextWeek()"
+            title="Next week"
+          >
+            ›
+          </button>
+
+
+          <button
+            type="button"
+            class="current-button"
+            (click)="currentWeek()"
+          >
+            Current Week
+          </button>
+
+
+        </div>
+
+
+      }
+
+
+      <!-- MONTH CONTROLS -->
+
+      @if (
+        viewMode === 'month'
+      ) {
+
+
+        <div class="period-navigation">
+
+
+          <button
+            type="button"
+            class="icon-button"
+            (click)="previousMonth()"
+            title="Previous month"
+          >
+            ‹
+          </button>
+
+
+          <div class="period-label month-title">
+
+            <span>
+              Month
+            </span>
+
+            <strong>
+              {{ monthLabel }}
+            </strong>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="icon-button"
+            (click)="nextMonth()"
+            title="Next month"
+          >
+            ›
+          </button>
+
+
+          <input
+            type="month"
+            class="month-picker"
+            [(ngModel)]="
+              selectedMonth
+            "
+            (change)="
+              onMonthChange()
+            "
+          />
+
+
+          <button
+            type="button"
+            class="current-button"
+            (click)="currentMonth()"
+          >
+            Current Month
+          </button>
+
+
+        </div>
+
+
+      }
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       SUMMARY
+  ====================================================== -->
+
+  <section class="summary-grid">
+
+
+    <article class="summary-card">
+
+      <span>
+        People
+      </span>
+
+      <strong>
+        {{ filteredPeople.length }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        {{ presentLabel }}
+      </span>
+
+      <strong class="present-text">
+
+        {{ presentCount }}
+
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        {{ absentLabel }}
+      </span>
+
+      <strong class="absent-text">
+
+        {{ absentCount }}
+
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        {{ rateLabel }}
+      </span>
+
+      <strong>
+
+        {{ attendanceRate }}%
+
+      </strong>
+
+    </article>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       ATTENDANCE CARD
+  ====================================================== -->
+
+  <section class="attendance-card">
+
+
+    <!-- ===================================================
+         FILTERS
+    ==================================================== -->
+
+    <div class="filter-bar">
+
+
+      <div class="search-box">
+
+
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+          >
+          </circle>
+
+          <path
+            d="m20 20-4-4"
+          >
+          </path>
+
+        </svg>
+
+
+        <input
+          type="text"
+          [(ngModel)]="
+            searchText
+          "
+          placeholder="Search name, member code or staff code..."
+        />
+
+
+      </div>
+
+
+      <select
+        [(ngModel)]="
+          selectedType
+        "
+      >
+
+        <option value="">
+          All People
+        </option>
+
+        <option value="member">
+          Members
+        </option>
+
+        <option value="staff">
+          Staff
+        </option>
+
+      </select>
+
+
+      <select
+        [(ngModel)]="
+          selectedLocation
+        "
+      >
+
+        <option value="">
+          All Locations
+        </option>
+
+
+        @for (
+          location of locations;
+          track location
+        ) {
+
+          <option
+            [value]="location"
+          >
+
+            {{ location }}
+
+          </option>
+
+        }
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+        Clear
+      </button>
+
+
+    </div>
+
+
+    <!-- ===================================================
+         WEEKLY VIEW
+    ==================================================== -->
+
+    @if (
+      viewMode === 'week'
+    ) {
+
+
+      <div class="table-wrapper">
+
+
+        <table
+          class="
+            attendance-table
+            weekly-table
+          "
+        >
+
+
+          <thead>
+
+
+            <tr>
+
+
+              <th class="person-column">
+                Person
+              </th>
+
+
+              <th class="type-column">
+                Type
+              </th>
+
+
+              @for (
+                day of weekDays;
+                track day.date
+              ) {
+
+                <th
+                  class="day-column"
+                  [class.today-column]="
+                    day.isToday
+                  "
+                >
+
+                  <span>
+                    {{ day.dayName }}
+                  </span>
+
+                  <strong>
+                    {{ day.dateLabel }}
+                  </strong>
+
+                </th>
+
+              }
+
+
+            </tr>
+
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              person of filteredPeople;
+              track person.id
+            ) {
+
+
+              <tr>
+
+
+                <td>
+
+
+                  <div class="person-info">
+
+
+                    <div class="person-avatar">
+
+                      {{
+                        person.name
+                          .charAt(0)
+                      }}
+
+                    </div>
+
+
+                    <div>
+
+
+                      <strong>
+
+                        {{ person.name }}
+
+                      </strong>
+
+
+                    </div>
+
+
+                  </div>
+
+
+                </td>
+
+
+                <td>
+
+
+                  <span
+                    class="person-type"
+                    [class.member]="
+                      person.type ===
+                      'member'
+                    "
+                    [class.staff]="
+                      person.type ===
+                      'staff'
+                    "
+                  >
+
+                    {{ person.type }}
+
+                  </span>
+
+
+                </td>
+
+
+                @for (
+                  day of weekDays;
+                  track day.date
+                ) {
+
+
+                  <td
+                    class="attendance-cell"
+                    [class.today-cell]="
+                      day.isToday
+                    "
+                  >
+
+
+                    <div
+                      class="attendance-status"
+                      [class.present]="
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'present'
+                      "
+                      [class.absent]="
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'absent'
+                      "
+                      [class.not-marked]="
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'none'
+                      "
+                      [class.future]="
+                        day.isFuture
+                      "
+                      [title]="
+                        getAttendanceTitle(
+                          person.id,
+                          day
+                        )
+                      "
+                    >
+
+
+                      @if (
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'present'
+                      ) {
+
+                        <span class="status-icon">
+                          ✓
+                        </span>
+
+                        <small>
+
+                          {{
+                            getRecord(
+                              person.id,
+                              day.date
+                            )?.checkIn
+                          }}
+
+                        </small>
+
+                      }
+
+
+                      @if (
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'absent'
+                      ) {
+
+                        <span class="status-icon">
+                          ×
+                        </span>
+
+                        <small>
+                          Absent
+                        </small>
+
+                      }
+
+
+                      @if (
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'none'
+                      ) {
+
+                        <span class="status-icon">
+                          —
+                        </span>
+
+                        <small>
+
+                          {{
+                            day.isFuture
+                              ? 'Upcoming'
+                              : 'Not Marked'
+                          }}
+
+                        </small>
+
+                      }
+
+
+                    </div>
+
+
+                  </td>
+
+
+                }
+
+
+              </tr>
+
+
+            }
+            @empty {
+
+
+              <tr>
+
+                <td
+                  colspan="9"
+                  class="empty-state"
+                >
+
+                  No members or staff match the selected filters.
+
+                </td>
+
+              </tr>
+
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    }
+
+
+    <!-- ===================================================
+         MONTHLY VIEW
+    ==================================================== -->
+
+    @if (
+      viewMode === 'month'
+    ) {
+
+
+      <div class="monthly-info">
+
+
+        <div>
+
+          <span>
+            Monthly Attendance
+          </span>
+
+          <strong>
+            {{ monthLabel }}
+          </strong>
+
+        </div>
+
+
+        <small>
+
+          Scroll horizontally to view all dates.
+
+        </small>
+
+
+      </div>
+
+
+      <div class="table-wrapper monthly-wrapper">
+
+
+        <table
+          class="
+            attendance-table
+            monthly-table
+          "
+        >
+
+
+          <thead>
+
+
+            <tr>
+
+
+              <th
+                class="
+                  person-column
+                  sticky-person
+                "
+              >
+                Person
+              </th>
+
+
+              <th class="month-summary-column">
+
+                P
+
+              </th>
+
+
+              <th class="month-summary-column">
+
+                A
+
+              </th>
+
+
+              <th class="month-summary-column">
+
+                %
+
+              </th>
+
+
+              @for (
+                day of monthDays;
+                track day.date
+              ) {
+
+                <th
+                  class="month-day-column"
+                  [class.today-column]="
+                    day.isToday
+                  "
+                >
+
+                  <span>
+
+                    {{ day.dayName }}
+
+                  </span>
+
+                  <strong>
+
+                    {{ day.dayNumber }}
+
+                  </strong>
+
+                </th>
+
+              }
+
+
+            </tr>
+
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              person of filteredPeople;
+              track person.id
+            ) {
+
+
+              <tr>
+
+
+                <td
+                  class="
+                    sticky-person
+                    monthly-person
+                  "
+                >
+
+
+                  <div class="person-info">
+
+
+                    <div class="person-avatar">
+
+                      {{
+                        person.name
+                          .charAt(0)
+                      }}
+
+                    </div>
+
+
+                    <div>
+
+
+                      <strong>
+                        {{ person.name }}
+                      </strong>
+
+
+                    </div>
+
+
+                  </div>
+
+
+                </td>
+
+
+                <!-- MONTH PRESENT -->
+
+                <td
+                  class="
+                    month-summary
+                    month-present
+                  "
+                >
+
+                  {{
+                    getPersonPresentCount(
+                      person.id
+                    )
+                  }}
+
+                </td>
+
+
+                <!-- MONTH ABSENT -->
+
+                <td
+                  class="
+                    month-summary
+                    month-absent
+                  "
+                >
+
+                  {{
+                    getPersonAbsentCount(
+                      person.id
+                    )
+                  }}
+
+                </td>
+
+
+                <!-- MONTH RATE -->
+
+                <td
+                  class="
+                    month-summary
+                    month-rate
+                  "
+                >
+
+                  {{
+                    getPersonMonthlyRate(
+                      person.id
+                    )
+                  }}%
+
+                </td>
+
+
+                <!-- DAYS -->
+
+                @for (
+                  day of monthDays;
+                  track day.date
+                ) {
+
+
+                  <td
+                    class="monthly-cell"
+                    [class.today-cell]="
+                      day.isToday
+                    "
+                  >
+
+
+                    <div
+                      class="monthly-status"
+                      [class.present]="
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'present'
+                      "
+                      [class.absent]="
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'absent'
+                      "
+                      [class.not-marked]="
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'none'
+                      "
+                      [class.future]="
+                        day.isFuture
+                      "
+                      [title]="
+                        getAttendanceTitle(
+                          person.id,
+                          day
+                        )
+                      "
+                    >
+
+
+                      @if (
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'present'
+                      ) {
+
+                        ✓
+
+                      }
+
+
+                      @if (
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'absent'
+                      ) {
+
+                        ×
+
+                      }
+
+
+                      @if (
+                        getStatus(
+                          person.id,
+                          day.date
+                        ) ===
+                        'none'
+                      ) {
+
+                        —
+
+                      }
+
+
+                    </div>
+
+
+                  </td>
+
+
+                }
+
+
+              </tr>
+
+
+            }
+            @empty {
+
+
+              <tr>
+
+                <td
+                  [attr.colspan]="
+                    monthDays.length + 4
+                  "
+                  class="empty-state"
+                >
+
+                  No attendance found.
+
+                </td>
+
+              </tr>
+
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    }
+
+
+    <!-- ===================================================
+         LEGEND
+    ==================================================== -->
+
+    <div class="legend">
+
+
+      <span>
+
+        <i class="legend-present">
+          ✓
+        </i>
+
+        Present
+
+      </span>
+
+
+      <span>
+
+        <i class="legend-absent">
+          ×
+        </i>
+
+        Absent
+
+      </span>
+
+
+      <span>
+
+        <i class="legend-none">
+          —
+        </i>
+
+        Not Marked / Upcoming
+
+      </span>
+
+
+      @if (
+        viewMode === 'month'
+      ) {
+
+        <span class="summary-help">
+
+          P = Present,
+          A = Absent,
+          % = Attendance Rate
+
+        </span>
+
+      }
+
+
+    </div>
+
+
+  </section>
+
+
+</div>

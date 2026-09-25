@@ -209,6 +209,148 @@
       </a>
 
     </nav>
+    <!-- =====================================================
+     ACCOUNTS
+====================================================== -->
+
+<div class="nav-group">
+
+
+  <!-- ACCOUNTS PARENT -->
+  <button
+    type="button"
+    class="nav-item nav-button nav-parent"
+    [class.active]="isAccountsActive()"
+    [class.expanded]="accountsOpen"
+    title="Accounts"
+    (click)="toggleAccounts()"
+  >
+
+
+    <!-- ICON -->
+    <span
+      class="nav-icon"
+      aria-hidden="true"
+    >
+
+      <svg viewBox="0 0 24 24">
+
+        <rect
+          x="3"
+          y="5"
+          width="18"
+          height="15"
+          rx="2">
+        </rect>
+
+        <path
+          d="M3 10h18">
+        </path>
+
+        <path
+          d="M7 15h4">
+        </path>
+
+        <path
+          d="M16 14v3">
+        </path>
+
+        <path
+          d="M14.5 15.5h3">
+        </path>
+
+      </svg>
+
+    </span>
+
+
+    <!-- LABEL -->
+    <span class="nav-label">
+
+      Accounts
+
+    </span>
+
+
+    <!-- ARROW -->
+    <span
+      class="nav-chevron"
+      aria-hidden="true"
+    >
+
+      ›
+
+    </span>
+
+
+  </button>
+
+
+  <!-- =================================================
+       ACCOUNTS SUB MENU
+  ================================================== -->
+
+  @if (accountsOpen) {
+
+    <div class="nav-submenu">
+
+
+      <!-- PAYMENTS -->
+      <a
+        class="sub-nav-item"
+        routerLink="/platform/accounts/payments"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: false
+        }"
+        (click)="closeMobileSidebar()"
+      >
+
+        <span
+          class="sub-nav-dot"
+        >
+        </span>
+
+        <span>
+
+          Payments
+
+        </span>
+
+      </a>
+
+
+      <!-- INVOICES -->
+      <a
+        class="sub-nav-item"
+        routerLink="/platform/accounts/invoices"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: false
+        }"
+        (click)="closeMobileSidebar()"
+      >
+
+        <span
+          class="sub-nav-dot"
+        >
+        </span>
+
+        <span>
+
+          Invoices
+
+        </span>
+
+      </a>
+
+
+    </div>
+
+  }
+
+
+</div>
 
 
     <!-- =====================================================

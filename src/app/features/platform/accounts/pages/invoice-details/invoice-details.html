@@ -1,0 +1,652 @@
+@if (invoice) {
+
+  <div class="invoice-details-page">
+
+
+    <!-- =================================================
+         ACTIONS
+    ================================================== -->
+
+    <div class="page-actions no-print">
+
+
+      <button
+        type="button"
+        class="back-link"
+        (click)="goBack()"
+      >
+
+        ← Back to Invoices
+
+      </button>
+
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="printInvoice()"
+      >
+
+        Print Invoice
+
+      </button>
+
+
+    </div>
+
+
+    <!-- =================================================
+         PRINTABLE INVOICE
+    ================================================== -->
+
+    <section
+      class="invoice-document"
+    >
+
+
+      <!-- HEADER -->
+      <div class="invoice-header">
+
+
+        <div class="company-area">
+
+          <div class="company-logo">
+
+            G
+
+          </div>
+
+
+          <div>
+
+            <h1>
+
+              {{
+                tenant?.tenantName
+                || 'GymAdmin'
+              }}
+
+            </h1>
+
+
+            <p>
+
+              {{
+                tenant?.subdomain
+                  ? tenant?.subdomain + '.gymerp.com'
+                  : 'Gym Management Platform'
+              }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="invoice-title">
+
+          <span>
+            INVOICE
+          </span>
+
+          <strong>
+
+            {{
+              invoice.invoiceNumber
+            }}
+
+          </strong>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =================================================
+           GENERAL INFORMATION
+      ================================================== -->
+
+      <div class="invoice-information">
+
+
+        <div class="info-block">
+
+          <span class="info-label">
+
+            Bill To
+
+          </span>
+
+
+          <strong>
+
+            Member
+            #{{ invoice.memberId || '-' }}
+
+          </strong>
+
+
+          <span>
+
+            Tenant:
+            {{
+              tenant?.tenantName
+                || 'Tenant #' + invoice.tenantId
+            }}
+
+          </span>
+
+
+          <span>
+
+            Location:
+            #{{ invoice.locationId }}
+
+          </span>
+
+        </div>
+
+
+        <div class="invoice-meta">
+
+
+          <div>
+
+            <span>
+
+              Invoice Date
+
+            </span>
+
+            <strong>
+
+              {{
+                invoice.invoiceDate
+                  | date:'dd MMM yyyy'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Due Date
+
+            </span>
+
+            <strong>
+
+              @if (
+                invoice.dueDate
+              ) {
+
+                {{
+                  invoice.dueDate
+                    | date:'dd MMM yyyy'
+                }}
+
+              } @else {
+
+                -
+
+              }
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Type
+
+            </span>
+
+            <strong>
+
+              {{
+                getInvoiceTypeLabel()
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Status
+
+            </span>
+
+            <strong
+              class="status-pill"
+              [ngClass]="
+                getStatusClass()
+              "
+            >
+
+              {{ invoice.status }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =================================================
+           ITEMS
+      ================================================== -->
+
+      <div class="invoice-items-wrapper">
+
+
+        <table
+          class="invoice-items"
+        >
+
+
+          <thead>
+
+            <tr>
+
+              <th>
+
+                Description
+
+              </th>
+
+              <th>
+
+                Type
+
+              </th>
+
+              <th class="numeric">
+
+                Qty
+
+              </th>
+
+              <th class="numeric">
+
+                Unit Price
+
+              </th>
+
+              <th class="numeric">
+
+                Discount
+
+              </th>
+
+              <th class="numeric">
+
+                Tax
+
+              </th>
+
+              <th class="numeric">
+
+                Total
+
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              item of invoiceItems;
+              track item.invoiceItemId
+            ) {
+
+              <tr>
+
+
+                <td>
+
+                  <strong>
+
+                    {{
+                      item.itemDescription
+                    }}
+
+                  </strong>
+
+                </td>
+
+
+                <td>
+
+                  {{
+                    getItemTypeLabel(
+                      item.itemType
+                    )
+                  }}
+
+                </td>
+
+
+                <td class="numeric">
+
+                  {{ item.quantity }}
+
+                </td>
+
+
+                <td class="numeric">
+
+                  {{
+                    item.unitPrice
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.2-2'
+                  }}
+
+                </td>
+
+
+                <td class="numeric">
+
+                  {{
+                    item.discountAmount
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.2-2'
+                  }}
+
+                </td>
+
+
+                <td class="numeric">
+
+                  {{
+                    item.taxAmount
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.2-2'
+                  }}
+
+                  @if (
+                    item.taxPercentage
+                  ) {
+
+                    <small>
+
+                      ({{
+                        item.taxPercentage
+                      }}%)
+
+                    </small>
+
+                  }
+
+                </td>
+
+
+                <td
+                  class="
+                    numeric
+                    item-total
+                  "
+                >
+
+                  {{
+                    item.totalAmount
+                      | currency:
+                        'INR':
+                        'symbol':
+                        '1.2-2'
+                  }}
+
+                </td>
+
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+
+                <td
+                  colspan="7"
+                  class="empty-items"
+                >
+
+                  No invoice items available.
+
+                </td>
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+      <!-- =================================================
+           BOTTOM SECTION
+      ================================================== -->
+
+      <div class="invoice-bottom">
+
+
+        <!-- NOTES -->
+        <div class="invoice-notes">
+
+          <span class="info-label">
+
+            Notes
+
+          </span>
+
+
+          <p>
+
+            {{
+              invoice.notes
+                || 'No additional notes.'
+            }}
+
+          </p>
+
+        </div>
+
+
+        <!-- TOTALS -->
+        <div class="invoice-totals">
+
+
+          <div>
+
+            <span>
+
+              Subtotal
+
+            </span>
+
+            <strong>
+
+              {{
+                invoice.subtotal
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Discount
+
+            </span>
+
+            <strong>
+
+              - {{
+                invoice.discountAmount
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Tax
+
+            </span>
+
+            <strong>
+
+              {{
+                invoice.taxAmount
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="grand-total">
+
+            <span>
+
+              Total Amount
+
+            </span>
+
+            <strong>
+
+              {{
+                invoice.totalAmount
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Paid Amount
+
+            </span>
+
+            <strong class="paid-amount">
+
+              {{
+                invoice.paidAmount
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="balance-total">
+
+            <span>
+
+              Balance Due
+
+            </span>
+
+            <strong>
+
+              {{
+                invoice.balanceAmount
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- FOOTER -->
+      <div class="invoice-footer">
+
+        <p>
+
+          Thank you.
+
+        </p>
+
+
+      </div>
+
+
+    </section>
+
+
+  </div>
+
+}
