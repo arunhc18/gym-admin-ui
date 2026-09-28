@@ -1,583 +1,319 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  CommonModule
+} from '@angular/common';
 
 import {
-  Member,
-  MemberService
-} from '../members/services/member.service';
+  Component,
+  DestroyRef,
+  inject,
+  OnInit
+} from '@angular/core';
 
-interface RecentMember {
-  id: number;
-  initials: string;
-  name: string;
-  memberId: string;
-  joinedDate: string;
-  status: string;
-}
+import {
+  Router
+} from '@angular/router';
 
-interface Renewal {
-  id: number;
-  name: string;
-  memberId: string;
-  expiryDate: string;
-  daysLeft: number;
-}
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
 
-interface LocationRevenue {
-  name: string;
-  revenue: number;
-  members: number;
-  colorClass: string;
-}
+import {
+  DashboardGrowthData,
+  DashboardLocationRevenue,
+  DashboardOverduePayment,
+  DashboardRecentMember,
+  DashboardRenewal,
+  DashboardService
+} from './dashboard.service';
 
-interface GrowthData {
-  month: string;
-  value: number;
-}
-
-interface OverduePayment {
-  id: number;
-  initials: string;
-  name: string;
-  memberId: string;
-  amountDue: number;
-  daysOverdue: number;
-}
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
+  selector:
+    'app-dashboard',
+
+  standalone:
+    true,
+
   imports: [
     CommonModule
   ],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss'
+
+  templateUrl:
+    './dashboard.html',
+
+  styleUrl:
+    './dashboard.scss'
 })
-export class DashboardComponent implements OnInit {
-
-  today = new Date();
-
-  // =====================================================
-  // MEMBERS FROM SHARED SERVICE
-  // =====================================================
-
-  members: Member[] = [];
+export class DashboardComponent
+  implements OnInit {
 
 
-  // =====================================================
-  // DASHBOARD COUNTS
-  // These are calculated from MemberService data
-  // =====================================================
-
-  get totalMembers(): number {
-
-    return this.members.length;
-  }
-
-
-  get activeMembers(): number {
-
-    return this.members.filter(
-      member =>
-        member.status.toLowerCase() === 'active'
-    ).length;
-  }
-
-
-  get expiringSoon(): number {
-
-    return this.members.filter(
-      member =>
-        member.status.toLowerCase() === 'expiring'
-    ).length;
-  }
-
-
-  get expiredMembers(): number {
-
-    return this.members.filter(
-      member =>
-        member.status.toLowerCase() === 'expired'
-    ).length;
-  }
-
-
-  // =====================================================
-  // PERCENTAGE VALUES
-  // These are currently demo values.
-  // Later these can come from backend reports.
-  // =====================================================
-
-  totalMembersChange = 12;
-
-  activeMembersChange = 8;
-
-  expiringChange = 3;
-
-  expiredChange = 5;
-
-
-  // =====================================================
-  // FINANCIAL DATA
-  // =====================================================
-
-  revenue = 245000;
-
-  expenses = 68500;
-
-  get netProfit(): number {
-
-    return (
-      this.revenue -
-      this.expenses
+  private readonly destroyRef =
+    inject(
+      DestroyRef
     );
-  }
 
-  revenueChange = 18;
 
-  expenseChange = 6;
+  today =
+    new Date();
 
-  profitChange = 20;
+
+  // =====================================================
+  // MEMBERS
+  // =====================================================
+
+  totalMembers =
+    0;
+
+
+  activeMembers =
+    0;
+
+
+  expiringSoon =
+    0;
+
+
+  expiredMembers =
+    0;
+
+
+  totalMembersChange =
+    0;
+
+
+  activeMembersChange =
+    0;
+
+
+  expiringChange =
+    0;
+
+
+  expiredChange =
+    0;
+
+
+  // =====================================================
+  // FINANCE
+  // =====================================================
+
+  revenue =
+    0;
+
+
+  expenses =
+    0;
+
+
+  netProfit =
+    0;
+
+
+  revenueChange =
+    0;
+
+
+  expenseChange =
+    0;
+
+
+  profitChange =
+    0;
 
 
   // =====================================================
   // ATTENDANCE
   // =====================================================
 
-  checkedIn = 86;
+  checkedIn =
+    0;
 
-  notCheckedIn = 24;
 
-
-  // =====================================================
-  // MEMBER GROWTH
-  // =====================================================
-
-  memberGrowth: GrowthData[] = [
-
-    {
-      month: 'Mar',
-      value: 10
-    },
-
-    {
-      month: 'Apr',
-      value: 20
-    },
-
-    {
-      month: 'May',
-      value: 23
-    },
-
-    {
-      month: 'Jun',
-      value: 22
-    },
-
-    {
-      month: 'Jul',
-      value: 28
-    },
-
-    {
-      month: 'Aug',
-      value: 35
-    }
-
-  ];
+  notCheckedIn =
+    0;
 
 
   // =====================================================
-  // OVERDUE PAYMENTS
-  // Members with pending dues past their due date.
-  // Demo values for now — later this should come from the
-  // payments/billing service.
+  // ENQUIRIES
   // =====================================================
 
-  overduePayments: OverduePayment[] = [
-
-    {
-      id: 201,
-      initials: 'PN',
-      name: 'Priya Nair',
-      memberId: 'MEM-00098',
-      amountDue: 1500,
-      daysOverdue: 5
-    },
-
-    {
-      id: 202,
-      initials: 'AM',
-      name: 'Arjun Mehta',
-      memberId: 'MEM-00112',
-      amountDue: 2200,
-      daysOverdue: 12
-    },
-
-    {
-      id: 203,
-      initials: 'KR',
-      name: 'Kavya Reddy',
-      memberId: 'MEM-00076',
-      amountDue: 800,
-      daysOverdue: 3
-    },
-
-    {
-      id: 204,
-      initials: 'SV',
-      name: 'Sanjay Verma',
-      memberId: 'MEM-00143',
-      amountDue: 3000,
-      daysOverdue: 21
-    }
-
-  ];
+  totalEnquiries =
+    0;
 
 
-  get totalOverdueAmount(): number {
-
-    return this.overduePayments.reduce(
-      (sum, payment) => sum + payment.amountDue,
-      0
-    );
-  }
+  convertedEnquiries =
+    0;
 
 
   // =====================================================
-  // LEAD CONVERSION
-  // Enquiries converted into paying members this month.
-  // Demo values for now — later this should come from the
-  // enquiries service.
+  // TABLES / CHARTS
   // =====================================================
 
-  totalEnquiries = 42;
-
-  convertedEnquiries = 15;
-
-  get conversionRate(): number {
-
-    if (
-      this.totalEnquiries === 0
-    ) {
-
-      return 0;
-    }
-
-    return Math.round(
-
-      (
-        this.convertedEnquiries /
-        this.totalEnquiries
-      )
-
-      * 100
-
-    );
-  }
+  memberGrowth:
+    DashboardGrowthData[] =
+    [];
 
 
-  // =====================================================
-  // RECENT MEMBERS
-  // Generated from MemberService
-  // =====================================================
-
-  recentMembers: RecentMember[] = [];
+  recentMembers:
+    DashboardRecentMember[] =
+    [];
 
 
-  // =====================================================
-  // UPCOMING RENEWALS
-  // Generated from MemberService
-  // =====================================================
-
-  renewals: Renewal[] = [];
+  renewals:
+    DashboardRenewal[] =
+    [];
 
 
-  // =====================================================
-  // REVENUE BY LOCATION
-  // =====================================================
-
-  locationRevenue: LocationRevenue[] = [
-
-    {
-      name: 'Main Branch',
-      revenue: 48200,
-      members: 46,
-      colorClass: 'red'
-    },
-
-    {
-      name: 'Indiranagar',
-      revenue: 32650,
-      members: 28,
-      colorClass: 'blue'
-    },
-
-    {
-      name: 'HSR Layout',
-      revenue: 24300,
-      members: 20,
-      colorClass: 'green'
-    },
-
-    {
-      name: 'North Branch',
-      revenue: 18400,
-      members: 16,
-      colorClass: 'yellow'
-    },
-
-    {
-      name: 'South Branch',
-      revenue: 12750,
-      members: 14,
-      colorClass: 'purple'
-    }
-
-  ];
+  overduePayments:
+    DashboardOverduePayment[] =
+    [];
 
 
-  // =====================================================
-  // CONSTRUCTOR
-  // =====================================================
+  locationRevenue:
+    DashboardLocationRevenue[] =
+    [];
+
 
   constructor(
-    private memberService: MemberService,
-    private router: Router
+
+    private readonly dashboardService:
+      DashboardService,
+
+    private readonly router:
+      Router
+
   ) {}
 
 
-  // =====================================================
-  // INITIALIZE
-  // =====================================================
-
-  ngOnInit(): void {
-
-    this.memberService
-      .getMembers()
-      .subscribe({
-
-        next: (
-          members: Member[]
-        ) => {
-
-          this.members = members;
-
-          this.prepareRecentMembers();
-
-          this.prepareUpcomingRenewals();
-        },
-
-        error: error => {
-
-          console.error(
-            'Error loading dashboard members:',
-            error
-          );
-
-          this.members = [];
-
-          this.recentMembers = [];
-
-          this.renewals = [];
-        }
-
-      });
-  }
+  ngOnInit():
+    void {
 
 
-  // =====================================================
-  // PREPARE RECENT MEMBERS
-  // =====================================================
+    this.dashboardService
+      .getDashboard()
 
-  private prepareRecentMembers(): void {
-
-    this.recentMembers = [
-
-      ...this.members
-
-    ]
-
-      .sort(
-        (
-          firstMember,
-          secondMember
-        ) => {
-
-          const firstDate =
-            new Date(
-              firstMember.joinedDate
-            ).getTime();
-
-          const secondDate =
-            new Date(
-              secondMember.joinedDate
-            ).getTime();
-
-          return (
-            secondDate -
-            firstDate
-          );
-        }
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
       )
 
-      .slice(0, 5)
+      .subscribe(
+        dashboard => {
 
-      .map(
-        member => ({
 
-          id:
-            member.memberId,
+          this.totalMembers =
+            dashboard.totalMembers;
 
-          initials:
-            this.getInitials(
-              member
-            ),
 
-          name:
-            this.getFullName(
-              member
-            ),
+          this.activeMembers =
+            dashboard.activeMembers;
 
-          memberId:
-            member.memberCode,
 
-          joinedDate:
-            this.formatDisplayDate(
-              member.joinedDate
-            ),
+          this.expiringSoon =
+            dashboard.expiringSoon;
 
-          status:
-            member.status
 
-        })
+          this.expiredMembers =
+            dashboard.expiredMembers;
+
+
+          this.totalMembersChange =
+            dashboard.totalMembersChange;
+
+
+          this.activeMembersChange =
+            dashboard.activeMembersChange;
+
+
+          this.expiringChange =
+            dashboard.expiringChange;
+
+
+          this.expiredChange =
+            dashboard.expiredChange;
+
+
+          this.revenue =
+            dashboard.revenue;
+
+
+          this.expenses =
+            dashboard.expenses;
+
+
+          this.netProfit =
+            dashboard.netProfit;
+
+
+          this.revenueChange =
+            dashboard.revenueChange;
+
+
+          this.expenseChange =
+            dashboard.expenseChange;
+
+
+          this.profitChange =
+            dashboard.profitChange;
+
+
+          this.checkedIn =
+            dashboard.checkedIn;
+
+
+          this.notCheckedIn =
+            dashboard.notCheckedIn;
+
+
+          this.totalEnquiries =
+            dashboard.totalEnquiries;
+
+
+          this.convertedEnquiries =
+            dashboard.convertedEnquiries;
+
+
+          this.memberGrowth =
+            dashboard.memberGrowth;
+
+
+          this.recentMembers =
+            dashboard.recentMembers;
+
+
+          this.renewals =
+            dashboard.renewals;
+
+
+          this.overduePayments =
+            dashboard.overduePayments;
+
+
+          this.locationRevenue =
+            dashboard.locationRevenue;
+
+        }
       );
+
   }
 
 
-  // =====================================================
-  // PREPARE UPCOMING RENEWALS
-  // =====================================================
+  viewAllMembers():
+    void {
 
-  private prepareUpcomingRenewals(): void {
-
-    const today =
-      new Date();
-
-    today.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-
-    this.renewals = this.members
-
-      .filter(
-        member =>
-          member.status
-            .toLowerCase() ===
-          'expiring'
-      )
-
-      .filter(
-        member =>
-          !!member.expiryDate
-      )
-
-      .map(
-        member => {
-
-          const expiry =
-            new Date(
-              member.expiryDate!
-            );
-
-          expiry.setHours(
-            0,
-            0,
-            0,
-            0
-          );
-
-
-          const millisecondsPerDay =
-            1000 *
-            60 *
-            60 *
-            24;
-
-
-          const daysLeft =
-            Math.max(
-              0,
-              Math.ceil(
-                (
-                  expiry.getTime() -
-                  today.getTime()
-                ) /
-                millisecondsPerDay
-              )
-            );
-
-
-          return {
-
-            id:
-              member.memberId,
-
-            name:
-              this.getFullName(
-                member
-              ),
-
-            memberId:
-              member.memberCode,
-
-            expiryDate:
-              this.formatDisplayDate(
-                member.expiryDate!
-              ),
-
-            daysLeft
-
-          };
-
-        }
-      )
-
-      .sort(
-        (
-          first,
-          second
-        ) =>
-          first.daysLeft -
-          second.daysLeft
-      )
-
-      .slice(
-        0,
-        5
-      );
-  }
-
-
-  // =====================================================
-  // KPI NAVIGATION
-  // =====================================================
-
-  viewAllMembers(): void {
 
     this.router.navigate([
       '/members'
     ]);
+
   }
 
 
-  viewActiveMembers(): void {
+  viewActiveMembers():
+    void {
+
 
     this.router.navigate(
       [
@@ -585,14 +321,18 @@ export class DashboardComponent implements OnInit {
       ],
       {
         queryParams: {
-          status: 'Active'
+          status:
+            'Active'
         }
       }
     );
+
   }
 
 
-  viewExpiringMembers(): void {
+  viewExpiringMembers():
+    void {
+
 
     this.router.navigate(
       [
@@ -600,14 +340,18 @@ export class DashboardComponent implements OnInit {
       ],
       {
         queryParams: {
-          status: 'Expiring'
+          status:
+            'Expiring'
         }
       }
     );
+
   }
 
 
-  viewExpiredMembers(): void {
+  viewExpiredMembers():
+    void {
+
 
     this.router.navigate(
       [
@@ -615,126 +359,182 @@ export class DashboardComponent implements OnInit {
       ],
       {
         queryParams: {
-          status: 'Expired'
+          status:
+            'Expired'
         }
       }
     );
+
   }
 
-
-  // =====================================================
-  // RECENT MEMBER NAVIGATION
-  // =====================================================
 
   openMember(
-    member: RecentMember
-  ): void {
+    member:
+      DashboardRecentMember
+  ):
+    void {
+
 
     this.router.navigate([
       '/members',
       member.id
     ]);
+
   }
 
 
-  // =====================================================
-  // RENEWAL MEMBER NAVIGATION
-  // =====================================================
-
   openRenewalMember(
-    renewal: Renewal
-  ): void {
+    renewal:
+      DashboardRenewal
+  ):
+    void {
+
 
     this.router.navigate([
       '/members',
       renewal.id
     ]);
+
   }
 
 
-  // =====================================================
-  // OVERDUE PAYMENT NAVIGATION
-  // =====================================================
+  viewAllRenewals():
+    void {
 
-  openOverdueMember(
-    payment: OverduePayment
-  ): void {
 
     this.router.navigate([
-      '/members',
-      payment.id
+      '/renewals'
     ]);
+
   }
 
 
-  viewOverduePayments(): void {
+  openOverduePayment(
+    payment:
+      DashboardOverduePayment
+  ):
+    void {
+
 
     this.router.navigate([
-      '/payments'
-    ],
-    {
-      queryParams: {
-        status: 'Overdue'
-      }
-    });
+      '/accounts/invoices',
+      payment.invoiceId
+    ]);
+
   }
 
 
-  // =====================================================
-  // VIEW ALL RECENT MEMBERS
-  // =====================================================
+  viewOverduePayments():
+    void {
 
-  viewAllRecentMembers(): void {
+
+    this.router.navigate([
+      '/accounts/invoices'
+    ]);
+
+  }
+
+
+  viewAllRecentMembers():
+    void {
+
 
     this.router.navigate([
       '/members'
     ]);
+
   }
 
 
-  // =====================================================
-  // VIEW ALL RENEWALS
-  // =====================================================
+  viewEnquiries():
+    void {
 
-  viewAllRenewals(): void {
 
-    this.router.navigate(
-      [
-        '/members'
-      ],
-      {
-        queryParams: {
-          status: 'Expiring'
-        }
-      }
-    );
+    this.router.navigate([
+      '/enquiries'
+    ]);
+
   }
 
 
-  // =====================================================
-  // TOTAL ATTENDANCE
-  // =====================================================
+  viewAttendance():
+    void {
 
-  get totalAttendance(): number {
 
-    return (
-      this.checkedIn +
-      this.notCheckedIn
-    );
+    this.router.navigate([
+      '/attendance'
+    ]);
+
   }
 
 
-  // =====================================================
-  // CHECKED IN %
-  // =====================================================
+  viewReports():
+    void {
 
-  get checkedInPercentage(): number {
+
+    this.router.navigate([
+      '/reports'
+    ]);
+
+  }
+
+
+  get conversionRate():
+    number {
+
 
     if (
-      this.totalAttendance === 0
+      this.totalEnquiries ===
+      0
     ) {
 
       return 0;
+
+    }
+
+
+    return Math.round(
+
+      (
+        this.convertedEnquiries
+        /
+        this.totalEnquiries
+      )
+
+      *
+
+      100
+
+    );
+
+  }
+
+
+  get totalAttendance():
+    number {
+
+
+    return (
+
+      this.checkedIn +
+      this.notCheckedIn
+
+    );
+
+  }
+
+
+  get checkedInPercentage():
+    number {
+
+
+    if (
+      this.totalAttendance ===
+      0
+    ) {
+
+      return 0;
+
     }
 
 
@@ -745,119 +545,237 @@ export class DashboardComponent implements OnInit {
         this.totalAttendance
       )
 
-      * 100
+      *
+
+      100
 
     );
+
   }
 
 
-  // =====================================================
-  // NOT CHECKED IN %
-  // =====================================================
+  get notCheckedInPercentage():
+    number {
 
-  get notCheckedInPercentage(): number {
 
     return (
+
       100 -
       this.checkedInPercentage
+
     );
+
   }
 
 
-  // =====================================================
-  // ATTENDANCE RING
-  // =====================================================
+  get attendanceRingBackground():
+    string {
 
-  get attendanceRingBackground(): string {
 
     return `conic-gradient(
       #00c896 0% ${this.checkedInPercentage}%,
       #637180 ${this.checkedInPercentage}% 100%
     )`;
+
   }
 
 
-  // =====================================================
-  // MEMBER GROWTH POINTS
-  // =====================================================
+  get growthScaleMax():
+    number {
+
+
+    const highest =
+      Math.max(
+
+        0,
+
+        ...this.memberGrowth
+          .map(
+            item =>
+              item.value
+          )
+
+      );
+
+
+    return Math.max(
+
+      10,
+
+      Math.ceil(
+        highest /
+        10
+      )
+
+      *
+
+      10
+
+    );
+
+  }
+
+
+  get growthAxisValues():
+    number[] {
+
+
+    const max =
+      this.growthScaleMax;
+
+
+    return [
+
+      max,
+
+      Math.round(
+        max *
+        .75
+      ),
+
+      Math.round(
+        max *
+        .5
+      ),
+
+      Math.round(
+        max *
+        .25
+      ),
+
+      0
+
+    ];
+
+  }
+
 
   get growthPoints(): {
-    x: number;
-    y: number;
-    month: string;
-    value: number;
+
+    x:
+      number;
+
+    y:
+      number;
+
+    month:
+      string;
+
+    value:
+      number;
+
   }[] {
 
-    const chartWidth = 640;
 
-    const leftPadding = 40;
+    const chartWidth =
+      640;
+
+
+    const leftPadding =
+      40;
+
 
     const availableWidth =
+
       chartWidth -
+
       (
         leftPadding *
         2
       );
 
-    const maxValue = 40;
 
-    const chartBottom = 180;
-
-    const chartHeight = 150;
+    const chartBottom =
+      180;
 
 
-    return this.memberGrowth.map(
-      (
-        item,
-        index
-      ) => {
+    const chartHeight =
+      150;
 
-        const x =
-          leftPadding +
-          (
-            index *
+
+    if (
+      !this.memberGrowth.length
+    ) {
+
+      return [];
+
+    }
+
+
+    return this.memberGrowth
+      .map(
+        (
+          item,
+          index
+        ) => {
+
+
+          const divisor =
+            Math.max(
+
+              1,
+
+              this.memberGrowth.length -
+              1
+
+            );
+
+
+          const x =
+
+            leftPadding
+
+            +
+
             (
-              availableWidth /
+              index *
+
               (
-                this.memberGrowth.length -
-                1
+                availableWidth /
+                divisor
               )
+            );
+
+
+          const y =
+
+            chartBottom
+
+            -
+
+            (
+              item.value /
+              this.growthScaleMax
             )
-          );
+
+            *
+
+            chartHeight;
 
 
-        const y =
-          chartBottom -
-          (
-            item.value /
-            maxValue
-          ) *
-          chartHeight;
+          return {
 
+            x,
 
-        return {
+            y,
 
-          x,
+            month:
+              item.month,
 
-          y,
+            value:
+              item.value
 
-          month:
-            item.month,
+          };
 
-          value:
-            item.value
+        }
+      );
 
-        };
-      }
-    );
   }
 
 
-  // =====================================================
-  // SVG POLYLINE POINTS
-  // =====================================================
+  get memberGrowthPoints():
+    string {
 
-  get memberGrowthPoints(): string {
 
     return this.growthPoints
 
@@ -867,24 +785,24 @@ export class DashboardComponent implements OnInit {
       )
 
       .join(' ');
+
   }
 
 
-  // =====================================================
-  // SVG AREA PATH
-  // =====================================================
+  get memberGrowthAreaPath():
+    string {
 
-  get memberGrowthAreaPath(): string {
 
     const points =
       this.growthPoints;
 
 
     if (
-      points.length === 0
+      !points.length
     ) {
 
       return '';
+
     }
 
 
@@ -894,11 +812,12 @@ export class DashboardComponent implements OnInit {
 
     const last =
       points[
-        points.length - 1
+        points.length -
+        1
       ];
 
 
-    const linePath =
+    const line =
       points
 
         .map(
@@ -911,138 +830,147 @@ export class DashboardComponent implements OnInit {
 
     return `
       M ${first.x} 180
-      ${linePath}
+      ${line}
       L ${last.x} 180
       Z
     `;
+
   }
 
 
-  // =====================================================
-  // FORMAT CURRENCY
-  // =====================================================
-
   formatCurrency(
-    value: number
-  ): string {
+    value:
+      number
+  ):
+    string {
+
 
     return new Intl.NumberFormat(
       'en-IN'
-    ).format(
-      value
-    );
-  }
-
-
-  // =====================================================
-  // FORMAT DATE
-  // =====================================================
-
-  private formatDisplayDate(
-    value: string
-  ): string {
-
-    const date =
-      new Date(
+    )
+      .format(
         value
       );
 
-
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
-
-      return value;
-    }
-
-
-    return new Intl.DateTimeFormat(
-      'en-GB',
-      {
-        day: '2-digit',
-
-        month: 'short',
-
-        year: 'numeric'
-      }
-    ).format(
-      date
-    );
   }
 
-
-  // =====================================================
-  // FULL NAME
-  // =====================================================
-
-  private getFullName(
-    member: Member
-  ): string {
-
-    return (
-      `${member.firstName} ${member.lastName}`
-    );
-  }
-
-
-  // =====================================================
-  // INITIALS
-  // =====================================================
-
-  private getInitials(
-    member: Member
-  ): string {
-
-    const first =
-      member.firstName
-        ?.charAt(0) ??
-      '';
-
-
-    const last =
-      member.lastName
-        ?.charAt(0) ??
-      '';
-
-
-    return (
-      first +
-      last
-    ).toUpperCase();
-  }
-
-
-  // =====================================================
-  // MEMBER STATUS CLASS
-  // =====================================================
 
   getMemberStatusClass(
-    status: string
-  ): string {
+    status:
+      string
+  ):
+    string {
+
 
     return status
       .toLowerCase();
+
   }
 
 
-  // =====================================================
-  // DAYS CLASS
-  // =====================================================
-
   getDaysClass(
-    days: number
-  ): string {
+    days:
+      number
+  ):
+    string {
+
+
+    return days <=
+      30
+
+      ? 'urgent'
+
+      : 'normal';
+
+  }
+
+
+  getChangeClass(
+
+    value:
+      number,
+
+    inverse:
+      boolean =
+      false
+
+  ):
+    string {
+
 
     if (
-      days <= 30
+      value ===
+      0
     ) {
 
-      return 'urgent';
+      return '';
+
     }
 
 
-    return 'normal';
+    const good =
+
+      inverse
+
+        ? value <
+          0
+
+        : value >
+          0;
+
+
+    return good
+
+      ? 'positive'
+
+      : 'negative';
+
   }
+
+
+  getChangeArrow(
+    value:
+      number
+  ):
+    string {
+
+
+    if (
+      value >
+      0
+    ) {
+
+      return '↑';
+
+    }
+
+
+    if (
+      value <
+      0
+    ) {
+
+      return '↓';
+
+    }
+
+
+    return '–';
+
+  }
+
+
+  absolute(
+    value:
+      number
+  ):
+    number {
+
+
+    return Math.abs(
+      value
+    );
+
+  }
+
 }

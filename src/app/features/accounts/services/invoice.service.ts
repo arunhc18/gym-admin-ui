@@ -46,7 +46,7 @@ export class InvoiceService {
         invoiceDate:
           '2026-09-20',
 
-        memberId: 101,
+        memberId: 1,
 
         invoiceType:
           'membership',
@@ -93,7 +93,7 @@ export class InvoiceService {
         invoiceDate:
           '2026-09-21',
 
-        memberId: 102,
+        memberId: 2,
 
         invoiceType:
           'pt_package',

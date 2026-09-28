@@ -4,6 +4,8 @@ import {
 
 import {
   Component,
+  DestroyRef,
+  inject,
   OnInit
 } from '@angular/core';
 
@@ -19,6 +21,10 @@ import {
 import {
   Router
 } from '@angular/router';
+
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
 
 import {
   CreateInvoiceItemRequest,
@@ -39,6 +45,10 @@ import {
 import {
   PaymentService
 } from '../../../services/payment.service';
+
+import {
+  MemberService
+} from '../../../../members/services/member.service';
 
 
 type PaymentOption =
@@ -71,7 +81,8 @@ interface BillingItemOption {
 
   id: number;
 
-  type: InvoiceItemType;
+  type:
+    InvoiceItemType;
 
   name: string;
 
@@ -86,7 +97,8 @@ interface BillingItemOption {
   selector:
     'app-invoice-form',
 
-  standalone: true,
+  standalone:
+    true,
 
   imports: [
     CommonModule,
@@ -103,93 +115,74 @@ export class InvoiceFormComponent
   implements OnInit {
 
 
-  /*
-   * TEMPORARY
-   *
-   * Later tenantId must come from
-   * logged-in user / authentication context.
-   */
-
-  readonly tenantId = 1;
+  private readonly destroyRef =
+    inject(
+      DestroyRef
+    );
 
 
-  submitted = false;
+  readonly tenantId =
+    1;
 
-  saving = false;
+
+  submitted =
+    false;
+
+
+  saving =
+    false;
 
 
   paymentMethods:
-    PaymentMethod[] = [];
+    PaymentMethod[] =
+    [];
 
 
   /*
-   * TEMPORARY MEMBER DATA
-   *
-   * Later replace with MemberService.
+   * Members now come directly from MemberService.
    */
-
-  readonly members:
-    MemberOption[] = [
-
-    {
-      memberId: 101,
-      memberCode: 'MEM-001',
-      memberName: 'Arun Kumar'
-    },
-
-    {
-      memberId: 102,
-      memberCode: 'MEM-002',
-      memberName: 'Rahul Sharma'
-    },
-
-    {
-      memberId: 103,
-      memberCode: 'MEM-003',
-      memberName: 'Kiran R'
-    }
-
-  ];
+  members:
+    MemberOption[] =
+    [];
 
 
   /*
-   * TEMPORARY LOCATION DATA
-   *
-   * Later replace with LocationService.
+   * Keep locations here until a shared
+   * LocationService exists.
    */
-
   readonly locations:
     LocationOption[] = [
 
     {
-      locationId: 1,
-      locationName: 'Main Branch'
+      locationId:
+        1,
+
+      locationName:
+        'Main Branch'
     },
 
     {
-      locationId: 2,
-      locationName: 'Branch 2'
+      locationId:
+        2,
+
+      locationName:
+        'Branch 2'
     }
 
   ];
 
 
   /*
-   * TEMPORARY BILLING CATALOG
+   * Membership items can later be replaced with
+   * MembershipPlanService.
    *
-   * Later:
-   *
-   * membership -> membership plans
-   * pt_session -> PT packages/sessions
-   * product    -> products
-   * service    -> gym services
+   * PT, products and services still need their
+   * respective catalog services.
    */
-
   readonly billingItems:
     BillingItemOption[] = [
 
 
-    // MEMBERSHIP
     {
       id: 1,
       type: 'membership',
@@ -223,7 +216,6 @@ export class InvoiceFormComponent
     },
 
 
-    // PT
     {
       id: 10,
       type: 'pt_session',
@@ -249,7 +241,6 @@ export class InvoiceFormComponent
     },
 
 
-    // PRODUCT
     {
       id: 20,
       type: 'product',
@@ -267,7 +258,6 @@ export class InvoiceFormComponent
     },
 
 
-    // SERVICE
     {
       id: 30,
       type: 'service',
@@ -287,7 +277,8 @@ export class InvoiceFormComponent
   ];
 
 
-invoiceForm!: FormGroup;
+  invoiceForm:
+    FormGroup;
 
 
   constructor(
@@ -301,29 +292,38 @@ invoiceForm!: FormGroup;
     private readonly paymentService:
       PaymentService,
 
+    private readonly memberService:
+      MemberService,
+
     private readonly router:
       Router
 
   ) {
+
 
     this.invoiceForm =
       this.fb.group({
 
 
         memberId: [
-          null as number | null,
+          null as
+            number | null,
+
           Validators.required
         ],
 
 
         locationId: [
-          null as number | null,
+          null as
+            number | null,
+
           Validators.required
         ],
 
 
         invoiceDate: [
           this.today(),
+
           Validators.required
         ],
 
@@ -335,6 +335,7 @@ invoiceForm!: FormGroup;
 
         invoiceType: [
           'membership' as InvoiceType,
+
           Validators.required
         ],
 
@@ -346,17 +347,20 @@ invoiceForm!: FormGroup;
 
         paymentOption: [
           'pay_now' as PaymentOption,
+
           Validators.required
         ],
 
 
         paymentMethodId: [
-          null as number | null
+          null as
+            number | null
         ],
 
 
         paymentAmount: [
-          null as number | null
+          null as
+            number | null
         ],
 
 
@@ -385,18 +389,29 @@ invoiceForm!: FormGroup;
   }
 
 
-  ngOnInit(): void {
+  ngOnInit():
+    void {
 
+
+    this.loadMembers();
 
     this.loadPaymentMethods();
-
 
     this.addItem();
 
 
     this.invoiceForm
-      .get('paymentOption')
+      .get(
+        'paymentOption'
+      )
       ?.valueChanges
+
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+
       .subscribe(
         () => {
 
@@ -408,16 +423,63 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // ITEMS
-  // =====================================================
+  private loadMembers():
+    void {
+
+
+    this.memberService
+      .getMembers()
+
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+
+      .subscribe(
+        members => {
+
+
+          this.members =
+            members
+
+              .filter(
+                member =>
+
+                  member.status !==
+                  'Inactive'
+              )
+
+              .map(
+                member => ({
+
+                  memberId:
+                    member.memberId,
+
+                  memberCode:
+                    member.memberCode,
+
+                  memberName:
+                    `${member.firstName} ${member.lastName}`
+
+                })
+              );
+
+        }
+      );
+
+  }
+
 
   get items():
-    FormArray<FormGroup> {
+    FormArray<
+      FormGroup
+    > {
+
 
     return this.invoiceForm.get(
-      'items'
-    ) as FormArray<FormGroup>;
+        'items'
+      )as FormArray<FormGroup>;
 
   }
 
@@ -425,68 +487,83 @@ invoiceForm!: FormGroup;
   createItemForm():
     FormGroup {
 
-    return this.fb.group({
+
+    return this.fb
+      .group({
 
 
-      itemType: [
-        'membership',
-        Validators.required
-      ],
+        itemType: [
+          'membership',
+
+          Validators.required
+        ],
 
 
-      referenceId: [
-        null,
-        Validators.required
-      ],
+        referenceId: [
+          null,
+
+          Validators.required
+        ],
 
 
-      itemDescription: [
-        '',
-        Validators.required
-      ],
+        itemDescription: [
+          '',
+
+          Validators.required
+        ],
 
 
-      quantity: [
-        1,
-        [
-          Validators.required,
-          Validators.min(1)
+        quantity: [
+          1,
+          [
+            Validators.required,
+            Validators.min(
+              1
+            )
+          ]
+        ],
+
+
+        unitPrice: [
+          0,
+          [
+            Validators.required,
+            Validators.min(
+              0
+            )
+          ]
+        ],
+
+
+        discountAmount: [
+          0,
+          [
+            Validators.required,
+            Validators.min(
+              0
+            )
+          ]
+        ],
+
+
+        taxPercentage: [
+          18,
+          [
+            Validators.required,
+            Validators.min(
+              0
+            )
+          ]
         ]
-      ],
 
-
-      unitPrice: [
-        0,
-        [
-          Validators.required,
-          Validators.min(0)
-        ]
-      ],
-
-
-      discountAmount: [
-        0,
-        [
-          Validators.required,
-          Validators.min(0)
-        ]
-      ],
-
-
-      taxPercentage: [
-        18,
-        [
-          Validators.required,
-          Validators.min(0)
-        ]
-      ]
-
-    });
+      });
 
   }
 
 
-  addItem(): void {
+  addItem():
+    void {
+
 
     this.items.push(
       this.createItemForm()
@@ -496,11 +573,15 @@ invoiceForm!: FormGroup;
 
 
   removeItem(
-    index: number
-  ): void {
+    index:
+      number
+  ):
+    void {
+
 
     if (
-      this.items.length === 1
+      this.items.length ===
+      1
     ) {
 
       return;
@@ -515,13 +596,12 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // ITEM TYPE CHANGE
-  // =====================================================
-
   onItemTypeChange(
-    index: number
-  ): void {
+    index:
+      number
+  ):
+    void {
+
 
     const row =
       this.items.at(
@@ -554,13 +634,12 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // ITEM SELECTION
-  // =====================================================
-
   onBillingItemChange(
-    index: number
-  ): void {
+    index:
+      number
+  ):
+    void {
+
 
     const row =
       this.items.at(
@@ -583,20 +662,23 @@ invoiceForm!: FormGroup;
 
 
     const selected =
-      this.billingItems.find(
-        item =>
+      this.billingItems
+        .find(
+          item =>
 
-          item.id ===
-            referenceId
+            item.id ===
+              referenceId
 
-          &&
+            &&
 
-          item.type ===
-            itemType
-      );
+            item.type ===
+              itemType
+        );
 
 
-    if (!selected) {
+    if (
+      !selected
+    ) {
 
       return;
 
@@ -619,31 +701,29 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // AVAILABLE ITEMS
-  // =====================================================
-
   getItemsByType(
     type:
       InvoiceItemType
-  ): BillingItemOption[] {
+  ):
+    BillingItemOption[] {
+
 
     return this.billingItems
       .filter(
         item =>
-          item.type === type
+          item.type ===
+          type
       );
 
   }
 
 
-  // =====================================================
-  // ROW TOTALS
-  // =====================================================
-
   getRowSubtotal(
-    index: number
-  ): number {
+    index:
+      number
+  ):
+    number {
+
 
     const row =
       this.items.at(
@@ -656,7 +736,9 @@ invoiceForm!: FormGroup;
         row.get(
           'quantity'
         )?.value
-      ) || 0;
+      )
+      ||
+      0;
 
 
     const price =
@@ -664,20 +746,27 @@ invoiceForm!: FormGroup;
         row.get(
           'unitPrice'
         )?.value
-      ) || 0;
+      )
+      ||
+      0;
 
 
     return this.round(
+
       quantity *
       price
+
     );
 
   }
 
 
   getRowTax(
-    index: number
-  ): number {
+    index:
+      number
+  ):
+    number {
+
 
     const row =
       this.items.at(
@@ -696,7 +785,9 @@ invoiceForm!: FormGroup;
         row.get(
           'discountAmount'
         )?.value
-      ) || 0;
+      )
+      ||
+      0;
 
 
     const taxPercentage =
@@ -704,14 +795,19 @@ invoiceForm!: FormGroup;
         row.get(
           'taxPercentage'
         )?.value
-      ) || 0;
+      )
+      ||
+      0;
 
 
     const taxable =
       Math.max(
+
         0,
+
         subtotal -
         discount
+
       );
 
 
@@ -727,8 +823,11 @@ invoiceForm!: FormGroup;
 
 
   getRowTotal(
-    index: number
-  ): number {
+    index:
+      number
+  ):
+    number {
+
 
     const row =
       this.items.at(
@@ -747,7 +846,9 @@ invoiceForm!: FormGroup;
         row.get(
           'discountAmount'
         )?.value
-      ) || 0;
+      )
+      ||
+      0;
 
 
     const tax =
@@ -759,9 +860,12 @@ invoiceForm!: FormGroup;
     return this.round(
 
       Math.max(
+
         0,
+
         subtotal -
         discount
+
       )
 
       +
@@ -773,11 +877,9 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // INVOICE TOTALS
-  // =====================================================
+  get subtotal():
+    number {
 
-  get subtotal(): number {
 
     return this.round(
 
@@ -790,6 +892,7 @@ invoiceForm!: FormGroup;
           ) =>
 
             total +
+
             this.getRowSubtotal(
               index
             ),
@@ -802,7 +905,9 @@ invoiceForm!: FormGroup;
   }
 
 
-  get discountTotal(): number {
+  get discountTotal():
+    number {
+
 
     return this.round(
 
@@ -813,14 +918,18 @@ invoiceForm!: FormGroup;
             row
           ) =>
 
-            total +
+            total
+
+            +
 
             (
               Number(
                 row.get(
                   'discountAmount'
                 )?.value
-              ) || 0
+              )
+              ||
+              0
             ),
 
           0
@@ -831,7 +940,9 @@ invoiceForm!: FormGroup;
   }
 
 
-  get taxTotal(): number {
+  get taxTotal():
+    number {
+
 
     return this.round(
 
@@ -843,7 +954,10 @@ invoiceForm!: FormGroup;
             index
           ) =>
 
-            total +
+            total
+
+            +
+
             this.getRowTax(
               index
             ),
@@ -856,12 +970,20 @@ invoiceForm!: FormGroup;
   }
 
 
-  get invoiceTotal(): number {
+  get invoiceTotal():
+    number {
+
 
     return this.round(
 
-      this.subtotal -
-      this.discountTotal +
+      this.subtotal
+
+      -
+
+      this.discountTotal
+
+      +
+
       this.taxTotal
 
     );
@@ -869,18 +991,17 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // PAYMENT OPTIONS
-  // =====================================================
-
   get paymentOption():
     PaymentOption {
 
+
     return (
 
-      this.invoiceForm.get(
-        'paymentOption'
-      )?.value
+      this.invoiceForm
+        .get(
+          'paymentOption'
+        )
+        ?.value
 
       ||
 
@@ -894,15 +1015,19 @@ invoiceForm!: FormGroup;
   get showPaymentFields():
     boolean {
 
+
     return (
+
       this.paymentOption !==
       'pay_later'
+
     );
 
   }
 
 
-  onPaymentOptionChange(): void {
+  onPaymentOptionChange():
+    void {
 
 
     if (
@@ -910,12 +1035,13 @@ invoiceForm!: FormGroup;
       'pay_now'
     ) {
 
-      this.invoiceForm.patchValue({
+      this.invoiceForm
+        .patchValue({
 
-        paymentAmount:
-          this.invoiceTotal
+          paymentAmount:
+            this.invoiceTotal
 
-      });
+        });
 
     }
 
@@ -925,12 +1051,13 @@ invoiceForm!: FormGroup;
       'partial'
     ) {
 
-      this.invoiceForm.patchValue({
+      this.invoiceForm
+        .patchValue({
 
-        paymentAmount:
-          null
+          paymentAmount:
+            null
 
-      });
+        });
 
     }
 
@@ -940,24 +1067,25 @@ invoiceForm!: FormGroup;
       'pay_later'
     ) {
 
-      this.invoiceForm.patchValue({
+      this.invoiceForm
+        .patchValue({
 
-        paymentMethodId:
-          null,
+          paymentMethodId:
+            null,
 
-        paymentAmount:
-          null,
+          paymentAmount:
+            null,
 
-        transactionId:
-          '',
+          transactionId:
+            '',
 
-        referenceNumber:
-          '',
+          referenceNumber:
+            '',
 
-        paymentNotes:
-          ''
+          paymentNotes:
+            ''
 
-      });
+        });
 
     }
 
@@ -972,18 +1100,27 @@ invoiceForm!: FormGroup;
 
 
     const methodControl =
-      this.invoiceForm.get(
-        'paymentMethodId'
-      ) as FormControl | null;
+      this.invoiceForm
+        .get(
+          'paymentMethodId'
+        ) as FormControl | null;
 
 
     const amountControl =
-      this.invoiceForm.get(
-        'paymentAmount'
-      ) as FormControl | null;
+      this.invoiceForm
+        .get(
+          'paymentAmount'
+        ) as FormControl | null;
 
-    if (!methodControl || !amountControl) {
+
+    if (
+      !methodControl
+      ||
+      !amountControl
+    ) {
+
       return;
+
     }
 
 
@@ -1000,20 +1137,23 @@ invoiceForm!: FormGroup;
       'pay_later'
     ) {
 
-      methodControl.setValidators([
-        Validators.required
-      ]);
+
+      methodControl
+        .setValidators([
+          Validators.required
+        ]);
 
 
-      amountControl.setValidators([
+      amountControl
+        .setValidators([
 
-        Validators.required,
+          Validators.required,
 
-        Validators.min(
-          0.01
-        )
+          Validators.min(
+            0.01
+          )
 
-      ]);
+        ]);
 
     }
 
@@ -1034,17 +1174,21 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // LOAD PAYMENT METHODS
-  // =====================================================
-
   private loadPaymentMethods():
     void {
+
 
     this.paymentService
       .getPaymentMethods(
         this.tenantId
       )
+
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+
       .subscribe(
         methods => {
 
@@ -1057,11 +1201,9 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // SAVE
-  // =====================================================
+  saveInvoice():
+    void {
 
-  saveInvoice(): void {
 
     this.submitted =
       true;
@@ -1083,7 +1225,8 @@ invoiceForm!: FormGroup;
 
 
     if (
-      this.items.length === 0
+      this.items.length ===
+      0
     ) {
 
       return;
@@ -1092,7 +1235,8 @@ invoiceForm!: FormGroup;
 
 
     if (
-      this.invoiceTotal <= 0
+      this.invoiceTotal <=
+      0
     ) {
 
       return;
@@ -1105,13 +1249,10 @@ invoiceForm!: FormGroup;
         .getRawValue();
 
 
-    /*
-     * Validate payment BEFORE invoice creation.
-     */
-
     if (
       this.showPaymentFields
     ) {
+
 
       const paymentAmount =
         Number(
@@ -1120,7 +1261,8 @@ invoiceForm!: FormGroup;
 
 
       if (
-        paymentAmount <= 0
+        paymentAmount <=
+        0
       ) {
 
         return;
@@ -1201,7 +1343,8 @@ invoiceForm!: FormGroup;
                   row.get(
                     'itemDescription'
                   )?.value
-                  ?? ''
+                  ??
+                  ''
                 ),
 
               itemType:
@@ -1215,7 +1358,8 @@ invoiceForm!: FormGroup;
                     'referenceId'
                   )?.value
                 )
-                || null,
+                ||
+                null,
 
               quantity:
                 Number(
@@ -1237,7 +1381,8 @@ invoiceForm!: FormGroup;
                     'discountAmount'
                   )?.value
                 )
-                || 0,
+                ||
+                0,
 
               taxPercentage:
                 Number(
@@ -1245,7 +1390,8 @@ invoiceForm!: FormGroup;
                     'taxPercentage'
                   )?.value
                 )
-                || 0
+                ||
+                0
 
             })
           );
@@ -1276,17 +1422,24 @@ invoiceForm!: FormGroup;
           value.invoiceType as InvoiceType,
 
         dueDate:
+
           value.dueDate
+
             ? String(
                 value.dueDate
               )
+
             : null,
 
         notes:
+
           value.notes
+
             ? String(
                 value.notes
-              ).trim()
+              )
+                .trim()
+
             : null,
 
         items:
@@ -1295,21 +1448,12 @@ invoiceForm!: FormGroup;
       };
 
 
-      /*
-       * 1. CREATE INVOICE
-       */
-
       const invoice =
         this.invoiceService
           .createInvoice(
             invoiceRequest
           );
 
-
-      /*
-       * 2. CREATE PAYMENT
-       * Only for Pay Now / Partial
-       */
 
       if (
         this.showPaymentFields
@@ -1334,13 +1478,6 @@ invoiceForm!: FormGroup;
           invoiceId:
             invoice.invoiceId,
 
-          /*
-           * IMPORTANT
-           *
-           * PAYMENT METHOD ID
-           * is stored here.
-           */
-
           paymentMethodId:
             Number(
               value.paymentMethodId
@@ -1352,27 +1489,39 @@ invoiceForm!: FormGroup;
             ),
 
           transactionId:
+
             value.transactionId
+
               ? String(
                   value.transactionId
-                ).trim()
+                )
+                  .trim()
+
               : null,
 
           paymentStatus:
             'completed',
 
           referenceNumber:
+
             value.referenceNumber
+
               ? String(
                   value.referenceNumber
-                ).trim()
+                )
+                  .trim()
+
               : null,
 
           notes:
+
             value.paymentNotes
+
               ? String(
                   value.paymentNotes
-                ).trim()
+                )
+                  .trim()
+
               : null
 
         };
@@ -1385,10 +1534,6 @@ invoiceForm!: FormGroup;
 
       }
 
-
-      /*
-       * 3. GO TO INVOICE DETAILS
-       */
 
       this.router.navigate([
 
@@ -1412,7 +1557,8 @@ invoiceForm!: FormGroup;
 
       const message =
 
-        error instanceof Error
+        error instanceof
+          Error
 
           ? error.message
 
@@ -1432,11 +1578,9 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // CANCEL
-  // =====================================================
+  cancel():
+    void {
 
-  cancel(): void {
 
     this.router.navigate([
       '/accounts/invoices'
@@ -1445,14 +1589,12 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // VALIDATION
-  // =====================================================
-
   isInvalid(
     controlName:
       keyof typeof this.invoiceForm.controls
-  ): boolean {
+  ):
+    boolean {
+
 
     const control =
       this.invoiceForm
@@ -1464,7 +1606,8 @@ invoiceForm!: FormGroup;
     return (
 
       (
-        control.touched ||
+        control.touched
+        ||
         this.submitted
       )
 
@@ -1477,51 +1620,46 @@ invoiceForm!: FormGroup;
   }
 
 
-  // =====================================================
-  // HELPERS
-  // =====================================================
-
   private today():
     string {
+
 
     const date =
       new Date();
 
 
-    const year =
-      date.getFullYear();
+    return [
 
+      date.getFullYear(),
 
-    const month =
       String(
-        date.getMonth() + 1
+        date.getMonth() +
+        1
       )
         .padStart(
           2,
           '0'
-        );
+        ),
 
-
-    const day =
       String(
         date.getDate()
       )
         .padStart(
           2,
           '0'
-        );
+        )
 
-
-    return (
-      `${year}-${month}-${day}`
-    );
+    ].join('-');
 
   }
 
 
   private round(
-    value: number
-  ): number {
+    value:
+      number
+  ):
+    number {
+
 
     return Math.round(
 

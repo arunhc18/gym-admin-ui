@@ -1,0 +1,1061 @@
+:host {
+  display: block;
+}
+
+
+.reports-page {
+  width: 100%;
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.filter-card {
+  margin-bottom: 6px;
+
+  padding: 7px 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+}
+
+
+.filter-grid {
+  display: grid;
+
+  grid-template-columns:
+    130px
+    130px
+    150px
+    auto
+    1fr;
+
+  align-items: end;
+
+  gap: 6px;
+}
+
+
+.filter-field label {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color:
+    var(--text-muted);
+
+  font-size: 7px;
+
+  font-weight: 600;
+}
+
+
+.filter-field input,
+.filter-field select {
+  width: 100%;
+
+  height: 27px;
+
+  box-sizing:
+    border-box;
+
+  padding:
+    0 7px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+}
+
+
+.filter-buttons,
+.export-buttons {
+  display: flex;
+
+  gap: 4px;
+}
+
+
+.export-buttons {
+  justify-content:
+    flex-end;
+}
+
+
+.filter-buttons .btn,
+.compact-action {
+  height: 27px;
+
+  min-height: 27px;
+
+  padding:
+    0 8px;
+
+  font-size: 8px;
+}
+
+
+.compact-action {
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+}
+
+
+.compact-action:hover {
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+.report-tabs {
+  display: flex;
+
+  width: fit-content;
+
+  gap: 2px;
+
+  margin-bottom: 6px;
+
+  padding: 2px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-card);
+}
+
+
+.report-tabs button {
+  height: 25px;
+
+  padding:
+    0 10px;
+
+  border: 0;
+
+  border-radius: 4px;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-muted);
+
+  cursor: pointer;
+
+  font-size: 7px;
+
+  font-weight: 600;
+}
+
+
+.report-tabs button.active {
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading-state {
+  padding: 30px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-muted);
+
+  font-size: 9px;
+
+  text-align: center;
+}
+
+
+/* =====================================================
+   KPI CARDS
+===================================================== */
+
+.metric-grid {
+  display: grid;
+
+  gap: 5px;
+
+  margin-bottom: 6px;
+}
+
+
+.six-cards {
+  grid-template-columns:
+    repeat(
+      6,
+      minmax(
+        0,
+        1fr
+      )
+    );
+}
+
+
+.four-cards {
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(
+        0,
+        1fr
+      )
+    );
+}
+
+
+.metric-card {
+  min-height: 43px;
+
+  box-sizing:
+    border-box;
+
+  padding:
+    7px 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+}
+
+
+.metric-card span {
+  display: block;
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  font-weight: 600;
+
+  line-height: 1;
+
+  text-transform:
+    uppercase;
+}
+
+
+.metric-card strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--text-primary);
+
+  font-size: 13px;
+
+  line-height: 1;
+}
+
+
+.success {
+  color:
+    var(--success) !important;
+}
+
+
+.danger {
+  color:
+    var(--danger) !important;
+}
+
+
+.warning {
+  color:
+    var(--warning, #f59e0b) !important;
+}
+
+
+/* =====================================================
+   REPORT GRID
+===================================================== */
+
+.report-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      0,
+      1.65fr
+    )
+    minmax(
+      250px,
+      .75fr
+    );
+
+  gap: 6px;
+
+  margin-bottom: 6px;
+}
+
+
+/* =====================================================
+   REPORT CARD
+===================================================== */
+
+.report-card {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+}
+
+
+.compact-section {
+  margin-bottom: 6px;
+}
+
+
+.table-card {
+  margin-bottom: 6px;
+}
+
+
+.card-header {
+  display: flex;
+
+  min-height: 28px;
+
+  box-sizing:
+    border-box;
+
+  align-items: center;
+
+  padding:
+    5px 8px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+}
+
+
+.card-header strong {
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+}
+
+
+/* =====================================================
+   CHART
+===================================================== */
+
+.bar-chart {
+  display: flex;
+
+  height: 135px;
+
+  align-items: flex-end;
+
+  gap: 3px;
+
+  overflow-x: auto;
+
+  padding:
+    10px 8px 5px;
+}
+
+
+.chart-column {
+  display: grid;
+
+  min-width: 18px;
+
+  height: 100%;
+
+  grid-template-rows:
+    1fr auto;
+
+  align-items: end;
+
+  gap: 2px;
+}
+
+
+.chart-bars {
+  display: flex;
+
+  height: 100%;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  gap: 2px;
+}
+
+
+.chart-bars span {
+  display: block;
+
+  width: 5px;
+
+  border-radius:
+    2px 2px 0 0;
+}
+
+
+.revenue-bar {
+  background:
+    var(--success);
+}
+
+
+.expense-bar {
+  background:
+    var(--danger);
+}
+
+
+.chart-column small {
+  color:
+    var(--text-muted);
+
+  font-size: 5px;
+
+  text-align: center;
+}
+
+
+.chart-legend {
+  display: flex;
+
+  gap: 12px;
+
+  padding:
+    5px 8px;
+
+  border-top:
+    1px solid
+    var(--border-secondary);
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+}
+
+
+.chart-legend span {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+}
+
+
+.chart-legend i {
+  width: 7px;
+
+  height: 7px;
+
+  border-radius: 2px;
+}
+
+
+.revenue-key {
+  background:
+    var(--success);
+}
+
+
+.expense-key {
+  background:
+    var(--danger);
+}
+
+
+/* =====================================================
+   PROGRESS LIST
+===================================================== */
+
+.progress-list {
+  display: grid;
+
+  gap: 7px;
+
+  padding: 8px;
+}
+
+
+.progress-item {
+  display: grid;
+
+  gap: 3px;
+}
+
+
+.progress-info {
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 8px;
+}
+
+
+.progress-info strong {
+  color:
+    var(--text-primary);
+
+  font-size: 7px;
+}
+
+
+.progress-info span {
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+}
+
+
+.progress {
+  height: 4px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background:
+    var(--bg-elevated);
+}
+
+
+.progress span {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    var(--primary);
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+table {
+  width: 100%;
+
+  border-collapse:
+    collapse;
+
+  border-spacing: 0;
+}
+
+
+th,
+td {
+  box-sizing: border-box;
+
+  height: 30px;
+
+  padding:
+    4px 7px;
+
+  border-bottom:
+    1px solid
+    var(--border-secondary);
+
+  vertical-align: middle;
+
+  text-align: left;
+
+  line-height: 1.1;
+}
+
+
+th {
+  height: 26px;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  font-weight: 700;
+
+  text-transform:
+    uppercase;
+
+  white-space: nowrap;
+}
+
+
+td {
+  color:
+    var(--text-secondary);
+
+  font-size: 8px;
+}
+
+
+td strong {
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+}
+
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+
+tbody tr:hover {
+  background:
+    var(--bg-elevated);
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-pill,
+.type-pill,
+.enquiry-status {
+  display: inline-flex;
+
+  min-width: 48px;
+
+  height: 18px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  padding:
+    0 5px;
+
+  border-radius: 4px;
+
+  font-size: 6px;
+
+  font-weight: 600;
+
+  text-transform: capitalize;
+}
+
+
+.status-pill.active {
+  background:
+    rgba(
+      16,
+      185,
+      129,
+      .1
+    );
+
+  color:
+    var(--success);
+}
+
+
+.status-pill.expired {
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .1
+    );
+
+  color:
+    var(--danger);
+}
+
+
+.status-pill.expiring {
+  background:
+    rgba(
+      245,
+      158,
+      11,
+      .1
+    );
+
+  color:
+    var(--warning, #f59e0b);
+}
+
+
+.type-pill {
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+}
+
+
+.type-pill.staff {
+  background:
+    rgba(
+      168,
+      85,
+      247,
+      .1
+    );
+
+  color:
+    #a855f7;
+}
+
+
+/* =====================================================
+   ENQUIRY STATUS
+===================================================== */
+
+.enquiry-status.new {
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+}
+
+
+.enquiry-status.follow-up {
+  background:
+    rgba(
+      245,
+      158,
+      11,
+      .1
+    );
+
+  color:
+    var(--warning, #f59e0b);
+}
+
+
+.enquiry-status.visited {
+  background:
+    rgba(
+      168,
+      85,
+      247,
+      .1
+    );
+
+  color:
+    #a855f7;
+}
+
+
+.enquiry-status.converted {
+  background:
+    rgba(
+      16,
+      185,
+      129,
+      .1
+    );
+
+  color:
+    var(--success);
+}
+
+
+.enquiry-status.lost {
+  background:
+    rgba(
+      239,
+      68,
+      68,
+      .1
+    );
+
+  color:
+    var(--danger);
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+  padding: 18px !important;
+
+  color:
+    var(--text-muted);
+
+  font-size: 8px;
+
+  text-align:
+    center !important;
+}
+
+
+/* =====================================================
+   SCROLL
+===================================================== */
+
+.table-wrapper,
+.bar-chart {
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    var(--border-primary)
+    transparent;
+}
+
+
+.table-wrapper::-webkit-scrollbar,
+.bar-chart::-webkit-scrollbar {
+  height: 5px;
+}
+
+
+.table-wrapper::-webkit-scrollbar-thumb,
+.bar-chart::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background:
+    var(--border-primary);
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
+
+  .filter-card,
+  .report-tabs {
+    display: none !important;
+  }
+
+
+  .reports-page {
+    color: #111;
+  }
+
+
+  .metric-card,
+  .report-card {
+    break-inside: avoid;
+
+    box-shadow: none;
+  }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 1100px
+) {
+
+  .six-cards {
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+  }
+
+
+  .filter-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+  }
+
+
+  .export-buttons {
+    justify-content:
+      flex-start;
+  }
+
+}
+
+
+@media (
+  max-width: 850px
+) {
+
+  .report-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .four-cards {
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+  }
+
+
+  .report-tabs {
+    display: grid;
+
+    width: 100%;
+
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+  }
+
+}
+
+
+@media (
+  max-width: 600px
+) {
+
+  .six-cards {
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+  }
+
+
+  .filter-grid {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .export-buttons {
+    grid-column:
+      1 / -1;
+  }
+
+}
+
+
+@media (
+  max-width: 450px
+) {
+
+  .six-cards,
+  .four-cards,
+  .filter-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .report-tabs {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+}

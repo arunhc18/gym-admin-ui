@@ -1262,56 +1262,54 @@ export const routes: Routes = [
       // This is different from Platform subscription plans.
       // =====================================================
 
-      {
-        path:
-          'plans',
+     // =====================================================
+// MEMBERSHIP PLANS
+// =====================================================
 
-        loadComponent: () =>
-          import(
-            './features/dashboard/dashboard'
-          ).then(
-            m =>
-              m.DashboardComponent
-          ),
+{
+  path: 'plans',
 
-        data: {
+  loadComponent: () =>
+    import(
+      './features/plans/pages/plan-list/plan-list'
+    ).then(
+      m => m.PlanListComponent
+    ),
 
-          title:
-            'Plans',
-
-          description:
-            'Manage gym membership plans and pricing'
-
-        }
-      },
+  data: {
+    title: 'Plans',
+    description:
+      'Manage membership plans and pricing'
+  }
+},
 
 
       // =====================================================
       // REPORTS
       // =====================================================
 
-      {
-        path:
-          'reports',
+      // =====================================================
+// REPORTS
+// =====================================================
 
-        loadComponent: () =>
-          import(
-            './features/dashboard/dashboard'
-          ).then(
-            m =>
-              m.DashboardComponent
-          ),
+{
+  path: 'reports',
 
-        data: {
+  loadComponent: () =>
+    import(
+      './features/reports/pages/reports-dashboard/reports-dashboard'
+    ).then(
+      m =>
+        m.ReportsDashboardComponent
+    ),
 
-          title:
-            'Reports',
+  data: {
+    title: 'Reports',
 
-          description:
-            'View gym reports and analytics'
-
-        }
-      },
+    description:
+      'Financial, membership and attendance reports'
+  }
+},
 
 
       // =====================================================

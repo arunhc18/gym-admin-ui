@@ -1,16 +1,16 @@
 :host {
   display: block;
 
-  --page: #071019;
-  --surface: #0d1821;
-  --surface-2: #101d27;
-  --surface-3: #14212b;
+  --page: #0a0d10;
+  --surface: #14181e;
+  --surface-2: #191d24;
+  --surface-3: #20252c;
 
-  --border: #263743;
-  --border-light: #344956;
+  --border: #252b33;
+  --border-light: #262d35;
 
-  --text: #eef2f5;
-  --muted: #8298a9;
+  --text: #edf0f3;
+  --muted: #6f7a86;
 
   --red: #ff1744;
   --green: #00d29a;
@@ -33,16 +33,11 @@
       100vh - 72px
     );
 
-  padding: 18px 22px;
+  padding: 14px 0 22px 8px;
 
   box-sizing: border-box;
 
-  background:
-    linear-gradient(
-      145deg,
-      #071019,
-      #08141e
-    );
+  background: var(--page);
 
   overflow: hidden;
 
@@ -62,6 +57,14 @@
   display: flex;
 
   flex-direction: column;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 7px;
+
+  overflow: hidden;
 
   transition:
     width .25s ease;
@@ -90,11 +93,7 @@
 .renewal-filters {
   flex: 0 0 auto;
 
-  min-height: 64px;
-
-  margin-bottom: 14px;
-
-  padding: 12px;
+  padding: 12px 16px;
 
   box-sizing: border-box;
 
@@ -102,31 +101,21 @@
 
   grid-template-columns:
     minmax(
-      280px,
+      300px,
       2fr
     )
-    140px
+    130px
+    130px
     145px
-    155px
-    75px;
+    65px;
 
-  gap: 9px;
+  gap: 8px;
 
   align-items: center;
 
-  border:
-    1px solid
-    var(--border);
+  background: var(--page);
 
-  border-radius: 8px;
-
-  background:
-    rgba(
-      13,
-      24,
-      33,
-      .92
-    );
+  border-bottom: 1px solid var(--border);
 }
 
 
@@ -161,7 +150,7 @@
   select {
     width: 100%;
 
-    height: 38px;
+    height: 34px;
 
     box-sizing: border-box;
 
@@ -169,28 +158,28 @@
       1px solid
       var(--border-light);
 
-    border-radius: 5px;
+    border-radius: 4px;
 
     outline: none;
 
     background:
-      #0c1720;
+      #191d24;
 
     color:
-      #e9eef2;
+      #e3e6e9;
 
     font-family: inherit;
 
-    font-size: 10px;
+    font-size: 11px;
 
     padding:
       0
-      11px;
+      9px;
 
 
     &:focus {
       border-color:
-        #536d7d;
+        #434b55;
     }
   }
 
@@ -202,28 +191,32 @@
 
 
 .filter-button {
-  height: 38px;
+  height: 34px;
 
   border:
     1px solid
     var(--border-light);
 
-  border-radius: 5px;
+  border-radius: 4px;
 
   background:
-    #111c25;
+    #14181e;
 
   color:
-    #d9e0e5;
+    #9ba5af;
 
-  font-size: 10px;
+  font-size: 11px;
 
   cursor: pointer;
 
 
   &:hover {
     background:
-      #172631;
+      #191d24;
+
+    border-color: #4a525d;
+
+    color: #fff;
   }
 }
 
@@ -241,21 +234,9 @@
 
   flex-direction: column;
 
-  border:
-    1px solid
-    var(--border);
-
-  border-radius: 8px;
-
   overflow: hidden;
 
-  background:
-    rgba(
-      12,
-      24,
-      33,
-      .96
-    );
+  background: var(--surface);
 }
 
 
@@ -272,19 +253,38 @@
 
   scrollbar-width: thin;
 
-  scrollbar-color:
-    #425766
-    #0d1821;
+  scrollbar-color: #3c4651 #101318;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #101318;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #3c4651;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #56616d;
+  }
 }
 
 
 table {
   width: 100%;
 
-  min-width: 850px;
+  min-width: 900px;
 
-  border-collapse:
-    collapse;
+  border-collapse: separate;
+
+  border-spacing: 0;
+
+  background: var(--surface);
 
 
   thead {
@@ -294,15 +294,12 @@ table {
 
     z-index: 5;
 
-    background:
-      #0f1c26;
+    background: var(--surface);
   }
 
 
   th {
-    padding:
-      0
-      14px;
+    padding: 0 16px;
 
     text-align: left;
 
@@ -310,8 +307,10 @@ table {
       1px solid
       var(--border);
 
+    background: var(--surface);
+
     color:
-      #7790a2;
+      #626d79;
 
     font-size: 9px;
 
@@ -319,23 +318,21 @@ table {
       uppercase;
 
     letter-spacing:
-      .03em;
+      .045em;
 
     white-space: nowrap;
   }
 
 
   td {
-    padding:
-      7px
-      14px;
+    padding: 7px 16px;
 
     border-bottom:
       1px solid
-      #243540;
+      #242a32;
 
     color:
-      #d4dde3;
+      #afb7c0;
 
     font-size: 10px;
 
@@ -347,13 +344,7 @@ table {
   tbody {
 
     tr:hover {
-      background:
-        rgba(
-          255,
-          255,
-          255,
-          .018
-        );
+      background: #191d24;
     }
   }
 }
@@ -368,7 +359,7 @@ table {
 
   align-items: center;
 
-  gap: 11px;
+  gap: 10px;
 
 
   > div:last-child {
@@ -406,11 +397,11 @@ table {
 
 
 .avatar {
-  width: 36px;
+  width: 30px;
 
-  height: 36px;
+  height: 30px;
 
-  min-width: 36px;
+  min-width: 30px;
 }
 
 
@@ -421,15 +412,11 @@ table {
 
   justify-content: center;
 
-  background:
-    linear-gradient(
-      135deg,
-      #ff3454,
-      #e71d43
-    );
+    background: #351b21;
 
-  color:
-    #fff;
+  border: 1px solid #54242e;
+
+  color: #ff304d;
 
   font-weight: 700;
 }
@@ -472,17 +459,15 @@ table {
 ===================================================== */
 
 .status {
-  padding:
-    5px
-    9px;
+  padding: 4px 7px;
 
   display: inline-flex;
 
   align-items: center;
 
-  gap: 6px;
+  gap: 5px;
 
-  border-radius: 4px;
+  border-radius: 3px;
 
   font-size: 9px;
 
@@ -567,20 +552,17 @@ table {
 .days-left {
 
   &.expired {
-    color:
-      #ff1744;
+    color: #ff304d;
   }
 
 
   &.warning {
-    color:
-      #ffc400;
+    color: #ffb000;
   }
 
 
   &.normal {
-    color:
-      #15b9ff;
+    color: #afb7c0;
   }
 }
 
@@ -590,9 +572,9 @@ table {
 ===================================================== */
 
 .renew-button {
-  min-width: 92px;
+  min-width: 84px;
 
-  height: 37px;
+  height: 34px;
 
   padding:
     0
@@ -606,21 +588,13 @@ table {
 
   gap: 7px;
 
-  border:
-    1px solid
-    #1989ff;
+  border: 1px solid #303640;
 
-  border-radius: 5px;
+  border-radius: 4px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #087ef7,
-      #006be0
-    );
+  background: #191d24;
 
-  color:
-    #fff;
+  color: #edf0f3;
 
   font-family: inherit;
 
@@ -632,8 +606,12 @@ table {
 
 
   &:hover {
-    filter:
-      brightness(1.08);
+    border-color: #ff304d;
+    background: #23191e;
+  }
+
+  i {
+    color: #ff304d;
   }
 }
 
@@ -643,7 +621,9 @@ table {
 ===================================================== */
 
 .list-footer {
-  min-height: 46px;
+  flex: 0 0 auto;
+
+  min-height: 44px;
 
   padding:
     0
@@ -659,10 +639,12 @@ table {
     1px solid
     var(--border);
 
-  color:
-    #7f94a5;
+  background: #101318;
 
-  font-size: 9px;
+  color:
+    #66717d;
+
+  font-size: 10px;
 
 
   span {
@@ -676,7 +658,7 @@ table {
 
   strong {
     color:
-      #cfd9df;
+      #cbd1d7;
   }
 }
 
@@ -1609,7 +1591,7 @@ table {
 ===================================================== */
 
 @media (
-  max-width: 1250px
+  max-width: 1050px
 ) {
 
   .renewal-drawer {
@@ -1630,6 +1612,7 @@ table {
 
   .renewal-filters {
     grid-template-columns:
+      1fr
       1fr
       1fr;
   }
@@ -1662,11 +1645,11 @@ table {
 
 
 @media (
-  max-width: 600px
+  max-width: 700px
 ) {
 
   .renewals-page {
-    padding: 10px;
+    padding: 12px;
   }
 
 

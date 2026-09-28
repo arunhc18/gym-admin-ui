@@ -4,6 +4,8 @@ import {
 
 import {
   Component,
+  DestroyRef,
+  inject,
   OnInit
 } from '@angular/core';
 
@@ -11,10 +13,16 @@ import {
   FormsModule
 } from '@angular/forms';
 
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
 
-type PersonType =
-  | 'member'
-  | 'staff';
+import {
+  AttendancePerson,
+  AttendancePersonType,
+  AttendanceRecord,
+  AttendanceService
+} from '../services/attendance.service';
 
 
 type AttendanceStatus =
@@ -26,47 +34,6 @@ type AttendanceStatus =
 type ViewMode =
   | 'week'
   | 'month';
-
-
-interface AttendancePerson {
-
-  id: number;
-
-  code: string;
-
-  name: string;
-
-  type: PersonType;
-
-  detail: string;
-
-  location: string;
-
-}
-
-
-interface AttendanceRecord {
-
-  personId: number;
-
-  date: string;
-
-  status:
-    Exclude<
-      AttendanceStatus,
-      'none'
-    >;
-
-  checkIn:
-    string | null;
-
-  checkOut:
-    string | null;
-
-  notes:
-    string | null;
-
-}
 
 
 interface AttendanceDay {
@@ -107,111 +74,26 @@ export class AttendanceListComponent
   implements OnInit {
 
 
-  // =====================================================
-  // VIEW MODE
-  // =====================================================
+  private readonly destroyRef =
+    inject(
+      DestroyRef
+    );
+
 
   viewMode:
-    ViewMode = 'week';
+    ViewMode =
+    'week';
 
-
-  // =====================================================
-  // PEOPLE
-  //
-  // TEMPORARY MOCK DATA
-  //
-  // Later replace with API data.
-  // =====================================================
 
   people:
-    AttendancePerson[] = [
+    AttendancePerson[] =
+    [];
 
-      {
-        id: 101,
-        code: 'MEM-001',
-        name: 'Arun Kumar',
-        type: 'member',
-        detail: 'Gold Membership',
-        location: 'Main Branch'
-      },
-
-      {
-        id: 102,
-        code: 'MEM-002',
-        name: 'Rahul Sharma',
-        type: 'member',
-        detail: 'Premium Membership',
-        location: 'Main Branch'
-      },
-
-      {
-        id: 103,
-        code: 'MEM-003',
-        name: 'Kiran R',
-        type: 'member',
-        detail: 'Monthly Membership',
-        location: 'Branch 2'
-      },
-
-      {
-        id: 104,
-        code: 'MEM-004',
-        name: 'Sandeep Kumar',
-        type: 'member',
-        detail: 'Gold Membership',
-        location: 'Main Branch'
-      },
-
-      {
-        id: 105,
-        code: 'MEM-005',
-        name: 'Priya S',
-        type: 'member',
-        detail: 'Premium Membership',
-        location: 'Branch 2'
-      },
-
-      {
-        id: 201,
-        code: 'STF-001',
-        name: 'Ravi Kumar',
-        type: 'staff',
-        detail: 'Trainer',
-        location: 'Main Branch'
-      },
-
-      {
-        id: 202,
-        code: 'STF-002',
-        name: 'Anil S',
-        type: 'staff',
-        detail: 'Manager',
-        location: 'Main Branch'
-      },
-
-      {
-        id: 203,
-        code: 'STF-003',
-        name: 'Megha R',
-        type: 'staff',
-        detail: 'Trainer',
-        location: 'Branch 2'
-      }
-
-    ];
-
-
-  // =====================================================
-  // ATTENDANCE
-  // =====================================================
 
   attendance:
-    AttendanceRecord[] = [];
+    AttendanceRecord[] =
+    [];
 
-
-  // =====================================================
-  // WEEK
-  // =====================================================
 
   weekStart =
     this.getMonday(
@@ -220,12 +102,9 @@ export class AttendanceListComponent
 
 
   weekDays:
-    AttendanceDay[] = [];
+    AttendanceDay[] =
+    [];
 
-
-  // =====================================================
-  // MONTH
-  // =====================================================
 
   selectedMonth =
     this.getMonthKey(
@@ -234,57 +113,105 @@ export class AttendanceListComponent
 
 
   monthDays:
-    AttendanceDay[] = [];
+    AttendanceDay[] =
+    [];
 
 
-  // =====================================================
-  // FILTERS
-  // =====================================================
-
-  searchText = '';
+  searchText =
+    '';
 
 
   selectedType:
-    PersonType | '' = '';
+    AttendancePersonType | '' =
+    '';
 
 
-  selectedLocation = '';
+  selectedLocation =
+    '';
 
 
   locations:
-    string[] = [];
+    string[] =
+    [];
 
 
-  // =====================================================
-  // INIT
-  // =====================================================
+  constructor(
 
-  ngOnInit(): void {
+    private readonly attendanceService:
+      AttendanceService
+
+  ) {}
 
 
-    this.locations =
-      Array.from(
-        new Set(
-          this.people.map(
-            person =>
-              person.location
-          )
-        )
-      );
+  ngOnInit():
+    void {
 
 
     this.buildWeek();
 
     this.buildMonth();
 
-    this.seedAttendance();
+
+    this.attendanceService
+      .getPeople()
+
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+
+      .subscribe(
+        people => {
+
+
+          this.people =
+            people;
+
+
+          this.locations =
+            Array.from(
+              new Set(
+                people.map(
+                  person =>
+                    person.location
+                )
+              )
+            )
+              .sort(
+                (
+                  a,
+                  b
+                ) =>
+                  a.localeCompare(
+                    b
+                  )
+              );
+
+        }
+      );
+
+
+    this.attendanceService
+      .getAttendance()
+
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+
+      .subscribe(
+        records => {
+
+          this.attendance =
+            records;
+
+        }
+      );
 
   }
 
-
-  // =====================================================
-  // FILTERED PEOPLE
-  // =====================================================
 
   get filteredPeople():
     AttendancePerson[] {
@@ -296,82 +223,79 @@ export class AttendanceListComponent
         .toLowerCase();
 
 
-    return this.people.filter(
-      person => {
+    return this.people
+      .filter(
+        person => {
 
 
-        const matchesSearch =
+          const matchesSearch =
 
-          !search
+            !search
 
-          ||
+            ||
 
-          person.name
-            .toLowerCase()
-            .includes(
-              search
-            )
+            person.name
+              .toLowerCase()
+              .includes(
+                search
+              )
 
-          ||
+            ||
 
-          person.code
-            .toLowerCase()
-            .includes(
-              search
-            )
+            person.code
+              .toLowerCase()
+              .includes(
+                search
+              )
 
-          ||
+            ||
 
-          person.detail
-            .toLowerCase()
-            .includes(
-              search
-            );
-
-
-        const matchesType =
-
-          !this.selectedType
-
-          ||
-
-          person.type ===
-            this.selectedType;
+            person.detail
+              .toLowerCase()
+              .includes(
+                search
+              );
 
 
-        const matchesLocation =
+          const matchesType =
 
-          !this.selectedLocation
+            !this.selectedType
 
-          ||
+            ||
 
-          person.location ===
-            this.selectedLocation;
+            person.type ===
+              this.selectedType;
 
 
-        return (
+          const matchesLocation =
 
-          matchesSearch
+            !this.selectedLocation
 
-          &&
+            ||
 
-          matchesType
+            person.location ===
+              this.selectedLocation;
 
-          &&
 
-          matchesLocation
+          return (
 
-        );
+            matchesSearch
 
-      }
-    );
+            &&
+
+            matchesType
+
+            &&
+
+            matchesLocation
+
+          );
+
+        }
+      );
 
   }
 
-
-  // =====================================================
-  // ACTIVE DAYS
-  // =====================================================
 
   get displayedDays():
     AttendanceDay[] {
@@ -387,10 +311,6 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // VIEW MODE
-  // =====================================================
-
   setViewMode(
     mode:
       ViewMode
@@ -402,7 +322,8 @@ export class AttendanceListComponent
 
 
     if (
-      mode === 'week'
+      mode ===
+      'week'
     ) {
 
       this.buildWeek();
@@ -417,11 +338,8 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // WEEK NAVIGATION
-  // =====================================================
-
-  previousWeek(): void {
+  previousWeek():
+    void {
 
 
     const date =
@@ -431,7 +349,8 @@ export class AttendanceListComponent
 
 
     date.setDate(
-      date.getDate() - 7
+      date.getDate() -
+      7
     );
 
 
@@ -444,7 +363,8 @@ export class AttendanceListComponent
   }
 
 
-  nextWeek(): void {
+  nextWeek():
+    void {
 
 
     const date =
@@ -454,7 +374,8 @@ export class AttendanceListComponent
 
 
     date.setDate(
-      date.getDate() + 7
+      date.getDate() +
+      7
     );
 
 
@@ -467,7 +388,8 @@ export class AttendanceListComponent
   }
 
 
-  currentWeek(): void {
+  currentWeek():
+    void {
 
 
     this.weekStart =
@@ -481,11 +403,8 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // MONTH NAVIGATION
-  // =====================================================
-
-  previousMonth(): void {
+  previousMonth():
+    void {
 
 
     const date =
@@ -495,7 +414,8 @@ export class AttendanceListComponent
 
 
     date.setMonth(
-      date.getMonth() - 1
+      date.getMonth() -
+      1
     );
 
 
@@ -510,7 +430,8 @@ export class AttendanceListComponent
   }
 
 
-  nextMonth(): void {
+  nextMonth():
+    void {
 
 
     const date =
@@ -520,7 +441,8 @@ export class AttendanceListComponent
 
 
     date.setMonth(
-      date.getMonth() + 1
+      date.getMonth() +
+      1
     );
 
 
@@ -535,7 +457,8 @@ export class AttendanceListComponent
   }
 
 
-  currentMonth(): void {
+  currentMonth():
+    void {
 
 
     this.selectedMonth =
@@ -549,16 +472,13 @@ export class AttendanceListComponent
   }
 
 
-  onMonthChange(): void {
+  onMonthChange():
+    void {
 
     this.buildMonth();
 
   }
 
-
-  // =====================================================
-  // WEEK BUILD
-  // =====================================================
 
   private buildWeek():
     void {
@@ -579,7 +499,8 @@ export class AttendanceListComponent
     this.weekDays =
       Array.from(
         {
-          length: 7
+          length:
+            7
         },
         (
           _,
@@ -594,9 +515,14 @@ export class AttendanceListComponent
 
 
           date.setDate(
+
             this.weekStart
-              .getDate() +
+              .getDate()
+
+            +
+
             index
+
           );
 
 
@@ -615,7 +541,8 @@ export class AttendanceListComponent
               date.toLocaleDateString(
                 'en-IN',
                 {
-                  weekday: 'short'
+                  weekday:
+                    'short'
                 }
               ),
 
@@ -623,8 +550,11 @@ export class AttendanceListComponent
               date.toLocaleDateString(
                 'en-IN',
                 {
-                  day: '2-digit',
-                  month: 'short'
+                  day:
+                    '2-digit',
+
+                  month:
+                    'short'
                 }
               ),
 
@@ -638,8 +568,10 @@ export class AttendanceListComponent
             isFuture:
               this.startOfDay(
                 date
-              ).getTime() >
-              todayDate.getTime()
+              )
+                .getTime() >
+              todayDate
+                .getTime()
 
           };
 
@@ -648,10 +580,6 @@ export class AttendanceListComponent
 
   }
 
-
-  // =====================================================
-  // MONTH BUILD
-  // =====================================================
 
   private buildMonth():
     void {
@@ -664,11 +592,13 @@ export class AttendanceListComponent
 
 
     const year =
-      monthDate.getFullYear();
+      monthDate
+        .getFullYear();
 
 
     const month =
-      monthDate.getMonth();
+      monthDate
+        .getMonth();
 
 
     const totalDays =
@@ -727,7 +657,8 @@ export class AttendanceListComponent
               date.toLocaleDateString(
                 'en-IN',
                 {
-                  weekday: 'short'
+                  weekday:
+                    'short'
                 }
               ),
 
@@ -735,8 +666,11 @@ export class AttendanceListComponent
               date.toLocaleDateString(
                 'en-IN',
                 {
-                  day: '2-digit',
-                  month: 'short'
+                  day:
+                    '2-digit',
+
+                  month:
+                    'short'
                 }
               ),
 
@@ -750,8 +684,10 @@ export class AttendanceListComponent
             isFuture:
               this.startOfDay(
                 date
-              ).getTime() >
-              todayDate.getTime()
+              )
+                .getTime() >
+              todayDate
+                .getTime()
 
           };
 
@@ -760,10 +696,6 @@ export class AttendanceListComponent
 
   }
 
-
-  // =====================================================
-  // DISPLAY LABELS
-  // =====================================================
 
   get weekRangeLabel():
     string {
@@ -780,7 +712,10 @@ export class AttendanceListComponent
 
     return (
 
-      `${this.weekDays[0].dateLabel} - ` +
+      `${this.weekDays[0].dateLabel} - `
+
+      +
+
       `${this.weekDays[6].dateLabel}`
 
     );
@@ -813,14 +748,15 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // ATTENDANCE RECORD
-  // =====================================================
-
   getRecord(
-    personId: number,
-    date: string
-  ): AttendanceRecord | undefined {
+    personId:
+      string,
+
+    date:
+      string
+  ):
+    AttendanceRecord
+    | undefined {
 
 
     return this.attendance
@@ -840,9 +776,13 @@ export class AttendanceListComponent
 
 
   getStatus(
-    personId: number,
-    date: string
-  ): AttendanceStatus {
+    personId:
+      string,
+
+    date:
+      string
+  ):
+    AttendanceStatus {
 
 
     return (
@@ -862,25 +802,23 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // FILTERS
-  // =====================================================
-
-  clearFilters(): void {
+  clearFilters():
+    void {
 
 
-    this.searchText = '';
+    this.searchText =
+      '';
 
-    this.selectedType = '';
 
-    this.selectedLocation = '';
+    this.selectedType =
+      '';
+
+
+    this.selectedLocation =
+      '';
 
   }
 
-
-  // =====================================================
-  // SUMMARY - PRESENT
-  // =====================================================
 
   get presentCount():
     number {
@@ -893,10 +831,6 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // SUMMARY - ABSENT
-  // =====================================================
-
   get absentCount():
     number {
 
@@ -908,15 +842,12 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // SUMMARY - NOT MARKED
-  // =====================================================
-
   get notMarkedCount():
     number {
 
 
-    let count = 0;
+    let count =
+      0;
 
 
     for (
@@ -962,10 +893,6 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // ATTENDANCE RATE
-  // =====================================================
-
   get attendanceRate():
     number {
 
@@ -999,10 +926,6 @@ export class AttendanceListComponent
 
   }
 
-
-  // =====================================================
-  // SUMMARY LABELS
-  // =====================================================
 
   get presentLabel():
     string {
@@ -1046,13 +969,11 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // PERSON MONTH SUMMARY
-  // =====================================================
-
   getPersonPresentCount(
-    personId: number
-  ): number {
+    personId:
+      string
+  ):
+    number {
 
 
     return this.monthDays
@@ -1075,8 +996,10 @@ export class AttendanceListComponent
 
 
   getPersonAbsentCount(
-    personId: number
-  ): number {
+    personId:
+      string
+  ):
+    number {
 
 
     return this.monthDays
@@ -1099,8 +1022,10 @@ export class AttendanceListComponent
 
 
   getPersonMonthlyRate(
-    personId: number
-  ): number {
+    personId:
+      string
+  ):
+    number {
 
 
     const present =
@@ -1145,15 +1070,14 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // TOOLTIP
-  // =====================================================
-
   getAttendanceTitle(
-    personId: number,
+    personId:
+      string,
+
     day:
       AttendanceDay
-  ): string {
+  ):
+    string {
 
 
     if (
@@ -1199,17 +1123,22 @@ export class AttendanceListComponent
 
     const checkIn =
       record.checkIn
-      ?? '-';
+      ??
+      '-';
 
 
     const checkOut =
       record.checkOut
-      ?? '-';
+      ??
+      '-';
 
 
     return (
 
-      `${day.dateLabel} - Present | ` +
+      `${day.dateLabel} - Present | `
+
+      +
+
       `In: ${checkIn} | Out: ${checkOut}`
 
     );
@@ -1217,18 +1146,17 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // COUNT STATUS
-  // =====================================================
-
   private countStatus(
     status:
-      'present' |
+      'present'
+      |
       'absent'
-  ): number {
+  ):
+    number {
 
 
-    let count = 0;
+    let count =
+      0;
 
 
     for (
@@ -1274,198 +1202,11 @@ export class AttendanceListComponent
   }
 
 
-  // =====================================================
-  // MOCK ATTENDANCE
-  //
-  // Creates historical attendance for:
-  //
-  // Current month + previous 6 months.
-  //
-  // Later replace with backend.
-  // =====================================================
-
-  private seedAttendance():
-    void {
-
-
-    const records:
-      AttendanceRecord[] = [];
-
-
-    const today =
-      this.startOfDay(
-        new Date()
-      );
-
-
-    for (
-      let monthOffset = 0;
-      monthOffset <= 6;
-      monthOffset++
-    ) {
-
-
-      const monthDate =
-        new Date(
-          today.getFullYear(),
-          today.getMonth() -
-          monthOffset,
-          1
-        );
-
-
-      const year =
-        monthDate.getFullYear();
-
-
-      const month =
-        monthDate.getMonth();
-
-
-      const totalDays =
-        new Date(
-          year,
-          month + 1,
-          0
-        )
-          .getDate();
-
-
-      for (
-        let dayNumber = 1;
-        dayNumber <=
-        totalDays;
-        dayNumber++
-      ) {
-
-
-        const date =
-          new Date(
-            year,
-            month,
-            dayNumber
-          );
-
-
-        if (
-          date.getTime() >
-          today.getTime()
-        ) {
-
-          continue;
-
-        }
-
-
-        const dateKey =
-          this.toDateKey(
-            date
-          );
-
-
-        this.people.forEach(
-          (
-            person,
-            personIndex
-          ) => {
-
-
-            /*
-             * Deterministic mock pattern.
-             *
-             * Most days present.
-             * Some days absent.
-             */
-
-            const absent =
-
-              (
-                dayNumber +
-                personIndex +
-                month
-              )
-
-              %
-
-              9 === 0;
-
-
-            records.push({
-
-              personId:
-                person.id,
-
-              date:
-                dateKey,
-
-              status:
-                absent
-                  ? 'absent'
-                  : 'present',
-
-              checkIn:
-
-                absent
-
-                  ? null
-
-                  : person.type ===
-                    'staff'
-
-                    ? (
-                        personIndex % 2 ===
-                          0
-                          ? '08:00'
-                          : '08:15'
-                      )
-
-                    : (
-                        personIndex % 2 ===
-                          0
-                          ? '06:30'
-                          : '07:00'
-                      ),
-
-              checkOut:
-
-                absent
-
-                  ? null
-
-                  : person.type ===
-                    'staff'
-
-                    ? '17:00'
-
-                    : null,
-
-              notes:
-                null
-
-            });
-
-          }
-        );
-
-      }
-
-    }
-
-
-    this.attendance =
-      records;
-
-  }
-
-
-  // =====================================================
-  // DATE HELPERS
-  // =====================================================
-
   private getMonday(
     source:
       Date
-  ): Date {
+  ):
+    Date {
 
 
     const date =
@@ -1479,11 +1220,13 @@ export class AttendanceListComponent
 
 
     const difference =
-      day === 0
+      day ===
+        0
 
         ? -6
 
-        : 1 - day;
+        : 1 -
+          day;
 
 
     date.setDate(
@@ -1500,7 +1243,8 @@ export class AttendanceListComponent
   private toDateKey(
     date:
       Date
-  ): string {
+  ):
+    string {
 
 
     return [
@@ -1508,7 +1252,8 @@ export class AttendanceListComponent
       date.getFullYear(),
 
       String(
-        date.getMonth() + 1
+        date.getMonth() +
+        1
       )
         .padStart(
           2,
@@ -1531,7 +1276,8 @@ export class AttendanceListComponent
   private getMonthKey(
     date:
       Date
-  ): string {
+  ):
+    string {
 
 
     return [
@@ -1539,7 +1285,8 @@ export class AttendanceListComponent
       date.getFullYear(),
 
       String(
-        date.getMonth() + 1
+        date.getMonth() +
+        1
       )
         .padStart(
           2,
@@ -1554,13 +1301,15 @@ export class AttendanceListComponent
   private monthKeyToDate(
     monthKey:
       string
-  ): Date {
+  ):
+    Date {
 
 
     const [
       year,
       month
     ] =
+
       monthKey
         .split('-')
         .map(
@@ -1580,7 +1329,8 @@ export class AttendanceListComponent
   private startOfDay(
     value:
       Date
-  ): Date {
+  ):
+    Date {
 
 
     const date =
