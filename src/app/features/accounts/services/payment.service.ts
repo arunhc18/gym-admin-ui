@@ -97,7 +97,7 @@ export class PaymentService {
         paymentDate:
           '2026-09-24',
 
-        memberId: 101,
+        memberId: 1,
 
         invoiceId: 1,
 
@@ -131,7 +131,7 @@ export class PaymentService {
         paymentDate:
           '2026-09-24',
 
-        memberId: 102,
+        memberId: 2,
 
         invoiceId: 2,
 

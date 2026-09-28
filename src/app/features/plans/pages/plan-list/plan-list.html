@@ -1,0 +1,892 @@
+<div class="plans-page">
+
+
+  <!-- =====================================================
+       SUMMARY
+  ====================================================== -->
+
+  <section class="summary-grid">
+
+
+    <article class="summary-card">
+
+      <span>Total Plans</span>
+
+      <strong>
+        {{ totalPlans }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>Active Plans</span>
+
+      <strong class="success">
+        {{ activePlans }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>Inactive Plans</span>
+
+      <strong class="danger">
+        {{ inactivePlans }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>Members</span>
+
+      <strong>
+        {{ totalMembers }}
+      </strong>
+
+    </article>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       MAIN CARD
+  ====================================================== -->
+
+  <section class="plans-card">
+
+
+    <!-- FILTERS -->
+
+    <div class="filter-bar">
+
+
+      <div class="search-box">
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (ngModelChange)="applyFilters()"
+          placeholder="Search plan..."
+        />
+
+      </div>
+
+
+      <select
+        [(ngModel)]="selectedPlanCategory"
+        (ngModelChange)="applyFilters()"
+      >
+
+        <option value="">
+          All Plans
+        </option>
+
+        @for (
+          category of planCategories;
+          track category.value
+        ) {
+
+          <option [value]="category.value">
+            {{ category.label }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <select
+        [(ngModel)]="selectedBilling"
+        (ngModelChange)="applyFilters()"
+      >
+
+        <option value="">
+          All Billing Cycles
+        </option>
+
+
+        @for (
+          cycle of billingCycles;
+          track cycle.value
+        ) {
+
+          <option
+            [value]="cycle.value"
+          >
+            {{ cycle.label }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()"
+      >
+        Clear
+      </button>
+
+
+      <button
+        type="button"
+        class="btn btn-primary add-button"
+        (click)="openAddPlan()"
+      >
+        + Add Plan
+      </button>
+
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="table-wrapper">
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>Code</th>
+
+            <th>Plan Name</th>
+
+            <th>Duration</th>
+
+            <th>Billing</th>
+
+            <th>Price</th>
+
+            <th>Joining Fee</th>
+
+            <th>Members</th>
+
+            <th>Status</th>
+
+            <th>Actions</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          @for (
+            plan of filteredPlans;
+            track plan.membershipPlanId
+          ) {
+
+
+            <tr>
+
+
+              <td>
+                {{ plan.planCode }}
+              </td>
+
+
+              <td>
+
+                <strong>
+                  {{ plan.planName }}
+                </strong>
+
+              </td>
+
+
+              <td>
+                {{ getDurationLabel(plan) }}
+              </td>
+
+
+              <td>
+                {{ getBillingLabel(plan.billingCycle) }}
+              </td>
+
+
+              <td>
+
+                {{
+                  plan.price
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.0-0'
+                }}
+
+              </td>
+
+
+              <td>
+
+                {{
+                  plan.joiningFee
+                    | currency:
+                      'INR':
+                      'symbol':
+                      '1.0-0'
+                }}
+
+              </td>
+
+
+              <td>
+
+                <button
+                  type="button"
+                  class="member-count"
+                >
+                  {{ plan.memberCount }}
+                </button>
+
+              </td>
+
+
+              <td>
+
+
+                <span
+                  class="status-pill"
+                  [class.active]="plan.isActive"
+                  [class.inactive]="!plan.isActive"
+                >
+
+                  {{
+                    plan.isActive
+                      ? 'Active'
+                      : 'Inactive'
+                  }}
+
+                </span>
+
+
+              </td>
+
+
+              <td>
+
+
+                <div class="row-actions">
+
+
+                  <button
+                    type="button"
+                    (click)="openEditPlan(plan)"
+                  >
+                    Edit
+                  </button>
+
+
+                  
+
+                  <button
+                    type="button"
+                    [class.activate]="!plan.isActive"
+                    [class.deactivate]="plan.isActive"
+                    (click)="openStatusConfirm(plan)"
+                  >
+
+                    {{
+                      plan.isActive
+                        ? 'Deactivate'
+                        : 'Activate'
+                    }}
+
+                  </button>
+
+
+                </div>
+
+
+              </td>
+
+
+            </tr>
+
+
+          }
+          @empty {
+
+
+            <tr>
+
+              <td
+                colspan="9"
+                class="empty-state"
+              >
+                No plans found for this category.
+              </td>
+
+            </tr>
+
+
+          }
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </section>
+
+
+</div>
+
+
+<!-- =====================================================
+     ADD / EDIT PLAN MODAL
+====================================================== -->
+
+@if (
+  showPlanModal
+) {
+
+
+  <div
+    class="modal-backdrop"
+    (click)="closePlanModal()"
+  >
+
+
+    <section
+      class="plan-modal"
+      (click)="$event.stopPropagation()"
+    >
+
+
+      <div class="modal-header">
+
+
+        <div>
+
+          <h2>
+
+            {{
+              editingPlanId
+                ? 'Edit Plan'
+                : 'Add Plan'
+            }}
+
+          </h2>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="closePlanModal()"
+        >
+          ×
+        </button>
+
+
+      </div>
+
+
+      <form
+        [formGroup]="planForm"
+        (ngSubmit)="savePlan()"
+      >
+
+
+        <div class="modal-body">
+
+
+          <!-- NAME -->
+
+          <div class="form-group">
+
+            <label>
+              Plan Name *
+            </label>
+
+            <input
+              type="text"
+              formControlName="planName"
+              placeholder="Gold Membership"
+              [class.invalid]="isInvalid('planName')"
+            />
+
+            @if (
+              isInvalid('planName')
+            ) {
+
+              <span class="error">
+                Plan name is required.
+              </span>
+
+            }
+
+          </div>
+
+
+          <!-- CATEGORY -->
+
+          <div class="form-group">
+
+            <label>
+              Plan Category *
+            </label>
+
+            <select formControlName="planCategory">
+
+              @for (
+                category of planCategories;
+                track category.value
+              ) {
+
+                <option [value]="category.value">
+                  {{ category.label }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <!-- CODE -->
+
+          <div class="form-group">
+
+            <label>
+              Plan Code *
+            </label>
+
+            <input
+              type="text"
+              formControlName="planCode"
+              placeholder="GOLD"
+              [class.invalid]="isInvalid('planCode')"
+            />
+
+            @if (
+              isInvalid('planCode')
+            ) {
+
+              <span class="error">
+                Enter a valid unique plan code.
+              </span>
+
+            }
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+
+          <div class="form-group full-width">
+
+            <label>
+              Description
+            </label>
+
+            <textarea
+              formControlName="description"
+              placeholder="Optional plan description"
+            >
+            </textarea>
+
+          </div>
+
+
+          <!-- DURATION -->
+
+          <div class="form-group">
+
+            <label>
+              Duration *
+            </label>
+
+            <input
+              type="number"
+              min="1"
+              formControlName="durationValue"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Duration Type *
+            </label>
+
+            <select
+              formControlName="durationType"
+            >
+
+              @for (
+                type of durationTypes;
+                track type.value
+              ) {
+
+                <option
+                  [value]="type.value"
+                >
+                  {{ type.label }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <!-- BILLING -->
+
+          <div class="form-group">
+
+            <label>
+              Billing Cycle *
+            </label>
+
+            <select
+              formControlName="billingCycle"
+            >
+
+              @for (
+                cycle of billingCycles;
+                track cycle.value
+              ) {
+
+                <option
+                  [value]="cycle.value"
+                >
+                  {{ cycle.label }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <!-- ACCESS -->
+
+          <div class="form-group">
+
+            <label>
+              Access *
+            </label>
+
+            <select
+              formControlName="accessType"
+            >
+
+              @for (
+                access of accessTypes;
+                track access.value
+              ) {
+
+                <option
+                  [value]="access.value"
+                >
+                  {{ access.label }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <!-- PRICE -->
+
+          <div class="form-group">
+
+            <label>
+              Price *
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              formControlName="price"
+            />
+
+          </div>
+
+
+          <!-- JOINING -->
+
+          <div class="form-group">
+
+            <label>
+              Joining Fee
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              formControlName="joiningFee"
+            />
+
+          </div>
+
+
+          <!-- DISCOUNT -->
+
+          <div class="form-group">
+
+            <label>
+              Discount
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              formControlName="discountAmount"
+            />
+
+          </div>
+
+
+          <!-- TAX -->
+
+          <div class="form-group">
+
+            <label>
+              Tax %
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              max="100"
+              formControlName="taxPercentage"
+            />
+
+          </div>
+
+
+          <!-- FREEZE DAYS -->
+
+          <div class="form-group">
+
+            <label>
+              Max Freeze Days
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              formControlName="maxFreezeDays"
+            />
+
+          </div>
+
+
+          <!-- FREEZE COUNT -->
+
+          <div class="form-group">
+
+            <label>
+              Max Freeze Count
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              formControlName="maxFreezeCount"
+            />
+
+          </div>
+
+
+          <!-- PREVIEW -->
+
+          <div class="price-preview full-width">
+
+
+            <span>
+              Estimated First Payment
+            </span>
+
+
+            <strong>
+
+              {{
+                firstPaymentPreview
+                  | currency:
+                    'INR':
+                    'symbol':
+                    '1.0-2'
+              }}
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+        <div class="modal-actions">
+
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closePlanModal()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+          >
+
+            {{
+              editingPlanId
+                ? 'Update Plan'
+                : 'Save Plan'
+            }}
+
+          </button>
+
+
+        </div>
+
+
+      </form>
+
+
+    </section>
+
+
+  </div>
+
+
+}
+
+
+<!-- =====================================================
+     STATUS CONFIRMATION
+====================================================== -->
+
+@if (
+  showStatusConfirm
+  &&
+  statusPlan
+) {
+
+
+  <div
+    class="modal-backdrop"
+    (click)="closeStatusConfirm()"
+  >
+
+
+    <section
+      class="confirm-modal"
+      (click)="$event.stopPropagation()"
+    >
+
+
+      <div class="confirm-icon">
+
+        {{
+          statusPlan.isActive
+            ? '!'
+            : '✓'
+        }}
+
+      </div>
+
+
+      <h3>
+
+        {{
+          statusPlan.isActive
+            ? 'Deactivate Plan?'
+            : 'Activate Plan?'
+        }}
+
+      </h3>
+
+
+      <p>
+
+        {{
+          statusPlan.planName
+        }}
+
+        will be
+
+        {{
+          statusPlan.isActive
+            ? 'removed from new membership and renewal selections.'
+            : 'available for new memberships and renewals.'
+        }}
+
+      </p>
+
+
+      <div class="confirm-actions">
+
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeStatusConfirm()"
+        >
+          Cancel
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="confirmStatusChange()"
+        >
+
+          {{
+            statusPlan.isActive
+              ? 'Deactivate'
+              : 'Activate'
+          }}
+
+        </button>
+
+
+      </div>
+
+
+    </section>
+
+
+  </div>
+
+
+}

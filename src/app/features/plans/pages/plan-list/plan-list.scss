@@ -1,0 +1,916 @@
+:host {
+  display: block;
+}
+
+
+.plans-page {
+  width: 100%;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 6px;
+
+  margin-bottom: 7px;
+}
+
+
+.summary-card {
+  min-height: 43px;
+
+  box-sizing: border-box;
+
+  padding:
+    7px 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+}
+
+
+.summary-card span {
+  display: block;
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+}
+
+
+.summary-card strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--text-primary);
+
+  font-size: 13px;
+
+  line-height: 1;
+}
+
+
+.success {
+  color:
+    var(--success) !important;
+}
+
+
+.danger {
+  color:
+    var(--danger) !important;
+}
+
+
+/* =====================================================
+   PLAN CARD
+===================================================== */
+
+.plans-card {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.filter-bar {
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      240px,
+      1fr
+    )
+    120px
+    145px
+    auto
+    auto;
+
+  gap: 6px;
+
+  padding:
+    7px 9px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+}
+
+
+.search-box input,
+.filter-bar select {
+  width: 100%;
+
+  height: 28px;
+
+  box-sizing: border-box;
+
+  padding:
+    0 7px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+}
+
+
+.clear-button,
+.add-button {
+  height: 28px;
+
+  min-height: 28px;
+
+  padding:
+    0 9px;
+
+  font-size: 8px;
+}
+
+
+.clear-button {
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+table {
+  width: 100%;
+
+  min-width: 900px;
+
+  border-collapse: collapse;
+}
+
+
+th,
+td {
+  height: 31px;
+
+  box-sizing: border-box;
+
+  padding:
+    4px 7px;
+
+  border-bottom:
+    1px solid
+    var(--border-secondary);
+
+  vertical-align: middle;
+
+  text-align: left;
+
+  line-height: 1.1;
+}
+
+
+th {
+  height: 27px;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+  font-size: 6px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+
+td {
+  color:
+    var(--text-secondary);
+
+  font-size: 8px;
+}
+
+
+td strong {
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+}
+
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+
+tbody tr:hover {
+  background:
+    var(--bg-elevated);
+}
+
+
+/* =====================================================
+   MEMBER COUNT
+===================================================== */
+
+.member-count {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color:
+    var(--primary);
+
+  cursor: pointer;
+
+  font-size: 8px;
+
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-pill {
+  display: inline-flex;
+
+  min-width: 48px;
+
+  height: 18px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 4px;
+
+  font-size: 6px;
+
+  font-weight: 600;
+}
+
+
+.status-pill.active {
+  background:
+    rgba(
+      16,
+      185,
+      129,
+      .1
+    );
+
+  color:
+    var(--success);
+}
+
+
+.status-pill.inactive {
+  background:
+    rgba(
+      148,
+      163,
+      184,
+      .1
+    );
+
+  color:
+    var(--text-muted);
+}
+
+
+/* =====================================================
+   ROW ACTIONS
+===================================================== */
+
+.row-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  white-space: nowrap;
+}
+
+
+.row-actions button {
+  height: 22px;
+
+  padding:
+    0 6px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius: 4px;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 6px;
+}
+
+
+.row-actions button:hover {
+  border-color:
+    var(--primary);
+
+  color:
+    var(--primary);
+}
+
+
+.row-actions
+.deactivate {
+  color:
+    var(--danger);
+}
+
+
+.row-actions
+.activate {
+  color:
+    var(--success);
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-state {
+  padding:
+    25px !important;
+
+  color:
+    var(--text-muted);
+
+  text-align:
+    center !important;
+}
+
+
+/* =====================================================
+   MODAL BACKDROP
+===================================================== */
+
+.modal-backdrop {
+  position: fixed;
+
+  z-index: 1200;
+
+  inset: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 20px;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .65
+    );
+}
+
+
+/* =====================================================
+   PLAN MODAL
+===================================================== */
+
+.plan-modal {
+  width:
+    min(
+      600px,
+      100%
+    );
+
+  max-height:
+    calc(
+      100vh - 40px
+    );
+
+  overflow-y: auto;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+  box-shadow:
+    0 25px 80px
+    rgba(
+      0,
+      0,
+      0,
+      .4
+    );
+}
+
+
+/* =====================================================
+   MODAL HEADER
+===================================================== */
+
+.modal-header {
+  display: flex;
+
+  min-height: 42px;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    8px 12px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+}
+
+
+.modal-header h2 {
+  margin: 0;
+
+  color:
+    var(--text-primary);
+
+  font-size: 11px;
+}
+
+
+.close-button {
+  display: grid;
+
+  width: 26px;
+
+  height: 26px;
+
+  place-items: center;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius: 4px;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-secondary);
+
+  cursor: pointer;
+
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   MODAL FORM
+===================================================== */
+
+.modal-body {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap:
+    8px 10px;
+
+  padding:
+    11px 12px;
+}
+
+
+.full-width {
+  grid-column:
+    1 / -1;
+}
+
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color:
+    var(--text-secondary);
+
+  font-size: 7px;
+
+  font-weight: 600;
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  outline: none;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-primary);
+
+  font-size: 8px;
+}
+
+
+.form-group input,
+.form-group select {
+  height: 29px;
+
+  padding:
+    0 7px;
+}
+
+
+.form-group textarea {
+  min-height: 48px;
+
+  padding:
+    6px 7px;
+
+  resize: vertical;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color:
+    var(--primary);
+}
+
+
+.form-group
+.invalid {
+  border-color:
+    var(--danger);
+}
+
+
+.error {
+  display: block;
+
+  margin-top: 2px;
+
+  color:
+    var(--danger);
+
+  font-size: 6px;
+}
+
+
+/* =====================================================
+   PRICE PREVIEW
+===================================================== */
+
+.price-preview {
+  display: flex;
+
+  min-height: 38px;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    7px 9px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+}
+
+
+.price-preview span {
+  color:
+    var(--text-muted);
+
+  font-size: 7px;
+}
+
+
+.price-preview strong {
+  color:
+    var(--success);
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   MODAL ACTIONS
+===================================================== */
+
+.modal-actions {
+  display: flex;
+
+  justify-content:
+    flex-end;
+
+  gap: 5px;
+
+  padding:
+    8px 12px;
+
+  border-top:
+    1px solid
+    var(--border-primary);
+}
+
+
+.modal-actions .btn {
+  min-height: 28px;
+
+  height: 28px;
+
+  padding:
+    0 10px;
+
+  font-size: 7px;
+}
+
+
+/* =====================================================
+   CONFIRM MODAL
+===================================================== */
+
+.confirm-modal {
+  width:
+    min(
+      360px,
+      100%
+    );
+
+  padding:
+    16px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--bg-card);
+
+  text-align: center;
+}
+
+
+.confirm-icon {
+  display: grid;
+
+  width: 34px;
+
+  height: 34px;
+
+  margin:
+    0 auto 8px;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+.confirm-modal h3 {
+  margin:
+    0 0 5px;
+
+  color:
+    var(--text-primary);
+
+  font-size: 11px;
+}
+
+
+.confirm-modal p {
+  margin: 0;
+
+  color:
+    var(--text-muted);
+
+  font-size: 7px;
+
+  line-height: 1.5;
+}
+
+
+.confirm-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 12px;
+}
+
+
+.confirm-actions .btn {
+  height: 28px;
+
+  min-height: 28px;
+
+  padding:
+    0 10px;
+
+  font-size: 7px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 950px
+) {
+
+  .filter-bar {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .summary-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+  }
+
+}
+
+
+@media (
+  max-width: 650px
+) {
+
+  .filter-bar {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .modal-body {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .full-width {
+    grid-column: auto;
+  }
+
+}
+
+
+@media (
+  max-width: 450px
+) {
+
+  .summary-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+}

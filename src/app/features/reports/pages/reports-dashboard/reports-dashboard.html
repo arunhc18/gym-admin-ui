@@ -1,0 +1,1503 @@
+<div class="reports-page">
+
+
+  <!-- =====================================================
+       FILTERS
+  ====================================================== -->
+
+  <section class="filter-card">
+
+
+    <div class="filter-grid">
+
+
+      <div class="filter-field">
+
+        <label>
+          From Date
+        </label>
+
+        <input
+          type="date"
+          [(ngModel)]="filter.fromDate"
+        />
+
+      </div>
+
+
+      <div class="filter-field">
+
+        <label>
+          To Date
+        </label>
+
+        <input
+          type="date"
+          [(ngModel)]="filter.toDate"
+        />
+
+      </div>
+
+
+      <div class="filter-field">
+
+        <label>
+          Location
+        </label>
+
+        <select
+          [(ngModel)]="filter.locationId"
+        >
+
+          <option
+            [ngValue]="null"
+          >
+            All Locations
+          </option>
+
+
+          @for (
+            location of locations;
+            track location.locationId
+          ) {
+
+            <option
+              [ngValue]="location.locationId"
+            >
+
+              {{ location.locationName }}
+
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="filter-buttons">
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="loadReport()"
+        >
+          Apply
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="clearFilters()"
+        >
+          Clear
+        </button>
+
+
+      </div>
+
+
+      <div class="export-buttons">
+
+
+        <button
+          type="button"
+          class="compact-action"
+          (click)="exportCsv()"
+        >
+          Export CSV
+        </button>
+
+
+        <button
+          type="button"
+          class="compact-action"
+          (click)="printReport()"
+        >
+          Print / PDF
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       REPORT TABS
+  ====================================================== -->
+
+  <div class="report-tabs">
+
+
+    <button
+      type="button"
+      [class.active]="
+        activeReport === 'financial'
+      "
+      (click)="setReport('financial')"
+    >
+      Financial
+    </button>
+
+
+    <button
+      type="button"
+      [class.active]="
+        activeReport === 'membership'
+      "
+      (click)="setReport('membership')"
+    >
+      Membership
+    </button>
+
+
+    <button
+      type="button"
+      [class.active]="
+        activeReport === 'attendance'
+      "
+      (click)="setReport('attendance')"
+    >
+      Attendance
+    </button>
+
+
+    <button
+      type="button"
+      [class.active]="
+        activeReport === 'staff'
+      "
+      (click)="setReport('staff')"
+    >
+      Staff
+    </button>
+
+
+    <button
+      type="button"
+      [class.active]="
+        activeReport === 'visitors'
+      "
+      (click)="setReport('visitors')"
+    >
+      Visitors & Enquiries
+    </button>
+
+
+  </div>
+
+
+  @if (loading) {
+
+    <div class="loading-state">
+      Loading report...
+    </div>
+
+  }
+
+
+  <!-- =====================================================
+       FINANCIAL
+  ====================================================== -->
+
+  @if (
+    !loading
+    &&
+    activeReport === 'financial'
+    &&
+    financialReport
+  ) {
+
+
+    <section class="metric-grid six-cards">
+
+
+      <article class="metric-card">
+
+        <span>
+          Gross Collections
+        </span>
+
+        <strong>
+
+          {{
+            financialReport.summary.grossCollections
+              | currency:'INR':'symbol':'1.0-2'
+          }}
+
+        </strong>
+
+      </article>
+
+
+      <article class="metric-card">
+
+        <span>
+          Refunds
+        </span>
+
+        <strong class="danger">
+
+          {{
+            financialReport.summary.refunds
+              | currency:'INR':'symbol':'1.0-2'
+          }}
+
+        </strong>
+
+      </article>
+
+
+      <article class="metric-card">
+
+        <span>
+          Net Collections
+        </span>
+
+        <strong class="success">
+
+          {{
+            financialReport.summary.netCollections
+              | currency:'INR':'symbol':'1.0-2'
+          }}
+
+        </strong>
+
+      </article>
+
+
+      <article class="metric-card">
+
+        <span>
+          Expenses
+        </span>
+
+        <strong class="danger">
+
+          {{
+            financialReport.summary.expenses
+              | currency:'INR':'symbol':'1.0-2'
+          }}
+
+        </strong>
+
+      </article>
+
+
+      <article class="metric-card">
+
+        <span>
+          Net Cash Flow
+        </span>
+
+        <strong>
+
+          {{
+            financialReport.summary.netCashFlow
+              | currency:'INR':'symbol':'1.0-2'
+          }}
+
+        </strong>
+
+      </article>
+
+
+      <article class="metric-card">
+
+        <span>
+          Outstanding
+        </span>
+
+        <strong class="warning">
+
+          {{
+            financialReport.summary.outstandingAmount
+              | currency:'INR':'symbol':'1.0-2'
+          }}
+
+        </strong>
+
+      </article>
+
+
+    </section>
+
+
+    <div class="report-grid">
+
+
+      <!-- REVENUE CHART -->
+
+      <section class="report-card">
+
+
+        <div class="card-header">
+
+          <strong>
+            Revenue vs Expenses
+          </strong>
+
+        </div>
+
+
+        <div class="bar-chart">
+
+
+          @for (
+            point of financialReport.daily;
+            track point.date
+          ) {
+
+
+            <div
+              class="chart-column"
+              [title]="point.date"
+            >
+
+
+              <div class="chart-bars">
+
+
+                <span
+                  class="revenue-bar"
+                  [style.height.%]="
+                    getRevenueHeight(point)
+                  "
+                >
+                </span>
+
+
+                <span
+                  class="expense-bar"
+                  [style.height.%]="
+                    getExpenseHeight(point)
+                  "
+                >
+                </span>
+
+
+              </div>
+
+
+              <small>
+
+                {{
+                  point.date
+                    | date:'dd'
+                }}
+
+              </small>
+
+
+            </div>
+
+
+          }
+
+
+        </div>
+
+
+        <div class="chart-legend">
+
+          <span>
+            <i class="revenue-key"></i>
+            Revenue
+          </span>
+
+          <span>
+            <i class="expense-key"></i>
+            Expenses
+          </span>
+
+        </div>
+
+
+      </section>
+
+
+      <!-- PAYMENT METHODS -->
+
+      <section class="report-card">
+
+
+        <div class="card-header">
+
+          <strong>
+            Payment Methods
+          </strong>
+
+        </div>
+
+
+        <div class="progress-list">
+
+
+          @for (
+            method of financialReport.paymentMethods;
+            track method.paymentMethodId
+          ) {
+
+
+            <div class="progress-item">
+
+
+              <div class="progress-info">
+
+                <strong>
+                  {{ method.paymentMethodName }}
+                </strong>
+
+                <span>
+
+                  {{
+                    method.amount
+                      | currency:'INR':'symbol':'1.0-2'
+                  }}
+
+                  ·
+
+                  {{ method.transactionCount }}
+
+                </span>
+
+              </div>
+
+
+              <div class="progress">
+
+                <span
+                  [style.width.%]="
+                    method.percentage
+                  "
+                >
+                </span>
+
+              </div>
+
+
+            </div>
+
+
+          }
+          @empty {
+
+            <div class="empty">
+              No payment data.
+            </div>
+
+          }
+
+
+        </div>
+
+
+      </section>
+
+
+    </div>
+
+
+    <section class="report-card table-card">
+
+
+      <div class="card-header">
+
+        <strong>
+          Daily Financial Summary
+        </strong>
+
+      </div>
+
+
+      <div class="table-wrapper">
+
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+              <th>Date</th>
+              <th>Revenue</th>
+              <th>Refunds</th>
+              <th>Expenses</th>
+              <th>Net</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              row of financialReport.daily;
+              track row.date
+            ) {
+
+              <tr>
+
+                <td>
+                  {{ row.date | date:'dd MMM yyyy' }}
+                </td>
+
+                <td class="success">
+                  {{ row.revenue | currency:'INR':'symbol':'1.0-2' }}
+                </td>
+
+                <td class="danger">
+                  {{ row.refunds | currency:'INR':'symbol':'1.0-2' }}
+                </td>
+
+                <td class="danger">
+                  {{ row.expenses | currency:'INR':'symbol':'1.0-2' }}
+                </td>
+
+                <td>
+                  {{ row.net | currency:'INR':'symbol':'1.0-2' }}
+                </td>
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    </section>
+
+
+  }
+
+
+  <!-- =====================================================
+       MEMBERSHIP
+  ====================================================== -->
+
+  @if (
+    !loading
+    &&
+    activeReport === 'membership'
+    &&
+    membershipReport
+  ) {
+
+
+    <section class="metric-grid six-cards">
+
+
+      <article class="metric-card">
+        <span>Total Members</span>
+        <strong>{{ membershipReport.summary.totalMembers }}</strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Active</span>
+        <strong class="success">
+          {{ membershipReport.summary.activeMembers }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Expired</span>
+        <strong class="danger">
+          {{ membershipReport.summary.expiredMembers }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Expiring Soon</span>
+        <strong class="warning">
+          {{ membershipReport.summary.expiringSoon }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>New Members</span>
+        <strong>
+          {{ membershipReport.summary.newMembers }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Renewals</span>
+        <strong>
+          {{ membershipReport.summary.renewals }}
+        </strong>
+      </article>
+
+
+    </section>
+
+
+    <section class="report-card compact-section">
+
+
+      <div class="card-header">
+
+        <strong>
+          Membership Plans
+        </strong>
+
+      </div>
+
+
+      <div class="progress-list">
+
+
+        @for (
+          plan of membershipReport.plans;
+          track plan.planName
+        ) {
+
+
+          <div class="progress-item">
+
+
+            <div class="progress-info">
+
+              <strong>
+                {{ plan.planName }}
+              </strong>
+
+              <span>
+                {{ plan.memberCount }}
+                ·
+                {{ plan.percentage }}%
+              </span>
+
+            </div>
+
+
+            <div class="progress">
+
+              <span
+                [style.width.%]="
+                  plan.percentage
+                "
+              >
+              </span>
+
+            </div>
+
+
+          </div>
+
+
+        }
+
+
+      </div>
+
+
+    </section>
+
+
+    <section class="report-card table-card">
+
+
+      <div class="card-header">
+
+        <strong>
+          Membership Report
+        </strong>
+
+      </div>
+
+
+      <div class="table-wrapper">
+
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+              <th>Code</th>
+              <th>Member</th>
+              <th>Plan</th>
+              <th>Location</th>
+              <th>Joined</th>
+              <th>Expiry</th>
+              <th>Status</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              member of membershipReport.members;
+              track member.memberId
+            ) {
+
+              <tr>
+
+                <td>
+                  {{ member.memberCode }}
+                </td>
+
+                <td>
+                  <strong>{{ member.memberName }}</strong>
+                </td>
+
+                <td>
+                  {{ member.planName }}
+                </td>
+
+                <td>
+                  {{ member.locationName }}
+                </td>
+
+                <td>
+                  {{ member.joinedDate | date:'dd MMM yyyy' }}
+                </td>
+
+                <td>
+                  {{ member.expiryDate | date:'dd MMM yyyy' }}
+                </td>
+
+                <td>
+
+                  <span
+                    class="status-pill"
+                    [class.active]="
+                      member.status === 'active'
+                    "
+                    [class.expired]="
+                      member.status === 'expired'
+                    "
+                    [class.expiring]="
+                      member.status === 'expiring'
+                    "
+                  >
+                    {{ member.status }}
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    </section>
+
+
+  }
+
+
+  <!-- =====================================================
+       ATTENDANCE
+  ====================================================== -->
+
+  @if (
+    !loading
+    &&
+    activeReport === 'attendance'
+    &&
+    attendanceReport
+  ) {
+
+
+    <section class="metric-grid four-cards">
+
+
+      <article class="metric-card">
+        <span>People</span>
+        <strong>
+          {{ attendanceReport.summary.totalPeople }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Present</span>
+        <strong class="success">
+          {{ attendanceReport.summary.totalPresent }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Absent</span>
+        <strong class="danger">
+          {{ attendanceReport.summary.totalAbsent }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Attendance Rate</span>
+        <strong>
+          {{ attendanceReport.summary.attendanceRate }}%
+        </strong>
+      </article>
+
+
+    </section>
+
+
+    <section class="report-card table-card">
+
+
+      <div class="card-header">
+
+        <strong>
+          Attendance Report
+        </strong>
+
+      </div>
+
+
+      <div class="table-wrapper">
+
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th>Present</th>
+              <th>Absent</th>
+              <th>Rate</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              row of attendanceReport.rows;
+              track row.personId
+            ) {
+
+              <tr>
+
+                <td>
+                  {{ row.code }}
+                </td>
+
+                <td>
+                  <strong>{{ row.name }}</strong>
+                </td>
+
+                <td>
+
+                  <span
+                    class="type-pill"
+                    [class.staff]="
+                      row.personType === 'staff'
+                    "
+                  >
+                    {{ row.personType }}
+                  </span>
+
+                </td>
+
+                <td>
+                  {{ row.locationName }}
+                </td>
+
+                <td class="success">
+                  {{ row.present }}
+                </td>
+
+                <td class="danger">
+                  {{ row.absent }}
+                </td>
+
+                <td>
+                  <strong>
+                    {{ row.attendanceRate }}%
+                  </strong>
+                </td>
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    </section>
+
+
+  }
+
+
+  <!-- =====================================================
+       STAFF
+  ====================================================== -->
+
+  @if (
+    !loading
+    &&
+    activeReport === 'staff'
+    &&
+    staffReport
+  ) {
+
+
+    <section class="metric-grid six-cards">
+
+
+      <article class="metric-card">
+        <span>Total Staff</span>
+        <strong>{{ staffReport.summary.totalStaff }}</strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Active Staff</span>
+        <strong class="success">
+          {{ staffReport.summary.activeStaff }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Trainers</span>
+        <strong>{{ staffReport.summary.trainers }}</strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Managers</span>
+        <strong>{{ staffReport.summary.managers }}</strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Present</span>
+        <strong class="success">
+          {{ staffReport.summary.totalPresent }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Attendance Rate</span>
+        <strong>
+          {{ staffReport.summary.attendanceRate }}%
+        </strong>
+      </article>
+
+
+    </section>
+
+
+    <section class="report-card compact-section">
+
+
+      <div class="card-header">
+
+        <strong>
+          Staff by Role
+        </strong>
+
+      </div>
+
+
+      <div class="progress-list">
+
+
+        @for (
+          role of staffReport.roles;
+          track role.role
+        ) {
+
+          <div class="progress-item">
+
+
+            <div class="progress-info">
+
+              <strong>
+                {{ role.role }}
+              </strong>
+
+              <span>
+                {{ role.count }}
+                ·
+                {{ role.percentage }}%
+              </span>
+
+            </div>
+
+
+            <div class="progress">
+
+              <span
+                [style.width.%]="
+                  role.percentage
+                "
+              >
+              </span>
+
+            </div>
+
+
+          </div>
+
+        }
+
+
+      </div>
+
+
+    </section>
+
+
+    <section class="report-card table-card">
+
+
+      <div class="card-header">
+
+        <strong>
+          Staff Report
+        </strong>
+
+      </div>
+
+
+      <div class="table-wrapper">
+
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+              <th>Code</th>
+              <th>Staff</th>
+              <th>Role</th>
+              <th>Location</th>
+              <th>Joined</th>
+              <th>Present</th>
+              <th>Absent</th>
+              <th>Rate</th>
+              <th>Status</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              staff of staffReport.rows;
+              track staff.staffId
+            ) {
+
+              <tr>
+
+                <td>
+                  {{ staff.staffCode }}
+                </td>
+
+                <td>
+                  <strong>
+                    {{ staff.staffName }}
+                  </strong>
+                </td>
+
+                <td>
+                  {{ staff.role }}
+                </td>
+
+                <td>
+                  {{ staff.locationName }}
+                </td>
+
+                <td>
+                  {{ staff.joiningDate | date:'dd MMM yyyy' }}
+                </td>
+
+                <td class="success">
+                  {{ staff.present }}
+                </td>
+
+                <td class="danger">
+                  {{ staff.absent }}
+                </td>
+
+                <td>
+                  {{ staff.attendanceRate }}%
+                </td>
+
+                <td>
+
+                  <span
+                    class="status-pill"
+                    [class.active]="
+                      staff.status === 'active'
+                    "
+                    [class.expired]="
+                      staff.status === 'inactive'
+                    "
+                  >
+                    {{ staff.status }}
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    </section>
+
+
+  }
+
+
+  <!-- =====================================================
+       VISITORS & ENQUIRIES
+  ====================================================== -->
+
+  @if (
+    !loading
+    &&
+    activeReport === 'visitors'
+    &&
+    visitorReport
+  ) {
+
+
+    <section class="metric-grid six-cards">
+
+
+      <article class="metric-card">
+        <span>Enquiries</span>
+        <strong>
+          {{ visitorReport.summary.totalEnquiries }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Visitors</span>
+        <strong>
+          {{ visitorReport.summary.totalVisitors }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Converted</span>
+        <strong class="success">
+          {{ visitorReport.summary.convertedMembers }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Follow Ups</span>
+        <strong class="warning">
+          {{ visitorReport.summary.pendingFollowUps }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Lost</span>
+        <strong class="danger">
+          {{ visitorReport.summary.lostEnquiries }}
+        </strong>
+      </article>
+
+
+      <article class="metric-card">
+        <span>Conversion</span>
+        <strong>
+          {{ visitorReport.summary.conversionRate }}%
+        </strong>
+      </article>
+
+
+    </section>
+
+
+    <section class="report-card compact-section">
+
+
+      <div class="card-header">
+
+        <strong>
+          Enquiry Sources
+        </strong>
+
+      </div>
+
+
+      <div class="progress-list">
+
+
+        @for (
+          source of visitorReport.sources;
+          track source.source
+        ) {
+
+
+          <div class="progress-item">
+
+
+            <div class="progress-info">
+
+              <strong>
+                {{ source.source }}
+              </strong>
+
+              <span>
+
+                {{ source.count }}
+
+                ·
+
+                {{ source.percentage }}%
+
+              </span>
+
+            </div>
+
+
+            <div class="progress">
+
+              <span
+                [style.width.%]="
+                  source.percentage
+                "
+              >
+              </span>
+
+            </div>
+
+
+          </div>
+
+
+        }
+
+
+      </div>
+
+
+    </section>
+
+
+    <section class="report-card table-card">
+
+
+      <div class="card-header">
+
+        <strong>
+          Visitors & Enquiries
+        </strong>
+
+      </div>
+
+
+      <div class="table-wrapper">
+
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Source</th>
+              <th>Plan</th>
+              <th>Follow Up</th>
+              <th>Status</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              enquiry of visitorReport.rows;
+              track enquiry.enquiryId
+            ) {
+
+              <tr>
+
+                <td>
+                  <strong>
+                    {{ enquiry.name }}
+                  </strong>
+                </td>
+
+                <td>
+                  {{ enquiry.phone }}
+                </td>
+
+                <td>
+                  {{ enquiry.enquiryDate | date:'dd MMM yyyy' }}
+                </td>
+
+                <td>
+                  {{ enquiry.locationName }}
+                </td>
+
+                <td>
+                  {{ enquiry.source }}
+                </td>
+
+                <td>
+                  {{ enquiry.interestedPlan }}
+                </td>
+
+                <td>
+
+                  @if (
+                    enquiry.followUpDate
+                  ) {
+
+                    {{
+                      enquiry.followUpDate
+                        | date:'dd MMM yyyy'
+                    }}
+
+                  }
+                  @else {
+
+                    —
+
+                  }
+
+                </td>
+
+                <td>
+
+                  <span
+                    class="enquiry-status"
+                    [class.new]="
+                      enquiry.status === 'new'
+                    "
+                    [class.follow-up]="
+                      enquiry.status === 'follow_up'
+                    "
+                    [class.visited]="
+                      enquiry.status === 'visited'
+                    "
+                    [class.converted]="
+                      enquiry.status === 'converted'
+                    "
+                    [class.lost]="
+                      enquiry.status === 'lost'
+                    "
+                  >
+
+                    {{
+                      enquiry.status === 'follow_up'
+                        ? 'Follow Up'
+                        : enquiry.status
+                    }}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+            @empty {
+
+              <tr>
+
+                <td
+                  colspan="8"
+                  class="empty"
+                >
+                  No enquiries found.
+                </td>
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    </section>
+
+
+  }
+
+
+</div>

@@ -14,7 +14,7 @@ export class QuickActionsComponent {
   }
 
   onCollectPayment(): void {
-    this.router.navigate(['/members/renewals']);
+    this.router.navigate(['/accounts/invoices/new']);
   }
 
   onQuickEnquiry(): void {
