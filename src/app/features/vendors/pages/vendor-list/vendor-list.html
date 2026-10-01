@@ -1,0 +1,66 @@
+<div class="vendors-page">
+  <div class="page-action">
+    <button class="btn btn-primary" type="button" (click)="openAddVendor()">+ Add Vendor</button>
+  </div>
+
+  <section class="vendors-card">
+    <div class="filter-bar">
+      <div class="search-box">
+        <input type="search" [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search vendor, code, contact, GST..." aria-label="Search vendors">
+      </div>
+      <select [(ngModel)]="selectedTenant" (change)="applyFilters()" aria-label="Filter by tenant">
+        <option value="">All Tenants</option>
+        <option *ngFor="let tenant of tenants" [value]="tenant.tenantId">{{ tenant.tenantName }}</option>
+      </select>
+      <select [(ngModel)]="selectedStatus" (change)="applyFilters()" aria-label="Filter by status">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="clear-button" type="button" (click)="clearFilters()">Clear</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>Vendor</th><th>Tenant</th><th>Contact</th><th>GST Number</th><th>Payment Terms</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vendor of filteredVendors">
+            <td><div class="vendor-cell"><span class="vendor-avatar">{{ vendor.vendorName.charAt(0) }}</span><div><strong>{{ vendor.vendorName }}</strong></div></div></td>
+            <td>{{ tenantName(vendor.tenantId) }}</td>
+            <td><div class="contact-cell"><strong>{{ vendor.contactPerson || '-' }}</strong></div></td>
+            <td>{{ vendor.gstNumber || '-' }}</td>
+            <td>{{ vendor.paymentTerms || '-' }}</td>
+            <td><span class="status" [class.inactive]="!vendor.isActive"><span class="status-dot"></span>{{ vendor.isActive ? 'Active' : 'Inactive' }}</span></td>
+            <td><div class="row-actions"><button class="action-button" type="button" (click)="openEditVendor(vendor)">Edit</button><button class="action-button" type="button" (click)="toggleVendorStatus(vendor)">{{ vendor.isActive ? 'Deactivate' : 'Activate' }}</button></div></td>
+          </tr>
+          <tr *ngIf="filteredVendors.length === 0"><td class="empty-cell" colspan="7">No vendors match the selected filters.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<div *ngIf="vendorModalOpen" class="modal-backdrop" (click)="closeVendorModal()">
+  <section class="vendor-modal" (click)="$event.stopPropagation()">
+    <header class="modal-header"><h2>{{ editingVendor ? 'Edit Vendor' : 'Add Vendor' }}</h2><button type="button" class="close-button" (click)="closeVendorModal()">&times;</button></header>
+    <form [formGroup]="vendorForm" (ngSubmit)="saveVendor()">
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="field"><span>Tenant</span><select formControlName="tenantId"><option value="">Select tenant</option><option *ngFor="let tenant of tenants" [value]="tenant.tenantId">{{ tenant.tenantName }}</option></select></label>
+          <label class="field"><span>Vendor Name</span><input type="text" formControlName="vendorName" placeholder="Vendor name"></label>
+          <label class="field"><span>Vendor Code</span><input type="text" formControlName="vendorCode" placeholder="VEN-EQP-001"><small class="error" *ngIf="vendorCodeError">{{ vendorCodeError }}</small></label>
+          <label class="field"><span>Contact Person</span><input type="text" formControlName="contactPerson" placeholder="Contact person"></label>
+          <label class="field"><span>Phone</span><input type="tel" formControlName="phone" placeholder="Phone number"></label>
+          <label class="field"><span>Email</span><input type="email" formControlName="email" placeholder="vendor@example.com"></label>
+          <label class="field"><span>GST Number</span><input type="text" formControlName="gstNumber" placeholder="GST number"></label>
+          <label class="field"><span>Payment Terms</span><input type="text" formControlName="paymentTerms" placeholder="Net 30 Days"></label>
+          <label class="field full"><span>Address</span><textarea rows="3" formControlName="address" placeholder="Vendor address"></textarea></label>
+          <label class="active-check full"><input type="checkbox" formControlName="isActive"> Active vendor</label>
+        </div>
+      </div>
+      <footer class="modal-footer"><button type="button" class="btn btn-secondary" (click)="closeVendorModal()">Cancel</button><button type="submit" class="btn btn-primary">Save Vendor</button></footer>
+    </form>
+  </section>
+</div>

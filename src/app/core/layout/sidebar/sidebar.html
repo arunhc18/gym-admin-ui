@@ -119,6 +119,102 @@
 
 
     <!-- =====================================================
+         VENDORS
+    ====================================================== -->
+
+    <a
+      class="nav-item"
+      routerLink="/vendors"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{
+        exact: true
+      }"
+      title="Vendors"
+      (click)="selectNavigation()"
+    >
+
+
+      <span
+        class="nav-icon"
+        aria-hidden="true"
+      >
+
+        <svg viewBox="0 0 24 24">
+
+          <path
+            d="M4 7h16v13H4z"
+          >
+          </path>
+
+          <path
+            d="M8 7V4h8v3"
+          >
+          </path>
+
+          <path
+            d="M4 11h16"
+          >
+          </path>
+
+          <path
+            d="M10 15h4"
+          >
+          </path>
+
+        </svg>
+
+      </span>
+
+
+      <span class="nav-label">
+        Vendors
+      </span>
+
+
+    </a>
+
+
+    <!-- =====================================================
+         PRODUCTS
+    ====================================================== -->
+
+    <a
+      class="nav-item"
+      routerLink="/products"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{
+        exact: true
+      }"
+      title="Products"
+      (click)="selectNavigation()"
+    >
+
+
+      <span
+        class="nav-icon"
+        aria-hidden="true"
+      >
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M4 7l8-4 8 4-8 4-8-4Z"></path>
+          <path d="M4 7v10l8 4 8-4V7"></path>
+          <path d="M12 11v10"></path>
+
+        </svg>
+
+      </span>
+
+
+      <span class="nav-label">
+        Products
+      </span>
+
+
+    </a>
+
+
+    <!-- =====================================================
          MEMBERS
     ====================================================== -->
 

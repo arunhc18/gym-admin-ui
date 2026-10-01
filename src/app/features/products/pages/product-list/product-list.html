@@ -1,0 +1,47 @@
+<div class="products-page">
+  <div class="page-heading">
+  </div>
+
+  <nav class="tabs" aria-label="Product management sections">
+    <button [class.active]="activeTab === 'products'" (click)="activeTab = 'products'" type="button">Products</button>
+    <button [class.active]="activeTab === 'categories'" (click)="activeTab = 'categories'" type="button">Categories</button>
+    <button [class.active]="activeTab === 'inventory'" (click)="activeTab = 'inventory'" type="button">Inventory</button>
+    <button [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'" type="button">Transactions</button>
+  </nav>
+
+  <section *ngIf="activeTab === 'products'" class="content-card">
+    <div class="section-heading"><h3>Products</h3><button class="add-button" type="button" (click)="openAddProduct()">+ Add Product</button></div>
+    <div class="filter-bar">
+      <input [(ngModel)]="productSearch" type="search" placeholder="Search product, code, barcode..." aria-label="Search products">
+      <select [(ngModel)]="selectedTenant" aria-label="Filter by tenant"><option value="">All Tenants</option><option *ngFor="let tenant of tenants" [value]="tenant.tenantId">{{ tenant.tenantName }}</option></select>
+      <select [(ngModel)]="selectedType" aria-label="Filter by product type"><option value="">All Types</option><option value="supplement">Supplements</option><option value="merchandise">Merchandise</option><option value="equipment">Equipment</option><option value="consumable">Consumables</option></select>
+      <select [(ngModel)]="selectedStatus" aria-label="Filter by status"><option value="">All Status</option><option value="active">Active</option><option value="inactive">Inactive</option></select>
+      <button class="clear-button" type="button" (click)="clearFilters()">Clear</button>
+    </div>
+    <div class="table-wrapper"><table><thead><tr><th>Product</th><th>Tenant</th><th>Category</th><th>Type</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+      <tr *ngFor="let product of filteredProducts"><td><strong>{{ product.productName }}</strong></td><td>{{ tenantName(product.tenantId) }}</td><td>{{ categoryName(product.categoryId) }}</td><td>{{ product.productType || '-' }}</td><td>{{ product.sellingPrice | currency:'INR' }}</td><td>{{ availableStock(product.productId) }}</td><td><span class="status" [class.inactive]="!product.isActive">{{ product.isActive ? 'Active' : 'Inactive' }}</span></td><td><button class="action-button" type="button" (click)="toggleProduct(product)">{{ product.isActive ? 'Deactivate' : 'Activate' }}</button></td></tr>
+      <tr *ngIf="filteredProducts.length === 0"><td colspan="8" class="empty-cell">No products match the selected filters.</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section *ngIf="activeTab === 'categories'" class="content-card"><div class="section-heading"><h3>Categories</h3><button class="add-button" type="button" (click)="openAddCategory()">+ Add Category</button></div><div class="table-wrapper"><table><thead><tr><th>Category</th><th>Tenant</th><th>Description</th><th>Status</th></tr></thead><tbody><tr *ngFor="let category of categories"><td>{{ category.categoryName }}</td><td>{{ tenantName(category.tenantId) }}</td><td>{{ category.description || '-' }}</td><td><span class="status" [class.inactive]="!category.isActive">{{ category.isActive ? 'Active' : 'Inactive' }}</span></td></tr></tbody></table></div></section>
+
+  <section *ngIf="activeTab === 'inventory'" class="content-card"><div class="section-heading"><h3>Inventory</h3><button class="add-button" type="button" (click)="openAddInventory()">+ Add Stock</button></div><div class="table-wrapper"><table><thead><tr><th>Location</th><th>Product</th><th>On Hand</th><th>Reserved</th><th>Available</th></tr></thead><tbody><tr *ngFor="let item of inventory"><td>{{ locationName(item.locationId) }}</td><td>{{ productName(item.productId) }}</td><td>{{ item.quantityOnHand }}</td><td>{{ item.quantityReserved }}</td><td>{{ item.quantityAvailable }}</td></tr></tbody></table></div></section>
+
+  <section *ngIf="activeTab === 'transactions'" class="content-card"><div class="section-heading"><h3>Transactions</h3><button class="add-button" type="button" (click)="openAddTransaction()">+ Add Transaction</button></div><div class="table-wrapper"><table><thead><tr><th>Date</th><th>Product</th><th>Location</th><th>Type</th><th>Quantity</th><th>Notes</th></tr></thead><tbody><tr *ngFor="let transaction of transactions"><td>{{ transaction.transactionDate | date:'mediumDate' }}</td><td>{{ productName(transaction.productId) }}</td><td>{{ locationName(transaction.locationId) }}</td><td>{{ transaction.transactionType }}</td><td>{{ transaction.quantity }}</td><td>{{ transaction.notes || '-' }}</td></tr></tbody></table></div></section>
+</div>
+
+<div *ngIf="modal" class="modal-backdrop" (click)="closeModal()">
+  <section class="entry-modal" (click)="$event.stopPropagation()">
+    <header class="modal-heading"><h3>{{ modal === 'product' ? 'Add Product' : modal === 'category' ? 'Add Category' : modal === 'inventory' ? 'Add Stock' : 'Add Transaction' }}</h3><button type="button" (click)="closeModal()">&times;</button></header>
+    <div class="modal-body" *ngIf="modal === 'product'">
+      <label>Tenant<select [(ngModel)]="productForm.tenantId"><option *ngFor="let tenant of tenants" [ngValue]="tenant.tenantId">{{ tenant.tenantName }}</option></select></label>
+      <label>Product name<input [(ngModel)]="productForm.productName" type="text"></label><label>Product code<input [(ngModel)]="productForm.productCode" type="text"></label>
+      <label>Category<select [(ngModel)]="productForm.categoryId"><option [ngValue]="null">No category</option><option *ngFor="let category of categories" [ngValue]="category.categoryId">{{ category.categoryName }}</option></select></label>
+      <label>Type<select [(ngModel)]="productForm.productType"><option value="supplement">Supplement</option><option value="merchandise">Merchandise</option><option value="equipment">Equipment</option><option value="consumable">Consumable</option></select></label><label>Selling price<input [(ngModel)]="productForm.sellingPrice" type="number" min="0"></label>
+    </div>
+    <div class="modal-body" *ngIf="modal === 'category'"><label>Tenant<select [(ngModel)]="categoryForm.tenantId"><option *ngFor="let tenant of tenants" [ngValue]="tenant.tenantId">{{ tenant.tenantName }}</option></select></label><label>Category name<input [(ngModel)]="categoryForm.categoryName" type="text"></label><label>Description<textarea [(ngModel)]="categoryForm.description" rows="3"></textarea></label></div>
+    <div class="modal-body" *ngIf="modal === 'inventory' || modal === 'transaction'"><label>Product<select [(ngModel)]="stockForm.productId"><option *ngFor="let product of products" [ngValue]="product.productId">{{ product.productName }}</option></select></label><label>Location<select [(ngModel)]="stockForm.locationId"><option *ngFor="let location of locations" [ngValue]="location.locationId">{{ location.locationName }}</option></select></label><label *ngIf="modal === 'transaction'">Transaction type<select [(ngModel)]="stockForm.transactionType"><option value="in">Stock in</option><option value="out">Stock out</option><option value="return">Return</option><option value="adjustment">Adjustment</option></select></label><label>Quantity<input [(ngModel)]="stockForm.quantity" type="number" [min]="stockForm.transactionType === 'adjustment' ? -999999 : 1"></label><label>Notes<textarea [(ngModel)]="stockForm.notes" rows="3"></textarea></label></div>
+    <p class="form-error" *ngIf="formError">{{ formError }}</p><footer class="modal-footer"><button class="clear-button" type="button" (click)="closeModal()">Cancel</button><button class="add-button" type="button" (click)="saveModal()">Save</button></footer>
+  </section>
+</div>

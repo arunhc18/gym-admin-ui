@@ -327,7 +327,6 @@ export const routes: Routes = [
         }
       },
 
-
       // =====================================================
       // PLATFORM ACCOUNTS
       // =====================================================
@@ -521,6 +520,64 @@ export const routes: Routes = [
 
           description:
             'Overview of your gym operations'
+
+        }
+      },
+
+
+      // =====================================================
+      // VENDORS
+      // =====================================================
+
+      {
+        path:
+          'vendors',
+
+        loadComponent: () =>
+          import(
+            './features/vendors/pages/vendor-list/vendor-list'
+          )
+            .then(
+              m =>
+                m.VendorListComponent
+            ),
+
+        data: {
+
+          title:
+            'Vendors',
+
+          description:
+            'Manage gym vendors and suppliers'
+
+        }
+      },
+
+
+      // =====================================================
+      // PRODUCTS
+      // =====================================================
+
+      {
+        path:
+          'products',
+
+        loadComponent: () =>
+          import(
+            './features/products/pages/product-list/product-list'
+          )
+            .then(
+              m =>
+                m.ProductListComponent
+            ),
+
+        data: {
+
+          title:
+            'Products',
+
+          description:
+            'Manage products, categories, inventory and stock'
 
         }
       },
