@@ -54,8 +54,8 @@ export class TopHeaderComponent {
 
       return {
         ...routeData,
-        breadcrumbParent: 'Dashboard',
-        breadcrumbParentUrl: '/dashboard',
+        breadcrumbParent: routeData.breadcrumbParent ?? 'Dashboard',
+        breadcrumbParentUrl: routeData.breadcrumbParentUrl ?? '/dashboard',
       };
     }),
   );

@@ -1,0 +1,138 @@
+<section class="class-types-page">
+  <div class="type-toolbar">
+    <span>{{ classTypes.length }} class types</span>
+    <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ Add Class Type</button>
+  </div>
+
+  <div class="type-table-wrap">
+    <table class="type-table">
+      <thead>
+        <tr>
+          <th>Class Type</th>
+          <th>Duration</th>
+          <th>Default Capacity</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (classType of classTypes; track classType.class_type_id) {
+          <tr>
+            <td>
+              <div class="type-name">
+                @if (classType.image_url) {
+                  <img [src]="classType.image_url" [alt]="classType.class_name" />
+                } @else {
+                  <span class="type-swatch" [style.backgroundColor]="classType.color_code || 'var(--primary)'"></span>
+                }
+                <div>
+                  <strong>{{ classType.class_name }}</strong>
+                  @if (classType.description) {
+                    <small>{{ classType.description }}</small>
+                  }
+                </div>
+              </div>
+            </td>
+            <td>{{ classType.duration_minutes }} min</td>
+            <td>{{ classType.max_capacity ?? '—' }}</td>
+            <td>
+              <span class="status-pill" [class.active]="classType.is_active" [class.inactive]="!classType.is_active">
+                {{ classType.is_active ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <div class="type-actions">
+                <button type="button" class="action-link" (click)="editClassType(classType)">Edit</button>
+                <button type="button" class="action-link" (click)="toggleClassTypeStatus(classType)">
+                  {{ classType.is_active ? 'Deactivate' : 'Activate' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="5" class="empty-state">No class types found.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+@if (formOpen) {
+  <div class="modal-backdrop" (click)="closeForm()">
+    <section class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="class-type-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <h2 id="class-type-title">{{ editingClassTypeId === null ? 'Add Class Type' : 'Edit Class Type' }}</h2>
+          <p>Maintain the class catalog.</p>
+        </div>
+        <button type="button" class="icon-close" aria-label="Close class type form" (click)="closeForm()">×</button>
+      </header>
+
+      <form [formGroup]="classTypeForm" (ngSubmit)="saveClassType()" novalidate>
+        <div class="modal-body form-grid">
+          <div class="field-group">
+            <label for="class-name">Class Name *</label>
+            <input id="class-name" type="text" formControlName="class_name" maxlength="200" />
+            @if (classTypeForm.controls.class_name.touched && classTypeForm.controls.class_name.invalid) {
+              <small class="error-text">Enter a class name of 200 characters or fewer.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="class-duration">Duration (minutes) *</label>
+            <input id="class-duration" type="number" min="1" step="1" formControlName="duration_minutes" />
+            @if (classTypeForm.controls.duration_minutes.touched && classTypeForm.controls.duration_minutes.invalid) {
+              <small class="error-text">Enter a positive whole number.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="class-capacity">Default Capacity</label>
+            <input id="class-capacity" type="number" min="1" step="1" formControlName="max_capacity" />
+            @if (classTypeForm.controls.max_capacity.touched && classTypeForm.controls.max_capacity.invalid) {
+              <small class="error-text">Capacity must be a positive whole number.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="class-color">Color Code</label>
+            <input id="class-color" type="text" formControlName="color_code" placeholder="#FF3B45" />
+            @if (classTypeForm.controls.color_code.touched && classTypeForm.controls.color_code.invalid) {
+              <small class="error-text">Use a six-digit hex color such as #FF3B45.</small>
+            }
+          </div>
+
+          <div class="field-group full-span">
+            <label for="class-image">Image URL</label>
+            <input id="class-image" type="url" formControlName="image_url" placeholder="https://example.com/image.jpg" />
+            @if (classTypeForm.controls.image_url.touched && classTypeForm.controls.image_url.invalid) {
+              <small class="error-text">Enter a valid HTTP or HTTPS URL.</small>
+            }
+          </div>
+
+          <div class="field-group full-span">
+            <label for="class-description">Description</label>
+            <textarea id="class-description" rows="3" formControlName="description"></textarea>
+          </div>
+
+          <label class="checkbox-field">
+            <input type="checkbox" formControlName="is_active" />
+            <span>Active</span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-ghost" (click)="closeForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="classTypeForm.invalid">Save Class Type</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+}
+
+@if (toastMessage) {
+  <div class="toast" role="status">
+    <span>{{ toastMessage }}</span>
+    <button type="button" aria-label="Dismiss toast" (click)="clearToast()">×</button>
+  </div>
+}

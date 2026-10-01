@@ -54,6 +54,8 @@ export class SidebarComponent {
 
   accountsExpanded = true;
 
+  classesExpanded = true;
+
 
   // =====================================================
   // NAVIGATION
@@ -86,6 +88,13 @@ export class SidebarComponent {
 
     this.accountsExpanded =
       !this.accountsExpanded;
+
+  }
+
+  toggleClasses(): void {
+
+    this.classesExpanded =
+      !this.classesExpanded;
 
   }
 
