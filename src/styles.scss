@@ -5,80 +5,479 @@
 @use 'styles/tables';
 @use 'styles/utilities';
 
+
+/* =====================================================
+   RESET
+===================================================== */
+
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+
+  box-sizing:
+    border-box;
+
+  margin: 0;
+
+  padding: 0;
+
 }
+
+
+/* =====================================================
+   DOCUMENT
+===================================================== */
 
 html,
-body { min-width: 320px; height: 100%; }
+body {
+
+  min-width:
+    320px;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+}
+
+
+html {
+
+  background:
+    var(--bg-app);
+
+  color-scheme:
+    var(--input-color-scheme);
+
+}
+
 
 body {
-	min-width: 320px;
-	height: 100%;
-	background: var(--bg-app);
-	color: var(--text-primary);
-	font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-	font-size: 14px;
-	line-height: 1.5;
-	-webkit-font-smoothing: antialiased;
-	text-rendering: optimizeLegibility;
+
+  min-width:
+    320px;
+
+  min-height:
+    100%;
+
+  margin: 0;
+
+  background:
+    var(--bg-app);
+
+  color:
+    var(--text-primary);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size:
+    14px;
+
+  line-height:
+    1.5;
+
+  -webkit-font-smoothing:
+    antialiased;
+
+  text-rendering:
+    optimizeLegibility;
+
+  transition:
+    background-color
+      var(--transition),
+    color
+      var(--transition);
+
 }
+
+
+/* =====================================================
+   FORM FONT
+===================================================== */
 
 button,
 input,
 textarea,
-select { font: inherit; }
+select {
+
+  font:
+    inherit;
+
+}
+
+
+/* =====================================================
+   GLOBAL INPUT TEXT
+===================================================== */
+
+input,
+textarea,
+select {
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   DATE / TIME / MONTH INPUT THEME
+===================================================== */
 
 input[type='date'],
-input[type='time'] {
-	color-scheme: dark;
+input[type='time'],
+input[type='month'] {
+
+  color-scheme:
+    var(--input-color-scheme);
+
 }
 
-input[type='date']::-webkit-calendar-picker-indicator,
-input[type='time']::-webkit-calendar-picker-indicator {
-	width: 14px;
-	height: 14px;
-	margin-right: 2px;
-	opacity: 1;
-	cursor: pointer;
-	filter: grayscale(1) brightness(1.8);
+
+/* =====================================================
+   DATE PICKER ICON
+===================================================== */
+
+input[type='date']
+::-webkit-calendar-picker-indicator,
+
+input[type='time']
+::-webkit-calendar-picker-indicator,
+
+input[type='month']
+::-webkit-calendar-picker-indicator {
+
+  width:
+    14px;
+
+  height:
+    14px;
+
+  margin-right:
+    2px;
+
+  opacity:
+    1;
+
+  cursor:
+    pointer;
+
+  filter:
+    var(--calendar-icon-filter);
+
 }
+
+
+/* =====================================================
+   DATE FIELD FOCUS
+===================================================== */
 
 input[type='date']:focus,
-input[type='time']:focus {
-	border-color: var(--primary);
-	box-shadow: 0 0 0 2px var(--primary-subtle);
+input[type='time']:focus,
+input[type='month']:focus {
+
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    0 0 0 2px
+    var(--primary-subtle);
+
 }
 
-button { border: 0; }
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+button {
+
+  border:
+    0;
+
+}
+
+
+/* =====================================================
+   LINKS
+===================================================== */
 
 a {
-	color: var(--primary);
-	text-decoration: none;
-	transition: color var(--transition);
 
-	&:hover { color: var(--primary-hover); }
+  color:
+    var(--primary);
+
+  text-decoration:
+    none;
+
+  transition:
+    color
+      var(--transition);
+
+
+  &:hover {
+
+    color:
+      var(--primary-hover);
+
+  }
+
 }
 
-::selection { background: var(--primary-subtle); color: var(--text-primary); }
 
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--bg-app); }
+/* =====================================================
+   TEXT SELECTION
+===================================================== */
+
+::selection {
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--text-primary);
+
+}
+
+
+/* =====================================================
+   THEME TRANSITION
+===================================================== */
+
+body,
+.sidebar,
+.platform-sidebar,
+.top-header,
+.platform-header,
+.app-shell,
+.platform-shell,
+.app-main,
+.platform-main,
+.page-content,
+.platform-content,
+.card,
+.dashboard-card,
+.summary-card,
+.stat-card,
+.report-card,
+.plans-card,
+.attendance-card,
+.filter-card,
+input,
+select,
+textarea {
+
+  transition:
+    background-color
+      var(--transition),
+    border-color
+      var(--transition),
+    color
+      var(--transition);
+
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar {
+
+  width:
+    10px;
+
+  height:
+    10px;
+
+}
+
+
+::-webkit-scrollbar-track {
+
+  background:
+    var(--bg-app);
+
+}
+
+
 ::-webkit-scrollbar-thumb {
-	border: 2px solid var(--bg-app);
-	border-radius: 10px;
-	background: var(--border-primary);
-}
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-@media (max-width: 600px) {
-	.card { padding: var(--space-md); }
-	.btn { flex: 1 1 auto; }
+  border:
+    2px solid
+    var(--bg-app);
+
+  border-radius:
+    10px;
+
+  background:
+    var(--border-primary);
+
 }
+
+
+::-webkit-scrollbar-thumb:hover {
+
+  background:
+    var(--text-muted);
+
+}
+
+
+/* FIREFOX */
+
+* {
+
+  scrollbar-color:
+    var(--border-primary)
+    var(--bg-app);
+
+}
+
+
+/* =====================================================
+   LIGHT THEME FALLBACKS
+===================================================== */
+
+/*
+ * Most components already use:
+ *
+ * --bg-app
+ * --bg-sidebar
+ * --bg-card
+ * --bg-elevated
+ * --border-primary
+ * --border-secondary
+ * --text-primary
+ * --text-secondary
+ * --text-muted
+ *
+ * so they switch automatically.
+ *
+ * These rules handle common native browser controls.
+ */
+
+:root[data-theme='light'] {
+
+  input,
+  textarea,
+  select {
+
+    background-color:
+      var(--bg-card);
+
+    color:
+      var(--text-primary);
+
+  }
+
+
+  option {
+
+    background:
+      var(--bg-card);
+
+    color:
+      var(--text-primary);
+
+  }
+
+}
+
+
+:root[data-theme='dark'] {
+
+  input,
+  textarea,
+  select {
+
+    color:
+      var(--text-primary);
+
+  }
+
+
+  option {
+
+    background:
+      var(--bg-card);
+
+    color:
+      var(--text-primary);
+
+  }
+
+}
+
+
+/* =====================================================
+   DISABLED CONTROLS
+===================================================== */
+
+input:disabled,
+textarea:disabled,
+select:disabled,
+button:disabled {
+
+  cursor:
+    not-allowed;
+
+  opacity:
+    .6;
+
+}
+
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+input::placeholder,
+textarea::placeholder {
+
+  color:
+    var(--text-muted);
+
+  opacity:
+    1;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (
+  max-width: 600px
+) {
+
+  .card {
+
+    padding:
+      var(--space-md);
+
+  }
+
+
+  .btn {
+
+    flex:
+      1 1 auto;
+
+  }
+
+}
+
+
 /* =====================================================
    GYM INVOICE PRINT
 ===================================================== */
@@ -97,9 +496,8 @@ a {
   }
 
 
+  html,
   body {
-
-    margin: 0;
 
     background:
       #ffffff !important;
@@ -110,11 +508,22 @@ a {
   }
 
 
-  /* Hide Gym Admin navigation */
+  body {
+
+    margin: 0;
+
+  }
+
+
+  /* ===================================================
+     HIDE APPLICATION NAVIGATION
+  =================================================== */
 
   .sidebar,
+  .platform-sidebar,
   .sidebar-overlay,
   app-top-header,
+  .platform-header,
   .no-print {
 
     display:
@@ -123,30 +532,38 @@ a {
   }
 
 
-  /* Remove application shell spacing */
+  /* ===================================================
+     REMOVE APPLICATION SHELL SPACING
+  =================================================== */
 
-  .app-shell {
+  .app-shell,
+  .platform-shell {
 
     display:
       block !important;
 
+    height:
+      auto !important;
+
+    overflow:
+      visible !important;
+
+    background:
+      #ffffff !important;
+
   }
 
 
-  .app-main {
-
-    margin-left:
-      0 !important;
+  .app-main,
+  .platform-main {
 
     width:
       100% !important;
 
-  }
+    height:
+      auto !important;
 
-
-  .page-content {
-
-    padding:
+    margin-left:
       0 !important;
 
     overflow:
@@ -155,15 +572,32 @@ a {
   }
 
 
-  /* Invoice */
+  .page-content,
+  .platform-content {
+
+    padding:
+      0 !important;
+
+    overflow:
+      visible !important;
+
+    background:
+      #ffffff !important;
+
+  }
+
+
+  /* ===================================================
+     INVOICE
+  =================================================== */
 
   .invoice-details-page {
 
-    max-width:
-      none !important;
-
     width:
       100% !important;
+
+    max-width:
+      none !important;
 
     margin:
       0 !important;
@@ -210,6 +644,10 @@ a {
   }
 
 
+  /* ===================================================
+     STATUS
+  =================================================== */
+
   .status-pill,
   .payment-status {
 
@@ -222,6 +660,10 @@ a {
 
   }
 
+
+  /* ===================================================
+     TABLE
+  =================================================== */
 
   .invoice-items-table th,
   .payment-table th {
@@ -253,6 +695,10 @@ a {
 
   }
 
+
+  /* ===================================================
+     TOTAL
+  =================================================== */
 
   .invoice-total {
 

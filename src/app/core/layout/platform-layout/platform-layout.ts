@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {
+  Component
+} from '@angular/core';
 
 import {
   Router,
@@ -7,16 +9,23 @@ import {
   RouterOutlet
 } from '@angular/router';
 
+import {
+  ThemeToggleComponent
+} from '../../theme/theme-toggle/theme-toggle';
+
 
 @Component({
-  selector: 'app-platform-layout',
+  selector:
+    'app-platform-layout',
 
-  standalone: true,
+  standalone:
+    true,
 
   imports: [
     RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    ThemeToggleComponent
   ],
 
   templateUrl:
@@ -27,32 +36,37 @@ import {
 })
 export class PlatformLayoutComponent {
 
-  sidebarCollapsed = false;
 
-  mobileSidebarOpen = false;
+  sidebarCollapsed =
+    false;
 
-  accountsOpen = false;
+
+  mobileSidebarOpen =
+    false;
+
+
+  accountsOpen =
+    false;
 
 
   constructor(
-    private readonly router: Router
+    private readonly router:
+      Router
   ) {
 
-    // Keep Accounts expanded when user is
-    // already inside Payments / Invoices.
+
     this.accountsOpen =
-      this.router.url.startsWith(
-        '/platform/accounts'
-      );
+      this.router.url
+        .startsWith(
+          '/platform/accounts'
+        );
 
   }
 
 
-  // =====================================================
-  // SIDEBAR
-  // =====================================================
+  toggleSidebar():
+    void {
 
-  toggleSidebar(): void {
 
     if (
       window.matchMedia(
@@ -74,11 +88,9 @@ export class PlatformLayoutComponent {
   }
 
 
-  // =====================================================
-  // ACCOUNTS MENU
-  // =====================================================
+  toggleAccounts():
+    void {
 
-  toggleAccounts(): void {
 
     this.accountsOpen =
       !this.accountsOpen;
@@ -86,20 +98,21 @@ export class PlatformLayoutComponent {
   }
 
 
-  isAccountsActive(): boolean {
+  isAccountsActive():
+    boolean {
 
-    return this.router.url.startsWith(
-      '/platform/accounts'
-    );
+
+    return this.router.url
+      .startsWith(
+        '/platform/accounts'
+      );
 
   }
 
 
-  // =====================================================
-  // MOBILE
-  // =====================================================
+  closeMobileSidebar():
+    void {
 
-  closeMobileSidebar(): void {
 
     this.mobileSidebarOpen =
       false;

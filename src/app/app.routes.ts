@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import {
+  Routes
+} from '@angular/router';
 
 import {
   AppLayoutComponent
@@ -17,7 +19,8 @@ export const routes: Routes = [
   // =====================================================
 
   {
-    path: 'platform',
+    path:
+      'platform',
 
     component:
       PlatformLayoutComponent,
@@ -30,9 +33,14 @@ export const routes: Routes = [
       // =================================================
 
       {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'dashboard'
+        path:
+          '',
+
+        pathMatch:
+          'full',
+
+        redirectTo:
+          'dashboard'
       },
 
 
@@ -41,15 +49,17 @@ export const routes: Routes = [
       // =================================================
 
       {
-        path: 'dashboard',
+        path:
+          'dashboard',
 
         loadComponent: () =>
           import(
             './features/platform/dashboard/dashboard'
-          ).then(
-            m =>
-              m.PlatformDashboardComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PlatformDashboardComponent
+            ),
 
         data: {
 
@@ -69,6 +79,7 @@ export const routes: Routes = [
 
 
       // CREATE PLAN
+
       {
         path:
           'subscription-plans/new',
@@ -76,10 +87,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-form/plan-form'
-          ).then(
-            m =>
-              m.PlanFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PlanFormComponent
+            ),
 
         data: {
 
@@ -94,6 +106,7 @@ export const routes: Routes = [
 
 
       // EDIT PLAN
+
       {
         path:
           'subscription-plans/:id/edit',
@@ -101,10 +114,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-form/plan-form'
-          ).then(
-            m =>
-              m.PlanFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PlanFormComponent
+            ),
 
         data: {
 
@@ -119,6 +133,7 @@ export const routes: Routes = [
 
 
       // PLAN DETAILS
+
       {
         path:
           'subscription-plans/:id',
@@ -126,10 +141,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-details/plan-details'
-          ).then(
-            m =>
-              m.PlanDetailsComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PlanDetailsComponent
+            ),
 
         data: {
 
@@ -144,6 +160,7 @@ export const routes: Routes = [
 
 
       // PLAN LIST
+
       {
         path:
           'subscription-plans',
@@ -151,10 +168,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/subscription-plans/pages/plan-list/plan-list'
-          ).then(
-            m =>
-              m.PlanListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PlanListComponent
+            ),
 
         data: {
 
@@ -174,6 +192,7 @@ export const routes: Routes = [
 
 
       // CREATE TENANT
+
       {
         path:
           'tenants/new',
@@ -181,10 +200,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-form/tenant-form'
-          ).then(
-            m =>
-              m.TenantFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.TenantFormComponent
+            ),
 
         data: {
 
@@ -199,6 +219,7 @@ export const routes: Routes = [
 
 
       // EDIT TENANT
+
       {
         path:
           'tenants/:id/edit',
@@ -206,10 +227,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-form/tenant-form'
-          ).then(
-            m =>
-              m.TenantFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.TenantFormComponent
+            ),
 
         data: {
 
@@ -224,6 +246,7 @@ export const routes: Routes = [
 
 
       // TENANT DETAILS
+
       {
         path:
           'tenants/:id',
@@ -231,10 +254,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-details/tenant-details'
-          ).then(
-            m =>
-              m.TenantDetailsComponent
-          ),
+          )
+            .then(
+              m =>
+                m.TenantDetailsComponent
+            ),
 
         data: {
 
@@ -249,6 +273,7 @@ export const routes: Routes = [
 
 
       // TENANT LIST
+
       {
         path:
           'tenants',
@@ -256,10 +281,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/tenants/pages/tenant-list/tenant-list'
-          ).then(
-            m =>
-              m.TenantListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.TenantListComponent
+            ),
 
         data: {
 
@@ -284,10 +310,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/subscriptions/subscription-list/subscription-list'
-          ).then(
-            m =>
-              m.SubscriptionListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.SubscriptionListComponent
+            ),
 
         data: {
 
@@ -303,14 +330,11 @@ export const routes: Routes = [
 
       // =====================================================
       // PLATFORM ACCOUNTS
-      //
-      // SaaS / TENANT BILLING
-      //
-      // Completely separate from Gym Accounts.
       // =====================================================
 
 
-      // PLATFORM ACCOUNTS DEFAULT
+      // DEFAULT
+
       {
         path:
           'accounts',
@@ -323,7 +347,8 @@ export const routes: Routes = [
       },
 
 
-      // PLATFORM CREATE PAYMENT
+      // CREATE PAYMENT
+
       {
         path:
           'accounts/payments/new',
@@ -331,10 +356,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/accounts/pages/payment-form/payment-form'
-          ).then(
-            m =>
-              m.PaymentFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PaymentFormComponent
+            ),
 
         data: {
 
@@ -348,7 +374,8 @@ export const routes: Routes = [
       },
 
 
-      // PLATFORM PAYMENTS
+      // PAYMENTS
+
       {
         path:
           'accounts/payments',
@@ -356,10 +383,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/accounts/pages/payment-list/payment-list'
-          ).then(
-            m =>
-              m.PaymentListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PaymentListComponent
+            ),
 
         data: {
 
@@ -373,7 +401,8 @@ export const routes: Routes = [
       },
 
 
-      // PLATFORM INVOICE DETAILS
+      // INVOICE DETAILS
+
       {
         path:
           'accounts/invoices/:id',
@@ -381,10 +410,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/accounts/pages/invoice-details/invoice-details'
-          ).then(
-            m =>
-              m.InvoiceDetailsComponent
-          ),
+          )
+            .then(
+              m =>
+                m.InvoiceDetailsComponent
+            ),
 
         data: {
 
@@ -398,7 +428,8 @@ export const routes: Routes = [
       },
 
 
-      // PLATFORM INVOICE LIST
+      // INVOICE LIST
+
       {
         path:
           'accounts/invoices',
@@ -406,10 +437,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/platform/accounts/pages/invoice/invoice-list'
-          ).then(
-            m =>
-              m.InvoiceListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.InvoiceListComponent
+            ),
 
         data: {
 
@@ -420,36 +452,15 @@ export const routes: Routes = [
             'View tenant invoices and outstanding balances'
 
         }
-      },
-
-
-      // =====================================================
-      // PLATFORM SETTINGS
-      // =====================================================
-
-      {
-        path:
-          'settings',
-
-        loadComponent: () =>
-          import(
-            './features/platform/dashboard/dashboard'
-          ).then(
-            m =>
-              m.PlatformDashboardComponent
-          ),
-
-        data: {
-
-          title:
-            'Platform Settings',
-
-          description:
-            'Configure platform settings'
-
-        }
       }
 
+
+      /*
+       * SETTINGS REMOVED
+       *
+       * Theme control is now available
+       * directly in the sidebar.
+       */
 
     ]
 
@@ -461,7 +472,8 @@ export const routes: Routes = [
   // =====================================================
 
   {
-    path: '',
+    path:
+      '',
 
     component:
       AppLayoutComponent,
@@ -470,13 +482,18 @@ export const routes: Routes = [
 
 
       // =================================================
-      // DEFAULT GYM ROUTE
+      // DEFAULT
       // =================================================
 
       {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'dashboard'
+        path:
+          '',
+
+        pathMatch:
+          'full',
+
+        redirectTo:
+          'dashboard'
       },
 
 
@@ -491,10 +508,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/dashboard/dashboard'
-          ).then(
-            m =>
-              m.DashboardComponent
-          ),
+          )
+            .then(
+              m =>
+                m.DashboardComponent
+            ),
 
         data: {
 
@@ -514,6 +532,7 @@ export const routes: Routes = [
 
 
       // ADD MEMBER
+
       {
         path:
           'members/new',
@@ -521,10 +540,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/members/pages/add-member/add-member'
-          ).then(
-            m =>
-              m.AddMemberComponent
-          ),
+          )
+            .then(
+              m =>
+                m.AddMemberComponent
+            ),
 
         data: {
 
@@ -539,6 +559,7 @@ export const routes: Routes = [
 
 
       // MEMBER DETAILS
+
       {
         path:
           'members/:id',
@@ -546,10 +567,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/members/pages/member-details/member-details'
-          ).then(
-            m =>
-              m.MemberDetailsComponent
-          ),
+          )
+            .then(
+              m =>
+                m.MemberDetailsComponent
+            ),
 
         data: {
 
@@ -564,6 +586,7 @@ export const routes: Routes = [
 
 
       // MEMBER LIST
+
       {
         path:
           'members',
@@ -571,10 +594,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/members/pages/member-list/member-list'
-          ).then(
-            m =>
-              m.MembersListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.MembersListComponent
+            ),
 
         data: {
 
@@ -588,7 +612,10 @@ export const routes: Routes = [
       },
 
 
+      // =====================================================
       // RENEWALS
+      // =====================================================
+
       {
         path:
           'renewals',
@@ -596,10 +623,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/members/pages/renewals/renewals'
-          ).then(
-            m =>
-              m.RenewalsComponent
-          ),
+          )
+            .then(
+              m =>
+                m.RenewalsComponent
+            ),
 
         data: {
 
@@ -619,6 +647,7 @@ export const routes: Routes = [
 
 
       // NEW ENQUIRY
+
       {
         path:
           'enquiries/new',
@@ -626,10 +655,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/enquiries/pages/quick-enquiry/quick-enquiry'
-          ).then(
-            m =>
-              m.QuickEnquiryComponent
-          ),
+          )
+            .then(
+              m =>
+                m.QuickEnquiryComponent
+            ),
 
         data: {
 
@@ -644,6 +674,7 @@ export const routes: Routes = [
 
 
       // EDIT ENQUIRY
+
       {
         path:
           'enquiries/:id/edit',
@@ -651,10 +682,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/enquiries/pages/edit-enquiry/edit-enquiry'
-          ).then(
-            m =>
-              m.EditEnquiryComponent
-          ),
+          )
+            .then(
+              m =>
+                m.EditEnquiryComponent
+            ),
 
         data: {
 
@@ -669,6 +701,7 @@ export const routes: Routes = [
 
 
       // ENQUIRY LIST
+
       {
         path:
           'enquiries',
@@ -676,10 +709,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/enquiries/pages/enquiry-list/enquiry-list'
-          ).then(
-            m =>
-              m.EnquiryListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.EnquiryListComponent
+            ),
 
         data: {
 
@@ -699,6 +733,7 @@ export const routes: Routes = [
 
 
       // NEW VISITOR
+
       {
         path:
           'visitors/new',
@@ -706,10 +741,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/visitors/pages/visitor-entry/visitor-entry'
-          ).then(
-            m =>
-              m.VisitorEntryComponent
-          ),
+          )
+            .then(
+              m =>
+                m.VisitorEntryComponent
+            ),
 
         data: {
 
@@ -724,6 +760,7 @@ export const routes: Routes = [
 
 
       // VISITOR LIST
+
       {
         path:
           'visitors',
@@ -731,10 +768,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/visitors/pages/visitor-list/visitor-list'
-          ).then(
-            m =>
-              m.VisitorListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.VisitorListComponent
+            ),
 
         data: {
 
@@ -754,6 +792,7 @@ export const routes: Routes = [
 
 
       // ADD STAFF
+
       {
         path:
           'staff/add',
@@ -761,10 +800,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/staff/pages/staff-form/staff-form'
-          ).then(
-            m =>
-              m.StaffFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.StaffFormComponent
+            ),
 
         data: {
 
@@ -779,6 +819,7 @@ export const routes: Routes = [
 
 
       // EDIT STAFF
+
       {
         path:
           'staff/:id/edit',
@@ -786,10 +827,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/staff/pages/staff-form/staff-form'
-          ).then(
-            m =>
-              m.StaffFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.StaffFormComponent
+            ),
 
         data: {
 
@@ -804,6 +846,7 @@ export const routes: Routes = [
 
 
       // STAFF DETAILS
+
       {
         path:
           'staff/:id',
@@ -811,10 +854,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/staff/pages/staff-details/staff-details'
-          ).then(
-            m =>
-              m.StaffDetailsComponent
-          ),
+          )
+            .then(
+              m =>
+                m.StaffDetailsComponent
+            ),
 
         data: {
 
@@ -829,6 +873,7 @@ export const routes: Routes = [
 
 
       // STAFF LIST
+
       {
         path:
           'staff',
@@ -836,10 +881,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/staff/pages/staff-list/staff-list'
-          ).then(
-            m =>
-              m.StaffListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.StaffListComponent
+            ),
 
         data: {
 
@@ -855,31 +901,31 @@ export const routes: Routes = [
 
       // =====================================================
       // ATTENDANCE
-      //
-      // Temporary placeholder until the attendance page
-      // is connected here.
       // =====================================================
 
-      // =====================================================
-// ATTENDANCE
-// =====================================================
+      {
+        path:
+          'attendance',
 
-{
-  path: 'attendance',
+        loadComponent: () =>
+          import(
+            './features/attendance/attendance-list/attendance-list'
+          )
+            .then(
+              m =>
+                m.AttendanceListComponent
+            ),
 
-  loadComponent: () =>
-    import(
-      './features/attendance/attendance-list/attendance-list'
-    ).then(
-      m => m.AttendanceListComponent
-    ),
+        data: {
 
-  data: {
-    title: 'Attendance',
-    description:
-      'Weekly attendance for members and staff'
-  }
-},
+          title:
+            'Attendance',
+
+          description:
+            'Weekly and monthly attendance for members and staff'
+
+        }
+      },
 
 
       // =====================================================
@@ -887,9 +933,7 @@ export const routes: Routes = [
       // =====================================================
 
 
-      // =================================================
       // ACCOUNTS DEFAULT
-      // =================================================
 
       {
         path:
@@ -914,10 +958,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/accounts-overview/accounts-overview'
-          ).then(
-            m =>
-              m.AccountsOverviewComponent
-          ),
+          )
+            .then(
+              m =>
+                m.AccountsOverviewComponent
+            ),
 
         data: {
 
@@ -938,8 +983,8 @@ export const routes: Routes = [
 
       // CREATE INVOICE
       //
-      // IMPORTANT:
-      // Keep before accounts/invoices/:id
+      // Must stay before :id route.
+
       {
         path:
           'accounts/invoices/new',
@@ -947,10 +992,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/invoices/invoice-form/invoice-form'
-          ).then(
-            m =>
-              m.InvoiceFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.InvoiceFormComponent
+            ),
 
         data: {
 
@@ -966,8 +1012,8 @@ export const routes: Routes = [
 
       // RECORD PAYMENT
       //
-      // IMPORTANT:
-      // Keep before accounts/invoices/:id
+      // Must stay before :id route.
+
       {
         path:
           'accounts/invoices/:id/payment',
@@ -975,10 +1021,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/payments/payment-form/payment-form'
-          ).then(
-            m =>
-              m.PaymentFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PaymentFormComponent
+            ),
 
         data: {
 
@@ -993,6 +1040,7 @@ export const routes: Routes = [
 
 
       // INVOICE DETAILS
+
       {
         path:
           'accounts/invoices/:id',
@@ -1000,10 +1048,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/invoices/invoice-details/invoice-details'
-          ).then(
-            m =>
-              m.InvoiceDetailsComponent
-          ),
+          )
+            .then(
+              m =>
+                m.InvoiceDetailsComponent
+            ),
 
         data: {
 
@@ -1018,6 +1067,7 @@ export const routes: Routes = [
 
 
       // INVOICE LIST
+
       {
         path:
           'accounts/invoices',
@@ -1025,10 +1075,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/invoices/invoice-list/invoice-list'
-          ).then(
-            m =>
-              m.InvoiceListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.InvoiceListComponent
+            ),
 
         data: {
 
@@ -1053,10 +1104,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/payments/payment-list/payment-list'
-          ).then(
-            m =>
-              m.PaymentListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.PaymentListComponent
+            ),
 
         data: {
 
@@ -1076,8 +1128,7 @@ export const routes: Routes = [
 
 
       // CREATE EXPENSE
-      //
-      // Keep before accounts/expenses
+
       {
         path:
           'accounts/expenses/new',
@@ -1085,10 +1136,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/expenses/expense-list/expense-form/expense-form'
-          ).then(
-            m =>
-              m.ExpenseFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.ExpenseFormComponent
+            ),
 
         data: {
 
@@ -1103,6 +1155,7 @@ export const routes: Routes = [
 
 
       // EXPENSE LIST
+
       {
         path:
           'accounts/expenses',
@@ -1110,10 +1163,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/expenses/expense-list/expense-list'
-          ).then(
-            m =>
-              m.ExpenseListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.ExpenseListComponent
+            ),
 
         data: {
 
@@ -1133,16 +1187,6 @@ export const routes: Routes = [
 
 
       // PROCESS REFUND
-      //
-      // IMPORTANT:
-      // Keep before accounts/refunds
-      //
-      // Example:
-      //
-      // /accounts/refunds/new/1
-      //
-      // where 1 is paymentId.
-      // =================================================
 
       {
         path:
@@ -1151,10 +1195,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/refunds/refund-form/refund-form'
-          ).then(
-            m =>
-              m.RefundFormComponent
-          ),
+          )
+            .then(
+              m =>
+                m.RefundFormComponent
+            ),
 
         data: {
 
@@ -1169,6 +1214,7 @@ export const routes: Routes = [
 
 
       // REFUND LIST
+
       {
         path:
           'accounts/refunds',
@@ -1176,10 +1222,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/accounts/pages/refunds/refund-list/refund-list'
-          ).then(
-            m =>
-              m.RefundListComponent
-          ),
+          )
+            .then(
+              m =>
+                m.RefundListComponent
+            ),
 
         data: {
 
@@ -1191,39 +1238,39 @@ export const routes: Routes = [
 
         }
       },
+
+
       // =====================================================
-// PAYMENT METHODS
-// =====================================================
+      // PAYMENT METHODS
+      // =====================================================
 
-{
-  path:
-    'accounts/payment-methods',
+      {
+        path:
+          'accounts/payment-methods',
 
-  loadComponent: () =>
-    import(
-      './features/accounts/pages/payment-methods/payment-method-list/payment-method-list'
-    ).then(
-      m =>
-        m.PaymentMethodListComponent
-    ),
+        loadComponent: () =>
+          import(
+            './features/accounts/pages/payment-methods/payment-method-list/payment-method-list'
+          )
+            .then(
+              m =>
+                m.PaymentMethodListComponent
+            ),
 
-  data: {
+        data: {
 
-    title:
-      'Payment Methods',
+          title:
+            'Payment Methods',
 
-    description:
-      'Configure payment methods available for gym transactions'
+          description:
+            'Configure payment methods available for gym transactions'
 
-  }
-},
+        }
+      },
 
 
       // =====================================================
       // LEGACY PAYMENT ROUTE
-      //
-      // Existing old sidebar/bookmarks using /payments
-      // will automatically use the new Accounts page.
       // =====================================================
 
       {
@@ -1255,90 +1302,87 @@ export const routes: Routes = [
 
 
       // =====================================================
-      // GYM MEMBERSHIP PLANS
-      //
-      // Temporary placeholder.
-      //
-      // This is different from Platform subscription plans.
+      // MEMBERSHIP PLANS
       // =====================================================
 
-     // =====================================================
-// MEMBERSHIP PLANS
-// =====================================================
+      {
+        path:
+          'plans',
 
+        loadComponent: () =>
+          import(
+            './features/plans/pages/plan-list/plan-list'
+          )
+            .then(
+              m =>
+                m.PlanListComponent
+            ),
+
+        data: {
+
+          title:
+            'Plans',
+
+          description:
+            'Manage membership plans and pricing'
+
+        }
+      },
+
+      
 {
-  path: 'plans',
+  path: 'equipment',
 
   loadComponent: () =>
     import(
-      './features/plans/pages/plan-list/plan-list'
+      './features/equipment/pages/equipment-list/equipment-list'
     ).then(
-      m => m.PlanListComponent
+      m => m.EquipmentListComponent
     ),
 
   data: {
-    title: 'Plans',
-    description:
-      'Manage membership plans and pricing'
+    title: 'Equipment',
+    description: 'Equipment inventory and maintenance'
   }
 },
+
 
 
       // =====================================================
       // REPORTS
       // =====================================================
 
-      // =====================================================
-// REPORTS
-// =====================================================
-
-{
-  path: 'reports',
-
-  loadComponent: () =>
-    import(
-      './features/reports/pages/reports-dashboard/reports-dashboard'
-    ).then(
-      m =>
-        m.ReportsDashboardComponent
-    ),
-
-  data: {
-    title: 'Reports',
-
-    description:
-      'Financial, membership and attendance reports'
-  }
-},
-
-
-      // =====================================================
-      // SETTINGS
-      // =====================================================
-
       {
         path:
-          'settings',
+          'reports',
 
         loadComponent: () =>
           import(
-            './features/dashboard/dashboard'
-          ).then(
-            m =>
-              m.DashboardComponent
-          ),
+            './features/reports/pages/reports-dashboard/reports-dashboard'
+          )
+            .then(
+              m =>
+                m.ReportsDashboardComponent
+            ),
 
         data: {
 
           title:
-            'Settings',
+            'Reports',
 
           description:
-            'Configure gym and application settings'
+            'Financial, membership and attendance reports'
 
         }
       }
 
+
+      /*
+       * SETTINGS REMOVED
+       *
+       * Dark / Light theme is now controlled
+       * directly from the sidebar.
+       */
 
     ]
 
@@ -1348,13 +1392,15 @@ export const routes: Routes = [
   // =====================================================
   // GLOBAL FALLBACK
   //
-  // IMPORTANT:
-  // ALWAYS KEEP THIS AS THE LAST ROUTE.
+  // Always keep this route last.
   // =====================================================
 
   {
-    path: '**',
-    redirectTo: 'dashboard'
+    path:
+      '**',
+
+    redirectTo:
+      'dashboard'
   }
 
 

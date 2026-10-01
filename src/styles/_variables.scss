@@ -1,36 +1,227 @@
-:root {
-  --bg-app: #0b0d10;
-  --bg-sidebar: #111318;
-  --bg-card: #15181e;
-  --bg-elevated: #1a1d24;
-  --border-primary: #272b33;
-  --border-secondary: #20232a;
+/* =====================================================
+   DARK THEME - DEFAULT
+===================================================== */
 
-  --text-primary: #f5f7fa;
-  --text-secondary: #9299a6;
-  --text-muted: #646b78;
+:root,
+:root[data-theme='dark'] {
 
-  --primary: #ff3b45;
-  --primary-hover: #e9323c;
-  --primary-subtle: rgba(255, 59, 69, 0.12);
-  --success: #18b981;
-  --warning: #f5a524;
-  --danger: #ef4444;
-  --info: #4f8cff;
+  color-scheme:
+    dark;
 
-  --sidebar-width: 240px;
-  --sidebar-collapsed-width: 72px;
-  --header-height: 72px;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
+  /* BACKGROUNDS */
 
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 20px;
-  --space-xl: 32px;
+  --bg-app:
+    #0b0d10;
 
-  --transition: 0.2s ease;
+  --bg-sidebar:
+    #111318;
+
+  --bg-card:
+    #15181e;
+
+  --bg-elevated:
+    #1a1d24;
+
+
+  /* BORDERS */
+
+  --border-primary:
+    #272b33;
+
+  --border-secondary:
+    #20232a;
+
+
+  /* TEXT */
+
+  --text-primary:
+    #f5f7fa;
+
+  --text-secondary:
+    #9299a6;
+
+  --text-muted:
+    #646b78;
+
+
+  /* BRAND */
+
+  --primary:
+    #ff3b45;
+
+  --primary-hover:
+    #e9323c;
+
+  --primary-subtle:
+    rgba(
+      255,
+      59,
+      69,
+      .12
+    );
+
+
+  /* STATUS */
+
+  --success:
+    #18b981;
+
+  --warning:
+    #f5a524;
+
+  --danger:
+    #ef4444;
+
+  --info:
+    #4f8cff;
+
+
+  /* INPUT */
+
+  --input-color-scheme:
+    dark;
+
+  --calendar-icon-filter:
+    grayscale(1)
+    brightness(1.8);
+
+
+  /* LAYOUT */
+
+  --sidebar-width:
+    240px;
+
+  --sidebar-collapsed-width:
+    72px;
+
+  --header-height:
+    72px;
+
+
+  /* RADIUS */
+
+  --radius-sm:
+    4px;
+
+  --radius-md:
+    8px;
+
+  --radius-lg:
+    10px;
+
+
+  /* SPACING */
+
+  --space-xs:
+    4px;
+
+  --space-sm:
+    8px;
+
+  --space-md:
+    16px;
+
+  --space-lg:
+    20px;
+
+  --space-xl:
+    32px;
+
+
+  /* ANIMATION */
+
+  --transition:
+    .2s ease;
+
+}
+
+
+/* =====================================================
+   LIGHT THEME
+===================================================== */
+
+:root[data-theme='light'] {
+
+  color-scheme:
+    light;
+
+
+  /* BACKGROUNDS */
+
+  --bg-app:
+    #f5f7fb;
+
+  --bg-sidebar:
+    #ffffff;
+
+  --bg-card:
+    #ffffff;
+
+  --bg-elevated:
+    #f0f3f8;
+
+
+  /* BORDERS */
+
+  --border-primary:
+    #d9dee8;
+
+  --border-secondary:
+    #e9ecf2;
+
+
+  /* TEXT */
+
+  --text-primary:
+    #171a21;
+
+  --text-secondary:
+    #555f70;
+
+  --text-muted:
+    #8790a0;
+
+
+  /* BRAND */
+
+  --primary:
+    #f52d3d;
+
+  --primary-hover:
+    #dc2635;
+
+  --primary-subtle:
+    rgba(
+      245,
+      45,
+      61,
+      .09
+    );
+
+
+  /* STATUS */
+
+  --success:
+    #059669;
+
+  --warning:
+    #d97706;
+
+  --danger:
+    #dc2626;
+
+  --info:
+    #2563eb;
+
+
+  /* INPUT */
+
+  --input-color-scheme:
+    light;
+
+  --calendar-icon-filter:
+    grayscale(1)
+    brightness(.55);
+
 }
