@@ -1,0 +1,178 @@
+<section class="booking-workspace">
+  @if (classes.length) {
+    <div class="booking-toolbar">
+      <label for="booking-class">Class</label>
+      <select id="booking-class" [ngModel]="selectedClassId" (ngModelChange)="selectClass($event)">
+        @for (classItem of classes; track classItem.class_id) {
+          <option [ngValue]="classItem.class_id">{{ classOptionLabel(classItem) }}</option>
+        }
+      </select>
+    </div>
+  }
+
+  @if (selectedClass; as classItem) {
+    <section class="booking-panel">
+      <header class="class-summary">
+        <div>
+          <h2>{{ classService.getClassTypeName(classItem.class_type_id) }}</h2>
+          <p>{{ formatDate(classItem.class_date) }} · {{ classItem.start_time }} - {{ classItem.end_time }} · Room {{ classItem.room_number || '—' }}</p>
+        </div>
+        <span class="status-pill" [ngClass]="statusClass(classItem.status === 'cancelled' || !classService.isClassFull(classItem) ? classItem.status : 'full')">
+          {{ classItem.status === 'cancelled' ? 'Cancelled' : classService.getClassStatusLabel(classItem) }}
+        </span>
+      </header>
+
+      <div class="class-capacity" aria-label="Class capacity summary">
+        <span><small>Location</small><strong>{{ locationName(classItem.location_id) }}</strong></span>
+        <span><small>Trainer</small><strong>{{ trainerName(classItem.trainer_id) }}</strong></span>
+        <span><small>Booked</small><strong>{{ classItem.current_bookings }} / {{ classItem.max_capacity }}</strong></span>
+        <span><small>Available</small><strong>{{ availableSlots }}</strong></span>
+      </div>
+
+      <nav class="booking-tabs" aria-label="Class records">
+        <button type="button" [class.active]="activeTab === 'bookings'" (click)="activeTab = 'bookings'">Bookings</button>
+        <button type="button" [class.active]="activeTab === 'waitlist'" (click)="activeTab = 'waitlist'">Waitlist</button>
+      </nav>
+
+      @if (activeTab === 'bookings') {
+        <section class="records-section">
+          <div class="section-toolbar">
+            <span>{{ selectedClassBookings.length }} bookings</span>
+            <button type="button" class="btn btn-primary" [disabled]="classItem.status === 'cancelled' || availableSlots === 0" (click)="openCreateBooking()">+ Create Booking</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="booking-table">
+              <thead>
+                <tr><th>Member</th><th>Phone</th><th>Booking Date</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                @for (booking of selectedClassBookings; track booking.booking_id) {
+                  <tr>
+                    <td>{{ memberName(booking.member_id) }}</td>
+                    <td>{{ memberPhone(booking.member_id) }}</td>
+                    <td>{{ formatDateTime(booking.booking_date) }}</td>
+                    <td>
+                      <span class="status-pill" [ngClass]="statusClass(booking.status)">{{ bookingStatusLabel(booking.status) }}</span>
+                      @if (booking.status === 'cancelled' && booking.cancellation_reason) {
+                        <small class="record-note">{{ booking.cancellation_reason }}</small>
+                      }
+                    </td>
+                    <td>
+                      <div class="inline-actions">
+                        @if (booking.status === 'confirmed') {
+                          <button type="button" class="action-link" [disabled]="!canMarkAttendance(booking, 'attended')" (click)="updateBookingStatus(booking.booking_id, 'attended')">Attended</button>
+                          <button type="button" class="action-link" [disabled]="!canMarkAttendance(booking, 'no_show')" (click)="updateBookingStatus(booking.booking_id, 'no_show')">No Show</button>
+                          <button type="button" class="action-link danger" (click)="openCancelBooking(booking)">Cancel</button>
+                        } @else {
+                          <span>—</span>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="5" class="empty-state">No bookings for this class.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      } @else {
+        <section class="records-section">
+          <div class="section-toolbar">
+            <span>{{ selectedClassWaitlist.length }} waitlist entries</span>
+            <button type="button" class="btn btn-primary" [disabled]="classItem.status === 'cancelled' || !classService.isClassFull(classItem)" (click)="openAddToWaitlist()">+ Add to Waitlist</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="booking-table">
+              <thead>
+                <tr><th>Position</th><th>Member</th><th>Phone</th><th>Added</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                @for (entry of selectedClassWaitlist; track entry.waitlist_id) {
+                  <tr>
+                    <td>{{ entry.position }}</td>
+                    <td>{{ memberName(entry.member_id) }}</td>
+                    <td>{{ memberPhone(entry.member_id) }}</td>
+                    <td>{{ formatDateTime(entry.added_date) }}</td>
+                    <td><span class="status-pill" [ngClass]="statusClass(entry.status)">{{ waitlistStatusLabel(entry.status) }}</span></td>
+                    <td>
+                      @if (entry.status === 'waiting') {
+                        <div class="inline-actions">
+                          <button type="button" class="action-link" [disabled]="classItem.status === 'cancelled' || availableSlots === 0" (click)="confirmWaitlistEntry(entry.waitlist_id)">Confirm</button>
+                          <button type="button" class="action-link danger" (click)="expireWaitlistEntry(entry.waitlist_id)">Expire</button>
+                        </div>
+                      } @else {
+                        <span>—</span>
+                      }
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="6" class="empty-state">No waitlist entries for this class.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+    </section>
+  } @else {
+    <div class="empty-state">No classes are available for this tenant.</div>
+  }
+</section>
+
+@if (showMemberModal) {
+  <div class="modal-backdrop" (click)="closeMemberModal()">
+    <section class="modal-shell member-modal" role="dialog" aria-modal="true" aria-labelledby="member-picker-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <h2 id="member-picker-title">{{ memberSelectionPurpose === 'booking' ? 'Create Booking' : 'Add to Waitlist' }}</h2>
+          <p>{{ selectedClass ? classOptionLabel(selectedClass) : '' }}</p>
+        </div>
+        <button type="button" class="icon-close" aria-label="Close member selection" (click)="closeMemberModal()">×</button>
+      </header>
+      <div class="modal-body member-picker-body">
+        <input type="search" [(ngModel)]="memberSearchText" placeholder="Search member name or phone" aria-label="Search members" />
+        <div class="member-list">
+          @for (member of filteredMembers; track member.memberId) {
+            <button type="button" class="member-option" [disabled]="!isMemberSelectable(member.memberId)" (click)="createBookingForMember(member.memberId)">
+              <span>{{ member.firstName }} {{ member.lastName }}</span>
+              <small>{{ member.phone }}</small>
+              @if (!isMemberSelectable(member.memberId)) { <small>Already booked or waitlisted</small> }
+            </button>
+          } @empty {
+            <div class="empty-state">No members found.</div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+}
+
+@if (showCancellationModal) {
+  <div class="modal-backdrop" (click)="closeCancellationModal()">
+    <section class="modal-shell cancellation-modal" role="dialog" aria-modal="true" aria-labelledby="booking-cancel-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div><h2 id="booking-cancel-title">Cancel Booking</h2><p>Enter a reason for this cancellation.</p></div>
+        <button type="button" class="icon-close" aria-label="Close cancellation form" (click)="closeCancellationModal()">×</button>
+      </header>
+      <div class="modal-body">
+        <label for="booking-cancellation-reason">Cancellation reason *</label>
+        <textarea id="booking-cancellation-reason" [(ngModel)]="cancellationReason" rows="3"></textarea>
+        @if (!cancellationReason.trim()) { <small class="error-text">A cancellation reason is required.</small> }
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-ghost" (click)="closeCancellationModal()">Keep Booking</button>
+        <button type="button" class="btn btn-danger" [disabled]="!cancellationReason.trim()" (click)="confirmCancelBooking()">Cancel Booking</button>
+      </footer>
+    </section>
+  </div>
+}
+
+@if (toastMessage) {
+  <div class="toast" role="status">
+    <span>{{ toastMessage }}</span>
+    <button type="button" aria-label="Dismiss toast" (click)="clearToast()">×</button>
+  </div>
+}

@@ -900,6 +900,95 @@ export const routes: Routes = [
 
 
       // =====================================================
+      // CLASSES
+      // =====================================================
+
+      {
+        path:
+          'classes',
+
+        loadComponent: () =>
+          import(
+            './features/classes/pages/class-list/class-list'
+          )
+            .then(
+              m =>
+                m.ClassListComponent
+            ),
+
+        data: {
+
+          title:
+            'Classes',
+
+          description:
+            'Manage schedules, bookings and waitlists'
+
+        }
+      },
+
+      {
+        path:
+          'classes/bookings',
+
+        loadComponent: () =>
+          import(
+            './features/classes/pages/class-bookings/class-bookings'
+          )
+            .then(
+              m =>
+                m.ClassBookingsComponent
+            ),
+
+        data: {
+
+          title:
+            'Class Bookings',
+
+          description:
+            'Manage class bookings and waitlists',
+
+          breadcrumbParent:
+            'Classes',
+
+          breadcrumbParentUrl:
+            '/classes'
+
+        }
+      },
+
+      {
+        path:
+          'classes/types',
+
+        loadComponent: () =>
+          import(
+            './features/classes/pages/class-types/class-types'
+          )
+            .then(
+              m =>
+                m.ClassTypesComponent
+            ),
+
+        data: {
+
+          title:
+            'Manage Class Types',
+
+          description:
+            'Manage the gym class catalog',
+
+          breadcrumbParent:
+            'Classes',
+
+          breadcrumbParentUrl:
+            '/classes'
+
+        }
+      },
+
+
+      // =====================================================
       // ATTENDANCE
       // =====================================================
 

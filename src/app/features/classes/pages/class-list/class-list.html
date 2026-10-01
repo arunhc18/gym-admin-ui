@@ -1,0 +1,615 @@
+<div class="classes-page">
+  <section class="stats-grid" aria-label="Class summary metrics">
+    <article class="stat-card">
+      <span>Today's Classes</span>
+      <strong>{{ todayClasses }}</strong>
+    </article>
+
+    <article class="stat-card">
+      <span>Scheduled</span>
+      <strong>{{ scheduledClasses }}</strong>
+    </article>
+
+    <article class="stat-card">
+      <span>Confirmed Bookings</span>
+      <strong>{{ totalBookings }}</strong>
+    </article>
+
+    <article class="stat-card">
+      <span>Waitlisted</span>
+      <strong>{{ waitlistedMembers }}</strong>
+    </article>
+  </section>
+
+  <section class="classes-panel">
+    <div class="panel-topbar">
+      <div class="view-toggle" aria-label="Select class view">
+        <button type="button" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">Today</button>
+        <button type="button" [class.active]="viewMode === 'week'" (click)="viewMode = 'week'">Week</button>
+        <button type="button" [class.active]="viewMode === 'calendar'" (click)="viewMode = 'calendar'">Calendar</button>
+      </div>
+
+      <div class="panel-actions">
+        <button type="button" class="btn btn-primary" (click)="openCreateClass()">+ Create Class</button>
+      </div>
+    </div>
+
+    <div class="filters-wrap">
+      <div class="filter-field search-field">
+        <input
+          type="search"
+          [(ngModel)]="searchText"
+          placeholder="Search name, trainer, room or location"
+          aria-label="Search classes"
+        />
+      </div>
+
+      <div class="filter-field">
+        <select [(ngModel)]="filterLocation" aria-label="Filter by location">
+          <option value="">All Locations</option>
+          @for (location of locations; track location.locationId) {
+            <option [value]="location.locationId">{{ location.locationName }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <select [(ngModel)]="filterType" aria-label="Filter by class type">
+          <option value="">All Class Types</option>
+          @for (classType of classTypes; track classType.class_type_id) {
+            <option [value]="classType.class_type_id">{{ classType.class_name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <select [(ngModel)]="filterTrainer" aria-label="Filter by trainer">
+          <option value="">All Trainers</option>
+          @for (trainer of trainers; track trainer.trainerId) {
+            <option [value]="trainer.trainerId">{{ trainer.fullName }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <select [(ngModel)]="filterStatus" aria-label="Filter by status">
+          <option value="">All Status</option>
+          <option value="scheduled">Scheduled</option>
+          <option value="ongoing">Ongoing</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="full">Full</option>
+        </select>
+      </div>
+
+      <div class="filter-field date-field">
+        <input type="date" [(ngModel)]="filterDate" aria-label="Filter by date" />
+      </div>
+
+      <button type="button" class="btn btn-ghost" (click)="clearFilters()">Clear</button>
+    </div>
+
+    @if (viewMode === 'list') {
+      <div class="table-wrap">
+        <table class="classes-table">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Date &amp; Time</th>
+              <th>Trainer</th>
+              <th>Location</th>
+              <th>Room</th>
+              <th>Capacity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (classItem of filteredClasses; track classItem.class_id) {
+              <tr (click)="openClassDetails(classItem.class_id)" class="clickable-row">
+                <td>
+                  <div class="class-name-cell">
+                    <span class="type-dot" [style.background]="classTypes.find(type => type.class_type_id === classItem.class_type_id)?.color_code || '#ff3b45'"></span>
+                    <div>
+                      <strong>{{ classService.getClassTypeName(classItem.class_type_id) }}</strong>
+                      <small>{{ classItem.is_virtual ? 'Virtual' : 'In-person' }}</small>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="date-time-cell">
+                    <strong>{{ formatDate(classItem.class_date) }}</strong>
+                    <small>{{ formatTimeRange(classItem.start_time, classItem.end_time) }}</small>
+                  </div>
+                </td>
+
+                <td>{{ getTrainerName(classItem.trainer_id) }}</td>
+                <td>{{ getLocationName(classItem.location_id) }}</td>
+                <td>{{ classItem.room_number || '—' }}</td>
+                <td>
+                  <span class="capacity-cell">
+                    {{ classItem.current_bookings }} / {{ classItem.max_capacity }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="list-row-actions">
+                    @if (classItem.status !== 'cancelled' && classService.isClassFull(classItem)) {
+                      <span class="status-pill status-full">Full</span>
+                    } @else {
+                      <span class="status-pill" [ngClass]="getStatusClass(classItem.status)">{{ classItem.status }}</span>
+                    }
+
+                    <div class="list-inline-actions">
+                      <button type="button" class="mini-action" (click)="$event.stopPropagation(); editClassSession(classItem)">Edit</button>
+                      @if (classItem.status !== 'cancelled') {
+                        <button type="button" class="mini-action danger" (click)="$event.stopPropagation(); cancelSingleClass(classItem)">Cancel</button>
+                      }
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="empty-state">No classes match the current filters.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else if (viewMode === 'week') {
+      <div class="week-grid">
+        @for (day of weekDates; track day.key) {
+          <div class="day-column">
+            <div class="day-header">
+              <strong>{{ day.label }}</strong>
+              <span>{{ formatDate(day.key) }}</span>
+            </div>
+
+            @if (day.classes.length === 0) {
+              <div class="no-class-card">No class</div>
+            } @else {
+              @for (classItem of day.classes; track classItem.class_id) {
+                <div class="class-card" (click)="openClassDetails(classItem.class_id)">
+                  <div class="class-card-top">
+                    <span class="mini-dot" [style.background]="classTypes.find(type => type.class_type_id === classItem.class_type_id)?.color_code || '#ff3b45'"></span>
+                    <strong>{{ classService.getClassTypeName(classItem.class_type_id) }}</strong>
+                  </div>
+                  <span>{{ classItem.start_time }} - {{ classItem.end_time }}</span>
+                  <small>{{ getTrainerName(classItem.trainer_id) }}</small>
+                  <small>{{ classItem.current_bookings }} / {{ classItem.max_capacity }} bookings</small>
+                  <div class="class-card-footer">
+                    @if (classItem.status !== 'cancelled' && classService.isClassFull(classItem)) {
+                      <span class="status-pill status-full">Full</span>
+                    } @else {
+                      <span class="status-pill" [ngClass]="getStatusClass(classItem.status)">{{ classItem.status }}</span>
+                    }
+
+                    <div class="card-actions">
+                      <button type="button" class="mini-action" (click)="$event.stopPropagation(); editClassSession(classItem)">Edit</button>
+                      @if (classItem.status !== 'cancelled') {
+                        <button type="button" class="mini-action danger" (click)="$event.stopPropagation(); cancelSingleClass(classItem)">Cancel</button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="calendar-nav">
+        <button type="button" class="icon-button" (click)="previousCalendarWeek()" aria-label="Previous week">‹</button>
+        <div class="calendar-range">
+          <span>Week of</span>
+          <strong>{{ formatWeekRange(calendarWeekStart) }}</strong>
+        </div>
+        <button type="button" class="icon-button" (click)="nextCalendarWeek()" aria-label="Next week">›</button>
+      </div>
+
+      <div class="week-grid calendar-grid">
+        @for (day of calendarWeekDates; track day.key) {
+          <div class="day-column">
+            <div class="day-header">
+              <strong>{{ day.label }}</strong>
+              <span>{{ formatDate(day.key) }}</span>
+            </div>
+
+            @if (day.classes.length === 0) {
+              <div class="no-class-card">No class</div>
+            } @else {
+              @for (classItem of day.classes; track classItem.class_id) {
+                <div class="class-card" (click)="openClassDetails(classItem.class_id)">
+                  <div class="class-card-top">
+                    <span class="mini-dot" [style.background]="classTypes.find(type => type.class_type_id === classItem.class_type_id)?.color_code || '#ff3b45'"></span>
+                    <strong>{{ classService.getClassTypeName(classItem.class_type_id) }}</strong>
+                  </div>
+                  <span>{{ classItem.start_time }} - {{ classItem.end_time }}</span>
+                  <small>{{ getTrainerName(classItem.trainer_id) }}</small>
+                  <small>{{ classItem.current_bookings }} / {{ classItem.max_capacity }} bookings</small>
+                  <div class="class-card-footer">
+                    @if (classItem.status !== 'cancelled' && classService.isClassFull(classItem)) {
+                      <span class="status-pill status-full">Full</span>
+                    } @else {
+                      <span class="status-pill" [ngClass]="getStatusClass(classItem.status)">{{ classItem.status }}</span>
+                    }
+
+                    <div class="card-actions">
+                      <button type="button" class="mini-action" (click)="$event.stopPropagation(); editClassSession(classItem)">Edit</button>
+                      @if (classItem.status !== 'cancelled') {
+                        <button type="button" class="mini-action danger" (click)="$event.stopPropagation(); cancelSingleClass(classItem)">Cancel</button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+  </section>
+</div>
+
+@if (selectedClass) {
+  <div class="modal-backdrop" (click)="closeClassDetails()">
+    <section class="modal-shell class-details-modal" role="dialog" aria-modal="true" aria-labelledby="class-details-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <div class="drawer-title-row">
+            <h2 id="class-details-title">{{ classService.getClassTypeName(selectedClass.class_type_id) }}</h2>
+            @if (selectedClass.status !== 'cancelled' && classService.isClassFull(selectedClass)) {
+              <span class="status-pill status-full">Full</span>
+            } @else {
+              <span class="status-pill" [ngClass]="getStatusClass(selectedClass.status)">{{ selectedClass.status }}</span>
+            }
+          </div>
+          <p>{{ formatDate(selectedClass.class_date) }} · {{ selectedClass.start_time }} - {{ selectedClass.end_time }}</p>
+        </div>
+
+        <button type="button" class="icon-close" aria-label="Close class details" (click)="closeClassDetails()">×</button>
+      </header>
+
+      <div class="modal-body details-body">
+        <div class="detail-grid">
+          <div><span>Class Type</span><strong>{{ getClassTypeLabel(selectedClass.class_type_id) }}</strong></div>
+          <div><span>Location</span><strong>{{ getLocationName(selectedClass.location_id) }}</strong></div>
+          <div><span>Trainer</span><strong>{{ getTrainerName(selectedClass.trainer_id) }}</strong></div>
+          <div><span>Date</span><strong>{{ formatDate(selectedClass.class_date) }}</strong></div>
+          <div><span>Start Time</span><strong>{{ selectedClass.start_time }}</strong></div>
+          <div><span>End Time</span><strong>{{ selectedClass.end_time }}</strong></div>
+          <div><span>Maximum Capacity</span><strong>{{ selectedClass.max_capacity }}</strong></div>
+          <div><span>Current Bookings</span><strong>{{ selectedClass.current_bookings }}</strong></div>
+          <div><span>Room</span><strong>{{ selectedClass.room_number || 'Not assigned' }}</strong></div>
+          <div><span>Status</span><strong>{{ getClassStatusLabel(selectedClass) }}</strong></div>
+          <div><span>Mode</span><strong>{{ selectedClass.is_virtual ? 'Virtual' : 'Physical' }}</strong></div>
+          @if (selectedClass.is_virtual && selectedClass.virtual_meeting_url) {
+            <div class="full-span"><span>Virtual Meeting URL</span><strong><a [href]="selectedClass.virtual_meeting_url" target="_blank" rel="noopener noreferrer">{{ selectedClass.virtual_meeting_url }}</a></strong></div>
+          }
+          @if (selectedClass.status === 'cancelled' && selectedClass.cancellation_reason) {
+            <div class="full-span"><span>Cancellation Reason</span><strong>{{ selectedClass.cancellation_reason }}</strong></div>
+          }
+        </div>
+
+        <nav class="drawer-tabs details-tabs" aria-label="Class records">
+        <button type="button" [class.active]="drawerTab === 'bookings'" (click)="drawerTab = 'bookings'">Bookings</button>
+        <button type="button" [class.active]="drawerTab === 'waitlist'" (click)="drawerTab = 'waitlist'">Waitlist</button>
+      </nav>
+
+      @if (drawerTab === 'bookings') {
+        <section class="record-section">
+          <div class="section-toolbar">
+            <span class="section-count">{{ selectedClassBookings.length }} bookings</span>
+            <button type="button" class="btn btn-primary" [disabled]="selectedClass.status === 'cancelled' || classService.isClassFull(selectedClass)" (click)="openAddMemberToClass(selectedClass.class_id, 'booking')">+ Create Booking</button>
+          </div>
+
+          <div class="table-wrap small-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Phone</th>
+                  <th>Booking Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (booking of selectedClassBookings; track booking.booking_id) {
+                  <tr>
+                    <td>{{ getMemberName(booking.member_id) }}</td>
+                    <td>{{ getMemberPhone(booking.member_id) }}</td>
+                    <td>{{ formatBookingDate(booking.booking_date) }}</td>
+                    <td>
+                      <span class="status-pill" [ngClass]="getStatusClass(booking.status)">{{ classService.getBookingStatusLabel(booking.status) }}</span>
+                      @if (booking.status === 'cancelled' && booking.cancellation_reason) {
+                        <small class="record-note">{{ booking.cancellation_reason }}</small>
+                      }
+                    </td>
+                    <td>
+                      <div class="inline-actions">
+                        @if (booking.status === 'confirmed') {
+                          <button type="button" class="action-link" [disabled]="!canMarkAttendance(booking, 'attended')" (click)="updateBookingStatus(booking.booking_id, 'attended')">Attended</button>
+                          <button type="button" class="action-link" [disabled]="!canMarkAttendance(booking, 'no_show')" (click)="updateBookingStatus(booking.booking_id, 'no_show')">No Show</button>
+                          <button type="button" class="action-link danger" (click)="cancelClassBooking(booking.booking_id)">Cancel</button>
+                        } @else {
+                          <span class="muted-label">—</span>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5" class="empty-state">No bookings yet for this class.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+
+      @if (drawerTab === 'waitlist') {
+        <section class="record-section">
+          <div class="section-toolbar">
+            <span class="section-count">{{ selectedClassWaitlist.length }} waitlist entries</span>
+            <button type="button" class="btn btn-primary" [disabled]="selectedClass.status === 'cancelled' || !classService.isClassFull(selectedClass)" (click)="openAddMemberToClass(selectedClass.class_id, 'waitlist')">+ Add to Waitlist</button>
+          </div>
+          <div class="table-wrap small-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Member</th>
+                  <th>Phone</th>
+                  <th>Added On</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (waitlistItem of selectedClassWaitlist; track waitlistItem.waitlist_id) {
+                  <tr>
+                    <td>{{ waitlistItem.position }}</td>
+                    <td>{{ getMemberName(waitlistItem.member_id) }}</td>
+                    <td>{{ getMemberPhone(waitlistItem.member_id) }}</td>
+                    <td>{{ formatBookingDate(waitlistItem.added_date) }}</td>
+                    <td><span class="status-pill" [ngClass]="getStatusClass(waitlistItem.status)">{{ classService.getWaitlistStatusLabel(waitlistItem.status) }}</span></td>
+                    <td>
+                      @if (waitlistItem.status === 'waiting') {
+                        <div class="inline-actions">
+                          <button type="button" class="action-link" [disabled]="selectedClass.status === 'cancelled' || classService.calculateAvailableSlots(selectedClass) === 0" (click)="promoteWaitlistEntry(waitlistItem.waitlist_id)">Confirm</button>
+                          <button type="button" class="action-link danger" (click)="expireWaitlistEntry(waitlistItem.waitlist_id)">Expire</button>
+                        </div>
+                      } @else {
+                        <span class="muted-label">—</span>
+                      }
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="empty-state">No waitlist entries for this class.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+      </div>
+
+      <footer class="modal-footer details-footer">
+        <button type="button" class="btn btn-secondary" (click)="openEditClass(selectedClass)">Edit Class</button>
+        @if (selectedClass.status !== 'cancelled') {
+          <button type="button" class="btn btn-danger" (click)="cancelSelectedClass()">Cancel Class</button>
+        }
+      </footer>
+    </section>
+  </div>
+}
+
+@if (classModalOpen) {
+  <div class="modal-backdrop" (click)="closeClassModal()">
+    <section class="modal-shell class-modal" role="dialog" aria-modal="true" aria-labelledby="class-form-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <h2 id="class-form-title">{{ editingClassId === null ? 'Create Class' : 'Edit Class' }}</h2>
+          <p>Schedule a class for the gym floor.</p>
+        </div>
+        <button type="button" class="icon-close" aria-label="Close class form" (click)="closeClassModal()">×</button>
+      </header>
+
+      <form [formGroup]="classForm" (ngSubmit)="saveClass()" novalidate>
+        <div class="modal-body form-grid">
+          <div class="field-group">
+            <label>Class Type *</label>
+            <select formControlName="class_type_id">
+              <option [ngValue]="null">Select class type</option>
+              @for (classType of selectableClassTypes; track classType.class_type_id) {
+                <option [ngValue]="classType.class_type_id">{{ classType.class_name }}</option>
+              }
+            </select>
+            @if (classForm.get('class_type_id')?.touched && classForm.get('class_type_id')?.invalid) {
+              <small class="error-text">Select a class type.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label>Location *</label>
+            <select formControlName="location_id">
+              <option [ngValue]="null">Select location</option>
+              @for (location of locations; track location.locationId) {
+                <option [ngValue]="location.locationId">{{ location.locationName }}</option>
+              }
+            </select>
+            @if (classForm.get('location_id')?.touched && classForm.get('location_id')?.invalid) {
+              <small class="error-text">Select a location.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label>Trainer</label>
+            <select formControlName="trainer_id">
+              <option [ngValue]="null">Unassigned</option>
+              @for (trainer of trainers; track trainer.trainerId) {
+                <option [ngValue]="trainer.trainerId">{{ trainer.fullName }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label>Class Date *</label>
+            <input type="date" formControlName="class_date" />
+            @if (classForm.get('class_date')?.touched && classForm.get('class_date')?.invalid) {
+              <small class="error-text">Choose a class date.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label>Start Time *</label>
+            <input type="time" formControlName="start_time" />
+            @if (classForm.get('start_time')?.touched && classForm.get('start_time')?.invalid) {
+              <small class="error-text">Choose a start time.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label>End Time *</label>
+            <input type="time" formControlName="end_time" />
+            @if (classForm.get('end_time')?.touched && classForm.get('end_time')?.invalid) {
+              <small class="error-text">Choose an end time later than the start time.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label>Maximum Capacity *</label>
+            <input type="number" min="1" step="1" formControlName="max_capacity" />
+            @if (classForm.get('max_capacity')?.touched && classForm.get('max_capacity')?.invalid) {
+              <small class="error-text">Enter a positive whole-number capacity.</small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label>Room Number</label>
+            <input type="text" formControlName="room_number" maxlength="50" />
+            @if (classForm.get('room_number')?.touched && classForm.get('room_number')?.invalid) {
+              <small class="error-text">Room number is too long.</small>
+            }
+          </div>
+
+          <div class="field-group checkbox-field">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="is_virtual" />
+              <span>Virtual Class</span>
+            </label>
+          </div>
+
+          @if (classForm.get('is_virtual')?.value) {
+            <div class="field-group full-span">
+              <label>Virtual Meeting URL *</label>
+              <input type="url" formControlName="virtual_meeting_url" placeholder="https://meet.example.com/room" />
+              @if (classForm.get('virtual_meeting_url')?.touched && classForm.get('virtual_meeting_url')?.invalid) {
+                <small class="error-text">Enter a valid meeting URL.</small>
+              }
+            </div>
+          }
+
+          <div class="field-group">
+            <label>Status</label>
+            <select formControlName="status">
+              <option value="scheduled">Scheduled</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          @if (classForm.get('status')?.value === 'cancelled') {
+            <div class="field-group full-span">
+              <label>Cancellation Reason</label>
+              <textarea rows="3" formControlName="cancellation_reason" placeholder="Explain why the class was cancelled."></textarea>
+            </div>
+          }
+        </div>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-ghost" (click)="closeClassModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="classForm.invalid">Save Class</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+}
+
+@if (showMemberModal) {
+  <div class="modal-backdrop" (click)="closeMemberModal()">
+    <section class="modal-shell member-modal" role="dialog" aria-modal="true" aria-labelledby="member-add-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <h2 id="member-add-title">{{ memberSelectionPurpose === 'booking' ? 'Create Booking' : 'Add to Waitlist' }}</h2>
+          <p>Search members by name or phone.</p>
+        </div>
+        <button type="button" class="icon-close" aria-label="Close add member modal" (click)="closeMemberModal()">×</button>
+      </header>
+
+      <div class="modal-body member-modal-body">
+        <input type="search" [(ngModel)]="memberSearchText" placeholder="Search member" />
+
+        <div class="member-list">
+          @for (member of filteredMembers; track member.memberId) {
+            <button type="button" class="member-option" [disabled]="!isMemberSelectable(member.memberId)" (click)="addMemberToSelectedClass(member.memberId)">
+              <span>{{ member.firstName }} {{ member.lastName }}</span>
+              <small>{{ member.phone }}</small>
+              @if (!isMemberSelectable(member.memberId)) {
+                <small>Already booked or waitlisted</small>
+              }
+            </button>
+          } @empty {
+            <div class="empty-state">No members found.</div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+}
+
+@if (showConfirmationModal) {
+  <div class="modal-backdrop" (click)="closeConfirmationModal()">
+    <section class="modal-shell confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <h2 id="confirm-title">{{ confirmationTitle }}</h2>
+        </div>
+        <button type="button" class="icon-close" aria-label="Close confirmation" (click)="closeConfirmationModal()">×</button>
+      </header>
+
+      <div class="modal-body">
+        <p>{{ confirmationText }}</p>
+
+        @if (confirmationAction === 'cancel-class' || confirmationAction === 'cancel-booking') {
+          <label class="field-group">
+            <span>Cancellation reason{{ cancellationReasonRequired ? ' *' : '' }}</span>
+            <textarea [(ngModel)]="confirmationReason" rows="3" placeholder="Enter cancellation reason"></textarea>
+            @if (cancellationReasonRequired && !confirmationReason.trim()) {
+              <small class="error-text">A reason is required to cancel this booking.</small>
+            }
+          </label>
+        }
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-ghost" (click)="closeConfirmationModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" [disabled]="cancellationReasonRequired && !confirmationReason.trim()" (click)="confirmCancellation()">Confirm</button>
+      </footer>
+    </section>
+  </div>
+}
+
+@if (toastMessage) {
+  <div class="toast" role="status">
+    <span>{{ toastMessage }}</span>
+    <button type="button" aria-label="Dismiss toast" (click)="clearToast()">×</button>
+  </div>
+}
