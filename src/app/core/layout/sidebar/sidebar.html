@@ -443,18 +443,20 @@
     >
 
 
-      <!-- OVERVIEW - NEXT DEVELOPMENT -->
+      <!-- OVERVIEW -->
 
       <a
-  routerLink="/accounts/overview"
-  routerLinkActive="active"
-  [routerLinkActiveOptions]="{
-    exact: true
-  }"
-  (click)="selectNavigation()"
->
-  Overview
-</a>
+        routerLink="/accounts/overview"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: true
+        }"
+        (click)="selectNavigation()"
+      >
+
+        Overview
+
+      </a>
 
 
       <!-- INVOICES -->
@@ -505,31 +507,37 @@
       </a>
 
 
-      <!-- REFUNDS - FUTURE -->
+      <!-- REFUNDS -->
 
       <a
-  routerLink="/accounts/refunds"
-  routerLinkActive="active"
-  [routerLinkActiveOptions]="{
-    exact: true
-  }"
-  (click)="selectNavigation()"
->
-  Refunds
-</a>
+        routerLink="/accounts/refunds"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: true
+        }"
+        (click)="selectNavigation()"
+      >
+
+        Refunds
+
+      </a>
 
 
-      <!-- PAYMENT METHODS - FUTURE -->
-<a
-  routerLink="/accounts/payment-methods"
-  routerLinkActive="active"
-  [routerLinkActiveOptions]="{
-    exact: true
-  }"
-  (click)="selectNavigation()"
->
-  Payment Methods
-</a>
+      <!-- PAYMENT METHODS -->
+
+      <a
+        routerLink="/accounts/payment-methods"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: true
+        }"
+        (click)="selectNavigation()"
+      >
+
+        Payment Methods
+
+      </a>
+
 
     </div>
 
@@ -573,6 +581,37 @@
 
 
     </a>
+
+    
+<!-- EQUIPMENT -->
+
+<a
+  class="nav-item"
+  routerLink="/equipment"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  title="Equipment"
+  (click)="selectNavigation()"
+>
+
+  <span class="nav-icon" aria-hidden="true">
+
+    <svg viewBox="0 0 24 24">
+
+      <path
+        d="M6 8v8M9 6v12M15 6v12M18 8v8M3 10v4M21 10v4M3 12h18"
+      />
+
+    </svg>
+
+  </span>
+
+  <span class="nav-label">
+    Equipment
+  </span>
+
+</a>
+
 
 
     <!-- =====================================================
@@ -626,53 +665,18 @@
   <div class="sidebar-footer">
 
 
-    <!-- SETTINGS -->
+    <!-- =====================================================
+         DARK / LIGHT THEME
+    ====================================================== -->
 
-    <a
-      class="nav-item"
-      routerLink="/settings"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
-      title="Settings"
-      (click)="selectNavigation()"
-    >
+    <app-theme-toggle
+      [compact]="collapsed"
+    />
 
 
-      <span
-        class="nav-icon"
-        aria-hidden="true"
-      >
-
-        <svg viewBox="0 0 24 24">
-
-          <circle
-            cx="12"
-            cy="12"
-            r="3"
-          >
-          </circle>
-
-          <path
-            d="M19 12a7 7 0 0 0-.2-1.6l1.7-1.3-2-3.4-2 .8a7 7 0 0 0-2.7-1.6L13.5 3h-3l-.3 1.9a7 7 0 0 0-2.7 1.6l-2-.8-2 3.4 1.7 1.3A7 7 0 0 0 5 12c0 .6.1 1.1.2 1.6l-1.7 1.3 2 3.4 2-.8a7 7 0 0 0 2.7 1.6l.3 1.9h3l.3-1.9a7 7 0 0 0 2.7-1.6l2 .8 2-3.4-1.7-1.3c.1-.5.2-1 .2-1.6Z"
-          >
-          </path>
-
-        </svg>
-
-      </span>
-
-
-      <span class="nav-label">
-        Settings
-      </span>
-
-
-    </a>
-
-
-    <!-- SIGN OUT -->
+    <!-- =====================================================
+         SIGN OUT
+    ====================================================== -->
 
     <button
       class="nav-item nav-item-button"

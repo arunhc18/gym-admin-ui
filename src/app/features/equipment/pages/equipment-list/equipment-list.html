@@ -1,0 +1,147 @@
+<div class="equipment-page">
+  <section class="stats-grid" aria-label="Equipment overview">
+    <article class="stat"><span>Total Equipment</span><strong>{{ equipment.length }}</strong></article>
+    <article class="stat"><span>Operational</span><strong class="success">{{ operationalCount }}</strong></article>
+    <article class="stat"><span>Maintenance / Repair</span><strong class="warning">{{ downtimeCount }}</strong></article>
+    <article class="stat"><span>Due in 7 Days</span><strong class="warning">{{ dueSoonCount }}</strong></article>
+    <article class="stat"><span>Overdue Service</span><strong class="danger">{{ overdueCount }}</strong></article>
+    <article class="stat"><span>Retired</span><strong>{{ retiredCount }}</strong></article>
+  </section>
+
+  <section class="equipment-card">
+    <div class="filter-bar">
+      <input aria-label="Search equipment" type="search" [(ngModel)]="search" placeholder="Search name, code, category, model or serial..." />
+      <select aria-label="Filter location" [(ngModel)]="selectedLocation">
+        <option [ngValue]="null">All Locations</option>
+        @for (location of locations; track location.locationId) {
+          <option [ngValue]="location.locationId">{{ location.locationName }}</option>
+        }
+      </select>
+      <select aria-label="Filter category" [(ngModel)]="selectedCategory">
+        <option value="">All Categories</option>
+        @for (category of categories; track category) { <option [value]="category">{{ category }}</option> }
+      </select>
+      <select aria-label="Filter status" [(ngModel)]="selectedStatus">
+        <option value="">All Statuses</option>
+        @for (status of statuses; track status) { <option [value]="status">{{ status | titlecase }}</option> }
+      </select>
+      <select aria-label="Filter service due" [(ngModel)]="selectedDue">
+        @for (option of dueOptions; track option.value) { <option [value]="option.value">{{ option.label }}</option> }
+      </select>
+      <button type="button" class="btn neutral" (click)="clearFilters()">Clear</button>
+      <button type="button" class="btn primary" (click)="openAddEquipment()">+ Add Equipment</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th>Equipment</th><th>Category</th><th>Location</th><th>Manufacturer / Model</th>
+          <th>Purchase</th><th>Warranty</th><th>Next Service</th><th>Status</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          @for (item of filteredEquipment; track item.equipmentId) {
+            <tr>
+              <td><div class="equipment-name"><strong>{{ item.equipmentName }}</strong></div></td>
+              <td>{{ item.category || '—' }}</td>
+              <td>{{ locationName(item.locationId) }}</td>
+              <td><div class="equipment-name"><span>{{ item.manufacturer || '—' }}</span><small>{{ item.modelNumber || '—' }}</small></div></td>
+              <td>{{ item.purchaseDate ? (item.purchaseDate | date:'dd MMM yyyy') : '—' }}</td>
+              <td><div class="equipment-name"><span>{{ item.warrantyExpiryDate ? (item.warrantyExpiryDate | date:'dd MMM yyyy') : '—' }}</span>
+                @if (item.warrantyExpiryDate) { <small [class.danger]="warrantyLabel(item) === 'Expired'">{{ warrantyLabel(item) }}</small> }
+              </div></td>
+              <td><div class="equipment-name"><span>{{ item.nextMaintenanceDate ? (item.nextMaintenanceDate | date:'dd MMM yyyy') : '—' }}</span>
+                <small [class.danger]="dueState(item) === 'overdue'" [class.warning]="dueState(item) === 'soon'">{{ dueLabel(item) }}</small>
+              </div></td>
+              <td><span class="pill" [ngClass]="item.status">{{ item.status | titlecase }}</span></td>
+              <td><div class="row-actions">
+                <button type="button" class="btn neutral" (click)="openEditEquipment(item)">Edit</button>
+                <button type="button" class="btn neutral" (click)="openHistory(item)">Maintenance</button>
+              </div></td>
+            </tr>
+          } @empty { <tr><td colspan="9" class="empty">No equipment matches these filters.</td></tr> }
+        </tbody>
+      </table>
+    </div>
+    <div class="table-footer">Showing <strong>{{ filteredEquipment.length }}</strong> of <strong>{{ equipment.length }}</strong> equipment records</div>
+  </section>
+</div>
+
+@if (equipmentModalOpen) {
+  <div class="overlay" (click)="closeEquipment()">
+    <section class="dialog equipment-dialog" role="dialog" aria-modal="true" aria-labelledby="equipment-dialog-title" (click)="$event.stopPropagation()">
+      <header class="modal-header"><div><h2 id="equipment-dialog-title">{{ editingId === null ? 'Add Equipment' : 'Edit Equipment' }}</h2><p>Equipment register</p></div>
+        <button class="close" type="button" aria-label="Close" (click)="closeEquipment()">×</button></header>
+      <form #equipmentForm="ngForm" novalidate (ngSubmit)="saveEquipment(equipmentForm)">
+        <div class="modal-body form-grid">
+          <div class="section-title">Identification</div>
+          <label class="field"><span>Equipment Name *</span><input name="equipmentName" [(ngModel)]="draft.equipmentName" required minlength="2" maxlength="200" placeholder="Commercial Treadmill" [class.invalid]="equipmentSubmitted && !draft.equipmentName.trim()" /></label>
+          <label class="field"><span>Equipment Code *</span><input name="equipmentCode" [(ngModel)]="draft.equipmentCode" required minlength="2" maxlength="50" pattern="[A-Za-z0-9_-]+" placeholder="EQ-TM-001" /></label>
+          <label class="field"><span>Location *</span><select name="locationId" [(ngModel)]="draft.locationId" required [class.invalid]="equipmentSubmitted && !draft.locationId"><option [ngValue]="0" disabled>Select location</option>
+              @for (location of locations; track location.locationId) { <option [ngValue]="location.locationId">{{ location.locationName }}</option> }</select></label>
+          <label class="field"><span>Category</span><input name="category" [(ngModel)]="draft.category" maxlength="100" placeholder="Cardio / Strength" /></label>
+          <label class="field"><span>Manufacturer</span><input name="manufacturer" [(ngModel)]="draft.manufacturer" maxlength="100" /></label>
+          <label class="field"><span>Model Number</span><input name="modelNumber" [(ngModel)]="draft.modelNumber" maxlength="100" /></label>
+          <label class="field"><span>Serial Number</span><input name="serialNumber" [(ngModel)]="draft.serialNumber" maxlength="100" /></label>
+          <label class="field"><span>Status *</span><select name="status" [(ngModel)]="draft.status" required>
+              @for (status of statuses; track status) { <option [value]="status">{{ status | titlecase }}</option> }</select></label>
+
+          <div class="section-title">Purchase & Warranty</div>
+          <label class="field"><span>Purchase Date</span><input name="purchaseDate" type="date" [(ngModel)]="draft.purchaseDate" [max]="today" /></label>
+          <label class="field"><span>Purchase Price (₹)</span><input name="purchasePrice" type="number" min="0" max="99999999.99" step="0.01" [(ngModel)]="draft.purchasePrice" placeholder="Optional" /></label>
+          <label class="field"><span>Warranty Expiry Date</span><input name="warrantyExpiryDate" type="date" [(ngModel)]="draft.warrantyExpiryDate" /></label>
+          <div class="field hint">Warranty expiry must be on or after the purchase date.</div>
+
+          <div class="section-title">Maintenance Schedule</div>
+          <label class="field"><span>Frequency (Days)</span><input name="maintenanceFrequencyDays" type="number" min="1" step="1" [(ngModel)]="draft.maintenanceFrequencyDays" placeholder="e.g. 90" /></label>
+          <label class="field"><span>Last Maintenance</span><input name="lastMaintenanceDate" type="date" [max]="today" [(ngModel)]="draft.lastMaintenanceDate" /></label>
+          <label class="field"><span>Next Maintenance</span><input name="nextMaintenanceDate" type="date" [(ngModel)]="draft.nextMaintenanceDate" /></label>
+          <div class="field hint">Log future work through Maintenance. A new log updates the latest/next service dates.</div>
+          <label class="field full"><span>Notes</span><textarea name="notes" rows="3" [(ngModel)]="draft.notes" placeholder="Condition, accessories or installation details"></textarea></label>
+        </div>
+        <footer class="modal-footer"><p class="error" role="alert">{{ equipmentError }}</p>
+          <button type="button" class="btn neutral" (click)="closeEquipment()">Cancel</button>
+          <button type="submit" class="btn primary">{{ editingId === null ? 'Save Equipment' : 'Update Equipment' }}</button></footer>
+      </form>
+    </section>
+  </div>
+}
+
+@if (isMaintenanceOpen && selectedEquipment; as item) {
+  <div class="overlay drawer-overlay" (click)="closeMaintenance()">
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="maintenance-title" (click)="$event.stopPropagation()">
+      <header class="modal-header"><div><h2 id="maintenance-title">{{ drawerMode === 'history' ? 'Maintenance History' : 'Log Maintenance' }}</h2>
+          <p>{{ item.equipmentCode }} · {{ item.equipmentName }}</p></div>
+        <button type="button" class="close" aria-label="Close maintenance" (click)="closeMaintenance()">×</button></header>
+      @if (drawerMode === 'history') {
+        <div class="drawer-body">
+          <div class="equipment-summary"><div><span>Equipment Status</span><strong>{{ item.status | titlecase }}</strong></div><div><span>Last Service</span><strong>{{ item.lastMaintenanceDate ? (item.lastMaintenanceDate | date:'dd MMM yyyy') : '—' }}</strong></div><div><span>Next Service</span><strong>{{ item.nextMaintenanceDate ? (item.nextMaintenanceDate | date:'dd MMM yyyy') : '—' }}</strong></div><div><span>Frequency</span><strong>{{ item.maintenanceFrequencyDays === null ? '—' : item.maintenanceFrequencyDays + ' days' }}</strong></div></div>
+          <div class="drawer-section-heading"><strong>Service Records ({{ history.length }})</strong>
+            <button type="button" class="btn primary" (click)="openLogMaintenance()" [disabled]="item.status === 'retired'">+ Log Maintenance</button></div>
+          @for (log of history; track log.maintenanceId) {
+            <article class="log-card"><div class="log-head"><strong>{{ log.maintenanceType | titlecase }}</strong><span>{{ log.maintenanceDate | date:'dd MMM yyyy' }}</span></div>
+              <p>{{ log.description || 'No additional description.' }}</p>
+              <div class="log-meta"><span>Cost: {{ log.cost === null ? '—' : (log.cost | currency:'INR':'symbol':'1.0-2') }}</span><span>Performed By: {{ log.performedBy === null ? '—' : 'Employee #' + log.performedBy }}</span><span>Next: {{ log.nextMaintenanceDate ? (log.nextMaintenanceDate | date:'dd MMM yyyy') : '—' }}</span></div></article>
+          } @empty { <div class="empty-history">No maintenance history yet. Use Log Maintenance to add the first service record.</div> }
+        </div>
+        <footer class="modal-footer"><button class="btn neutral" type="button" (click)="closeMaintenance()">Close</button></footer>
+      } @else {
+        <form #maintenanceForm="ngForm" novalidate (ngSubmit)="saveMaintenance(maintenanceForm)" class="drawer-form">
+          <div class="drawer-body form-grid">
+            <div class="section-title">Service Details</div>
+            <label class="field"><span>Service Date *</span><input type="date" name="maintenanceDate" required [max]="today" [(ngModel)]="maintenanceDraft.maintenanceDate" (ngModelChange)="onServiceDateChange()" /></label>
+            <label class="field"><span>Type *</span><select name="maintenanceType" [(ngModel)]="maintenanceDraft.maintenanceType" required>
+              @for (type of maintenanceTypes; track type) { <option [value]="type">{{ type | titlecase }}</option> }</select></label>
+            <label class="field"><span>Performed By (Employee ID)</span><input type="number" name="performedBy" min="1" step="1" [(ngModel)]="maintenanceDraft.performedBy" placeholder="Optional" /></label>
+            <label class="field"><span>Cost (₹)</span><input type="number" name="cost" min="0" max="99999999.99" step="0.01" [(ngModel)]="maintenanceDraft.cost" placeholder="Optional" /></label>
+            <label class="field full"><span>Next Maintenance</span><input type="date" name="nextMaintenanceDate" [min]="maintenanceDraft.maintenanceDate" [(ngModel)]="maintenanceDraft.nextMaintenanceDate" /><small>Auto-suggested from maintenance frequency; you can change it.</small></label>
+            <label class="field full"><span>Description</span><textarea name="description" rows="5" [(ngModel)]="maintenanceDraft.description" placeholder="Work performed, findings, replacement parts..."></textarea></label>
+            <div class="form-note full">Performed By must refer to <code>employees.employee_id</code>. Recording a cost here does not automatically create an Accounts expense.</div>
+          </div>
+          <footer class="modal-footer"><p class="error" role="alert">{{ maintenanceError }}</p>
+            <button class="btn neutral" type="button" (click)="backToHistory()">Back</button><button class="btn primary" type="submit">Save Maintenance</button></footer>
+        </form>
+      }
+    </aside>
+  </div>
+}
+
+@if (toast) { <div class="toast" role="status"><span>{{ toast }}</span><button type="button" (click)="toast = ''" aria-label="Dismiss message">×</button></div> }

@@ -10,13 +10,20 @@ import {
   RouterLinkActive
 } from '@angular/router';
 
+import {
+  ThemeToggleComponent
+} from '../../theme/theme-toggle/theme-toggle';
+
 
 @Component({
   selector: 'app-sidebar',
 
+  standalone: true,
+
   imports: [
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    ThemeToggleComponent
   ],
 
   templateUrl: './sidebar.html',

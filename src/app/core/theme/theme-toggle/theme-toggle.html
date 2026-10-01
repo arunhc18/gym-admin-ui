@@ -1,0 +1,116 @@
+<div
+  class="theme-control"
+  [class.compact]="compact"
+>
+
+
+  <div
+    class="theme-icon"
+    aria-hidden="true"
+  >
+
+
+    @if (isLightTheme) {
+
+
+      <!-- SUN -->
+
+      <svg
+        viewBox="0 0 24 24"
+      >
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+        ></circle>
+
+
+        <path
+          d="
+            M12 2v2
+            M12 20v2
+            M4.93 4.93l1.41 1.41
+            M17.66 17.66l1.41 1.41
+            M2 12h2
+            M20 12h2
+            M4.93 19.07l1.41-1.41
+            M17.66 6.34l1.41-1.41
+          "
+        >
+        </path>
+
+      </svg>
+
+
+    }
+    @else {
+
+
+      <!-- MOON -->
+
+      <svg
+        viewBox="0 0 24 24"
+      >
+
+        <path
+          d="
+            M21 12.79
+            A9 9 0 1 1
+            11.21 3
+            7 7 0 0 0
+            21 12.79Z
+          "
+        >
+        </path>
+
+      </svg>
+
+
+    }
+
+
+  </div>
+
+
+  <div class="theme-copy">
+
+    <span>
+      Theme
+    </span>
+
+    <strong>
+      {{ themeLabel }}
+    </strong>
+
+  </div>
+
+
+  <button
+    type="button"
+    class="theme-switch"
+    [class.light]="isLightTheme"
+    role="switch"
+    [attr.aria-checked]="isLightTheme"
+    [attr.aria-label]="
+      isLightTheme
+        ? 'Switch to dark theme'
+        : 'Switch to light theme'
+    "
+    [title]="
+      isLightTheme
+        ? 'Switch to dark theme'
+        : 'Switch to light theme'
+    "
+    (click)="toggleTheme()"
+  >
+
+    <span
+      class="switch-knob"
+    >
+    </span>
+
+  </button>
+
+
+</div>
