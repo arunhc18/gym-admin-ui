@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
 
 import {
   CreateMember,
@@ -18,8 +19,8 @@ describe('MemberService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return the initial members', () => {
-    const members = service.getMembers();
+  it('should return the initial members', async () => {
+    const members = await firstValueFrom(service.getMembers());
 
     expect(members.length).toBe(12);
   });
