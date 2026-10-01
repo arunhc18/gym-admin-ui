@@ -1,0 +1,32 @@
+:host { display: block; }
+.products-page { width: 100%; }
+.page-heading { margin-bottom: 14px; }
+.page-heading h2 { margin: 0; color: var(--text-primary); font-size: 17px; }
+.page-heading p { margin: 3px 0 0; color: var(--text-muted); font-size: 11px; }
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--border-primary); }
+.tabs button { padding: 10px 14px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; font-size: 11px; }
+.tabs button.active { border-bottom-color: var(--primary); color: var(--primary); font-weight: 700; }
+.content-card { overflow: hidden; border: 1px solid var(--border-primary); border-radius: var(--radius-md); background: var(--bg-card); }
+.section-heading { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border-primary); }
+.section-heading h3 { margin: 0; color: var(--text-primary); font-size: 13px; }
+.add-button { border: 0; border-radius: var(--radius-sm); padding: 8px 12px; background: var(--primary); color: var(--on-primary); cursor: pointer; font-size: 11px; }
+.filter-bar { display: grid; grid-template-columns: minmax(220px, 1fr) 170px 150px 140px auto; gap: 8px; padding: 12px; border-bottom: 1px solid var(--border-primary); }
+.filter-bar input, .filter-bar select { width: 100%; height: 36px; box-sizing: border-box; padding: 0 9px; border: 1px solid var(--border-primary); border-radius: var(--radius-sm); background: var(--bg-elevated); color: var(--text-primary); font-size: 11px; }
+.clear-button, .action-button { border: 1px solid var(--border-primary); border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); cursor: pointer; }
+.clear-button { padding: 0 13px; }
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; min-width: 850px; border-collapse: collapse; }
+th { padding: 10px 12px; background: var(--bg-elevated); border-bottom: 1px solid var(--border-primary); color: var(--text-muted); text-align: left; font-size: 9px; text-transform: uppercase; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border-secondary); color: var(--text-secondary); font-size: 10px; }
+td strong, td small { display: block; } td strong { color: var(--text-primary); } td small { margin-top: 3px; color: var(--text-muted); font-size: 9px; }
+.status { display: inline-block; padding: 4px 8px; border-radius: 4px; background: var(--success-subtle); color: var(--success); font-size: 10px; }.status.inactive { background: var(--bg-elevated); color: var(--text-muted); }
+.action-button { padding: 7px 9px; font-size: 10px; }.empty-cell { padding: 28px; text-align: center; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 20px; background: rgb(0 0 0 / 35%); }
+.entry-modal { width: min(560px, 100%); border: 1px solid var(--border-primary); border-radius: var(--radius-md); background: var(--bg-card); box-shadow: 0 20px 50px rgb(0 0 0 / 18%); }
+.modal-heading, .modal-footer { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-primary); }
+.modal-heading h3 { margin: 0; color: var(--text-primary); font-size: 15px; }.modal-heading button { border: 0; background: transparent; color: var(--text-muted); font-size: 21px; cursor: pointer; }
+.modal-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px; }
+.modal-body label { display: grid; gap: 5px; color: var(--text-secondary); font-size: 11px; }.modal-body input, .modal-body select, .modal-body textarea { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid var(--border-primary); border-radius: var(--radius-sm); background: var(--bg-elevated); color: var(--text-primary); font: inherit; }
+.modal-body label:last-child { grid-column: 1 / -1; }.form-error { margin: 0; padding: 0 16px 12px; color: var(--danger); font-size: 11px; }.modal-footer { justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border-primary); border-bottom: 0; }
+@media (max-width: 900px) { .filter-bar { grid-template-columns: 1fr 1fr; } .clear-button { min-height: 36px; } }
+@media (max-width: 600px) { .modal-body { grid-template-columns: 1fr; } .modal-body label:last-child { grid-column: auto; } }
