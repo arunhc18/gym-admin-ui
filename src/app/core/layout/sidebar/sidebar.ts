@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import {
+  IsActiveMatchOptions,
   RouterLink,
   RouterLinkActive
 } from '@angular/router';
@@ -47,6 +48,24 @@ export class SidebarComponent {
 
 
   // =====================================================
+  // ROUTER MATCHING
+  // =====================================================
+
+  readonly exactRouteMatch:
+    IsActiveMatchOptions = {
+
+      paths: 'exact',
+
+      queryParams: 'ignored',
+
+      fragment: 'ignored',
+
+      matrixParams: 'ignored'
+
+    };
+
+
+  // =====================================================
   // EXPANDED MENU STATES
   // =====================================================
 
@@ -54,7 +73,7 @@ export class SidebarComponent {
 
   accountsExpanded = true;
 
-  classesExpanded = true;
+  trainingExpanded = true;
 
 
   // =====================================================
@@ -91,10 +110,15 @@ export class SidebarComponent {
 
   }
 
-  toggleClasses(): void {
 
-    this.classesExpanded =
-      !this.classesExpanded;
+  // =====================================================
+  // TRAINING
+  // =====================================================
+
+  toggleTraining(): void {
+
+    this.trainingExpanded =
+      !this.trainingExpanded;
 
   }
 

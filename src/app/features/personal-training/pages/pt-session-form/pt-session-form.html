@@ -1,0 +1,530 @@
+<form
+  class="pt-session-page"
+  [formGroup]="form"
+  (ngSubmit)="save()"
+  novalidate
+>
+
+
+  <div class="page-actions">
+
+    <div></div>
+
+
+    <div class="action-buttons">
+
+      <a
+        class="btn btn-secondary"
+        routerLink="/training/personal-training/sessions"
+      >
+        Cancel
+      </a>
+
+
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="isSaveDisabled"
+      >
+
+        {{
+          isEditMode
+            ? 'Save Changes'
+            : 'Schedule Session'
+        }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  @if (errorMessage) {
+
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+
+  }
+
+
+  <!-- =====================================================
+       PT CLIENT
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <h2>
+        PT Client
+      </h2>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label for="ptSubscriptionId">
+
+          PT Client
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          id="ptSubscriptionId"
+          formControlName="ptSubscriptionId"
+          (change)="onSubscriptionChange()"
+        >
+
+          <option
+            [ngValue]="null"
+          >
+            Select PT client
+          </option>
+
+
+          @for (
+            subscription of subscriptions;
+            track subscription.ptSubscriptionId
+          ) {
+
+            <option
+              [ngValue]="
+                subscription.ptSubscriptionId
+              "
+              [disabled]="
+                !canUseSubscription(
+                  subscription
+                )
+              "
+            >
+
+              {{
+                getSubscriptionLabel(
+                  subscription
+                )
+              }}
+
+              @if (
+                subscription.status !==
+                  'Active'
+              ) {
+                ({{ subscription.status }})
+              }
+
+            </option>
+
+          }
+
+        </select>
+
+
+        @if (
+          form.controls
+            .ptSubscriptionId
+            .touched
+          &&
+          form.controls
+            .ptSubscriptionId
+            .invalid
+        ) {
+
+          <span class="validation-error">
+            PT client is required.
+          </span>
+
+        }
+
+
+        @if (subscriptionInvalid) {
+
+          <span class="validation-error">
+            This PT subscription cannot schedule additional sessions.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Package
+        </label>
+
+        <div class="readonly-value">
+          {{ selectedPackageName }}
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Assigned Trainer
+        </label>
+
+        <div class="readonly-value">
+          {{ assignedTrainerName }}
+        </div>
+
+
+        @if (
+          selectedSubscription
+          &&
+          selectedSubscription.trainerId ===
+            null
+        ) {
+
+          <span class="validation-error">
+            This PT client does not have an assigned trainer.
+          </span>
+
+        }
+
+      </div>
+
+
+      @if (selectedSubscription) {
+
+        <div class="form-group">
+
+          <label>
+            Sessions Remaining
+          </label>
+
+          <div class="readonly-value">
+            {{ remainingSessions }}
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Valid From
+          </label>
+
+          <div class="readonly-value">
+            {{ selectedSubscription.startDate }}
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Valid Until
+          </label>
+
+          <div class="readonly-value">
+            {{ selectedSubscription.endDate }}
+          </div>
+
+        </div>
+
+      }
+
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       SESSION DETAILS
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <h2>
+        Session Details
+      </h2>
+
+    </div>
+
+
+    <div class="form-grid four-column">
+
+
+      <div class="form-group">
+
+        <label for="sessionDate">
+
+          Session Date
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="sessionDate"
+          type="date"
+          formControlName="sessionDate"
+        />
+
+
+        @if (
+          form.controls
+            .sessionDate
+            .touched
+          &&
+          form.controls
+            .sessionDate
+            .invalid
+        ) {
+
+          <span class="validation-error">
+            Session date is required.
+          </span>
+
+        }
+
+
+        @if (sessionDateInvalid) {
+
+          <span class="validation-error">
+            Session date must be within the PT subscription period.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="startTime">
+
+          Start Time
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="startTime"
+          type="time"
+          formControlName="startTime"
+          (change)="onStartTimeChange()"
+        />
+
+
+        @if (
+          form.controls
+            .startTime
+            .touched
+          &&
+          form.controls
+            .startTime
+            .invalid
+        ) {
+
+          <span class="validation-error">
+            Start time is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="endTime">
+
+          End Time
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="endTime"
+          type="time"
+          formControlName="endTime"
+        />
+
+
+        @if (
+          form.controls
+            .endTime
+            .touched
+          &&
+          form.controls
+            .endTime
+            .invalid
+        ) {
+
+          <span class="validation-error">
+            End time is required.
+          </span>
+
+        }
+
+
+        @if (timeRangeInvalid) {
+
+          <span class="validation-error">
+            End time must be later than start time.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="status">
+
+          Status
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          id="status"
+          formControlName="status"
+        >
+
+          <option value="Scheduled">
+            Scheduled
+          </option>
+
+          <option value="Completed">
+            Completed
+          </option>
+
+          <option value="Cancelled">
+            Cancelled
+          </option>
+
+          <option value="No Show">
+            No Show
+          </option>
+
+        </select>
+
+      </div>
+
+
+      @if (trainerConflict) {
+
+        <div class="form-group full-width">
+
+          <span class="validation-error">
+            The assigned trainer already has another PT session during this time.
+          </span>
+
+        </div>
+
+      }
+
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       SESSION RECORD
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <h2>
+        Session Record
+      </h2>
+
+    </div>
+
+
+    <div class="form-grid text-grid">
+
+
+      <div class="form-group">
+
+        <label for="notes">
+          Notes
+        </label>
+
+        <textarea
+          id="notes"
+          formControlName="notes"
+          placeholder="Optional session notes"
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="exercisesPerformed">
+          Exercises Performed
+        </label>
+
+        <textarea
+          id="exercisesPerformed"
+          formControlName="exercisesPerformed"
+          placeholder="Exercises performed during the session"
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="feedback">
+          Feedback
+        </label>
+
+        <textarea
+          id="feedback"
+          formControlName="feedback"
+          placeholder="Trainer or client feedback"
+        ></textarea>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+</form>

@@ -365,6 +365,16 @@
 }
 
 
+/* TRAINING HAS FOUR ITEMS */
+
+.training-submenu.expanded {
+
+  max-height:
+    180px;
+
+}
+
+
 /* ACCOUNTS HAS SIX ITEMS */
 
 .accounts-submenu.expanded {
@@ -457,7 +467,7 @@
 
 .sidebar-footer {
 
-   display: grid;
+  display: grid;
 
   gap: 6px;
 
@@ -467,7 +477,6 @@
   border-top:
     1px solid
     var(--border-secondary);
-
 
 }
 
@@ -671,12 +680,5 @@
       grid;
 
   }
-
-}
-
-.classes-submenu.expanded {
-
-  max-height:
-    140px;
 
 }

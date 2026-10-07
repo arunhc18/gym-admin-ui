@@ -1,0 +1,67 @@
+<div
+  class="toast-stack"
+  aria-live="polite"
+  aria-atomic="false"
+>
+
+  @if (toasts$ | async; as toasts) {
+
+    @for (
+      toast of toasts;
+      track toast.toastId
+    ) {
+
+      <article
+        class="notification-toast"
+        [class.success]="toast.severity === 'success'"
+        [class.info]="toast.severity === 'info'"
+        [class.warning]="toast.severity === 'warning'"
+        [class.danger]="toast.severity === 'danger'"
+        [class.clickable]="!!toast.route"
+        (click)="openToast(toast)"
+      >
+
+        <div class="toast-icon">
+
+          <i
+            [class]="toast.iconClass"
+            aria-hidden="true"
+          ></i>
+
+        </div>
+
+
+        <div class="toast-content">
+
+          <strong>
+            {{ toast.subject }}
+          </strong>
+
+          <p>
+            {{ toast.message }}
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="toast-close"
+          aria-label="Dismiss notification"
+          (click)="dismiss($event, toast.toastId)"
+        >
+
+          <i
+            class="fa-solid fa-xmark"
+            aria-hidden="true"
+          ></i>
+
+        </button>
+
+      </article>
+
+    }
+
+  }
+
+</div>
