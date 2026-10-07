@@ -1,0 +1,417 @@
+<section class="pt-page">
+
+
+  <!-- =====================================================
+       PERSONAL TRAINING NAVIGATION
+  ====================================================== -->
+
+  <div class="page-toolbar">
+
+
+    <nav class="pt-tabs" aria-label="Personal Training navigation">
+
+  <a
+    class="active"
+    routerLink="/training/personal-training/packages"
+  >
+    Packages
+  </a>
+
+  <a
+    routerLink="/training/personal-training/clients"
+  >
+    Clients
+  </a>
+
+  <a
+    routerLink="/training/personal-training/sessions"
+  >
+    Sessions
+  </a>
+
+</nav>
+
+
+    <a
+      class="primary-button"
+      routerLink="/training/personal-training/packages/new"
+    >
+      + New PT Package
+    </a>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       SUMMARY
+  ====================================================== -->
+
+  <section
+    class="stats-grid"
+    aria-label="Personal training summary"
+  >
+
+
+    <article class="stat-card">
+
+      <span>
+        Total Packages
+      </span>
+
+      <strong>
+        {{ packages.length }}
+      </strong>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <span>
+        Active Packages
+      </span>
+
+      <strong>
+        {{ activePackages }}
+      </strong>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <span>
+        Inactive Packages
+      </span>
+
+      <strong>
+        {{ inactivePackages }}
+      </strong>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <span>
+        Average Price
+      </span>
+
+      <strong>
+
+        {{
+          averagePrice
+            | currency:
+              'INR':
+              'symbol':
+              '1.0-0'
+        }}
+
+      </strong>
+
+    </article>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       FILTERS
+  ====================================================== -->
+
+  <div class="toolbar">
+
+
+    <div class="search-box">
+
+      <input
+        type="search"
+        placeholder="Search PT packages..."
+        [value]="searchTerm"
+        (input)="updateSearch($event)"
+      />
+
+    </div>
+
+
+    <select
+      [value]="typeFilter"
+      (change)="updateTypeFilter($event)"
+    >
+
+      <option value="all">
+        All Types
+      </option>
+
+      <option value="individual">
+        Individual
+      </option>
+
+      <option value="group">
+        Group
+      </option>
+
+    </select>
+
+
+    <select
+      [value]="statusFilter"
+      (change)="updateStatusFilter($event)"
+    >
+
+      <option value="all">
+        All Status
+      </option>
+
+      <option value="active">
+        Active
+      </option>
+
+      <option value="inactive">
+        Inactive
+      </option>
+
+    </select>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       TABLE
+  ====================================================== -->
+
+  <section class="table-card">
+
+
+    @if (filteredPackages.length) {
+
+
+      <div class="table-scroll">
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Package
+              </th>
+
+              <th>
+                Type
+              </th>
+
+              <th>
+                Sessions
+              </th>
+
+              <th>
+                Validity
+              </th>
+
+              <th>
+                Duration
+              </th>
+
+              <th>
+                Price
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              item of filteredPackages;
+              track item.packageId
+            ) {
+
+              <tr>
+
+
+                <td>
+
+                  <div class="package-name">
+
+                    <strong>
+                      {{ item.packageName }}
+                    </strong>
+
+
+                    @if (item.description) {
+
+                      <span>
+                        {{ item.description }}
+                      </span>
+
+                    }
+
+                  </div>
+
+                </td>
+
+
+                <td>
+
+                  <span class="type-badge">
+
+                    {{
+                      item.packageType ===
+                        'individual'
+                        ? 'Individual'
+                        : 'Group'
+                    }}
+
+                  </span>
+
+                </td>
+
+
+                <td>
+                  {{ item.totalSessions }}
+                </td>
+
+
+                <td>
+                  {{ item.validityDays }} days
+                </td>
+
+
+                <td>
+                  {{ item.sessionDurationMinutes }} min
+                </td>
+
+
+                <td>
+
+                  <strong>
+
+                    {{
+                      item.price
+                        | currency:
+                          'INR':
+                          'symbol':
+                          '1.0-0'
+                    }}
+
+                  </strong>
+
+                </td>
+
+
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [class.inactive]="
+                      !item.isActive
+                    "
+                  >
+
+                    {{
+                      item.isActive
+                        ? 'Active'
+                        : 'Inactive'
+                    }}
+
+                  </span>
+
+                </td>
+
+
+                <td>
+
+                  <div class="row-actions">
+
+
+                    <a
+                      [routerLink]="[
+                        '/training/personal-training/packages',
+                        item.packageId,
+                        'edit'
+                      ]"
+                    >
+                      Edit
+                    </a>
+
+
+                    <button
+                      type="button"
+                      (click)="toggleStatus(item)"
+                    >
+
+                      {{
+                        item.isActive
+                          ? 'Disable'
+                          : 'Enable'
+                      }}
+
+                    </button>
+
+
+                  </div>
+
+                </td>
+
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+      </div>
+
+
+    }
+
+    @else {
+
+
+      <div class="empty-state">
+
+        <h3>
+          No PT packages found
+        </h3>
+
+        <p>
+          Create a PT package or change the current filters.
+        </p>
+
+        <a
+          class="primary-button"
+          routerLink="/training/personal-training/packages/new"
+        >
+          Create PT Package
+        </a>
+
+      </div>
+
+
+    }
+
+
+  </section>
+
+
+</section>

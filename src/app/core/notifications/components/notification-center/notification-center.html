@@ -1,0 +1,301 @@
+<div
+  class="notification-center"
+  [class.has-actions]="
+    ((actionCount$ | async) ?? 0) > 0
+  "
+  [class.has-critical-action]="
+    (highestPriority$ | async) === 'critical'
+  "
+>
+
+  <button
+    type="button"
+    class="notification-bell"
+    [class.active]="panelOpen"
+    aria-label="Notifications"
+    title="Notifications"
+    [attr.aria-expanded]="panelOpen"
+    (click)="togglePanel()"
+  >
+
+    <i
+      class="fa-solid fa-bell notification-bell-icon"
+      aria-hidden="true"
+    ></i>
+
+
+    @if (actionCount$ | async; as actionCount) {
+
+      @if (actionCount > 0) {
+
+        <span class="notification-badge">
+
+          {{
+            actionCount > 9
+              ? '9+'
+              : actionCount
+          }}
+
+        </span>
+
+      }
+
+    }
+
+  </button>
+
+
+  @if (panelOpen) {
+
+    <section
+      class="notification-panel"
+      aria-label="Notification panel"
+    >
+
+      <header class="notification-panel-header">
+
+        <div>
+
+          <h2>
+            Notifications
+          </h2>
+
+          @if (actionCount$ | async; as actionCount) {
+
+            <span>
+
+              {{ actionCount }}
+
+              {{
+                actionCount === 1
+                  ? 'action needs attention'
+                  : 'actions need attention'
+              }}
+
+            </span>
+
+          } @else {
+
+            <span>
+              Nothing needs attention
+            </span>
+
+          }
+
+        </div>
+
+
+        <div class="panel-header-icon">
+
+          <i
+            class="fa-solid fa-bell"
+            aria-hidden="true"
+          ></i>
+
+        </div>
+
+      </header>
+
+
+      <div class="notification-list">
+
+        @if (notifications$ | async; as notifications) {
+
+          @if (notifications.length > 0) {
+
+            @for (
+              notification of notifications;
+              track notification.notificationId;
+              let first = $first
+            ) {
+
+              <article
+                class="notification-item"
+                [class.featured]="first"
+                [class.unread]="notification.status !== 'read'"
+                [class.priority-critical]="
+                  notification.priority === 'critical'
+                "
+                [class.priority-high]="
+                  notification.priority === 'high'
+                "
+                [class.priority-normal]="
+                  notification.priority === 'normal'
+                "
+              >
+
+                <button
+                  type="button"
+                  class="notification-main"
+                  (click)="openNotification(notification)"
+                >
+
+                  <div
+                    class="notification-icon"
+                    [class.success]="notification.severity === 'success'"
+                    [class.info]="notification.severity === 'info'"
+                    [class.warning]="notification.severity === 'warning'"
+                    [class.danger]="notification.severity === 'danger'"
+                  >
+
+                    <i
+                      [class]="notification.iconClass"
+                      aria-hidden="true"
+                    ></i>
+
+                  </div>
+
+
+                  <div class="notification-content">
+
+                    <div class="notification-title-row">
+
+                      <strong>
+                        {{ notification.subject }}
+                      </strong>
+
+
+                      @if (notification.status !== 'read') {
+
+                        <span
+                          class="unread-dot"
+                          title="New"
+                        ></span>
+
+                      }
+
+                    </div>
+
+
+                    <p>
+                      {{ notification.message }}
+                    </p>
+
+
+                    <div class="notification-meta">
+
+                      <span
+                        class="priority-label"
+                        [class.critical]="
+                          notification.priority === 'critical'
+                        "
+                        [class.high]="
+                          notification.priority === 'high'
+                        "
+                      >
+
+                        {{
+                          getPriorityLabel(
+                            notification.priority
+                          )
+                        }}
+
+                      </span>
+
+
+                      <span
+                        class="notification-time"
+                        [title]="notification.createdAt"
+                      >
+
+                        {{
+                          getRelativeTime(
+                            notification.createdAt
+                          )
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+
+                  @if (notification.route) {
+
+                    <i
+                      class="
+                        fa-solid
+                        fa-chevron-right
+                        notification-arrow
+                      "
+                      aria-hidden="true"
+                    ></i>
+
+                  }
+
+                </button>
+
+
+                <button
+                  type="button"
+                  class="notification-dismiss"
+                  aria-label="Dismiss notification"
+                  title="Dismiss"
+                  (click)="
+                    dismissNotification(
+                      $event,
+                      notification.notificationId
+                    )
+                  "
+                >
+
+                  <i
+                    class="fa-solid fa-xmark"
+                    aria-hidden="true"
+                  ></i>
+
+                </button>
+
+              </article>
+
+            }
+
+          } @else {
+
+            <div class="notification-empty">
+
+              <div class="empty-icon">
+
+                <i
+                  class="fa-solid fa-check"
+                  aria-hidden="true"
+                ></i>
+
+              </div>
+
+
+              <strong>
+                You're all caught up
+              </strong>
+
+
+              <span>
+                Important actions will appear here.
+              </span>
+
+            </div>
+
+          }
+
+        }
+
+      </div>
+
+
+      <footer class="notification-panel-footer">
+
+        <i
+          class="fa-solid fa-circle-info"
+          aria-hidden="true"
+        ></i>
+
+        Only the 5 most important pending actions are shown.
+
+      </footer>
+
+    </section>
+
+  }
+
+</div>

@@ -4,13 +4,11 @@
   [class.collapsed]="collapsed"
 >
 
-
   <!-- =====================================================
        BRAND
   ====================================================== -->
 
   <div class="sidebar-brand">
-
 
     <span
       class="brand-mark"
@@ -18,7 +16,6 @@
     >
       G
     </span>
-
 
     <div class="brand-copy">
 
@@ -31,7 +28,6 @@
       </span>
 
     </div>
-
 
   </div>
 
@@ -54,13 +50,10 @@
       class="nav-item"
       routerLink="/dashboard"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Dashboard"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -75,8 +68,7 @@
             width="7"
             height="7"
             rx="1"
-          >
-          </rect>
+          ></rect>
 
           <rect
             x="14"
@@ -84,8 +76,7 @@
             width="7"
             height="7"
             rx="1"
-          >
-          </rect>
+          ></rect>
 
           <rect
             x="3"
@@ -93,8 +84,7 @@
             width="7"
             height="7"
             rx="1"
-          >
-          </rect>
+          ></rect>
 
           <rect
             x="14"
@@ -102,18 +92,15 @@
             width="7"
             height="7"
             rx="1"
-          >
-          </rect>
+          ></rect>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Dashboard
       </span>
-
 
     </a>
 
@@ -126,13 +113,10 @@
       class="nav-item"
       routerLink="/vendors"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Vendors"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -141,35 +125,21 @@
 
         <svg viewBox="0 0 24 24">
 
-          <path
-            d="M4 7h16v13H4z"
-          >
-          </path>
+          <path d="M4 7h16v13H4z"></path>
 
-          <path
-            d="M8 7V4h8v3"
-          >
-          </path>
+          <path d="M8 7V4h8v3"></path>
 
-          <path
-            d="M4 11h16"
-          >
-          </path>
+          <path d="M4 11h16"></path>
 
-          <path
-            d="M10 15h4"
-          >
-          </path>
+          <path d="M10 15h4"></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Vendors
       </span>
-
 
     </a>
 
@@ -182,13 +152,10 @@
       class="nav-item"
       routerLink="/products"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Products"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -198,18 +165,18 @@
         <svg viewBox="0 0 24 24">
 
           <path d="M4 7l8-4 8 4-8 4-8-4Z"></path>
+
           <path d="M4 7v10l8 4 8-4V7"></path>
+
           <path d="M12 11v10"></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Products
       </span>
-
 
     </a>
 
@@ -226,7 +193,6 @@
       (click)="toggleMembers()"
     >
 
-
       <span
         class="nav-icon"
         aria-hidden="true"
@@ -238,78 +204,52 @@
             cx="12"
             cy="8"
             r="3.5"
-          >
-          </circle>
+          ></circle>
 
           <path
             d="M5 20c.5-3.5 3-5.5 7-5.5s6.5 2 7 5.5"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Members
       </span>
-
 
       <span
         class="nav-chevron"
         aria-hidden="true"
       >
-
-        {{
-          membersExpanded
-            ? '⌄'
-            : '›'
-        }}
-
+        {{ membersExpanded ? '⌄' : '›' }}
       </span>
-
 
     </button>
 
-
-    <!-- =====================================================
-         MEMBER SUBMENU
-    ====================================================== -->
 
     <div
       class="submenu members-submenu"
       [class.expanded]="membersExpanded"
     >
 
-
       <a
         routerLink="/members"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         All Members
-
       </a>
-
 
       <a
         routerLink="/renewals"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         Renewals
-
       </a>
-
 
     </div>
 
@@ -322,13 +262,10 @@
       class="nav-item"
       routerLink="/visitors"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Visitors"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -341,23 +278,19 @@
             cx="12"
             cy="8"
             r="3"
-          >
-          </circle>
+          ></circle>
 
           <path
             d="M5 20c.5-3.5 3-5.5 7-5.5s6.5 2 7 5.5M19 8v5M16.5 10.5h5"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Visitors
       </span>
-
 
     </a>
 
@@ -370,13 +303,10 @@
       class="nav-item"
       routerLink="/staff"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Staff"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -389,23 +319,19 @@
             cx="12"
             cy="8"
             r="3"
-          >
-          </circle>
+          ></circle>
 
           <path
             d="M5 20c.4-3.2 2.8-5 7-5s6.6 1.8 7 5"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Staff
       </span>
-
 
     </a>
 
@@ -418,13 +344,10 @@
       class="nav-item"
       routerLink="/attendance"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Attendance"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -437,37 +360,33 @@
             cx="12"
             cy="12"
             r="8.5"
-          >
-          </circle>
+          ></circle>
 
           <path
             d="M12 7v5l3 2"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Attendance
       </span>
-
 
     </a>
 
 
     <!-- =====================================================
-         CLASSES
+         TRAINING
     ====================================================== -->
 
     <button
       class="nav-item nav-item-button"
       type="button"
-      [class.active-parent]="classesExpanded"
-      title="Classes"
-      (click)="toggleClasses()"
+      [class.active-parent]="trainingExpanded"
+      title="Training"
+      (click)="toggleTraining()"
     >
 
       <span
@@ -483,60 +402,78 @@
             width="18"
             height="17"
             rx="2"
-          >
-          </rect>
+          ></rect>
 
           <path
             d="M8 2v4M16 2v4M3 10h18"
-          >
-          </path>
+          ></path>
 
           <path
             d="M8 14h3M13 14h3M8 18h3M13 18h3"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
       <span class="nav-label">
-        Classes
+        Training
       </span>
 
-      <span class="nav-chevron" aria-hidden="true">
-        {{ classesExpanded ? '⌄' : '›' }}
+      <span
+        class="nav-chevron"
+        aria-hidden="true"
+      >
+        {{ trainingExpanded ? '⌄' : '›' }}
       </span>
+
     </button>
 
+
+    <!-- =====================================================
+         TRAINING SUBMENU
+    ====================================================== -->
+
     <div
-      class="submenu classes-submenu"
-      [class.expanded]="classesExpanded"
+      class="submenu training-submenu"
+      [class.expanded]="trainingExpanded"
     >
+
       <a
         routerLink="/classes"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-        Schedule
+        Class Schedule
       </a>
+
       <a
         routerLink="/classes/bookings"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-        Bookings
+        Class Bookings
       </a>
+
       <a
         routerLink="/classes/types"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-        Manage Class Types
+        Class Types
       </a>
+
+      <a
+        routerLink="/training/personal-training/packages"
+        routerLinkActive="active"
+        (click)="selectNavigation()"
+      >
+        Personal Training
+      </a>
+
     </div>
 
 
@@ -552,7 +489,6 @@
       (click)="toggleAccounts()"
     >
 
-
       <span
         class="nav-icon"
         aria-hidden="true"
@@ -566,156 +502,96 @@
             width="18"
             height="14"
             rx="2"
-          >
-          </rect>
+          ></rect>
 
           <path
             d="M3 10h18"
-          >
-          </path>
+          ></path>
 
           <path
             d="M7 15h3"
-          >
-          </path>
+          ></path>
 
           <path
             d="M15 14h3"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Accounts
       </span>
-
 
       <span
         class="nav-chevron"
         aria-hidden="true"
       >
-
-        {{
-          accountsExpanded
-            ? '⌄'
-            : '›'
-        }}
-
+        {{ accountsExpanded ? '⌄' : '›' }}
       </span>
-
 
     </button>
 
-
-    <!-- =====================================================
-         ACCOUNTS SUBMENU
-    ====================================================== -->
 
     <div
       class="submenu accounts-submenu"
       [class.expanded]="accountsExpanded"
     >
 
-
-      <!-- OVERVIEW -->
-
       <a
         routerLink="/accounts/overview"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         Overview
-
       </a>
-
-
-      <!-- INVOICES -->
 
       <a
         routerLink="/accounts/invoices"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         Invoices
-
       </a>
-
-
-      <!-- PAYMENTS -->
 
       <a
         routerLink="/accounts/payments"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         Payments
-
       </a>
-
-
-      <!-- EXPENSES -->
 
       <a
         routerLink="/accounts/expenses"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         Expenses
-
       </a>
-
-
-      <!-- REFUNDS -->
 
       <a
         routerLink="/accounts/refunds"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         Refunds
-
       </a>
-
-
-      <!-- PAYMENT METHODS -->
 
       <a
         routerLink="/accounts/payment-methods"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{
-          exact: true
-        }"
+        [routerLinkActiveOptions]="exactRouteMatch"
         (click)="selectNavigation()"
       >
-
         Payment Methods
-
       </a>
-
 
     </div>
 
@@ -728,13 +604,10 @@
       class="nav-item"
       routerLink="/plans"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Plans"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -745,51 +618,52 @@
 
           <path
             d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Plans
       </span>
 
-
     </a>
 
-    
-<!-- EQUIPMENT -->
 
-<a
-  class="nav-item"
-  routerLink="/equipment"
-  routerLinkActive="active"
-  [routerLinkActiveOptions]="{ exact: true }"
-  title="Equipment"
-  (click)="selectNavigation()"
->
+    <!-- =====================================================
+         EQUIPMENT
+    ====================================================== -->
 
-  <span class="nav-icon" aria-hidden="true">
+    <a
+      class="nav-item"
+      routerLink="/equipment"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="exactRouteMatch"
+      title="Equipment"
+      (click)="selectNavigation()"
+    >
 
-    <svg viewBox="0 0 24 24">
+      <span
+        class="nav-icon"
+        aria-hidden="true"
+      >
 
-      <path
-        d="M6 8v8M9 6v12M15 6v12M18 8v8M3 10v4M21 10v4M3 12h18"
-      />
+        <svg viewBox="0 0 24 24">
 
-    </svg>
+          <path
+            d="M6 8v8M9 6v12M15 6v12M18 8v8M3 10v4M21 10v4M3 12h18"
+          ></path>
 
-  </span>
+        </svg>
 
-  <span class="nav-label">
-    Equipment
-  </span>
+      </span>
 
-</a>
+      <span class="nav-label">
+        Equipment
+      </span>
 
+    </a>
 
 
     <!-- =====================================================
@@ -800,13 +674,10 @@
       class="nav-item"
       routerLink="/reports"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{
-        exact: true
-      }"
+      [routerLinkActiveOptions]="exactRouteMatch"
       title="Reports"
       (click)="selectNavigation()"
     >
-
 
       <span
         class="nav-icon"
@@ -817,18 +688,15 @@
 
           <path
             d="M5 20V10M12 20V4M19 20v-7"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Reports
       </span>
-
 
     </a>
 
@@ -843,25 +711,16 @@
   <div class="sidebar-footer">
 
 
-    <!-- =====================================================
-         DARK / LIGHT THEME
-    ====================================================== -->
-
     <app-theme-toggle
       [compact]="collapsed"
     />
 
-
-    <!-- =====================================================
-         SIGN OUT
-    ====================================================== -->
 
     <button
       class="nav-item nav-item-button"
       type="button"
       title="Sign Out"
     >
-
 
       <span
         class="nav-icon"
@@ -872,18 +731,15 @@
 
           <path
             d="M10 5H5v14h5M14 8l4 4-4 4M8 12h10"
-          >
-          </path>
+          ></path>
 
         </svg>
 
       </span>
 
-
       <span class="nav-label">
         Sign Out
       </span>
-
 
     </button>
 

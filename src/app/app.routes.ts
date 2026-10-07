@@ -19,8 +19,7 @@ export const routes: Routes = [
   // =====================================================
 
   {
-    path:
-      'platform',
+    path: 'platform',
 
     component:
       PlatformLayoutComponent,
@@ -33,14 +32,11 @@ export const routes: Routes = [
       // =================================================
 
       {
-        path:
-          '',
+        path: '',
 
-        pathMatch:
-          'full',
+        pathMatch: 'full',
 
-        redirectTo:
-          'dashboard'
+        redirectTo: 'dashboard'
       },
 
 
@@ -49,8 +45,7 @@ export const routes: Routes = [
       // =================================================
 
       {
-        path:
-          'dashboard',
+        path: 'dashboard',
 
         loadComponent: () =>
           import(
@@ -62,23 +57,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Platform Dashboard',
 
           description:
             'Manage tenants, subscriptions and platform operations'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // PLATFORM SUBSCRIPTION PLANS
-      // =====================================================
-
-
-      // CREATE PLAN
+      // =================================================
 
       {
         path:
@@ -94,18 +84,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Create Subscription Plan',
 
           description:
             'Create a new SaaS subscription plan'
-
         }
       },
 
-
-      // EDIT PLAN
 
       {
         path:
@@ -121,18 +107,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Edit Subscription Plan',
 
           description:
             'Update subscription plan information'
-
         }
       },
 
-
-      // PLAN DETAILS
 
       {
         path:
@@ -148,18 +130,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Subscription Plan Details',
 
           description:
             'View subscription plan information'
-
         }
       },
 
-
-      // PLAN LIST
 
       {
         path:
@@ -175,23 +153,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Subscription Plans',
 
           description:
             'Manage GymAdmin SaaS subscription plans'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // PLATFORM TENANTS
-      // =====================================================
-
-
-      // CREATE TENANT
+      // =================================================
 
       {
         path:
@@ -207,18 +180,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Create Tenant',
 
           description:
             'Create a new gym organization'
-
         }
       },
 
-
-      // EDIT TENANT
 
       {
         path:
@@ -234,18 +203,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Edit Tenant',
 
           description:
             'Update tenant and subscription information'
-
         }
       },
 
-
-      // TENANT DETAILS
 
       {
         path:
@@ -261,18 +226,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Tenant Details',
 
           description:
             'View tenant organization information'
-
         }
       },
 
-
-      // TENANT LIST
 
       {
         path:
@@ -288,20 +249,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Tenants',
 
           description:
             'Manage gym organizations using the platform'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // TENANT SUBSCRIPTIONS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -317,36 +276,28 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Subscriptions',
 
           description:
             'Manage tenant subscriptions, renewals and plan assignments'
-
         }
       },
 
-      // =====================================================
+
+      // =================================================
       // PLATFORM ACCOUNTS
-      // =====================================================
-
-
-      // DEFAULT
+      // =================================================
 
       {
-        path:
-          'accounts',
+        path: 'accounts',
 
-        pathMatch:
-          'full',
+        pathMatch: 'full',
 
         redirectTo:
           'accounts/payments'
       },
 
-
-      // CREATE PAYMENT
 
       {
         path:
@@ -362,18 +313,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'New Payment',
 
           description:
             'Record a new tenant payment'
-
         }
       },
 
-
-      // PAYMENTS
 
       {
         path:
@@ -389,18 +336,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Payments',
 
           description:
             'View and manage tenant payments'
-
         }
       },
 
-
-      // INVOICE DETAILS
 
       {
         path:
@@ -416,18 +359,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Invoice Details',
 
           description:
             'View and print invoice information'
-
         }
       },
 
-
-      // INVOICE LIST
 
       {
         path:
@@ -443,26 +382,15 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Invoices',
 
           description:
             'View tenant invoices and outstanding balances'
-
         }
       }
 
-
-      /*
-       * SETTINGS REMOVED
-       *
-       * Theme control is now available
-       * directly in the sidebar.
-       */
-
     ]
-
   },
 
 
@@ -471,8 +399,7 @@ export const routes: Routes = [
   // =====================================================
 
   {
-    path:
-      '',
+    path: '',
 
     component:
       AppLayoutComponent,
@@ -485,20 +412,18 @@ export const routes: Routes = [
       // =================================================
 
       {
-        path:
-          '',
+        path: '',
 
-        pathMatch:
-          'full',
+        pathMatch: 'full',
 
         redirectTo:
           'dashboard'
       },
 
 
-      // =====================================================
+      // =================================================
       // DASHBOARD
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -514,20 +439,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Dashboard',
 
           description:
             'Overview of your gym operations'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // VENDORS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -543,20 +466,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Vendors',
 
           description:
             'Manage gym vendors and suppliers'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // PRODUCTS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -572,23 +493,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Products',
 
           description:
             'Manage products, categories, inventory and stock'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // MEMBERS
-      // =====================================================
-
-
-      // ADD MEMBER
+      // =================================================
 
       {
         path:
@@ -604,18 +520,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Add Member',
 
           description:
             'Create a new gym member profile'
-
         }
       },
 
-
-      // MEMBER DETAILS
 
       {
         path:
@@ -631,18 +543,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Member Details',
 
           description:
             'View member profile and membership information'
-
         }
       },
 
-
-      // MEMBER LIST
 
       {
         path:
@@ -658,20 +566,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Members',
 
           description:
             'Manage gym members'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // RENEWALS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -687,23 +593,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Renewals',
 
           description:
             'Manage membership renewals'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // ENQUIRIES
-      // =====================================================
-
-
-      // NEW ENQUIRY
+      // =================================================
 
       {
         path:
@@ -719,18 +620,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Quick Enquiry',
 
           description:
             'Create a new enquiry'
-
         }
       },
 
-
-      // EDIT ENQUIRY
 
       {
         path:
@@ -746,18 +643,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Edit Enquiry',
 
           description:
             'Update enquiry details'
-
         }
       },
 
-
-      // ENQUIRY LIST
 
       {
         path:
@@ -773,23 +666,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Enquiries',
 
           description:
             'Manage prospective members'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // VISITORS
-      // =====================================================
-
-
-      // NEW VISITOR
+      // =================================================
 
       {
         path:
@@ -805,18 +693,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'New Visitor',
 
           description:
             'Record a new visitor check-in'
-
         }
       },
 
-
-      // VISITOR LIST
 
       {
         path:
@@ -832,23 +716,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Visitors',
 
           description:
             'Track gym visitors and guest activity'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // STAFF
-      // =====================================================
-
-
-      // ADD STAFF
+      // =================================================
 
       {
         path:
@@ -864,18 +743,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Add Staff',
 
           description:
             'Add a new staff member'
-
         }
       },
 
-
-      // EDIT STAFF
 
       {
         path:
@@ -891,18 +766,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Edit Staff',
 
           description:
             'Update staff member details'
-
         }
       },
 
-
-      // STAFF DETAILS
 
       {
         path:
@@ -918,18 +789,14 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Staff Details',
 
           description:
             'View staff member profile'
-
         }
       },
 
-
-      // STAFF LIST
 
       {
         path:
@@ -945,20 +812,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Staff',
 
           description:
             'Manage trainers and gym staff'
-
         }
       },
 
 
-      // =====================================================
-      // CLASSES
-      // =====================================================
+      // =================================================
+      // TRAINING - CLASS SCHEDULE
+      // =================================================
 
       {
         path:
@@ -974,15 +839,21 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
-            'Classes',
+            'Class Schedule',
 
           description:
-            'Manage schedules, bookings and waitlists'
+            'Manage class schedules',
 
+          breadcrumbParent:
+            'Training'
         }
       },
+
+
+      // =================================================
+      // TRAINING - CLASS BOOKINGS
+      // =================================================
 
       {
         path:
@@ -998,7 +869,6 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Class Bookings',
 
@@ -1006,13 +876,17 @@ export const routes: Routes = [
             'Manage class bookings and waitlists',
 
           breadcrumbParent:
-            'Classes',
+            'Training',
 
           breadcrumbParentUrl:
             '/classes'
-
         }
       },
+
+
+      // =================================================
+      // TRAINING - CLASS TYPES
+      // =================================================
 
       {
         path:
@@ -1028,26 +902,337 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
-            'Manage Class Types',
+            'Class Types',
 
           description:
             'Manage the gym class catalog',
 
           breadcrumbParent:
-            'Classes',
+            'Training',
 
           breadcrumbParentUrl:
             '/classes'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
+      // PERSONAL TRAINING DEFAULT
+      // =================================================
+
+      {
+        path:
+          'training/personal-training',
+
+        pathMatch:
+          'full',
+
+        redirectTo:
+          'training/personal-training/packages'
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - NEW PACKAGE
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/packages/new',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-package-form/pt-package-form'
+          )
+            .then(
+              m =>
+                m.PtPackageFormComponent
+            ),
+
+        data: {
+          title:
+            'New PT Package',
+
+          description:
+            'Create a new personal training package',
+
+          breadcrumbParent:
+            'Personal Training',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/packages'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - EDIT PACKAGE
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/packages/:id/edit',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-package-form/pt-package-form'
+          )
+            .then(
+              m =>
+                m.PtPackageFormComponent
+            ),
+
+        data: {
+          title:
+            'Edit PT Package',
+
+          description:
+            'Update personal training package details',
+
+          breadcrumbParent:
+            'Personal Training',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/packages'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - PACKAGES
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/packages',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-package-list/pt-package-list'
+          )
+            .then(
+              m =>
+                m.PtPackageListComponent
+            ),
+
+        data: {
+          title:
+            'Personal Training',
+
+          description:
+            'Manage personal training packages and pricing',
+
+          breadcrumbParent:
+            'Training',
+
+          breadcrumbParentUrl:
+            '/classes'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - ASSIGN CLIENT
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/clients/new',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-subscription-form/pt-subscription-form'
+          )
+            .then(
+              m =>
+                m.PtSubscriptionFormComponent
+            ),
+
+        data: {
+          title:
+            'Assign PT Client',
+
+          description:
+            'Assign a personal training package to a member',
+
+          breadcrumbParent:
+            'PT Clients',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/clients'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - EDIT CLIENT
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/clients/:id/edit',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-subscription-form/pt-subscription-form'
+          )
+            .then(
+              m =>
+                m.PtSubscriptionFormComponent
+            ),
+
+        data: {
+          title:
+            'Edit PT Client',
+
+          description:
+            'Update personal training client assignment',
+
+          breadcrumbParent:
+            'PT Clients',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/clients'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - CLIENTS
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/clients',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-subscription-list/pt-subscription-list'
+          )
+            .then(
+              m =>
+                m.PtSubscriptionListComponent
+            ),
+
+        data: {
+          title:
+            'PT Clients',
+
+          description:
+            'Manage personal training clients',
+
+          breadcrumbParent:
+            'Personal Training',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/packages'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - SCHEDULE SESSION
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/sessions/new',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-session-form/pt-session-form'
+          )
+            .then(
+              m =>
+                m.PtSessionFormComponent
+            ),
+
+        data: {
+          title:
+            'Schedule PT Session',
+
+          description:
+            'Schedule a personal training session',
+
+          breadcrumbParent:
+            'PT Sessions',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/sessions'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - EDIT SESSION
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/sessions/:id/edit',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-session-form/pt-session-form'
+          )
+            .then(
+              m =>
+                m.PtSessionFormComponent
+            ),
+
+        data: {
+          title:
+            'Edit PT Session',
+
+          description:
+            'Update personal training session details',
+
+          breadcrumbParent:
+            'PT Sessions',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/sessions'
+        }
+      },
+
+
+      // =================================================
+      // PERSONAL TRAINING - SESSIONS
+      // =================================================
+
+      {
+        path:
+          'training/personal-training/sessions',
+
+        loadComponent: () =>
+          import(
+            './features/personal-training/pages/pt-session-list/pt-session-list'
+          )
+            .then(
+              m =>
+                m.PtSessionListComponent
+            ),
+
+        data: {
+          title:
+            'PT Sessions',
+
+          description:
+            'Manage personal training sessions',
+
+          breadcrumbParent:
+            'Personal Training',
+
+          breadcrumbParentUrl:
+            '/training/personal-training/packages'
+        }
+      },
+
+
+      // =================================================
       // ATTENDANCE
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1063,23 +1248,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Attendance',
 
           description:
             'Weekly and monthly attendance for members and staff'
-
         }
       },
 
 
-      // =====================================================
-      // GYM ACCOUNTS
-      // =====================================================
-
-
-      // ACCOUNTS DEFAULT
+      // =================================================
+      // GYM ACCOUNTS DEFAULT
+      // =================================================
 
       {
         path:
@@ -1093,9 +1273,9 @@ export const routes: Routes = [
       },
 
 
-      // =====================================================
+      // =================================================
       // ACCOUNTS OVERVIEW
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1111,25 +1291,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Accounts',
 
           description:
             'Financial overview of gym collections and outstanding invoices'
-
         }
       },
 
 
-      // =====================================================
-      // INVOICES
-      // =====================================================
-
-
+      // =================================================
       // CREATE INVOICE
-      //
-      // Must stay before :id route.
+      // =================================================
 
       {
         path:
@@ -1145,20 +1318,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Create Invoice',
 
           description:
             'Generate a member invoice and record payment'
-
         }
       },
 
 
+      // =================================================
       // RECORD PAYMENT
-      //
-      // Must stay before :id route.
+      // =================================================
 
       {
         path:
@@ -1174,18 +1345,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Record Payment',
 
           description:
             'Record payment against a member invoice'
-
         }
       },
 
 
+      // =================================================
       // INVOICE DETAILS
+      // =================================================
 
       {
         path:
@@ -1201,18 +1372,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Invoice Details',
 
           description:
             'View and print member invoice'
-
         }
       },
 
 
+      // =================================================
       // INVOICE LIST
+      // =================================================
 
       {
         path:
@@ -1228,20 +1399,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Invoices',
 
           description:
             'Manage member invoices and outstanding balances'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // PAYMENTS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1257,23 +1426,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Payments',
 
           description:
             'View member payment transactions and collections'
-
         }
       },
 
 
-      // =====================================================
-      // EXPENSES
-      // =====================================================
-
-
+      // =================================================
       // CREATE EXPENSE
+      // =================================================
 
       {
         path:
@@ -1289,18 +1453,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Add Expense',
 
           description:
             'Record a new gym operational expense'
-
         }
       },
 
 
+      // =================================================
       // EXPENSE LIST
+      // =================================================
 
       {
         path:
@@ -1316,23 +1480,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Expenses',
 
           description:
             'Track and manage gym operational expenses'
-
         }
       },
 
 
-      // =====================================================
-      // REFUNDS
-      // =====================================================
-
-
+      // =================================================
       // PROCESS REFUND
+      // =================================================
 
       {
         path:
@@ -1348,18 +1507,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Process Refund',
 
           description:
             'Refund an existing member payment'
-
         }
       },
 
 
+      // =================================================
       // REFUND LIST
+      // =================================================
 
       {
         path:
@@ -1375,20 +1534,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Refunds',
 
           description:
             'View and manage member payment refunds'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // PAYMENT METHODS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1404,20 +1561,18 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Payment Methods',
 
           description:
             'Configure payment methods available for gym transactions'
-
         }
       },
 
 
-      // =====================================================
+      // =================================================
       // LEGACY PAYMENT ROUTE
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1431,9 +1586,9 @@ export const routes: Routes = [
       },
 
 
-      // =====================================================
+      // =================================================
       // LEGACY EXPENSE ROUTE
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1447,9 +1602,9 @@ export const routes: Routes = [
       },
 
 
-      // =====================================================
+      // =================================================
       // MEMBERSHIP PLANS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1465,38 +1620,45 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Plans',
 
           description:
             'Manage membership plans and pricing'
-
         }
       },
 
-      
-{
-  path: 'equipment',
 
-  loadComponent: () =>
-    import(
-      './features/equipment/pages/equipment-list/equipment-list'
-    ).then(
-      m => m.EquipmentListComponent
-    ),
+      // =================================================
+      // EQUIPMENT
+      // =================================================
 
-  data: {
-    title: 'Equipment',
-    description: 'Equipment inventory and maintenance'
-  }
-},
+      {
+        path:
+          'equipment',
+
+        loadComponent: () =>
+          import(
+            './features/equipment/pages/equipment-list/equipment-list'
+          )
+            .then(
+              m =>
+                m.EquipmentListComponent
+            ),
+
+        data: {
+          title:
+            'Equipment',
+
+          description:
+            'Equipment inventory and maintenance'
+        }
+      },
 
 
-
-      // =====================================================
+      // =================================================
       // REPORTS
-      // =====================================================
+      // =================================================
 
       {
         path:
@@ -1512,38 +1674,24 @@ export const routes: Routes = [
             ),
 
         data: {
-
           title:
             'Reports',
 
           description:
             'Financial, membership and attendance reports'
-
         }
       }
 
-
-      /*
-       * SETTINGS REMOVED
-       *
-       * Dark / Light theme is now controlled
-       * directly from the sidebar.
-       */
-
     ]
-
   },
 
 
   // =====================================================
   // GLOBAL FALLBACK
-  //
-  // Always keep this route last.
   // =====================================================
 
   {
-    path:
-      '**',
+    path: '**',
 
     redirectTo:
       'dashboard'
