@@ -66,6 +66,10 @@ export class TopHeaderComponent {
   menuClicked =
     new EventEmitter<void>();
 
+  @Output()
+  menuClicked =
+    new EventEmitter<void>();
+
 
   readonly pageMeta$ =
     this.router.events.pipe(

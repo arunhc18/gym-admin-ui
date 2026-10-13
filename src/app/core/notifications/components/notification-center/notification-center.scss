@@ -1,0 +1,1062 @@
+:host {
+  display:
+    inline-flex;
+
+  flex:
+    0 0 auto;
+
+  align-items:
+    center;
+}
+
+
+.notification-center {
+  position:
+    relative;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+}
+
+
+/* =====================================================
+   BELL
+===================================================== */
+
+.notification-bell {
+  position:
+    relative;
+
+  display:
+    inline-flex;
+
+  width:
+    40px;
+
+  height:
+    36px;
+
+  min-width:
+    40px;
+
+  flex:
+    0 0 40px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    0;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--primary);
+
+  cursor:
+    pointer;
+
+  transition:
+    background-color
+      var(--transition),
+    border-color
+      var(--transition),
+    color
+      var(--transition);
+}
+
+
+.notification-bell:hover,
+.notification-bell:focus-visible {
+  border-color:
+    var(--text-muted);
+
+  background:
+    var(--border-primary);
+}
+
+
+.notification-bell.active {
+  border-color:
+    var(--primary);
+
+  background:
+    var(--primary-subtle);
+}
+
+
+.notification-bell-icon {
+  font-size:
+    14px;
+
+  line-height:
+    1;
+}
+
+
+/*
+ * Subtle red attention pulse while at least one
+ * unresolved action exists.
+ */
+.has-actions
+.notification-bell-icon {
+  animation:
+    notification-bell-attention
+    1.65s
+    ease-in-out
+    infinite;
+}
+
+
+.notification-badge {
+  position:
+    absolute;
+
+  top:
+    -6px;
+
+  right:
+    -6px;
+
+  z-index:
+    2;
+
+  display:
+    inline-flex;
+
+  min-width:
+    17px;
+
+  height:
+    17px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    0 4px;
+
+  border:
+    2px solid
+    var(--bg-app);
+
+  border-radius:
+    999px;
+
+  background:
+    var(--primary);
+
+  color:
+    #ffffff;
+
+  font-size:
+    8px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1;
+}
+
+
+.has-critical-action
+.notification-badge {
+  animation:
+    notification-badge-attention
+    1.4s
+    ease-in-out
+    infinite;
+}
+
+
+/* =====================================================
+   PANEL
+===================================================== */
+
+.notification-panel {
+  position:
+    absolute;
+
+  z-index:
+    120;
+
+  top:
+    calc(100% + 10px);
+
+  right:
+    0;
+
+  width:
+    min(
+      390px,
+      calc(100vw - 24px)
+    );
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    var(--bg-card);
+
+  box-shadow:
+    0 18px 48px
+    rgba(
+      0,
+      0,
+      0,
+      .24
+    );
+}
+
+
+.notification-panel-header {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    12px;
+
+  padding:
+    12px 14px;
+
+  border-bottom:
+    1px solid
+    var(--border-primary);
+
+  background:
+    var(--bg-card);
+}
+
+
+.notification-panel-header h2 {
+  margin:
+    0;
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    13px;
+
+  font-weight:
+    700;
+}
+
+
+.notification-panel-header span {
+  display:
+    block;
+
+  margin-top:
+    2px;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    9px;
+}
+
+
+.panel-header-icon {
+  display:
+    flex;
+
+  width:
+    28px;
+
+  height:
+    28px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    50%;
+
+  background:
+    var(--primary-subtle);
+
+  color:
+    var(--primary);
+
+  font-size:
+    10px;
+}
+
+
+/* =====================================================
+   LIST
+===================================================== */
+
+.notification-list {
+  max-height:
+    min(
+      470px,
+      calc(100vh - 170px)
+    );
+
+  overflow-y:
+    auto;
+}
+
+
+.notification-item {
+  position:
+    relative;
+
+  border-bottom:
+    1px solid
+    var(--border-secondary);
+
+  background:
+    var(--bg-card);
+
+  transition:
+    background-color
+      var(--transition),
+    border-color
+      var(--transition),
+    box-shadow
+      var(--transition);
+}
+
+
+.notification-item:last-child {
+  border-bottom:
+    0;
+}
+
+
+.notification-item:hover {
+  background:
+    var(--bg-elevated);
+}
+
+
+.notification-item.unread {
+  background:
+    var(--bg-elevated);
+}
+
+
+/*
+ * Static urgency strip.
+ */
+.notification-item::before {
+  position:
+    absolute;
+
+  z-index:
+    2;
+
+  top:
+    0;
+
+  bottom:
+    0;
+
+  left:
+    0;
+
+  width:
+    2px;
+
+  background:
+    transparent;
+
+  content:
+    '';
+}
+
+
+.notification-item.priority-critical::before {
+  background:
+    var(--danger);
+}
+
+
+.notification-item.priority-high::before {
+  background:
+    var(--warning);
+}
+
+
+.notification-item.priority-normal::before {
+  background:
+    var(--info);
+}
+
+
+/*
+ * The first item is the most important because
+ * the service sorts by urgency before rendering.
+ */
+.notification-item.featured {
+  border-left-color:
+    var(--primary);
+
+  background:
+    var(--primary-subtle);
+
+  animation:
+    notification-important-attention
+    1.05s
+    ease-in-out
+    3;
+}
+
+
+.notification-item.featured::before {
+  width:
+    3px;
+
+  background:
+    var(--primary);
+}
+
+
+/* =====================================================
+   MAIN ITEM BUTTON
+===================================================== */
+
+.notification-main {
+  display:
+    grid;
+
+  grid-template-columns:
+    34px
+    minmax(0, 1fr)
+    12px;
+
+  gap:
+    9px;
+
+  width:
+    100%;
+
+  padding:
+    11px 34px 11px 12px;
+
+  background:
+    transparent;
+
+  color:
+    inherit;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+}
+
+
+.notification-icon {
+  display:
+    flex;
+
+  width:
+    32px;
+
+  height:
+    32px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    50%;
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-secondary);
+}
+
+
+.notification-icon i {
+  font-size:
+    12px;
+}
+
+
+.notification-icon.success {
+  color:
+    var(--success);
+}
+
+
+.notification-icon.info {
+  color:
+    var(--info);
+}
+
+
+.notification-icon.warning {
+  color:
+    var(--warning);
+}
+
+
+.notification-icon.danger {
+  color:
+    var(--danger);
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.notification-content {
+  min-width:
+    0;
+}
+
+
+.notification-title-row {
+  display:
+    flex;
+
+  min-width:
+    0;
+
+  align-items:
+    center;
+
+  gap:
+    6px;
+}
+
+
+.notification-title-row strong {
+  overflow:
+    hidden;
+
+  color:
+    var(--text-primary);
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+.unread-dot {
+  flex:
+    0 0 auto;
+
+  width:
+    5px;
+
+  height:
+    5px;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--primary);
+}
+
+
+.notification-content p {
+  display:
+    -webkit-box;
+
+  overflow:
+    hidden;
+
+  margin:
+    3px 0 5px;
+
+  color:
+    var(--text-secondary);
+
+  font-size:
+    9px;
+
+  line-height:
+    1.4;
+
+  -webkit-box-orient:
+    vertical;
+
+  -webkit-line-clamp:
+    2;
+
+  line-clamp:
+    2;
+}
+
+
+.notification-meta {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    7px;
+}
+
+
+.priority-label {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  min-height:
+    16px;
+
+  padding:
+    0 5px;
+
+  border:
+    1px solid
+    var(--border-primary);
+
+  border-radius:
+    999px;
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    7px;
+
+  font-weight:
+    700;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    .025em;
+}
+
+
+.priority-label.high {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--warning) 40%,
+      var(--border-primary)
+    );
+
+  color:
+    var(--warning);
+}
+
+
+.priority-label.critical {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--danger) 45%,
+      var(--border-primary)
+    );
+
+  color:
+    var(--danger);
+}
+
+
+.notification-time {
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+}
+
+
+.notification-arrow {
+  align-self:
+    center;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+}
+
+
+/* =====================================================
+   DISMISS
+===================================================== */
+
+.notification-dismiss {
+  position:
+    absolute;
+
+  z-index:
+    4;
+
+  top:
+    7px;
+
+  right:
+    7px;
+
+  display:
+    flex;
+
+  width:
+    20px;
+
+  height:
+    20px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--text-muted);
+
+  cursor:
+    pointer;
+}
+
+
+.notification-dismiss:hover {
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-primary);
+}
+
+
+.notification-dismiss i {
+  font-size:
+    8px;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.notification-empty {
+  display:
+    flex;
+
+  min-height:
+    210px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  flex-direction:
+    column;
+
+  padding:
+    24px;
+
+  text-align:
+    center;
+}
+
+
+.empty-icon {
+  display:
+    flex;
+
+  width:
+    42px;
+
+  height:
+    42px;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  margin-bottom:
+    9px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--success) 30%,
+      var(--border-primary)
+    );
+
+  border-radius:
+    50%;
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--success);
+}
+
+
+.notification-empty strong {
+  color:
+    var(--text-primary);
+
+  font-size:
+    11px;
+}
+
+
+.notification-empty > span {
+  margin-top:
+    3px;
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    9px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.notification-panel-footer {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    5px;
+
+  padding:
+    8px 12px;
+
+  border-top:
+    1px solid
+    var(--border-primary);
+
+  background:
+    var(--bg-elevated);
+
+  color:
+    var(--text-muted);
+
+  font-size:
+    8px;
+}
+
+
+.notification-panel-footer i {
+  color:
+    var(--info);
+
+  font-size:
+    8px;
+}
+
+
+/* =====================================================
+   ATTENTION ANIMATIONS
+===================================================== */
+
+@keyframes notification-bell-attention {
+
+  0%,
+  100% {
+    opacity:
+      .72;
+
+    filter:
+      drop-shadow(
+        0 0 0
+        transparent
+      );
+  }
+
+
+  50% {
+    opacity:
+      1;
+
+    color:
+      var(--primary);
+
+    filter:
+      drop-shadow(
+        0 0 5px
+        var(--primary)
+      );
+  }
+
+}
+
+
+@keyframes notification-badge-attention {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0
+      var(--primary-subtle);
+  }
+
+
+  50% {
+    box-shadow:
+      0 0 0 4px
+      var(--primary-subtle);
+  }
+
+}
+
+
+@keyframes notification-important-attention {
+
+  0%,
+  100% {
+    box-shadow:
+      inset
+      0 0 0 0
+      transparent;
+  }
+
+
+  50% {
+    box-shadow:
+      inset
+      0 0 0 1px
+      var(--primary),
+      0 0 0 3px
+      var(--primary-subtle);
+  }
+
+}
+
+
+/* =====================================================
+   ACCESSIBILITY
+===================================================== */
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+
+  .has-actions
+  .notification-bell-icon,
+
+  .has-critical-action
+  .notification-badge,
+
+  .notification-item.featured {
+    animation:
+      none;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (
+  max-width: 600px
+) {
+
+  .notification-panel {
+    position:
+      fixed;
+
+    top:
+      66px;
+
+    right:
+      10px;
+
+    left:
+      10px;
+
+    width:
+      auto;
+  }
+
+}

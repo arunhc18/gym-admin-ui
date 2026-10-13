@@ -1,0 +1,475 @@
+<section class="pt-clients-page">
+
+
+  <!-- =====================================================
+       PERSONAL TRAINING NAVIGATION
+  ====================================================== -->
+
+  <div class="page-toolbar">
+
+
+    <nav class="pt-tabs" aria-label="Personal Training navigation">
+
+  <a
+    routerLink="/training/personal-training/packages"
+  >
+    Packages
+  </a>
+
+  <a
+    class="active"
+    routerLink="/training/personal-training/clients"
+  >
+    Clients
+  </a>
+
+  <a
+    routerLink="/training/personal-training/sessions"
+  >
+    Sessions
+  </a>
+
+</nav>
+
+    <a
+      class="btn btn-primary"
+      routerLink="/training/personal-training/clients/new"
+    >
+      + Assign PT Client
+    </a>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       SUMMARY
+  ====================================================== -->
+
+  <section
+    class="summary-grid"
+    aria-label="PT clients summary"
+  >
+
+
+    <article class="summary-card">
+
+      <span>
+        PT Clients
+      </span>
+
+      <strong>
+        {{ totalClients }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        Active
+      </span>
+
+      <strong>
+        {{ activeClients }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        Completed
+      </span>
+
+      <strong>
+        {{ completedClients }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        Sessions Remaining
+      </span>
+
+      <strong>
+        {{ remainingSessions }}
+      </strong>
+
+    </article>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       CLIENT LIST
+  ====================================================== -->
+
+  <section class="clients-card">
+
+
+    <!-- =================================================
+         FILTERS
+    ================================================== -->
+
+    <div class="filter-bar">
+
+
+      <input
+        type="search"
+        placeholder="Search member, package or trainer..."
+        [value]="searchTerm"
+        (input)="updateSearch($event)"
+      />
+
+
+      <select
+        [value]="trainerFilter"
+        (change)="updateTrainerFilter($event)"
+      >
+
+        <option value="all">
+          All Trainers
+        </option>
+
+
+        @for (
+          trainer of trainers;
+          track trainer.trainerId
+        ) {
+
+          <option
+            [value]="trainer.trainerId"
+          >
+            {{ trainer.fullName }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <select
+        [value]="statusFilter"
+        (change)="updateStatusFilter($event)"
+      >
+
+        <option value="all">
+          All Status
+        </option>
+
+        <option value="Active">
+          Active
+        </option>
+
+        <option value="Completed">
+          Completed
+        </option>
+
+        <option value="Expired">
+          Expired
+        </option>
+
+        <option value="Cancelled">
+          Cancelled
+        </option>
+
+      </select>
+
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    @if (
+      filteredSubscriptions.length
+    ) {
+
+
+      <div class="table-wrapper">
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Member
+              </th>
+
+              <th>
+                Package
+              </th>
+
+              <th>
+                Trainer
+              </th>
+
+              <th>
+                Start Date
+              </th>
+
+              <th>
+                End Date
+              </th>
+
+              <th>
+                Sessions
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              item of filteredSubscriptions;
+              track item.ptSubscriptionId
+            ) {
+
+              <tr>
+
+
+                <!-- =========================================
+                     MEMBER
+                ========================================== -->
+
+                <td>
+
+                  <div class="primary-cell">
+
+                    <strong>
+
+                      {{
+                        getMemberName(
+                          item.memberId
+                        )
+                      }}
+
+                    </strong>
+
+
+                    <small>
+
+                      {{
+                        getMemberCode(
+                          item.memberId
+                        )
+                      }}
+
+                    </small>
+
+                  </div>
+
+                </td>
+
+
+                <!-- =========================================
+                     PACKAGE
+                ========================================== -->
+
+                <td>
+
+                  {{
+                    getPackageName(
+                      item.packageId
+                    )
+                  }}
+
+                </td>
+
+
+                <!-- =========================================
+                     TRAINER
+                ========================================== -->
+
+                <td>
+
+                  {{
+                    getTrainerName(
+                      item.trainerId
+                    )
+                  }}
+
+                </td>
+
+
+                <!-- =========================================
+                     START DATE
+                ========================================== -->
+
+                <td>
+
+                  {{
+                    item.startDate
+                      | date:
+                        'dd MMM yyyy'
+                  }}
+
+                </td>
+
+
+                <!-- =========================================
+                     END DATE
+                ========================================== -->
+
+                <td>
+
+                  {{
+                    item.endDate
+                      | date:
+                        'dd MMM yyyy'
+                  }}
+
+                </td>
+
+
+                <!-- =========================================
+                     SESSIONS
+                ========================================== -->
+
+                <td>
+
+                  <div class="session-cell">
+
+
+                    <strong>
+
+                      {{
+                        item.completedSessions
+                      }}
+                      /
+                      {{
+                        item.totalSessions
+                      }}
+
+                    </strong>
+
+
+                    <small>
+
+                      {{
+                        item.remainingSessions
+                      }}
+                      remaining
+
+                    </small>
+
+
+                  </div>
+
+                </td>
+
+
+                <!-- =========================================
+                     STATUS
+                ========================================== -->
+
+                <td>
+
+                  <span
+                    class="status-pill"
+
+                    [class.status-active]="
+                      item.status === 'Active'
+                    "
+
+                    [class.status-completed]="
+                      item.status === 'Completed'
+                    "
+
+                    [class.status-expired]="
+                      item.status === 'Expired'
+                    "
+
+                    [class.status-cancelled]="
+                      item.status === 'Cancelled'
+                    "
+                  >
+
+                    {{ item.status }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- =========================================
+                     ACTIONS
+                ========================================== -->
+
+                <td>
+
+                  <div class="row-actions">
+
+
+                    <a
+                      [routerLink]="[
+                        '/training/personal-training/clients',
+                        item.ptSubscriptionId,
+                        'edit'
+                      ]"
+                    >
+                      Edit
+                    </a>
+
+
+                  </div>
+
+                </td>
+
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+      </div>
+
+
+    }
+
+    @else {
+
+
+      <div class="empty-state">
+
+        No PT clients match the selected filters.
+
+      </div>
+
+
+    }
+
+
+  </section>
+
+
+</section>

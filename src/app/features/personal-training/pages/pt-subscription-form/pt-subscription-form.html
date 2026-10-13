@@ -1,0 +1,422 @@
+<form
+  class="pt-subscription-page"
+  [formGroup]="form"
+  (ngSubmit)="save()"
+  novalidate
+>
+
+  <div class="page-actions">
+
+    <div></div>
+
+    <div class="action-buttons">
+
+      <a
+        class="btn btn-secondary"
+        routerLink="/training/personal-training/clients"
+      >
+        Cancel
+      </a>
+
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="isSaveDisabled"
+      >
+        {{
+          isEditMode
+            ? 'Save Changes'
+            : 'Assign PT Client'
+        }}
+      </button>
+
+    </div>
+
+  </div>
+
+
+  @if (errorMessage) {
+
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+
+  }
+
+
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>PT Assignment</h2>
+    </div>
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label for="memberId">
+          Member
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="memberId"
+          formControlName="memberId"
+        >
+
+          <option [ngValue]="null">
+            Select member
+          </option>
+
+          @for (
+            member of members;
+            track member.memberId
+          ) {
+
+            <option
+              [ngValue]="member.memberId"
+              [disabled]="!canUseMember(member)"
+            >
+              {{ member.firstName }}
+              {{ member.lastName }}
+              - {{ member.memberCode }}
+            </option>
+
+          }
+
+        </select>
+
+        @if (
+          form.controls.memberId.touched &&
+          form.controls.memberId.invalid
+        ) {
+
+          <span class="validation-error">
+            Member is required.
+          </span>
+
+        }
+
+        @if (memberHasActiveSubscription) {
+
+          <span class="validation-error">
+            This member already has an active PT subscription.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="packageId">
+          PT Package
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="packageId"
+          formControlName="packageId"
+          (change)="onPackageChange()"
+        >
+
+          <option [ngValue]="null">
+            Select PT package
+          </option>
+
+          @for (
+            packageItem of packages;
+            track packageItem.packageId
+          ) {
+
+            <option
+              [ngValue]="packageItem.packageId"
+              [disabled]="!canUsePackage(packageItem)"
+            >
+              {{ packageItem.packageName }}
+
+              @if (!packageItem.isActive) {
+                (Inactive)
+              }
+
+            </option>
+
+          }
+
+        </select>
+
+        @if (
+          form.controls.packageId.touched &&
+          form.controls.packageId.invalid
+        ) {
+
+          <span class="validation-error">
+            PT package is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="trainerId">
+          Trainer
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="trainerId"
+          formControlName="trainerId"
+        >
+
+          <option [ngValue]="null">
+            Select trainer
+          </option>
+
+          @for (
+            trainer of trainers;
+            track trainer.trainerId
+          ) {
+
+            <option
+              [ngValue]="trainer.trainerId"
+              [disabled]="!canUseTrainer(trainer)"
+            >
+              {{ trainer.fullName }}
+
+              @if (trainer.status === 'On Leave') {
+                (On Leave)
+              }
+
+            </option>
+
+          }
+
+        </select>
+
+        @if (
+          form.controls.trainerId.touched &&
+          form.controls.trainerId.invalid
+        ) {
+
+          <span class="validation-error">
+            Trainer is required.
+          </span>
+
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Subscription Dates</h2>
+    </div>
+
+    <div class="form-grid">
+
+
+      <div class="form-group">
+
+        <label for="purchaseDate">
+          Purchase Date
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="purchaseDate"
+          type="date"
+          formControlName="purchaseDate"
+        />
+
+        @if (
+          form.controls.purchaseDate.touched &&
+          form.controls.purchaseDate.invalid
+        ) {
+
+          <span class="validation-error">
+            Purchase date is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="startDate">
+          Start Date
+          <span class="required">*</span>
+        </label>
+
+        <input
+          id="startDate"
+          type="date"
+          formControlName="startDate"
+          (change)="onStartDateChange()"
+        />
+
+        @if (
+          form.controls.startDate.touched &&
+          form.controls.startDate.invalid
+        ) {
+
+          <span class="validation-error">
+            Start date is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="endDate">
+          End Date
+        </label>
+
+        <input
+          id="endDate"
+          type="date"
+          formControlName="endDate"
+          readonly
+        />
+
+      </div>
+
+
+      @if (dateRangeInvalid) {
+
+        <div class="form-group full-width">
+
+          <span class="validation-error">
+            Start date cannot be before the purchase date.
+          </span>
+
+        </div>
+
+      }
+
+    </div>
+
+  </section>
+
+
+  <section class="form-card">
+
+    <div class="section-header">
+      <h2>Sessions & Status</h2>
+    </div>
+
+    <div class="form-grid four-column">
+
+
+      <div class="form-group">
+
+        <label for="totalSessions">
+          Total Sessions
+        </label>
+
+        <input
+          id="totalSessions"
+          type="number"
+          formControlName="totalSessions"
+          readonly
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="completedSessions">
+          Completed
+        </label>
+
+        <input
+          id="completedSessions"
+          type="number"
+          formControlName="completedSessions"
+          readonly
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="remainingSessions">
+          Remaining
+        </label>
+
+        <input
+          id="remainingSessions"
+          type="number"
+          formControlName="remainingSessions"
+          readonly
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="status">
+          Status
+          <span class="required">*</span>
+        </label>
+
+        <select
+          id="status"
+          formControlName="status"
+        >
+
+          <option value="Active">
+            Active
+          </option>
+
+          <option value="Completed">
+            Completed
+          </option>
+
+          <option value="Expired">
+            Expired
+          </option>
+
+          <option value="Cancelled">
+            Cancelled
+          </option>
+
+        </select>
+
+      </div>
+
+
+      @if (sessionCountInvalid) {
+
+        <div class="form-group full-width">
+
+          <span class="validation-error">
+            Completed and remaining sessions must match the package total.
+          </span>
+
+        </div>
+
+      }
+
+    </div>
+
+  </section>
+
+</form>

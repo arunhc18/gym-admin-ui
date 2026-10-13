@@ -1,0 +1,512 @@
+<section class="pt-sessions-page">
+
+
+  <!-- =====================================================
+       PERSONAL TRAINING NAVIGATION
+  ====================================================== -->
+
+  <div class="page-toolbar">
+
+
+    <nav
+      class="pt-tabs"
+      aria-label="Personal Training navigation"
+    >
+
+      <a
+        routerLink="/training/personal-training/packages"
+      >
+        Packages
+      </a>
+
+
+      <a
+        routerLink="/training/personal-training/clients"
+      >
+        Clients
+      </a>
+
+
+      <a
+        class="active"
+        routerLink="/training/personal-training/sessions"
+      >
+        Sessions
+      </a>
+
+    </nav>
+
+
+    <a
+      class="btn btn-primary"
+      routerLink="/training/personal-training/sessions/new"
+    >
+      + Schedule Session
+    </a>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       SUMMARY
+  ====================================================== -->
+
+  <section
+    class="summary-grid"
+    aria-label="PT session summary"
+  >
+
+
+    <article class="summary-card">
+
+      <span>
+        Total Sessions
+      </span>
+
+      <strong>
+        {{ totalSessions }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        Scheduled
+      </span>
+
+      <strong>
+        {{ scheduledSessions }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        Completed
+      </span>
+
+      <strong>
+        {{ completedSessions }}
+      </strong>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        Cancelled / No Show
+      </span>
+
+      <strong>
+        {{ cancelledSessions }}
+      </strong>
+
+    </article>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       SESSION LIST
+  ====================================================== -->
+
+  <section class="sessions-card">
+
+
+    <!-- =================================================
+         FILTERS
+    ================================================== -->
+
+    <div class="filter-bar">
+
+
+      <input
+        class="search-input"
+        type="search"
+        placeholder="Search member, package or trainer..."
+        [value]="searchTerm"
+        (input)="updateSearch($event)"
+      />
+
+
+      <select
+        [value]="trainerFilter"
+        (change)="updateTrainerFilter($event)"
+      >
+
+        <option value="all">
+          All Trainers
+        </option>
+
+
+        @for (
+          trainer of trainers;
+          track trainer.trainerId
+        ) {
+
+          <option
+            [value]="trainer.trainerId"
+          >
+            {{ trainer.fullName }}
+          </option>
+
+        }
+
+      </select>
+
+
+      <select
+        [value]="statusFilter"
+        (change)="updateStatusFilter($event)"
+      >
+
+        <option value="all">
+          All Status
+        </option>
+
+        <option value="Scheduled">
+          Scheduled
+        </option>
+
+        <option value="Completed">
+          Completed
+        </option>
+
+        <option value="Cancelled">
+          Cancelled
+        </option>
+
+        <option value="No Show">
+          No Show
+        </option>
+
+      </select>
+
+
+      <div class="date-filter">
+
+        <input
+          type="date"
+          aria-label="Filter by session date"
+          [value]="dateFilter"
+          (change)="updateDateFilter($event)"
+        />
+
+
+        @if (dateFilter) {
+
+          <button
+            type="button"
+            class="clear-date"
+            (click)="clearDateFilter()"
+          >
+            Clear
+          </button>
+
+        }
+
+      </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    @if (
+      filteredSessions.length
+    ) {
+
+
+      <div class="table-wrapper">
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Client
+              </th>
+
+              <th>
+                Package
+              </th>
+
+              <th>
+                Trainer
+              </th>
+
+              <th>
+                Session Date
+              </th>
+
+              <th>
+                Time
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            @for (
+              session of filteredSessions;
+              track session.sessionId
+            ) {
+
+              <tr>
+
+
+                <!-- CLIENT -->
+
+                <td>
+
+                  <div class="primary-cell">
+
+                    <strong>
+
+                      {{
+                        getMemberName(
+                          session.ptSubscriptionId
+                        )
+                      }}
+
+                    </strong>
+
+
+                    <small>
+
+                      {{
+                        getMemberCode(
+                          session.ptSubscriptionId
+                        )
+                      }}
+
+                    </small>
+
+                  </div>
+
+                </td>
+
+
+                <!-- PACKAGE -->
+
+                <td>
+
+                  {{
+                    getPackageName(
+                      session.ptSubscriptionId
+                    )
+                  }}
+
+                </td>
+
+
+                <!-- TRAINER -->
+
+                <td>
+
+                  {{
+                    getTrainerName(
+                      session.trainerId
+                    )
+                  }}
+
+                </td>
+
+
+                <!-- DATE -->
+
+                <td>
+
+                  {{
+                    session.sessionDate
+                      | date:
+                        'dd MMM yyyy'
+                  }}
+
+                </td>
+
+
+                <!-- TIME -->
+
+                <td>
+
+                  <div class="time-cell">
+
+                    <strong>
+
+                      {{
+                        formatTime(
+                          session.startTime
+                        )
+                      }}
+
+                    </strong>
+
+                    <small>
+                      to
+                      {{
+                        formatTime(
+                          session.endTime
+                        )
+                      }}
+                    </small>
+
+                  </div>
+
+                </td>
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                  <span
+                    class="status-pill"
+
+                    [class.status-scheduled]="
+                      session.status ===
+                        'Scheduled'
+                    "
+
+                    [class.status-completed]="
+                      session.status ===
+                        'Completed'
+                    "
+
+                    [class.status-cancelled]="
+                      session.status ===
+                        'Cancelled'
+                    "
+
+                    [class.status-no-show]="
+                      session.status ===
+                        'No Show'
+                    "
+                  >
+                    {{ session.status }}
+                  </span>
+
+                </td>
+
+
+                <!-- ACTIONS -->
+
+                <td>
+
+                  <div class="row-actions">
+
+                    <a
+                      [routerLink]="[
+                        '/training/personal-training/sessions',
+                        session.sessionId,
+                        'edit'
+                      ]"
+                    >
+                      Edit
+                    </a>
+
+                  </div>
+
+                </td>
+
+
+              </tr>
+
+            }
+
+
+          </tbody>
+
+
+        </table>
+
+      </div>
+
+
+    }
+
+    @else {
+
+
+      <div class="empty-state">
+
+
+        <strong>
+          No PT sessions found
+        </strong>
+
+
+        <span>
+
+          @if (
+            searchTerm ||
+            statusFilter !== 'all' ||
+            trainerFilter !== 'all' ||
+            dateFilter
+          ) {
+
+            No sessions match the selected filters.
+
+          }
+
+          @else {
+
+            Schedule the first PT session for an active client.
+
+          }
+
+        </span>
+
+
+        @if (
+          !searchTerm &&
+          statusFilter === 'all' &&
+          trainerFilter === 'all' &&
+          !dateFilter
+        ) {
+
+          <a
+            class="btn btn-primary"
+            routerLink="/training/personal-training/sessions/new"
+          >
+            Schedule Session
+          </a>
+
+        }
+
+
+      </div>
+
+
+    }
+
+
+  </section>
+
+
+</section>

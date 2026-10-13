@@ -1,9 +1,15 @@
-<div class="app-shell" [class.sidebar-collapsed]="sidebarCollapsed" [class.mobile-sidebar-open]="mobileSidebarOpen">
+<div
+  class="app-shell"
+  [class.sidebar-collapsed]="sidebarCollapsed"
+  [class.mobile-sidebar-open]="mobileSidebarOpen"
+>
+
   <app-sidebar
     [collapsed]="sidebarCollapsed"
     [mobileOpen]="mobileSidebarOpen"
     (navigationSelected)="closeMobileSidebar()"
   />
+
 
   <button
     class="sidebar-overlay"
@@ -12,10 +18,24 @@
     (click)="closeMobileSidebar()"
   ></button>
 
+
   <div class="app-main">
-    <app-top-header (menuClicked)="toggleSidebar()" />
+
+    <app-top-header
+      (menuClicked)="toggleSidebar()"
+    />
+
+
     <main class="page-content">
+
       <router-outlet />
+
     </main>
+
   </div>
+
+
+  <!-- Global notification toast stack -->
+<app-notification-toast></app-notification-toast>
+
 </div>

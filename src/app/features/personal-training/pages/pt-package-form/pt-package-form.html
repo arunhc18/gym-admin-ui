@@ -1,0 +1,558 @@
+<form
+  class="pt-package-page"
+  [formGroup]="form"
+  (ngSubmit)="save()"
+  novalidate
+>
+
+
+  <!-- =====================================================
+       PAGE ACTIONS
+  ====================================================== -->
+
+  <div class="page-actions">
+
+    <div></div>
+
+
+    <div class="action-buttons">
+
+      <a
+        class="btn btn-secondary"
+        routerLink="/training/personal-training/packages"
+      >
+        Cancel
+      </a>
+
+
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="isSaveDisabled"
+      >
+
+        {{
+          isEditMode
+            ? 'Save Changes'
+            : 'Create Package'
+        }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ERROR MESSAGE
+  ====================================================== -->
+
+  @if (errorMessage) {
+
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+
+  }
+
+
+  <!-- =====================================================
+       PACKAGE INFORMATION
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <h2>
+        Package Information
+      </h2>
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+      <!-- =================================================
+           PACKAGE NAME
+      ================================================== -->
+
+      <div class="form-group span-2">
+
+        <label for="packageName">
+
+          Package Name
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="packageName"
+          type="text"
+          formControlName="packageName"
+          placeholder="Example: Transformation 12"
+        />
+
+
+        @if (
+          form.controls.packageName.touched
+          &&
+          form.controls.packageName.hasError('required')
+        ) {
+
+          <span class="validation-error">
+            Package name is required.
+          </span>
+
+        }
+
+
+        @if (
+          form.controls.packageName.touched
+          &&
+          form.controls.packageName.hasError('maxlength')
+        ) {
+
+          <span class="validation-error">
+            Package name cannot exceed 150 characters.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- =================================================
+           PACKAGE TYPE
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label for="packageType">
+
+          Package Type
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <select
+          id="packageType"
+          formControlName="packageType"
+        >
+
+          <option value="individual">
+            Individual
+          </option>
+
+          <option value="group">
+            Group
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- =================================================
+           GROUP SIZE
+      ================================================== -->
+
+      @if (isGroupPackage) {
+
+        <div class="form-group">
+
+          <label for="maxGroupSize">
+
+            Maximum Group Size
+
+            <span class="required">
+              *
+            </span>
+
+          </label>
+
+
+          <input
+            id="maxGroupSize"
+            type="number"
+            min="2"
+            formControlName="maxGroupSize"
+          />
+
+
+          @if (
+            form.controls.maxGroupSize.touched
+            &&
+            form.controls.maxGroupSize.hasError('required')
+          ) {
+
+            <span class="validation-error">
+              Maximum group size is required.
+            </span>
+
+          }
+
+
+          @if (
+            form.controls.maxGroupSize.touched
+            &&
+            form.controls.maxGroupSize.hasError('min')
+          ) {
+
+            <span class="validation-error">
+              Group size must be at least 2.
+            </span>
+
+          }
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           DESCRIPTION
+      ================================================== -->
+
+      <div class="form-group full-width">
+
+        <label for="description">
+          Description
+        </label>
+
+
+        <textarea
+          id="description"
+          rows="3"
+          formControlName="description"
+          placeholder="Describe this personal training package"
+        ></textarea>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       SESSION & PRICING
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <div class="section-header">
+
+      <h2>
+        Session & Pricing
+      </h2>
+
+    </div>
+
+
+    <div class="form-grid four-column">
+
+
+      <!-- =================================================
+           TOTAL SESSIONS
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label for="totalSessions">
+
+          Total Sessions
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <input
+          id="totalSessions"
+          type="number"
+          min="1"
+          formControlName="totalSessions"
+        />
+
+
+        @if (
+          form.controls.totalSessions.touched
+          &&
+          form.controls.totalSessions.hasError('required')
+        ) {
+
+          <span class="validation-error">
+            Total sessions is required.
+          </span>
+
+        }
+
+
+        @if (
+          form.controls.totalSessions.touched
+          &&
+          form.controls.totalSessions.hasError('min')
+        ) {
+
+          <span class="validation-error">
+            At least 1 session is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- =================================================
+           VALIDITY
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label for="validityDays">
+
+          Validity
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <div class="input-suffix">
+
+          <input
+            id="validityDays"
+            type="number"
+            min="1"
+            formControlName="validityDays"
+          />
+
+          <span>
+            Days
+          </span>
+
+        </div>
+
+
+        @if (
+          form.controls.validityDays.touched
+          &&
+          form.controls.validityDays.hasError('required')
+        ) {
+
+          <span class="validation-error">
+            Validity is required.
+          </span>
+
+        }
+
+
+        @if (
+          form.controls.validityDays.touched
+          &&
+          form.controls.validityDays.hasError('min')
+        ) {
+
+          <span class="validation-error">
+            Validity must be at least 1 day.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- =================================================
+           DURATION
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label for="sessionDurationMinutes">
+
+          Session Duration
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <div class="input-suffix">
+
+          <input
+            id="sessionDurationMinutes"
+            type="number"
+            min="1"
+            formControlName="sessionDurationMinutes"
+          />
+
+          <span>
+            Min
+          </span>
+
+        </div>
+
+
+        @if (
+          form.controls.sessionDurationMinutes.touched
+          &&
+          form.controls.sessionDurationMinutes.hasError('required')
+        ) {
+
+          <span class="validation-error">
+            Session duration is required.
+          </span>
+
+        }
+
+
+        @if (
+          form.controls.sessionDurationMinutes.touched
+          &&
+          form.controls.sessionDurationMinutes.hasError('min')
+        ) {
+
+          <span class="validation-error">
+            Duration must be at least 1 minute.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- =================================================
+           PRICE
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label for="price">
+
+          Package Price
+
+          <span class="required">
+            *
+          </span>
+
+        </label>
+
+
+        <div class="input-prefix">
+
+          <span>
+            ₹
+          </span>
+
+          <input
+            id="price"
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="price"
+          />
+
+        </div>
+
+
+        @if (
+          form.controls.price.touched
+          &&
+          form.controls.price.hasError('required')
+        ) {
+
+          <span class="validation-error">
+            Package price is required.
+          </span>
+
+        }
+
+
+        @if (
+          form.controls.price.touched
+          &&
+          form.controls.price.hasError('min')
+        ) {
+
+          <span class="validation-error">
+            Package price cannot be negative.
+          </span>
+
+        }
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PACKAGE STATUS
+  ====================================================== -->
+
+  <section class="form-card status-card">
+
+
+    <div class="status-content">
+
+
+      <div>
+
+        <h2>
+          Package Status
+        </h2>
+
+      </div>
+
+
+      <label class="toggle-control">
+
+        <input
+          type="checkbox"
+          formControlName="isActive"
+        />
+
+        <span class="toggle-switch"></span>
+
+        <span class="toggle-label">
+
+          {{
+            form.controls.isActive.value
+              ? 'Active'
+              : 'Inactive'
+          }}
+
+        </span>
+
+      </label>
+
+
+    </div>
+
+
+  </section>
+
+
+</form>
