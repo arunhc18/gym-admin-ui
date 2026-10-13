@@ -15,36 +15,36 @@ describe('ClassesService', () => {
     const firstMember = tenantMembers.find(member => member.memberId === 1)!;
 
     expect(tenantMembers.some(member => member.memberId === 6)).toBe(false);
-    expect(service.addBooking(4, 6)).toBeUndefined();
+    expect(service.addBooking(3, 6)).toBeUndefined();
 
-    const booking = service.addBooking(4, firstMember.memberId);
+    const booking = service.addBooking(3, firstMember.memberId);
     expect(booking?.status).toBe('confirmed');
-    expect(service.addBooking(4, firstMember.memberId)).toBeUndefined();
-    expect(service.getClassById(4)?.current_bookings).toBe(1);
+    expect(service.addBooking(3, firstMember.memberId)).toBeUndefined();
+    expect(service.getClassById(3)?.current_bookings).toBe(1);
   });
 
   it('cancels and reactivates the existing unique booking record', () => {
     const memberId = 1;
-    const initial = service.addBooking(4, memberId)!;
+    const initial = service.addBooking(3, memberId)!;
 
     const cancelled = service.cancelBooking(initial.booking_id, 'Schedule changed');
     expect(cancelled?.status).toBe('cancelled');
     expect(cancelled?.cancellation_date).toBeTruthy();
     expect(cancelled?.cancellation_reason).toBe('Schedule changed');
-    expect(service.getClassById(4)?.current_bookings).toBe(0);
+    expect(service.getClassById(3)?.current_bookings).toBe(0);
 
-    const rebooked = service.addBooking(4, memberId);
+    const rebooked = service.addBooking(3, memberId);
     expect(rebooked?.booking_id).toBe(initial.booking_id);
     expect(rebooked?.status).toBe('confirmed');
-    expect(service.getBookingsByClass(4)).toHaveLength(1);
-    expect(service.getClassById(4)?.current_bookings).toBe(1);
+    expect(service.getBookingsByClass(3)).toHaveLength(1);
+    expect(service.getClassById(3)?.current_bookings).toBe(1);
   });
 
   it('prevents duplicate waitlist entries and confirms into an available booking slot', () => {
     const members = service.getMembersForTenant();
     const memberOne = members.find(member => member.memberId === 1)!;
     const memberTwo = members.find(member => member.memberId === 2)!;
-    const classItem = service.updateClass(4, { max_capacity: 1 })!;
+    const classItem = service.updateClass(3, { max_capacity: 1 })!;
 
     const booking = service.addBooking(classItem.class_id, memberOne.memberId)!;
     const waitlist = service.addToWaitlist(classItem.class_id, memberTwo.memberId)!;
@@ -63,7 +63,7 @@ describe('ClassesService', () => {
 
   it('reuses expired waitlist rows and keeps history instead of inserting duplicates', () => {
     const members = service.getMembersForTenant();
-    const classItem = service.updateClass(4, { max_capacity: 1 })!;
+    const classItem = service.updateClass(3, { max_capacity: 1 })!;
     service.addBooking(classItem.class_id, members[0].memberId);
 
     const entry = service.addToWaitlist(classItem.class_id, members[1].memberId)!;

@@ -36,11 +36,27 @@ export class ProductListComponent implements OnInit {
   inventory: InventoryRecord[] = [];
   transactions: StockTransaction[] = [];
   productSearch = '';
+  categorySearch = '';
+  inventorySearch = '';
+  transactionSearch = '';
   selectedTenant = '';
   selectedStatus = '';
   selectedType = '';
 
   modal: 'product' | 'category' | 'inventory' | 'transaction' | null = null;
+
+  editingProductId: number | null = null;
+  editingCategoryId: number | null = null;
+  editingInventoryId: number | null = null;
+  editingTransactionId: number | null = null;
+  inventoryEditMinimum = 0;
+
+  deleteConfirmation: {
+    kind: 'product' | 'category' | 'inventory' | 'transaction';
+    id: number;
+    label: string;
+  } | null = null;
+  deleteError = '';
 
   productForm: ProductRequest = this.emptyProduct();
 
@@ -75,12 +91,46 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  get filteredCategories(): ProductCategory[] {
+    const search = this.categorySearch.trim().toLowerCase();
+    return this.categories.filter(category =>
+      !search || [category.categoryName, category.description ?? '', this.tenantName(category.tenantId)]
+        .some(value => value.toLowerCase().includes(search))
+    );
+  }
+
+  get filteredInventory(): InventoryRecord[] {
+    const search = this.inventorySearch.trim().toLowerCase();
+    return this.inventory.filter(item =>
+      !search || [this.productName(item.productId), this.locationName(item.locationId), String(item.quantityOnHand), String(item.quantityAvailable)]
+        .some(value => value.toLowerCase().includes(search))
+    );
+  }
+
+  get filteredTransactions(): StockTransaction[] {
+    const search = this.transactionSearch.trim().toLowerCase();
+    return this.transactions.filter(transaction =>
+      !search || [
+        this.productName(transaction.productId),
+        this.locationName(transaction.locationId),
+        transaction.transactionType,
+        String(transaction.quantity),
+        transaction.notes ?? '',
+        transaction.referenceId == null ? '' : String(transaction.referenceId)
+      ].some(value => value.toLowerCase().includes(search))
+    );
+  }
+
   tenantName(tenantId: number): string {
     return this.tenants.find(tenant => tenant.tenantId === tenantId)?.tenantName ?? 'Unknown tenant';
   }
 
   categoryName(categoryId?: number | null): string {
     return this.categories.find(category => category.categoryId === categoryId)?.categoryName ?? '-';
+  }
+
+  categoriesForTenant(tenantId: number): ProductCategory[] {
+    return this.categories.filter(category => category.tenantId === tenantId);
   }
 
   locationName(locationId: number): string {
@@ -97,39 +147,126 @@ export class ProductListComponent implements OnInit {
 
   openAddProduct(): void {
     this.formError = '';
+    this.editingProductId = null;
     this.productForm = this.emptyProduct();
+    this.modal = 'product';
+  }
+
+  editProduct(product: Product): void {
+    this.formError = '';
+    this.editingProductId = product.productId;
+    this.productForm = {
+      tenantId: product.tenantId,
+      categoryId: product.categoryId ?? null,
+      productName: product.productName,
+      productCode: product.productCode,
+      description: product.description ?? '',
+      barcode: product.barcode ?? '',
+      productType: product.productType ?? 'supplement',
+      unitOfMeasure: product.unitOfMeasure ?? 'piece',
+      sellingPrice: product.sellingPrice,
+      costPrice: product.costPrice ?? 0,
+      taxPercentage: product.taxPercentage,
+      minStockLevel: product.minStockLevel,
+      maxStockLevel: product.maxStockLevel ?? null,
+      imageUrl: product.imageUrl ?? '',
+      isActive: product.isActive
+    };
     this.modal = 'product';
   }
 
   openAddCategory(): void {
     this.formError = '';
+    this.editingCategoryId = null;
     this.categoryForm = this.emptyCategory();
+    this.modal = 'category';
+  }
+
+  editCategory(category: ProductCategory): void {
+    this.formError = '';
+    this.editingCategoryId = category.categoryId;
+    this.categoryForm = {
+      tenantId: category.tenantId,
+      categoryName: category.categoryName,
+      description: category.description ?? '',
+      parentCategoryId: category.parentCategoryId ?? null,
+      isActive: category.isActive
+    };
     this.modal = 'category';
   }
 
   openAddInventory(): void {
     this.formError = '';
+    this.editingInventoryId = null;
     this.stockForm = this.emptyStock('in');
+    this.modal = 'inventory';
+  }
+
+  editInventory(item: InventoryRecord): void {
+    this.formError = '';
+    this.editingInventoryId = item.inventoryId;
+    this.inventoryEditMinimum = item.quantityReserved;
+    this.stockForm = {
+      locationId: item.locationId,
+      productId: item.productId,
+      transactionType: 'adjustment',
+      quantity: item.quantityOnHand,
+      referenceType: 'adjustment',
+      referenceId: item.inventoryId,
+      notes: ''
+    };
     this.modal = 'inventory';
   }
 
   openAddTransaction(): void {
     this.formError = '';
+    this.editingTransactionId = null;
     this.stockForm = this.emptyStock('in');
+    this.modal = 'transaction';
+  }
+
+  editTransaction(transaction: StockTransaction): void {
+    this.formError = '';
+    this.editingTransactionId = transaction.transactionId;
+    this.stockForm = {
+      locationId: transaction.locationId,
+      productId: transaction.productId,
+      transactionType: transaction.transactionType,
+      quantity: transaction.quantity,
+      referenceType: transaction.referenceType ?? null,
+      referenceId: transaction.referenceId ?? null,
+      notes: transaction.notes ?? ''
+    };
     this.modal = 'transaction';
   }
 
   closeModal(): void {
     this.modal = null;
     this.formError = '';
+    this.editingProductId = null;
+    this.editingCategoryId = null;
+    this.editingInventoryId = null;
+    this.editingTransactionId = null;
   }
 
   saveModal(): void {
     try {
       if (this.modal === 'product') {
-        this.productService.createProduct(this.productForm);
+        if (this.editingProductId !== null) {
+          this.productService.updateProduct(this.editingProductId, this.productForm);
+        } else {
+          this.productService.createProduct(this.productForm);
+        }
       } else if (this.modal === 'category') {
-        this.productService.createCategory(this.categoryForm);
+        if (this.editingCategoryId !== null) {
+          this.productService.updateCategory(this.editingCategoryId, this.categoryForm);
+        } else {
+          this.productService.createCategory(this.categoryForm);
+        }
+      } else if (this.modal === 'inventory' && this.editingInventoryId !== null) {
+        this.productService.updateInventoryQuantity(this.editingInventoryId, Number(this.stockForm.quantity));
+      } else if (this.modal === 'transaction' && this.editingTransactionId !== null) {
+        this.productService.updateStockTransaction(this.editingTransactionId, this.stockForm);
       } else if (this.modal === 'inventory' || this.modal === 'transaction') {
         this.productService.recordStockTransaction(this.stockForm);
       }
@@ -141,6 +278,47 @@ export class ProductListComponent implements OnInit {
 
   productName(productId: number): string {
     return this.products.find(product => product.productId === productId)?.productName ?? '-';
+  }
+
+  requestDelete(
+    kind: 'product' | 'category' | 'inventory' | 'transaction',
+    id: number,
+    label: string
+  ): void {
+    this.deleteError = '';
+    this.deleteConfirmation = { kind, id, label };
+  }
+
+  confirmDelete(): void {
+    if (!this.deleteConfirmation) {
+      return;
+    }
+
+    const confirmation = this.deleteConfirmation;
+    try {
+      switch (confirmation.kind) {
+        case 'product':
+          this.productService.deleteProduct(confirmation.id);
+          break;
+        case 'category':
+          this.productService.deleteCategory(confirmation.id);
+          break;
+        case 'inventory':
+          this.productService.deleteInventory(confirmation.id);
+          break;
+        case 'transaction':
+          this.productService.deleteStockTransaction(confirmation.id);
+          break;
+      }
+      this.deleteConfirmation = null;
+    } catch (error) {
+      this.deleteError = error instanceof Error ? error.message : 'Unable to delete this item.';
+    }
+  }
+
+  cancelDelete(): void {
+    this.deleteConfirmation = null;
+    this.deleteError = '';
   }
 
   private emptyProduct(): ProductRequest {
@@ -190,5 +368,8 @@ export class ProductListComponent implements OnInit {
     this.selectedTenant = '';
     this.selectedStatus = '';
     this.selectedType = '';
+    this.categorySearch = '';
+    this.inventorySearch = '';
+    this.transactionSearch = '';
   }
 }

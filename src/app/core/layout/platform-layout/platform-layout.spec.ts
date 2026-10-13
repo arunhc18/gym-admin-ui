@@ -1,16 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PlatformLayout } from './platform-layout';
+import { provideRouter } from '@angular/router';
+import { ThemeService } from '../../theme/theme.service';
+import { PlatformLayoutComponent } from './platform-layout';
 
-describe('PlatformLayout', () => {
-  let component: PlatformLayout;
-  let fixture: ComponentFixture<PlatformLayout>;
+describe('PlatformLayoutComponent', () => {
+  let component: PlatformLayoutComponent;
+  let fixture: ComponentFixture<PlatformLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PlatformLayout],
+      imports: [PlatformLayoutComponent],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ThemeService,
+          useValue: {
+            isLight: false,
+            toggleTheme: () => {}
+          }
+        }
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PlatformLayout);
+    fixture = TestBed.createComponent(PlatformLayoutComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
