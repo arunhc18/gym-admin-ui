@@ -75,7 +75,6 @@ export class SidebarComponent {
 
   trainingExpanded = true;
 
-
   // =====================================================
   // NAVIGATION
   // =====================================================
@@ -97,7 +96,6 @@ export class SidebarComponent {
       !this.membersExpanded;
 
   }
-
 
   // =====================================================
   // ACCOUNTS

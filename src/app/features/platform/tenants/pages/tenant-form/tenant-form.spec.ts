@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TenantForm } from './tenant-form';
+import { provideRouter } from '@angular/router';
+import { TenantFormComponent } from './tenant-form';
 
-describe('TenantForm', () => {
-  let component: TenantForm;
-  let fixture: ComponentFixture<TenantForm>;
+describe('TenantFormComponent', () => {
+  let component: TenantFormComponent;
+  let fixture: ComponentFixture<TenantFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TenantForm],
+      imports: [TenantFormComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TenantForm);
+    fixture = TestBed.createComponent(TenantFormComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

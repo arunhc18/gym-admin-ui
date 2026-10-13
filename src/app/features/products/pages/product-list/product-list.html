@@ -1,12 +1,9 @@
 <div class="products-page">
-  <div class="page-heading">
-  </div>
-
   <nav class="tabs" aria-label="Product management sections">
-    <button [class.active]="activeTab === 'products'" (click)="activeTab = 'products'" type="button">Products</button>
-    <button [class.active]="activeTab === 'categories'" (click)="activeTab = 'categories'" type="button">Categories</button>
-    <button [class.active]="activeTab === 'inventory'" (click)="activeTab = 'inventory'" type="button">Inventory</button>
-    <button [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'" type="button">Transactions</button>
+    <button type="button" [class.active]="activeTab === 'products'" (click)="activeTab = 'products'">Products</button>
+    <button type="button" [class.active]="activeTab === 'categories'" (click)="activeTab = 'categories'">Categories</button>
+    <button type="button" [class.active]="activeTab === 'inventory'" (click)="activeTab = 'inventory'">Inventory</button>
+    <button type="button" [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'">Transactions</button>
   </nav>
 
   <section *ngIf="activeTab === 'products'" class="content-card">
@@ -18,30 +15,129 @@
       <select [(ngModel)]="selectedStatus" aria-label="Filter by status"><option value="">All Status</option><option value="active">Active</option><option value="inactive">Inactive</option></select>
       <button class="clear-button" type="button" (click)="clearFilters()">Clear</button>
     </div>
-    <div class="table-wrapper"><table><thead><tr><th>Product</th><th>Tenant</th><th>Category</th><th>Type</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-      <tr *ngFor="let product of filteredProducts"><td><strong>{{ product.productName }}</strong></td><td>{{ tenantName(product.tenantId) }}</td><td>{{ categoryName(product.categoryId) }}</td><td>{{ product.productType || '-' }}</td><td>{{ product.sellingPrice | currency:'INR' }}</td><td>{{ availableStock(product.productId) }}</td><td><span class="status" [class.inactive]="!product.isActive">{{ product.isActive ? 'Active' : 'Inactive' }}</span></td><td><button class="action-button" type="button" (click)="toggleProduct(product)">{{ product.isActive ? 'Deactivate' : 'Activate' }}</button></td></tr>
-      <tr *ngIf="filteredProducts.length === 0"><td colspan="8" class="empty-cell">No products match the selected filters.</td></tr>
-    </tbody></table></div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Product</th><th>Tenant</th><th>Category</th><th>Type</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let product of filteredProducts">
+            <td><strong>{{ product.productName }}</strong></td><td>{{ tenantName(product.tenantId) }}</td><td>{{ categoryName(product.categoryId) }}</td><td>{{ product.productType || '-' }}</td><td>{{ product.sellingPrice | currency:'INR' }}</td><td>{{ availableStock(product.productId) }}</td>
+            <td><span class="status" [class.inactive]="!product.isActive">{{ product.isActive ? 'Active' : 'Inactive' }}</span></td>
+            <td><div class="row-actions"><button class="action-button" type="button" (click)="editProduct(product)">Edit</button><button class="action-button" type="button" (click)="toggleProduct(product)">{{ product.isActive ? 'Deactivate' : 'Activate' }}</button><button class="action-button danger" type="button" (click)="requestDelete('product', product.productId, 'product ' + product.productName)">Delete</button></div></td>
+          </tr>
+          <tr *ngIf="filteredProducts.length === 0"><td colspan="8" class="empty-cell">No products match the selected filters.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <section *ngIf="activeTab === 'categories'" class="content-card"><div class="section-heading"><h3>Categories</h3><button class="add-button" type="button" (click)="openAddCategory()">+ Add Category</button></div><div class="table-wrapper"><table><thead><tr><th>Category</th><th>Tenant</th><th>Description</th><th>Status</th></tr></thead><tbody><tr *ngFor="let category of categories"><td>{{ category.categoryName }}</td><td>{{ tenantName(category.tenantId) }}</td><td>{{ category.description || '-' }}</td><td><span class="status" [class.inactive]="!category.isActive">{{ category.isActive ? 'Active' : 'Inactive' }}</span></td></tr></tbody></table></div></section>
+  <section *ngIf="activeTab === 'categories'" class="content-card">
+    <div class="section-heading"><h3>Categories</h3><button class="add-button" type="button" (click)="openAddCategory()">+ Add Category</button></div>
+    <div class="section-search"><input [(ngModel)]="categorySearch" type="search" placeholder="Search category, tenant, description..." aria-label="Search categories"><button class="clear-button" type="button" (click)="categorySearch = ''">Clear</button></div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Category</th><th>Tenant</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let category of filteredCategories">
+            <td>{{ category.categoryName }}</td><td>{{ tenantName(category.tenantId) }}</td><td>{{ category.description || '-' }}</td>
+            <td><span class="status" [class.inactive]="!category.isActive">{{ category.isActive ? 'Active' : 'Inactive' }}</span></td>
+            <td><div class="row-actions"><button class="action-button" type="button" (click)="editCategory(category)">Edit</button><button class="action-button danger" type="button" (click)="requestDelete('category', category.categoryId, 'category ' + category.categoryName)">Delete</button></div></td>
+          </tr>
+          <tr *ngIf="filteredCategories.length === 0"><td colspan="5" class="empty-cell">No categories match your search.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-  <section *ngIf="activeTab === 'inventory'" class="content-card"><div class="section-heading"><h3>Inventory</h3><button class="add-button" type="button" (click)="openAddInventory()">+ Add Stock</button></div><div class="table-wrapper"><table><thead><tr><th>Location</th><th>Product</th><th>On Hand</th><th>Reserved</th><th>Available</th></tr></thead><tbody><tr *ngFor="let item of inventory"><td>{{ locationName(item.locationId) }}</td><td>{{ productName(item.productId) }}</td><td>{{ item.quantityOnHand }}</td><td>{{ item.quantityReserved }}</td><td>{{ item.quantityAvailable }}</td></tr></tbody></table></div></section>
+  <section *ngIf="activeTab === 'inventory'" class="content-card">
+    <div class="section-heading"><h3>Inventory</h3><button class="add-button" type="button" (click)="openAddInventory()">+ Add Stock</button></div>
+    <div class="section-search"><input [(ngModel)]="inventorySearch" type="search" placeholder="Search product, location, quantity..." aria-label="Search inventory"><button class="clear-button" type="button" (click)="inventorySearch = ''">Clear</button></div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Location</th><th>Product</th><th>On Hand</th><th>Reserved</th><th>Available</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let item of filteredInventory">
+            <td>{{ locationName(item.locationId) }}</td><td>{{ productName(item.productId) }}</td><td>{{ item.quantityOnHand }}</td><td>{{ item.quantityReserved }}</td><td>{{ item.quantityAvailable }}</td>
+            <td><div class="row-actions"><button class="action-button" type="button" (click)="editInventory(item)">Edit</button><button class="action-button danger" type="button" (click)="requestDelete('inventory', item.inventoryId, 'inventory record for ' + productName(item.productId))">Delete</button></div></td>
+          </tr>
+          <tr *ngIf="filteredInventory.length === 0"><td colspan="6" class="empty-cell">No inventory records match your search.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-  <section *ngIf="activeTab === 'transactions'" class="content-card"><div class="section-heading"><h3>Transactions</h3><button class="add-button" type="button" (click)="openAddTransaction()">+ Add Transaction</button></div><div class="table-wrapper"><table><thead><tr><th>Date</th><th>Product</th><th>Location</th><th>Type</th><th>Quantity</th><th>Notes</th></tr></thead><tbody><tr *ngFor="let transaction of transactions"><td>{{ transaction.transactionDate | date:'mediumDate' }}</td><td>{{ productName(transaction.productId) }}</td><td>{{ locationName(transaction.locationId) }}</td><td>{{ transaction.transactionType }}</td><td>{{ transaction.quantity }}</td><td>{{ transaction.notes || '-' }}</td></tr></tbody></table></div></section>
+  <section *ngIf="activeTab === 'transactions'" class="content-card">
+    <div class="section-heading"><h3>Transactions</h3><button class="add-button" type="button" (click)="openAddTransaction()">+ Add Transaction</button></div>
+    <div class="section-search"><input [(ngModel)]="transactionSearch" type="search" placeholder="Search product, location, type, notes..." aria-label="Search transactions"><button class="clear-button" type="button" (click)="transactionSearch = ''">Clear</button></div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Date</th><th>Product</th><th>Location</th><th>Type</th><th>Quantity</th><th>Notes</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let transaction of filteredTransactions">
+            <td>{{ transaction.transactionDate | date:'mediumDate' }}</td><td>{{ productName(transaction.productId) }}</td><td>{{ locationName(transaction.locationId) }}</td><td>{{ transaction.transactionType | titlecase }}</td><td>{{ transaction.quantity }}</td><td>{{ transaction.notes || '-' }}</td>
+            <td><div class="row-actions"><button class="action-button" type="button" (click)="editTransaction(transaction)">Edit</button><button class="action-button danger" type="button" (click)="requestDelete('transaction', transaction.transactionId, 'stock transaction #' + transaction.transactionId)">Delete</button></div></td>
+          </tr>
+          <tr *ngIf="filteredTransactions.length === 0"><td colspan="7" class="empty-cell">No transactions match your search.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </div>
 
 <div *ngIf="modal" class="modal-backdrop" (click)="closeModal()">
-  <section class="entry-modal" (click)="$event.stopPropagation()">
-    <header class="modal-heading"><h3>{{ modal === 'product' ? 'Add Product' : modal === 'category' ? 'Add Category' : modal === 'inventory' ? 'Add Stock' : 'Add Transaction' }}</h3><button type="button" (click)="closeModal()">&times;</button></header>
+  <section class="entry-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header class="modal-heading">
+      <h3>{{ modal === 'product' ? (editingProductId !== null ? 'Edit Product' : 'Add Product') : modal === 'category' ? (editingCategoryId !== null ? 'Edit Category' : 'Add Category') : modal === 'inventory' ? (editingInventoryId !== null ? 'Edit Inventory' : 'Add Stock') : (editingTransactionId !== null ? 'Edit Transaction' : 'Add Transaction') }}</h3>
+      <button type="button" aria-label="Close" (click)="closeModal()">&times;</button>
+    </header>
+
     <div class="modal-body" *ngIf="modal === 'product'">
       <label>Tenant<select [(ngModel)]="productForm.tenantId"><option *ngFor="let tenant of tenants" [ngValue]="tenant.tenantId">{{ tenant.tenantName }}</option></select></label>
-      <label>Product name<input [(ngModel)]="productForm.productName" type="text"></label><label>Product code<input [(ngModel)]="productForm.productCode" type="text"></label>
-      <label>Category<select [(ngModel)]="productForm.categoryId"><option [ngValue]="null">No category</option><option *ngFor="let category of categories" [ngValue]="category.categoryId">{{ category.categoryName }}</option></select></label>
-      <label>Type<select [(ngModel)]="productForm.productType"><option value="supplement">Supplement</option><option value="merchandise">Merchandise</option><option value="equipment">Equipment</option><option value="consumable">Consumable</option></select></label><label>Selling price<input [(ngModel)]="productForm.sellingPrice" type="number" min="0"></label>
+      <label>Product name<input [(ngModel)]="productForm.productName" type="text" required minlength="2" maxlength="100"></label>
+      <label>Product code<input [(ngModel)]="productForm.productCode" type="text" required pattern="[A-Za-z0-9_-]{2,50}" maxlength="50"></label>
+      <label>Category<select [(ngModel)]="productForm.categoryId"><option [ngValue]="null">No category</option><option *ngFor="let category of categoriesForTenant(productForm.tenantId)" [ngValue]="category.categoryId">{{ category.categoryName }}</option></select></label>
+      <label>Type<select [(ngModel)]="productForm.productType"><option value="supplement">Supplement</option><option value="merchandise">Merchandise</option><option value="equipment">Equipment</option><option value="consumable">Consumable</option></select></label>
+      <label>Unit of measure<input [(ngModel)]="productForm.unitOfMeasure" type="text" maxlength="50"></label>
+      <label>Selling price<input [(ngModel)]="productForm.sellingPrice" type="number" min="0" step="any" required></label>
+      <label>Cost price<input [(ngModel)]="productForm.costPrice" type="number" min="0" step="any"></label>
+      <label>Tax percentage<input [(ngModel)]="productForm.taxPercentage" type="number" min="0" max="100" step="any" required></label>
+      <label>Minimum stock<input [(ngModel)]="productForm.minStockLevel" type="number" min="0" step="1" required></label>
+      <label>Maximum stock<input [(ngModel)]="productForm.maxStockLevel" type="number" min="productForm.minStockLevel" step="1"></label>
+      <label>Barcode<input [(ngModel)]="productForm.barcode" type="text" maxlength="50"></label>
+      <label class="full">Description<textarea [(ngModel)]="productForm.description" rows="3" maxlength="1000"></textarea></label>
+      <label class="check full"><input [(ngModel)]="productForm.isActive" type="checkbox">Active</label>
     </div>
-    <div class="modal-body" *ngIf="modal === 'category'"><label>Tenant<select [(ngModel)]="categoryForm.tenantId"><option *ngFor="let tenant of tenants" [ngValue]="tenant.tenantId">{{ tenant.tenantName }}</option></select></label><label>Category name<input [(ngModel)]="categoryForm.categoryName" type="text"></label><label>Description<textarea [(ngModel)]="categoryForm.description" rows="3"></textarea></label></div>
-    <div class="modal-body" *ngIf="modal === 'inventory' || modal === 'transaction'"><label>Product<select [(ngModel)]="stockForm.productId"><option *ngFor="let product of products" [ngValue]="product.productId">{{ product.productName }}</option></select></label><label>Location<select [(ngModel)]="stockForm.locationId"><option *ngFor="let location of locations" [ngValue]="location.locationId">{{ location.locationName }}</option></select></label><label *ngIf="modal === 'transaction'">Transaction type<select [(ngModel)]="stockForm.transactionType"><option value="in">Stock in</option><option value="out">Stock out</option><option value="return">Return</option><option value="adjustment">Adjustment</option></select></label><label>Quantity<input [(ngModel)]="stockForm.quantity" type="number" [min]="stockForm.transactionType === 'adjustment' ? -999999 : 1"></label><label>Notes<textarea [(ngModel)]="stockForm.notes" rows="3"></textarea></label></div>
-    <p class="form-error" *ngIf="formError">{{ formError }}</p><footer class="modal-footer"><button class="clear-button" type="button" (click)="closeModal()">Cancel</button><button class="add-button" type="button" (click)="saveModal()">Save</button></footer>
+
+    <div class="modal-body" *ngIf="modal === 'category'">
+      <label>Tenant<select [(ngModel)]="categoryForm.tenantId"><option *ngFor="let tenant of tenants" [ngValue]="tenant.tenantId">{{ tenant.tenantName }}</option></select></label>
+      <label>Category name<input [(ngModel)]="categoryForm.categoryName" type="text" required minlength="2" maxlength="100"></label>
+      <label>Parent category<select [(ngModel)]="categoryForm.parentCategoryId"><option [ngValue]="null">No parent</option><option *ngFor="let category of categoriesForTenant(categoryForm.tenantId)" [ngIf]="category.categoryId !== editingCategoryId" [ngValue]="category.categoryId">{{ category.categoryName }}</option></select></label>
+      <label class="check"><input [(ngModel)]="categoryForm.isActive" type="checkbox">Active</label>
+      <label class="full">Description<textarea [(ngModel)]="categoryForm.description" rows="3" maxlength="500"></textarea></label>
+    </div>
+
+    <div class="modal-body" *ngIf="modal === 'inventory' || modal === 'transaction'">
+      <label>Product<select [(ngModel)]="stockForm.productId" [disabled]="editingInventoryId !== null || editingTransactionId !== null"><option *ngFor="let product of products" [ngValue]="product.productId">{{ product.productName }}</option></select></label>
+      <label>Location<select [(ngModel)]="stockForm.locationId" [disabled]="editingInventoryId !== null || editingTransactionId !== null"><option *ngFor="let location of locations" [ngValue]="location.locationId">{{ location.locationName }}</option></select></label>
+      <label *ngIf="modal === 'transaction'">Transaction type<select [(ngModel)]="stockForm.transactionType"><option value="in">Stock in</option><option value="out">Stock out</option><option value="return">Return</option><option value="adjustment">Adjustment</option></select></label>
+      <label>{{ editingInventoryId !== null ? 'Quantity on hand' : 'Quantity' }}<input [(ngModel)]="stockForm.quantity" type="number" [min]="editingInventoryId !== null ? inventoryEditMinimum : stockForm.transactionType === 'adjustment' ? -999999 : 1" step="1" required></label>
+      <label *ngIf="modal === 'transaction'">Reference type<select [(ngModel)]="stockForm.referenceType"><option [ngValue]="null">None</option><option value="purchase">Purchase</option><option value="sale">Sale</option><option value="adjustment">Adjustment</option><option value="return">Return</option></select></label>
+      <label *ngIf="modal === 'transaction'">Reference ID<input [(ngModel)]="stockForm.referenceId" type="number" min="1" step="1"></label>
+      <label class="full">Notes<textarea [(ngModel)]="stockForm.notes" rows="3" maxlength="500"></textarea></label>
+    </div>
+
+    <p class="form-error" *ngIf="formError" role="alert">{{ formError }}</p>
+    <footer class="modal-footer">
+      <button class="clear-button" type="button" (click)="closeModal()">Cancel</button>
+      <button class="add-button" type="button" (click)="saveModal()">{{ editingProductId !== null || editingCategoryId !== null || editingInventoryId !== null || editingTransactionId !== null ? 'Update' : 'Save' }}</button>
+    </footer>
+  </section>
+</div>
+
+<div *ngIf="deleteConfirmation" class="modal-backdrop" (click)="cancelDelete()">
+  <section class="entry-modal confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="delete-title" (click)="$event.stopPropagation()">
+    <header class="modal-heading"><h3 id="delete-title">Confirm deletion</h3><button type="button" aria-label="Close" (click)="cancelDelete()">&times;</button></header>
+    <p class="confirmation-copy">Delete {{ deleteConfirmation.label }}? Product or inventory deletion also removes its linked stock records and transaction history. This cannot be undone.</p>
+    <p class="form-error" *ngIf="deleteError" role="alert">{{ deleteError }}</p>
+    <footer class="modal-footer"><button class="clear-button" type="button" (click)="cancelDelete()">Cancel</button><button class="delete-button" type="button" (click)="confirmDelete()">Delete</button></footer>
   </section>
 </div>

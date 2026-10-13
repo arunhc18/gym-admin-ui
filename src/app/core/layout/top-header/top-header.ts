@@ -1,13 +1,13 @@
 import {
-  AsyncPipe
-} from '@angular/common';
-
-import {
   Component,
   EventEmitter,
   Output,
   inject
 } from '@angular/core';
+
+import {
+  AsyncPipe
+} from '@angular/common';
 
 import {
   ActivatedRoute,
@@ -23,40 +23,26 @@ import {
 } from 'rxjs';
 
 import {
-  NotificationCenterComponent
-} from '../../notifications/components/notification-center/notification-center';
-
-import {
   QuickActionsComponent
 } from '../quick-actions/quick-actions';
 
 
+
 interface PageMeta {
-
-  title?:
-    string;
-
-  description?:
-    string;
-
-  breadcrumbParent?:
-    string;
-
-  breadcrumbParentUrl?:
-    string;
-
+  title?: string;
+  description?: string;
+  breadcrumbParent?: string;
+  breadcrumbParentUrl?: string;
 }
 
 
 @Component({
-  selector:
-    'app-top-header',
+  selector: 'app-top-header',
 
   imports: [
     AsyncPipe,
     QuickActionsComponent,
-    RouterLink,
-    NotificationCenterComponent
+    RouterLink
   ],
 
   templateUrl:
@@ -69,15 +55,11 @@ export class TopHeaderComponent {
 
 
   private readonly router =
-    inject(
-      Router
-    );
+    inject(Router);
 
 
   private readonly activatedRoute =
-    inject(
-      ActivatedRoute
-    );
+    inject(ActivatedRoute);
 
 
   @Output()
@@ -86,108 +68,96 @@ export class TopHeaderComponent {
 
 
   readonly pageMeta$ =
-    this.router.events
-      .pipe(
+    this.router.events.pipe(
 
-        filter(
-          event =>
-            event instanceof
-            NavigationEnd
-        ),
+      filter(
+        event =>
+          event instanceof
+          NavigationEnd
+      ),
 
-        startWith(
-          null
-        ),
+      startWith(null),
 
-        map(
-          () => {
+      map(() => {
 
-
-            let route =
-              this.activatedRoute;
+        let route =
+          this.activatedRoute;
 
 
-            while (
-              route.firstChild
-            ) {
+        while (
+          route.firstChild
+        ) {
 
-              route =
-                route.firstChild;
+          route =
+            route.firstChild;
 
-            }
-
-
-            const routeData =
-              route.snapshot
-                .data as PageMeta;
+        }
 
 
-            const currentUrl =
-              this.router.url
-                .split(
-                  '?'
-                )[0];
+        const routeData = route.snapshot.data as PageMeta;
 
 
-            const isMemberChildRoute =
-
-              currentUrl
-                .startsWith(
-                  '/members/'
-                )
-
-              &&
-
-              currentUrl !==
-              '/members/new';
+        const currentUrl =
+          this.router.url
+            .split('?')[0];
 
 
-            const isAddMemberRoute =
+        const isMemberChildRoute =
 
-              currentUrl ===
-              '/members/new';
+          currentUrl
+            .startsWith(
+              '/members/'
+            ) &&
 
-
-            if (
-              isMemberChildRoute
-              ||
-              isAddMemberRoute
-            ) {
-
-              return {
-
-                ...routeData,
-
-                breadcrumbParent:
-                  'Members',
-
-                breadcrumbParentUrl:
-                  '/members'
-
-              };
-
-            }
+          currentUrl !==
+            '/members/new';
 
 
-            return {
+        const isAddMemberRoute =
 
-              ...routeData,
+          currentUrl ===
+            '/members/new';
 
-              breadcrumbParent:
-                routeData.breadcrumbParent
-                ??
-                'Dashboard',
 
-              breadcrumbParentUrl:
-                routeData.breadcrumbParentUrl
-                ??
-                '/dashboard'
+        if (
+          isMemberChildRoute ||
+          isAddMemberRoute
+        ) {
 
-            };
+          return {
 
-          }
-        )
+            ...routeData,
 
-      );
+            breadcrumbParent:
+              'Members',
+
+            breadcrumbParentUrl:
+              '/members'
+
+          };
+
+        }
+
+
+        return {
+
+          ...routeData,
+
+          breadcrumbParent:
+            routeData
+              .breadcrumbParent ??
+            'Dashboard',
+
+          breadcrumbParentUrl:
+            routeData
+              .breadcrumbParentUrl ??
+            '/dashboard'
+
+        };
+
+      })
+
+    );
+
 
 }

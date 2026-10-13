@@ -1,16 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TenantDetails } from './tenant-details';
+import { ActivatedRoute, provideRouter } from '@angular/router';
+import { TenantDetailsComponent } from './tenant-details';
 
-describe('TenantDetails', () => {
-  let component: TenantDetails;
-  let fixture: ComponentFixture<TenantDetails>;
+describe('TenantDetailsComponent', () => {
+  let component: TenantDetailsComponent;
+  let fixture: ComponentFixture<TenantDetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TenantDetails],
+      imports: [TenantDetailsComponent],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { paramMap: { get: () => '1' } } }
+        }
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TenantDetails);
+    fixture = TestBed.createComponent(TenantDetailsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

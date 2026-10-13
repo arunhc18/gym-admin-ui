@@ -1256,6 +1256,84 @@ export const routes: Routes = [
         }
       },
 
+      // =====================================================
+// FACILITIES
+// =====================================================
+
+{
+  path: 'facilities',
+
+  loadComponent: () =>
+    import(
+      './features/facilities/pages/facility-management/facility-management'
+    ).then(
+      m => m.FacilityManagementComponent
+    ),
+
+  data: {
+    title: 'Facilities',
+    description: 'Manage gym facilities and amenities',
+    facilityPage: 'facilities'
+  }
+},
+
+{
+  path: 'facilities/bookings',
+
+  loadComponent: () =>
+    import(
+      './features/facilities/pages/facility-management/facility-management'
+    ).then(
+      m => m.FacilityManagementComponent
+    ),
+
+  data: {
+    title: 'Facility Bookings',
+    description: 'Manage facility reservations',
+    facilityPage: 'bookings',
+    breadcrumbParent: 'Facilities',
+    breadcrumbParentUrl: '/facilities'
+  }
+},
+
+{
+  path: 'facilities/cleaning',
+
+  loadComponent: () =>
+    import(
+      './features/facilities/pages/facility-management/facility-management'
+    ).then(
+      m => m.FacilityManagementComponent
+    ),
+
+  data: {
+    title: 'Cleaning Schedules',
+    description: 'Manage cleaning schedules',
+    facilityPage: 'cleaning',
+    breadcrumbParent: 'Facilities',
+    breadcrumbParentUrl: '/facilities'
+  }
+},
+
+{
+  path: 'facilities/maintenance',
+
+  loadComponent: () =>
+    import(
+      './features/facilities/pages/facility-management/facility-management'
+    ).then(
+      m => m.FacilityManagementComponent
+    ),
+
+  data: {
+    title: 'Maintenance Requests',
+    description: 'Manage facility maintenance requests',
+    facilityPage: 'maintenance',
+    breadcrumbParent: 'Facilities',
+    breadcrumbParentUrl: '/facilities'
+  }
+},
+
 
       // =================================================
       // GYM ACCOUNTS DEFAULT
