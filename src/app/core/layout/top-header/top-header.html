@@ -1,96 +1,36 @@
 <header class="top-header">
 
-
   <button
     class="btn btn-icon menu-button"
     type="button"
     aria-label="Toggle sidebar"
     (click)="menuClicked.emit()"
   >
-
-    <span aria-hidden="true">
-      ☰
-    </span>
-
-
-    <span aria-hidden="true">
-      ☰
-    </span>
-
+    <span aria-hidden="true">☰</span>
+    <span aria-hidden="true">☰</span>
   </button>
 
-
-  @if (
-    pageMeta$ | async;
-    as pageMeta
-  ) {
-
-
-  @if (
-    pageMeta$ | async;
-    as pageMeta
-  ) {
-
+  @if (pageMeta$ | async; as pageMeta) {
     <div class="header-copy">
+      <h1>{{ pageMeta.title }}</h1>
 
-      <h1>
-        {{ pageMeta.title }}
-      </h1>
-
-
-      <h1>
-        {{ pageMeta.title }}
-      </h1>
-
-
-      <nav
-        class="breadcrumbs"
-        aria-label="Breadcrumb"
-      >
-
-        @if (
-          pageMeta.breadcrumbParent &&
-          pageMeta.breadcrumbParentUrl
-        ) {
-
-          <a
-            [routerLink]="
-              pageMeta.breadcrumbParentUrl
-            "
-          >
-            {{
-              pageMeta.breadcrumbParent
-            }}
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        @if (pageMeta.breadcrumbParent && pageMeta.breadcrumbParentUrl) {
+          <a [routerLink]="pageMeta.breadcrumbParentUrl">
+            {{ pageMeta.breadcrumbParent }}
           </a>
 
-
-          <span aria-hidden="true">
-            /
-          </span>
-
+          <span aria-hidden="true">/</span>
         }
 
-
-
         <span aria-current="page">
-
           {{ pageMeta.title }}
-
         </span>
-
-
       </nav>
-
-
     </div>
-
   }
 
-
   <div class="header-actions">
-
     <app-quick-actions />
-
   </div>
-
 </header>
